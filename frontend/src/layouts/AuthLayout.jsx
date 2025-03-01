@@ -16,13 +16,19 @@ const AuthLayout = ({ children, imageUrl, title, description }) => {
           <div className="position-absolute bottom-0 start-0 p-5 text-white col-lg-8">
             <h1
               className="text-white"
-              style={{ filter: "brightness(120%)" }}
+              style={{
+                fontWeight: "bold",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)", // Bóng chữ
+              }}
             >
               {title}
             </h1>
             <p
               className="text-white"
-              style={{ filter: "brightness(120%)" }}
+              style={{
+                fontSize: "1.2rem",
+                textShadow: "1px 1px 3px rgba(0, 0, 0, 0.8)",
+              }}
             >
               {description}
             </p>
