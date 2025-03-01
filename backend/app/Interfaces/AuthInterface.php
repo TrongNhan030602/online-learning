@@ -9,4 +9,7 @@ interface AuthInterface
     public function logout();
     public function refresh();
     public function me();
+    public function createPasswordResetToken($email);
+    public function findPasswordResetToken($token);
+    public function deletePasswordResetToken($token);
 }

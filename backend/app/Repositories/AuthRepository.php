@@ -3,10 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Str;
+use App\Models\PasswordReset;
 use App\Interfaces\AuthInterface;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthRepository implements AuthInterface
 {
@@ -38,4 +40,23 @@ class AuthRepository implements AuthInterface
     {
         return Auth::user();
     }
+
+    // ======= Các hàm Reset Password =======
+    public function createPasswordResetToken($email)
+    {
+        return PasswordReset::updateOrCreate(
+            attributes: ['email' => $email],
+            values: ['token' => Str::random(length: 60)]
+        );
+    }
+
+    public function findPasswordResetToken($token)
+    {
+        return PasswordReset::where('token', $token)->first();
+    }
+    public function deletePasswordResetToken($token)
+    {
+        PasswordReset::where('token', $token)->delete();
+    }
+
 }

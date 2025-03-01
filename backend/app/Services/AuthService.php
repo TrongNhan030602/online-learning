@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Mail\ResetPasswordMail;
 use App\Interfaces\AuthInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthService
@@ -54,4 +57,20 @@ class AuthService
     {
         return $this->authRepository->me();
     }
+
+    public function createPasswordResetToken($email)
+    {
+        return $this->authRepository->createPasswordResetToken($email);
+    }
+
+    public function findPasswordResetToken($token)
+    {
+        return $this->authRepository->findPasswordResetToken($token);
+    }
+
+    public function deletePasswordResetToken($token)
+    {
+        return $this->authRepository->deletePasswordResetToken($token);
+    }
+
 }
