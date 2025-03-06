@@ -5,12 +5,12 @@ namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\PasswordReset;
-use App\Interfaces\AuthInterface;
+use App\Interfaces\AuthRepositoryInterface;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthRepository implements AuthInterface
+class AuthRepository implements AuthRepositoryInterface
 {
     public function register(array $data)
     {
@@ -23,7 +23,16 @@ class AuthRepository implements AuthInterface
 
     public function login(array $credentials)
     {
-        return Auth::attempt($credentials);
+        if (!$token = Auth::attempt($credentials)) {
+            throw new \Exception(message: 'Thông tin đăng nhập không chính xác!');
+        }
+        $user = Auth::user();
+
+        // Trả về cả token và vai trò của người dùng ở cùng một cấp
+        return [
+            'access_token' => $token,
+            'role' => $user->role,
+        ];
     }
 
     public function logout()
@@ -54,9 +63,9 @@ class AuthRepository implements AuthInterface
     {
         return PasswordReset::where('token', $token)->first();
     }
+
     public function deletePasswordResetToken($token)
     {
         PasswordReset::where('token', $token)->delete();
     }
-
 }

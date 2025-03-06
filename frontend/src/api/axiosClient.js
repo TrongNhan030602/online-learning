@@ -8,8 +8,16 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
+  const tokenData = localStorage.getItem("token");
+  if (tokenData) {
+    let token;
+    try {
+      const parsed = JSON.parse(tokenData);
+      token = parsed.access_token || tokenData;
+    } catch (error) {
+      token = tokenData;
+      console.log(error);
+    }
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -20,7 +28,7 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
-      window.location.href = "/login"; // Redirect về login nếu token hết hạn
+      window.location.href = "/login"; // Redirect nếu token hết hạn
     }
     return Promise.reject(error);
   }

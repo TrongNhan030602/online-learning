@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Mail\ResetPasswordMail;
-use App\Interfaces\AuthInterface;
+use App\Interfaces\AuthRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +13,7 @@ class AuthService
 {
     protected $authRepository;
 
-    public function __construct(AuthInterface $authRepository)
+    public function __construct(AuthRepositoryInterface $authRepository)
     {
         $this->authRepository = $authRepository;
     }
@@ -25,18 +25,16 @@ class AuthService
 
     public function login(array $credentials)
     {
-        if (!$token = $this->authRepository->login($credentials)) {
-            throw ValidationException::withMessages([
-                'email' => ['Thông tin đăng nhập không chính xác.'],
-            ]);
-        }
+        $data = $this->authRepository->login($credentials);
 
         return [
-            'access_token' => $token,
+            'access_token' => $data['access_token'],
+            'role' => $data['role'],
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
         ];
     }
+
 
     public function logout()
     {

@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      // Kiểm tra token trước khi gọi API
       if (!localStorage.getItem("token")) {
         setLoading(false);
         return;
@@ -30,6 +29,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const response = await authApi.login({ email, password });
+    // Lưu token trực tiếp dưới dạng chuỗi
     localStorage.setItem("token", response.data.access_token);
     try {
       const userResponse = await authApi.getUser();
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password) => {
-     await authApi.register({ name, email, password });
+    await authApi.register({ name, email, password });
   };
 
   const logout = async () => {
