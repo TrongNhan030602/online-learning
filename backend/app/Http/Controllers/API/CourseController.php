@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Services\CourseService;
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
+use App\Services\CourseService;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Course\CourseStoreRequest;
+use App\Http\Requests\Course\CourseUpdateRequest;
 
 class CourseController extends Controller
 {
@@ -32,24 +34,10 @@ class CourseController extends Controller
     }
 
     // Thêm khóa học mới (bao gồm upload file nếu có)
-    public function store(Request $request)
+    public function store(CourseStoreRequest $request)
     {
         try {
-            $data = $request->validate([
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'price' => 'required|numeric|min:0',
-                'image' => 'nullable|image|max:2048', // hình ảnh (max 2MB)
-                'document' => 'nullable|mimes:pdf,mp4,avi,mov|max:10240' // PDF hoặc video (max 10MB)
-            ]);
-
-            if ($request->hasFile('image')) {
-                $data['image'] = $request->file('image')->store('images', 'public');
-            }
-            if ($request->hasFile('document')) {
-                $data['document'] = $request->file('document')->store('documents', 'public');
-            }
-
+            $data = $request->validated();
             $course = $this->courseService->createNewCourse($data);
             return response()->json($course, 201);
         } catch (Exception $e) {
@@ -59,17 +47,27 @@ class CourseController extends Controller
             ], 500);
         }
     }
-
-    // Cập nhật thông tin khóa học 
-    public function update(Request $request, $id)
+    // Lấy chi tiết một khóa học theo ID
+    public function show($id)
     {
         try {
-            $data = $request->validate([
-                'title' => 'sometimes|required|string|max:255',
-                'description' => 'sometimes|nullable|string',
-                'price' => 'sometimes|required|numeric|min:0'
-            ]);
+            $course = $this->courseService->getCourseById($id);
+            // Eager load quan hệ files
+            $course->load('files');
+            return response()->json($course, 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi: Không tìm thấy khóa học.',
+                'error' => $e->getMessage()
+            ], 404);
+        }
+    }
 
+    // Cập nhật thông tin khóa học 
+    public function update(CourseUpdateRequest $request, $id)
+    {
+        try {
+            $data = $request->validated();
             $course = $this->courseService->updateExistingCourse($id, $data);
             return response()->json($course, 200);
         } catch (Exception $e) {
@@ -80,31 +78,7 @@ class CourseController extends Controller
         }
     }
 
-    // Endpoint riêng để cập nhật file (image, document)
-    public function upload(Request $request, $id)
-    {
-        try {
-            $data = $request->validate([
-                'image' => 'nullable|image|max:2048',
-                'document' => 'nullable|mimes:pdf,mp4,avi,mov|max:10240'
-            ]);
 
-            if ($request->hasFile('image')) {
-                $data['image'] = $request->file('image')->store('images', 'public');
-            }
-            if ($request->hasFile('document')) {
-                $data['document'] = $request->file('document')->store('documents', 'public');
-            }
-
-            $course = $this->courseService->updateExistingCourse($id, $data);
-            return response()->json($course, 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Lỗi: Cập nhật file khóa học thất bại.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
 
     // Xóa khóa học và các file liên quan
     public function destroy($id)

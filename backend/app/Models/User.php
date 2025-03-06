@@ -70,4 +70,30 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    // Định nghĩa các quan hệ
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
+
+    // Sử dụng model event để xóa các dữ liệu liên quan khi xóa user
+    protected static function booted()
+    {
+        static::deleting(function ($user) {
+            // Xóa enrollments, reviews, progress liên quan
+            $user->enrollments()->delete();
+            $user->reviews()->delete();
+            $user->progress()->delete();
+        });
+    }
 }

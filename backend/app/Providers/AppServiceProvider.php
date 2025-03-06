@@ -9,6 +9,8 @@ use App\Interfaces\CourseRepositoryInterface;
 use App\Repositories\CourseRepository;
 use App\Interfaces\ReviewRepositoryInterface;
 use App\Repositories\ReviewRepository;
+use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -19,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
         $this->app->bind(CourseRepositoryInterface::class, CourseRepository::class);
         $this->app->bind(ReviewRepositoryInterface::class, ReviewRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**

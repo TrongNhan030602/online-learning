@@ -75,9 +75,13 @@ const RegisterForm = () => {
       navigate("/login");
     } catch (err) {
       console.error("Registration failed", err);
+      // Kiểm tra nếu API trả về thông báo lỗi từ server
+      const serverMessage = err.response?.data?.message || 
+                            err.response?.data?.error || 
+                            "Đăng ký thất bại. Vui lòng thử lại.";
       setErrors((prevErrors) => ({
         ...prevErrors,
-        form: "Đăng ký thất bại. Vui lòng thử lại.",
+        form: serverMessage,
       }));
     }
   };

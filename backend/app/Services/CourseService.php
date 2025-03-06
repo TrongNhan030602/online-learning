@@ -31,7 +31,14 @@ class CourseService
             throw new Exception("Lỗi khi tạo khóa học: " . $e->getMessage());
         }
     }
-
+    public function getCourseById($id)
+    {
+        try {
+            return $this->courseRepository->getCourseById($id);
+        } catch (Exception $e) {
+            throw new Exception("Lỗi khi lấy chi tiết khóa học: " . $e->getMessage());
+        }
+    }
     public function updateExistingCourse($id, $data)
     {
         try {
