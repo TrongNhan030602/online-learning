@@ -14,21 +14,24 @@ class Lesson extends Model
         'title',
         'content',
         'video_url',
+        'document',
+        'order',
     ];
 
-    /**
-     * Mối quan hệ N - 1: Bài học thuộc về một khóa học
-     */
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    /**
-     * Mối quan hệ 1 - N: Tiến độ học của từng học viên
-     */
     public function progress()
     {
         return $this->hasMany(Progress::class);
+    }
+
+    // Quan hệ many-to-many: Bài học chọn các tài liệu từ khóa học
+    public function selectedFiles()
+    {
+        return $this->belongsToMany(CourseFile::class, 'course_file_lesson', 'lesson_id', 'course_file_id')
+            ->withTimestamps();
     }
 }

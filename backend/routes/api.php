@@ -4,9 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CourseController;
+use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\ReviewController;
+use App\Http\Controllers\API\ProgressController;
 use App\Http\Controllers\API\CourseFileController;
 
+// Authentication routes
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -18,6 +21,16 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('reset-password', [AuthController::class, 'sendMail']);
     Route::put('reset-password/{token}', [AuthController::class, 'reset']);
 
+});
+
+// API quản lý người dùng
+Route::prefix('users')->group(function () {
+    Route::get('/statistics', [UserController::class, 'statistics'])->middleware('auth:api', 'role:admin');
+    Route::get('/', [UserController::class, 'index'])->middleware('auth:api', 'role:admin');
+    Route::get('/{id}', [UserController::class, 'show'])->middleware('auth:api', 'role:admin');
+    Route::put('/{id}', [UserController::class, 'update'])->middleware('auth:api', 'role:admin');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('auth:api', 'role:admin');
+    Route::post('/{id}/reset-password', [UserController::class, 'resetPassword'])->middleware('auth:api', 'role:admin');
 });
 
 // API quản lý khóa học
@@ -38,13 +51,44 @@ Route::prefix('courses')->group(function () {
     Route::delete('/{id}', [CourseController::class, 'destroy'])->middleware('auth:api', 'role:admin');
 
 });
-
 // API riêng dùng  để cập nhật file (image, document) cho Course
 Route::prefix('courses/{courseId}/files')->group(function () {
     Route::get('/', [CourseFileController::class, 'index'])->middleware('auth:api', 'role:admin');
     Route::post('/', [CourseFileController::class, 'store'])->middleware('auth:api', 'role:admin');
     Route::delete('/{fileId}', [CourseFileController::class, 'destroy'])->middleware('auth:api', 'role:admin');
 });
+
+// API quản lý bài học
+Route::prefix('lessons')->group(function () {
+    Route::get('/', [LessonController::class, 'index']);
+    Route::get('/{id}', [LessonController::class, 'show']);
+    Route::post('/', [LessonController::class, 'store'])->middleware('auth:api', 'role:admin');
+    Route::put('/{id}', [LessonController::class, 'update'])->middleware('auth:api', 'role:admin');
+    Route::delete('/{id}', [LessonController::class, 'destroy'])->middleware('auth:api', 'role:admin');
+
+    // Endpoint riêng để gán file cho bài học
+    Route::post('/{lessonId}/selected-files', [LessonController::class, 'assignFiles'])->middleware('auth:api', 'role:admin');
+});
+
+
+
+// API quản lý tiến độ học viên
+Route::prefix('progress')->group(function () {
+    Route::get('/', [ProgressController::class, 'index'])->middleware('auth:api');
+    Route::get('/{id}', [ProgressController::class, 'show'])->middleware('auth:api');
+    Route::post('/', [ProgressController::class, 'store'])->middleware('auth:api');
+    Route::put('/{id}', [ProgressController::class, 'update'])->middleware('auth:api');
+});
+
+
+
+
+
+
+
+
+
+
 
 
 // API quản lý đánh giá khóa học
@@ -53,20 +97,6 @@ Route::prefix('reviews')->group(function () {
     Route::put('/{id}/approve', [ReviewController::class, 'approve']); // Duyệt đánh giá
     Route::delete('/{id}', [ReviewController::class, 'destroy']); // Xóa đánh giá
 });
-
-// API quản lý người dùng
-Route::prefix('users')->group(function () {
-    Route::get('/statistics', [UserController::class, 'statistics'])->middleware('auth:api', 'role:admin');
-    Route::get('/', [UserController::class, 'index'])->middleware('auth:api', 'role:admin');
-    Route::get('/{id}', [UserController::class, 'show'])->middleware('auth:api', 'role:admin');
-    Route::put('/{id}', [UserController::class, 'update'])->middleware('auth:api', 'role:admin');
-    Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('auth:api', 'role:admin');
-    Route::post('/{id}/reset-password', [UserController::class, 'resetPassword'])->middleware('auth:api', 'role:admin');
-});
-
-
-
-
 
 
 

@@ -37,7 +37,9 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = $this->userService->getUserById($id);
+            $user = $this->userService->getUserById((int) $id);
+            // Eager load các quan hệ: enrollments, reviews, progress
+            $user->load(['enrollments', 'reviews', 'progress']);
             return response()->json($user, 200);
         } catch (Exception $e) {
             return response()->json([
@@ -46,6 +48,7 @@ class UserController extends Controller
             ], 404);
         }
     }
+
 
     // Cập nhật thông tin người dùng
     public function update(UserUpdateRequest $request, $id)
