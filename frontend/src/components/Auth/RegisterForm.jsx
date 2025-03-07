@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../contexts/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/authForm.css";
@@ -76,9 +76,10 @@ const RegisterForm = () => {
     } catch (err) {
       console.error("Registration failed", err);
       // Kiểm tra nếu API trả về thông báo lỗi từ server
-      const serverMessage = err.response?.data?.message || 
-                            err.response?.data?.error || 
-                            "Đăng ký thất bại. Vui lòng thử lại.";
+      const serverMessage =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Đăng ký thất bại. Vui lòng thử lại.";
       setErrors((prevErrors) => ({
         ...prevErrors,
         form: serverMessage,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../contexts/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStreetView,
@@ -44,14 +44,18 @@ const LoginForm = () => {
     e.preventDefault();
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-    const newErrors = { email: emailError, password: passwordError, form: "" };
-    setErrors(newErrors);
+    setErrors({ email: emailError, password: passwordError, form: "" });
 
     if (emailError || passwordError) return;
 
     try {
-      await login(email, password);
-      navigate("/profile");
+      const response = await login(email, password);
+      // Kiểm tra role và chuyển hướng
+      if (response.data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/student");
+      }
     } catch (err) {
       console.error("Login failed", err);
       setErrors((prevErrors) => ({
@@ -75,11 +79,8 @@ const LoginForm = () => {
           />
         </h2>
         <p className="custom-subtitle">Chào mừng bạn quay lại.</p>
-
         {errors.form && <div className="alert alert-danger">{errors.form}</div>}
-
         <form onSubmit={handleSubmit}>
-          {/* Email */}
           <div className="mb-3">
             <label
               htmlFor="loginEmail"
@@ -105,13 +106,10 @@ const LoginForm = () => {
                 />
               </span>
             </div>
-            {/* Đưa invalid-feedback ra ngoài input-group */}
             {errors.email && (
               <div className="invalid-feedback d-block">{errors.email}</div>
             )}
           </div>
-
-          {/* Mật khẩu */}
           <div className="mb-3">
             <label
               htmlFor="loginPassword"
@@ -139,21 +137,16 @@ const LoginForm = () => {
                 />
               </span>
             </div>
-            {/* Đưa invalid-feedback ra ngoài input-group */}
             {errors.password && (
               <div className="invalid-feedback d-block">{errors.password}</div>
             )}
           </div>
-
-          {/* Submit */}
           <button
             type="submit"
             className="custom-btn-submit"
           >
             ĐĂNG NHẬP
           </button>
-
-          {/* Quên mật khẩu */}
           <div className="text-center mt-3">
             <span className="me-1 text-muted">Quên mật khẩu?</span>
             <Link
@@ -164,8 +157,6 @@ const LoginForm = () => {
             </Link>
             <span> ngay.</span>
           </div>
-
-          {/* Đăng ký */}
           <div className="text-center mt-2">
             <span className="text-muted">Chưa có tài khoản? </span>
             <Link

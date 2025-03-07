@@ -1,4 +1,4 @@
-import ForgotPasswordForm from "../../components/authComponent/ForgotPasswordForm";
+import ForgotPasswordForm from "../../components/Auth/ForgotPasswordForm";
 import AuthLayout from "../../layouts/AuthLayout";
 
 const ForgotPassword = () => {

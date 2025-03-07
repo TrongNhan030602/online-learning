@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Failed to fetch user after login:", error);
     }
+    return response; // Trả về response để xử lý chuyển hướng ở LoginForm
   };
 
   const register = async (name, email, password) => {

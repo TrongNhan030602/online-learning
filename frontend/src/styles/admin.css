@@ -1,0 +1,160 @@
+/* Block: admin */
+.admin {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.admin__sidebar {
+  width: 250px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin__sidebar-top {
+  padding: 20px;
+  border-bottom: 1px solid #dee2e6;
+  text-align: center;
+}
+
+.admin__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+}
+
+.admin__logo-img {
+  width: 144px;
+  height: 50px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.admin__nav {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.admin__nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin__nav-item {
+  margin-bottom: 10px;
+}
+
+.admin__nav-link {
+  display: block;
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.admin__nav-link:hover,
+.admin__nav-link.active {
+  background-color: #e9ecef;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Main content area */
+.admin__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.admin__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.admin__header-left {
+  flex: 1;
+}
+
+.admin__header-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.admin__header-center {
+  flex: 2;
+}
+
+.admin__search-input {
+  width: 100%;
+  border-radius: 0.25rem;
+}
+
+.admin__header-left {
+  margin-left: auto;
+}
+
+.admin__user-btn {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.admin__user-avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.admin__user-name {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Main */
+.admin__main {
+  padding: 20px;
+  flex: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin {
+    flex-direction: column;
+  }
+
+  .admin__sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .admin__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin__header-center {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .admin__header-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

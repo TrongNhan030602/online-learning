@@ -1,19 +1,18 @@
-import { useAuth } from "../../contexts/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import avatarPlaceholder from "../../assets/react.svg";
 // Import FontAwesome components và icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faUser, 
-  faAddressCard, 
-  faGraduationCap, 
-  faFileAlt, 
-  faUsers, 
-  faShoppingCart, 
-  faCertificate, 
-  faEdit 
+import {
+  faUser,
+  faAddressCard,
+  faGraduationCap,
+  faFileAlt,
+  faUsers,
+  faShoppingCart,
+  faCertificate,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-
 
 const Profile = () => {
   const { user, logout } = useAuth();
@@ -60,39 +59,66 @@ const Profile = () => {
               <h5 className="card-title">{displayName}</h5>
               <ul className="list-group list-group-flush mt-3 text-start">
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faUser} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="me-2"
+                  />
                   PROFILE
                 </li>
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faAddressCard} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faAddressCard}
+                    className="me-2"
+                  />
                   Hồ sơ
                 </li>
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faGraduationCap} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faGraduationCap}
+                    className="me-2"
+                  />
                   Khoá học
                 </li>
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faFileAlt} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faFileAlt}
+                    className="me-2"
+                  />
                   Tài liệu
                 </li>
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faUsers} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    className="me-2"
+                  />
                   Học Team
                 </li>
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faShoppingCart} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    className="me-2"
+                  />
                   Đơn hàng
                 </li>
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faCertificate} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faCertificate}
+                    className="me-2"
+                  />
                   Chứng nhận
                 </li>
                 <li className="list-group-item hover-item">
-                  <FontAwesomeIcon icon={faEdit} className="me-2" />
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    className="me-2"
+                  />
                   Cập nhật
                 </li>
               </ul>
-              <button className="btn btn-secondary mt-3 w-100" onClick={handleLogout}>
+              <button
+                className="btn btn-secondary mt-3 w-100"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </div>
@@ -106,7 +132,10 @@ const Profile = () => {
               {/* Tiêu đề của Profile */}
               <h2 className="mb-3">Profile</h2>
               {/* Phần nội dung với đường phân cách */}
-              <div className="pt-3" style={{ borderTop: "1px solid #dee2e6" }}>
+              <div
+                className="pt-3"
+                style={{ borderTop: "1px solid #dee2e6" }}
+              >
                 <h4 className="mb-3">Giới thiệu</h4>
                 <p className="text-muted">{bio}</p>
                 <hr />

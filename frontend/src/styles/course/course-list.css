@@ -1,0 +1,90 @@
+/* Container chính cho danh sách khóa học */
+.course-list {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+/* Tiêu đề của component */
+.course-list__title {
+  font-size: 1.75rem;
+  margin: 20px;
+  color: #333;
+  text-align: center;
+}
+
+/* Bảng danh sách */
+.course-list__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Định dạng header bảng */
+.course-list__th,
+.course-list__td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.course-list__th {
+  background-color: #f9f9f9;
+  color: #555;
+  font-weight: bold;
+}
+
+/* Định dạng hàng của bảng */
+.course-list__tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Link của tiêu đề khóa học */
+.course-list__link {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.course-list__link:hover {
+  color: #0056b3;
+}
+
+/* Các nút hành động */
+.course-list__action-button {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  margin-right: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.course-list__action-button--delete {
+  background-color: #dc3545;
+}
+
+.course-list__action-button:hover {
+  opacity: 0.9;
+}
+
+/* Nếu không có dữ liệu */
+.course-list__no-data {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+}
+
+/* Responsive: giảm padding cho thiết bị nhỏ */
+@media (max-width: 576px) {
+  .course-list__th,
+  .course-list__td {
+    padding: 8px 10px;
+  }
+  .course-list__title {
+    font-size: 1.5rem;
+  }
+}
