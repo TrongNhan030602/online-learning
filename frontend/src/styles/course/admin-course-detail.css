@@ -1,0 +1,185 @@
+/* Container chính cho trang chi tiết khóa học */
+.admin-course-detail {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header khóa học */
+.admin-course-detail__header {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.admin-course-detail__header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.admin-course-detail__btn-add {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 5px 0;
+  transition: background-color 0.3s ease;
+}
+
+.admin-course-detail__link-back {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3sease;
+}
+.admin-course-detail__link-back:hover {
+  filter: brightness(1.2);
+}
+.admin-course-detail__btn-add:hover {
+  filter: brightness(1.2);
+}
+.admin-course-detail__title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 10px 0;
+  flex: 1;
+  text-align: center;
+}
+.admin-course-detail__description {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+.admin-course-detail__price {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+/* Files Section */
+.admin-course-detail__files-section {
+  margin-bottom: 30px;
+}
+.admin-course-detail__section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 5px;
+}
+.admin-course-detail__files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.admin-course-detail__file-card {
+  flex: 1 1 300px;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  padding: 10px;
+  background: #fafafa;
+  text-align: center;
+}
+.admin-course-detail__file-link {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+.admin-course-detail__file-link a,
+.admin-course-detail__selected-files-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.admin-course-detail__file-link a:hover,
+.admin-course-detail__selected-files-link:hover {
+  filter: brightness(1.2);
+}
+
+/* Lessons Section */
+.admin-course-detail__lessons-section {
+  margin-bottom: 30px;
+}
+.admin-course-detail__accordion .accordion-button {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+.admin-course-detail__accordion .accordion-button:not(.collapsed) {
+  color: var(--primary-color);
+  background-color: #f1f1f1;
+}
+.admin-course-detail__accordion .accordion-body {
+  font-size: 0.95rem;
+  color: #555;
+}
+.admin-course-detail__lesson-order {
+  font-weight: 500;
+  margin-left: 5px;
+}
+.admin-course-detail__lesson-actions {
+  margin-top: 15px;
+  text-align: right;
+}
+.admin-course-detail__btn-detail {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.admin-course-detail__btn-detail:hover {
+  filter: brightness(1.2);
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.admin-course-detail__lesson-video-link,
+.admin-course-detail__lesson-document-link {
+  font-size: 1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.admin-course-detail__lesson-video-link,
+.admin-course-detail__lesson-document-link:hover {
+  filter: brightness(1.2);
+}
+
+.admin-course-detail__btn-manage-files {
+  display: inline-block;
+  padding: 6px 10px;
+  background-color: transparent;
+  outline: 1.5px solid var(--primary-color);
+  color: var(--primary-color);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+  font-weight: 500;
+  margin-right: 4px;
+}
+.admin-course-detail__btn-manage-files:hover {
+  filter: brightness(1.2);
+  background-color: var(--primary-color);
+  color: #fff;
+}
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-course-detail__title {
+    font-size: 1.75rem;
+  }
+  .admin-course-detail__description,
+  .admin-course-detail__price {
+    font-size: 0.95rem;
+  }
+  .admin-course-detail__file-card {
+    flex: 1 1 100%;
+  }
+}

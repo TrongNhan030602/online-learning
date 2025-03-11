@@ -1,0 +1,126 @@
+.confirm-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirm-dialog__overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.confirm-dialog__box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 300px;
+  transform: translateY(-20px);
+  opacity: 0;
+  animation: slideDown 0.3s forwards;
+}
+
+.confirm-dialog__title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.confirm-dialog__message {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.confirm-dialog__actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirm-dialog__btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.confirm-dialog__btn--cancel {
+  background: #ccc;
+  color: black;
+}
+
+.confirm-dialog__btn--cancel:hover {
+  background: #b3b3b3;
+}
+
+.confirm-dialog__btn--confirm {
+  background: #e74c3c;
+  color: white;
+}
+
+.confirm-dialog__btn--confirm:hover {
+  background: #c0392b;
+}
+
+/* Hiệu ứng mở hộp thoại */
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Hiệu ứng ẩn hộp thoại */
+@keyframes fadeOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+
+/* Hiệu ứng fade-in và fade-out cho overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutOverlay {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Khi đóng hộp thoại */
+.confirm-dialog.hide .confirm-dialog__box {
+  animation: fadeOut 0.3s forwards;
+}
+
+.confirm-dialog.hide .confirm-dialog__overlay {
+  animation: fadeOutOverlay 0.3s forwards;
+}

@@ -1,0 +1,143 @@
+/* Container chính cho trang chi tiết bài học */
+.admin-lesson-detail {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin: 20px auto;
+  max-width: 960px;
+  width: 100%;
+}
+
+.admin-lesson-detail__loading,
+.admin-lesson-detail__error {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 20px;
+}
+
+.admin-lesson-detail__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-lesson-detail__title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-lesson-detail__back-link {
+  font-size: 1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.admin-lesson-detail__back-link:hover {
+  filter: brightness(1.2);
+}
+
+/* Form */
+.admin-lesson-detail__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.admin-lesson-detail__form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-lesson-detail__label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.admin-lesson-detail__input,
+.admin-lesson-detail__textarea {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.admin-lesson-detail__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Form actions */
+.admin-lesson-detail__form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.admin-lesson-detail__btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-lesson-detail__btn--primary {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.admin-lesson-detail__btn--primary:hover {
+  background-color: #218838;
+  transform: scale(1.02);
+}
+
+.admin-lesson-detail__btn--danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.admin-lesson-detail__btn--danger:hover {
+  background-color: #c82333;
+  transform: scale(1.02);
+}
+
+.admin-lesson-detail__btn--secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.admin-lesson-detail__btn--secondary:hover {
+  background-color: #5a6268;
+  transform: scale(1.02);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .admin-lesson-detail {
+    margin: 10px;
+    padding: 16px;
+  }
+
+  .admin-lesson-detail__title {
+    font-size: 1.5rem;
+  }
+
+  .admin-lesson-detail__input,
+  .admin-lesson-detail__textarea {
+    font-size: 0.9rem;
+  }
+
+  .admin-lesson-detail__btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}

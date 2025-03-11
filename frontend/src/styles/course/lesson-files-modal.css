@@ -1,0 +1,135 @@
+/* Overlay */
+.lesson-files-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 15px;
+}
+
+/* Modal container */
+.lesson-files-modal {
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Header */
+.lesson-files-modal__header {
+  background: #f9f9f9;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.lesson-files-modal__title {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+}
+
+.lesson-files-modal__close {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Body */
+.lesson-files-modal__body {
+  padding: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.lesson-files-modal__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lesson-files-modal__list-item {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.lesson-files-modal__list-item label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.lesson-files-modal__checkbox {
+  margin-right: 6px;
+}
+.lesson-files-modal__icon {
+  margin-right: 8px;
+  color: #007bff;
+}
+
+.lesson-files-modal__view-link {
+  margin-left: auto;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.lesson-files-modal__view-link:hover {
+  color: var(--primary-color);
+  filter: brightness(1.2);
+}
+
+.lesson-files-modal__error {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+.lesson-files-modal__footer {
+  padding: 15px 20px;
+  background: #f9f9f9;
+  border-top: 1px solid #eaeaea;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.lesson-files-modal__btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.lesson-files-modal__btn--primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.lesson-files-modal__btn--primary:hover {
+  filter: brightness(1.2);
+}
+
+.lesson-files-modal__btn--secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+@media (max-width: 576px) {
+  .lesson-files-modal {
+    max-width: 90%;
+  }
+}

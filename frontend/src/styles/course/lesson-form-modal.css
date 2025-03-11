@@ -1,0 +1,130 @@
+/* Overlay của modal */
+.lesson-form-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt quá */
+  padding: 20px; /* Khoảng cách xung quanh modal */
+}
+
+/* Khung modal */
+.lesson-form-modal {
+  background-color: #fff;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh; /* Giới hạn chiều cao tối đa */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow-y: auto; /* Cho phép cuộn nội dung bên trong modal */
+}
+
+/* Header modal */
+.lesson-form-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.lesson-form-modal__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.lesson-form-modal__close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Form modal */
+.lesson-form-modal__form {
+  padding: 20px;
+}
+
+.lesson-form-modal__form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-form-modal__label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.lesson-form-modal__input,
+.lesson-form-modal__textarea,
+.lesson-form-modal__input-file {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.lesson-form-modal__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.lesson-form-modal__input-file {
+  padding: 4px;
+}
+
+/* Actions (buttons) */
+.lesson-form-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.lesson-form-modal__btn {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.lesson-form-modal__btn--primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.lesson-form-modal__btn--primary:hover {
+  filter: brightness(1.2);
+}
+
+.lesson-form-modal__btn--secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.lesson-form-modal__btn--secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .lesson-form-modal {
+    width: 90%;
+    max-height: 90vh;
+  }
+}

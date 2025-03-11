@@ -12,7 +12,7 @@ axiosClient.interceptors.request.use((config) => {
   if (tokenData) {
     let token;
     try {
-      const parsed = JSON.parse(tokenData);
+      const parsed = tokenData;
       token = parsed.access_token || tokenData;
     } catch (error) {
       token = tokenData;

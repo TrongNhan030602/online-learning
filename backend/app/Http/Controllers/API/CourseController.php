@@ -51,9 +51,8 @@ class CourseController extends Controller
     public function show($id)
     {
         try {
+            // Lấy chi tiết khóa học, bao gồm files và lessons (với selectedFiles của mỗi bài học)
             $course = $this->courseService->getCourseById($id);
-            // Eager load quan hệ files
-            $course->load('files');
             return response()->json($course, 200);
         } catch (Exception $e) {
             return response()->json([
@@ -62,6 +61,7 @@ class CourseController extends Controller
             ], 404);
         }
     }
+
 
     // Cập nhật thông tin khóa học 
     public function update(CourseUpdateRequest $request, $id)

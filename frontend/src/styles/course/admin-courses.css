@@ -2,135 +2,162 @@
 /* Admin Courses Page Styles     */
 /* ============================= */
 
-/* Container chính của trang admin (nội dung) */
-.admin__content {
-  padding: 20px;
+/* Container chính */
+.admin-courses {
+  padding: 30px;
   background-color: #f4f7fa;
-  min-height: calc(100vh - 94px); /*  header chiếm 94px */
+  min-height: calc(100vh - 100px);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Tiêu đề trang */
-.admin__content h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
+/* Header */
+.admin-courses__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.admin-courses__title {
+  font-size: 2.2rem;
+  font-weight: 600;
   color: #333;
-  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Thông báo (message) */
-.admin__message {
-  background-color: #dff0d8;
-  border: 1px solid #d0e9c6;
+.admin-courses__message {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
   padding: 10px 15px;
   border-radius: 4px;
-  color: #3c763d;
+  color: #155724;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Actions */
+.admin-courses__actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
   margin-bottom: 20px;
 }
 
-/* Nút (button) */
-.admin__btn {
+.admin-courses__btn {
   display: inline-block;
-  padding: 8px 18px;
-  margin-bottom: 20px;
+  padding: 10px 20px;
+  margin: 0 10px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.admin__btn--primary {
-  background-color: #007bff;
+.admin-courses__btn:hover {
+  transform: scale(1.03);
+}
+
+.admin-courses__btn--primary {
+  font-family: var(--primary-font);
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  background-color: var(--primary-color);
   color: #fff;
-  width: 100px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.admin__btn--primary:hover {
-  background-color: #0069d9;
+.admin-courses__btn--primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
 }
 
-/* Danh sách khóa học */
+/* Loading */
+.admin-courses__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+/* Course List */
 .course-list {
-  margin-top: 20px;
-  background: #fff;
-  border-radius: 4px;
+  background: #ffffff;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin: 0 auto;
 }
 
-.course-list table {
+.course-list__title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  padding: 20px;
+  border-bottom: 1px solid #eaeaea;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.course-list__table-wrapper {
+  overflow-x: auto;
+}
+
+.course-list__table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.course-list th,
-.course-list td {
-  padding: 12px 15px;
+.course-list__th,
+.course-list__td {
+  padding: 16px;
   text-align: left;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f1f1f1;
 }
 
-.course-list th {
-  background-color: #f9f9f9;
+.course-list__th {
+  background-color: #f0f0f0;
   color: #555;
-  font-size: 1rem;
-}
-
-.course-list td {
+  font-weight: 500;
+  text-transform: uppercase;
   font-size: 0.9rem;
-  color: #666;
 }
 
-.course-list tr:hover {
-  background-color: #f1f1f1;
+.course-list__td {
+  font-size: 1rem;
+  color: #444;
 }
 
-.course-list a {
+.course-list__tr:hover {
+  background-color: #f7f7f7;
+}
+
+.course-list__link {
   color: #007bff;
   text-decoration: none;
+  font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.course-list a:hover {
+.course-list__link:hover {
   color: #0056b3;
 }
 
-/* Responsive: Điều chỉnh cho màn hình nhỏ */
-@media (max-width: 576px) {
-  .admin__content h2 {
-    font-size: 1.5rem;
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-courses__title {
+    font-size: 1.8rem;
   }
-
-  .admin__btn {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-
-  .course-list th,
-  .course-list td {
-    padding: 8px 10px;
-  }
-}
-.modal-title {
-  font-size: 1.75rem;
-  font-weight: bold;
-  color: #333;
-}
-
-/* Tùy chỉnh body modal */
-.modal-body {
-  padding: 20px;
-}
-
-/* Tùy chỉnh nút đóng modal */
-.btn-close {
-  background: none;
-  border: none;
-}
-
-/* Responsive adjustments cho modal nếu cần */
-@media (max-width: 576px) {
-  .modal-content {
-    margin: 10px;
+  .admin-courses__btn {
+    padding: 10px 16px;
+    font-size: 0.95rem;
   }
 }

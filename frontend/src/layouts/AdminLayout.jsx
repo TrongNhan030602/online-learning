@@ -69,14 +69,6 @@ const AdminLayout = () => {
             <li className="admin__nav-item">
               <Link
                 className="admin__nav-link"
-                to="/admin/lessons"
-              >
-                Quản lý bài học
-              </Link>
-            </li>
-            <li className="admin__nav-item">
-              <Link
-                className="admin__nav-link"
                 to="/admin/progress"
               >
                 Quản lý tiến độ

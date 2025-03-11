@@ -1,90 +1,161 @@
-/* Container chính cho danh sách khóa học */
+/* Container */
 .course-list {
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 20px 0;
+  background: #ffffff;
+  border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 100%;
+  width: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Tiêu đề của component */
+/* Title */
 .course-list__title {
-  font-size: 1.75rem;
-  margin: 20px;
+  font-size: 1.8rem;
+  font-weight: 600;
   color: #333;
+  padding: 20px;
+  border-bottom: 1px solid #eaeaea;
   text-align: center;
+  background-color: #f9f9f9;
 }
 
-/* Bảng danh sách */
+/* Responsive table wrapper */
+.course-list__table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Table styles */
 .course-list__table {
   width: 100%;
   border-collapse: collapse;
 }
 
-/* Định dạng header bảng */
 .course-list__th,
 .course-list__td {
-  padding: 12px 15px;
+  padding: 16px;
   text-align: left;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f1f1f1;
 }
 
 .course-list__th {
-  background-color: #f9f9f9;
+  background-color: #f0f0f0;
   color: #555;
-  font-weight: bold;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 }
 
-/* Định dạng hàng của bảng */
+.course-list__td {
+  font-size: 1rem;
+  color: #444;
+}
+
 .course-list__tr:hover {
-  background-color: #f1f1f1;
+  background-color: #f7f7f7;
 }
 
-/* Link của tiêu đề khóa học */
+/* Link for course title */
 .course-list__link {
-  color: #007bff;
+  color: var(--primary-color) !important;
   text-decoration: none;
+  font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .course-list__link:hover {
-  color: #0056b3;
+  color: var(--primary-color);
+  opacity: 0.8;
 }
 
-/* Các nút hành động */
+/* Action buttons */
 .course-list__action-button {
-  background-color: #007bff;
+  background-color: #fff;
+  outline: 1.2px solid #007bff;
+  color: #007bff;
   border: none;
-  color: #fff;
-  padding: 6px 12px;
-  margin-right: 5px;
-  border-radius: 3px;
+  margin: 4px;
+  border-radius: 4px;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.course-list__action-button--delete {
-  background-color: #dc3545;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .course-list__action-button:hover {
-  opacity: 0.9;
+  background-color: #0069d9;
+  transform: scale(1.02);
+  color: #fff;
 }
 
-/* Nếu không có dữ liệu */
+.course-list__action-button--delete {
+  background-color: #fff;
+  outline: 1.2px solid var(--primary-color);
+  padding: 8px 13px;
+  color: var(--primary-color);
+}
+
+.course-list__action-button--delete:hover {
+  background-color: #c82333;
+}
+
+/* No data message */
 .course-list__no-data {
   padding: 20px;
   text-align: center;
-  color: #777;
+  color: #888;
+  font-size: 1rem;
 }
 
-/* Responsive: giảm padding cho thiết bị nhỏ */
-@media (max-width: 576px) {
+/* Expandable text for description */
+.expandable-text {
+  position: relative;
+  margin-top: 5px;
+}
+
+.expandable-text__para {
+  margin: 0;
+  line-height: 1.4;
+  transition: max-height 0.3s ease;
+}
+
+.expandable-text__para--clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.expandable-text__toggle {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+  margin-top: 5px;
+  position: absolute;
+  right: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .course-list__th,
   .course-list__td {
-    padding: 8px 10px;
+    padding: 12px;
+    font-size: 0.85rem;
   }
   .course-list__title {
     font-size: 1.5rem;
+    padding: 16px;
   }
+}
+/* Loading indicator */
+.course-list__loading {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+  color: #007bff;
 }

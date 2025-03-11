@@ -26,8 +26,9 @@ class CourseRepository implements CourseRepositoryInterface
 
     public function getCourseById($id)
     {
-        return Course::findOrFail($id);
+        return Course::with(['files', 'lessons.selectedFiles'])->findOrFail($id);
     }
+
 
     public function createCourse(array $data)
     {

@@ -59,7 +59,7 @@
 .admin__nav-link:hover,
 .admin__nav-link.active {
   background-color: #e9ecef;
-  color: #007bff;
+  color: var(--primary-color);
   font-weight: bold;
 }
 

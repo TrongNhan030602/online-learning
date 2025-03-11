@@ -65,17 +65,18 @@
 }
 
 .course-form__button--submit {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: #fff;
 }
 
 .course-form__button--submit:hover {
-  background-color: #0069d9;
+  filter: brightness(1.2);
 }
 
 .course-form__button--cancel {
-  background-color: #6c757d;
+  background-color: var(--secondary-color);
   color: #fff;
+  filter: brightness(1.2);
 }
 
 .course-form__button--cancel:hover {
