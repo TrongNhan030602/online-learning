@@ -15,6 +15,12 @@ use App\Interfaces\LessonRepositoryInterface;
 use App\Repositories\LessonRepository;
 use App\Interfaces\ProgressRepositoryInterface;
 use App\Repositories\ProgressRepository;
+use App\Interfaces\BlogRepositoryInterface;
+use App\Repositories\BlogRepository;
+use App\Interfaces\BlogCommentRepositoryInterface;
+use App\Repositories\BlogCommentRepository;
+use App\Interfaces\FaqRepositoryInterface;
+use App\Repositories\FaqRepository;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(LessonRepositoryInterface::class, LessonRepository::class);
         $this->app->bind(ProgressRepositoryInterface::class, ProgressRepository::class);
+        $this->app->bind(BlogRepositoryInterface::class, BlogRepository::class);
+        $this->app->bind(BlogCommentRepositoryInterface::class, BlogCommentRepository::class);
+        $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
     }
 
     /**

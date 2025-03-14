@@ -1,3 +1,4 @@
+// src/api/courseApi.js
 import axiosClient from "./axiosClient";
 
 const courseApi = {

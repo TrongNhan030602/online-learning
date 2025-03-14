@@ -1,0 +1,121 @@
+/* Form container */
+.blog-form {
+  background: #fff;
+  padding: 25px;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Lỗi hiển thị */
+.blog-form__error {
+  color: #e74c3c;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Form group */
+.blog-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+/* Label */
+.blog-form__label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Input & Textarea */
+.blog-form__input,
+.blog-form__textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.blog-form__input:focus,
+.blog-form__textarea:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  outline: none;
+}
+
+/* Textarea */
+.blog-form__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Button container */
+.blog-form__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Button chung */
+.blog-form__button {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+/* Button submit */
+.blog-form__button--submit {
+  background: linear-gradient(135deg, #3498db, #1d75bb);
+  color: white;
+}
+
+.blog-form__button--submit:hover {
+  background: linear-gradient(135deg, #2980b9, #1668a7);
+  transform: scale(1.05);
+}
+
+.blog-form__button--submit:active {
+  transform: scale(0.98);
+}
+
+/* Button cancel */
+.blog-form__button--cancel {
+  background: #e74c3c;
+  color: white;
+}
+
+.blog-form__button--cancel:hover {
+  background: #c0392b;
+  transform: scale(1.05);
+}
+
+.blog-form__button--cancel:active {
+  transform: scale(0.98);
+}
+
+/* Hiệu ứng fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,107 @@
+.image-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Khu vực upload ảnh */
+.image-manager__upload {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 10px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  position: relative;
+  display: inline-block;
+}
+
+.image-manager__upload:hover {
+  border-color: #007bff;
+}
+
+.image-manager__upload-label {
+  font-size: 16px;
+  color: #007bff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.image-manager__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2; /* Đảm bảo input nằm trên */
+  cursor: pointer;
+}
+
+/* Danh sách ảnh */
+.image-manager__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.image-manager__item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-manager__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.image-manager__img:hover {
+  transform: scale(1.05);
+}
+
+.image-manager__delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  padding: 5px;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.image-manager__delete:hover {
+  background: red;
+}
+
+/* Khi không có ảnh */
+.image-manager__empty {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+}
+
+/* Danh sách ảnh đã chọn */
+.image-manager__selected {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.image-manager__selected ul {
+  list-style: none;
+  padding: 0;
+}
+
+.image-manager__selected li {
+  font-size: 14px;
+  padding: 2px 0;
+}

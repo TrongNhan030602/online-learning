@@ -1,11 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import AdminLayout from "../layouts/AdminLayout";
-import AdminCourses from "../pages/admin/AdminCourses";
+import AdminCourses from "../pages/admin/Courses/AdminCourses";
+import CourseDetail from "../pages/admin/Courses/CourseDetail";
 import AdminUsers from "../pages/admin/AdminUsers";
 import AdminProgress from "../pages/admin/AdminProgress";
-import CourseDetail from "../pages/admin/CourseDetail";
-import AdminLessonDetail from "../pages/admin/AdminLessonDetail";
-
+import AdminLessonDetail from "../pages/admin/Lessons/AdminLessonDetail";
+import AdminBlogs from "../pages/admin/Blogs/AdminBlogs";
+// import AdminBlogDetail from "../pages/admin/Blogs/AdminBlogDetail";
+import AdminFaqs from "../pages/admin/Faqs/AdminFaqs";
+import FaqDetail from "../pages/admin/Faqs/FaqDetail";
 const AdminRoutes = () => {
   return (
     <Routes>
@@ -32,6 +35,23 @@ const AdminRoutes = () => {
         <Route
           path="progress"
           element={<AdminProgress />}
+        />
+        <Route
+          path="blogs"
+          element={<AdminBlogs />}
+        />
+        {/* <Route
+          path="blogs/:id"
+          element={<AdminBlogDetail />}
+        /> */}
+
+        <Route
+          path="/faqs"
+          element={<AdminFaqs />}
+        />
+        <Route
+          path="faqs/:id"
+          element={<FaqDetail />}
         />
       </Route>
     </Routes>

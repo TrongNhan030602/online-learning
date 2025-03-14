@@ -1,13 +1,13 @@
 // src/pages/admin/CourseDetail.jsx
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import courseApi from "../../api/courseApi";
-import { getStorageUrl } from "../../utils/getStorageUrl";
-import LessonFormModal from "../../components/Lessons/LessonFormModal";
-import LessonFilesModal from "../../components/Lessons/LessonFilesModal";
-import "../../styles/course/admin-course-detail.css";
-import Loading from "../../components/Common/Loading";
-import { useToast } from "../../hooks/useToast";
+import courseApi from "../../../api/courseApi";
+import { getStorageUrl } from "../../../utils/getStorageUrl";
+import LessonFormModal from "../../../components/Lessons/LessonFormModal";
+import LessonFilesModal from "../../../components/Lessons/LessonFilesModal";
+import "../../../styles/course/admin-course-detail.css";
+import Loading from "../../../components/Common/Loading";
+import { useToast } from "../../../hooks/useToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 

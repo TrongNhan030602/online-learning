@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../hooks/useToast"; // Import useToast
-import courseApi from "../../api/courseApi";
-import CourseList from "../../components/Courses/CourseList";
-import CourseModal from "../../components/Courses/CourseModal";
-import CourseFilesManager from "../../components/Courses/CourseFilesManager";
-import ConfirmDialog from "../../components/Common/ConfirmDialog";
-import Loading from "../../components/Common/Loading";
-import "../../styles/course/admin-courses.css";
+import { useToast } from "../../../hooks/useToast"; // Import useToast
+import courseApi from "../../../api/courseApi";
+import CourseList from "../../../components/Courses/CourseList";
+import CourseModal from "../../../components/Courses/CourseModal";
+import CourseFilesManager from "../../../components/Courses/CourseFilesManager";
+import ConfirmDialog from "../../../components/Common/ConfirmDialog";
+import Loading from "../../../components/Common/Loading";
+import "../../../styles/course/admin-courses.css";
 
 const AdminCourses = () => {
   const [courses, setCourses] = useState([]);

@@ -1,13 +1,16 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\ProgressController;
 use App\Http\Controllers\API\CourseFileController;
+use App\Http\Controllers\API\BlogCommentController;
 
 // Authentication routes
 Route::group(['prefix' => 'auth'], function () {
@@ -73,20 +76,16 @@ Route::prefix('lessons')->group(function () {
 
 
 // API quản lý tiến độ học viên
-Route::prefix('progress')->group(function () {
-    Route::get('/', [ProgressController::class, 'index'])->middleware('auth:api');
-    Route::get('/{id}', [ProgressController::class, 'show'])->middleware('auth:api');
-    Route::post('/', [ProgressController::class, 'store'])->middleware('auth:api');
-    Route::put('/{id}', [ProgressController::class, 'update'])->middleware('auth:api');
+Route::prefix('progress')->middleware('auth:api')->group(function () {
+    Route::get('/', [ProgressController::class, 'index']); // Lấy danh sách tiến độ
+    Route::get('/{id}', [ProgressController::class, 'show']); // Lấy chi tiết tiến độ
+    Route::post('/', [ProgressController::class, 'store']); // Tạo mới tiến độ
+    Route::put('/{id}', [ProgressController::class, 'update'])->middleware('auth:api', 'role:admin'); // Cập nhật tiến độ
+    Route::put('/{id}/complete', [ProgressController::class, 'markLessonComplete']); // Đánh dấu bài học hoàn thành
+    Route::get('/user/{userId}/completed-lessons', [ProgressController::class, 'getCompletedLessons']); // Danh sách bài học hoàn thành
+    Route::post('/{courseId}/review', [ProgressController::class, 'submitReview']); // Đánh giá khóa học
+    Route::get('/admin/users-progress', [ProgressController::class, 'adminViewProgress'])->middleware('auth:api', 'role:admin'); // Admin xem tiến độ học viên
 });
-
-
-
-
-
-
-
-
 
 
 
@@ -97,6 +96,46 @@ Route::prefix('reviews')->group(function () {
     Route::put('/{id}/approve', [ReviewController::class, 'approve']); // Duyệt đánh giá
     Route::delete('/{id}', [ReviewController::class, 'destroy']); // Xóa đánh giá
 });
+
+// API quản lý blog
+Route::prefix('blogs')->group(function () {
+    Route::get('/', [BlogController::class, 'index']); // Lấy danh sách blog
+    Route::get('/{id}', [BlogController::class, 'show']); // Lấy blog theo ID
+    Route::post('/', [BlogController::class, 'store']); // Tạo blog
+    Route::put('/{id}', [BlogController::class, 'update']); // Cập nhật blog
+    Route::delete('/{id}', [BlogController::class, 'destroy']); // Xóa blog
+
+    // Routes quản lý ảnh
+    Route::get('/{id}/images', [BlogController::class, 'getImages']); // Lấy danh sách ảnh của blog
+    Route::post('/{id}/images', [BlogController::class, 'uploadImages']); // Upload ảnh cho blog
+    Route::delete('/images/{imageId}', [BlogController::class, 'deleteImage']); // Xóa ảnh blog
+
+});
+
+
+Route::prefix('blog-comments')->group(function () {
+    Route::get('/{blogId}', [BlogCommentController::class, 'index']); // Lấy danh sách bình luận theo blog
+    Route::post('/', [BlogCommentController::class, 'store']); // Tạo bình luận mới
+    Route::put('/{id}', [BlogCommentController::class, 'update']); // ✅ Chỉnh sửa bình luận
+    Route::delete('/{id}', [BlogCommentController::class, 'destroy']); // Xóa bình luận
+});
+
+
+Route::prefix('faqs')->group(function () {
+    Route::get('/', [FaqController::class, 'index']);
+    Route::get('/{id}', [FaqController::class, 'show']);
+    Route::get('/category/{category}', [FaqController::class, 'getByCategory']);
+    Route::get('/status/{status}', [FaqController::class, 'getByStatus']);
+    Route::post('/', [FaqController::class, 'store']);
+    Route::put('/{id}', [FaqController::class, 'update']);
+    Route::delete('/{id}', [FaqController::class, 'destroy']);
+});
+
+
+
+
+
+
 
 
 

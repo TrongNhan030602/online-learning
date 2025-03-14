@@ -1,0 +1,102 @@
+.faq-detail {
+  padding: 20px;
+  background: linear-gradient(135deg, #f3f4f6, #e2e8f0);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.faq-card {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Nút quay lại & Tiêu đề */
+.faq-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.faq-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.faq-back-btn:hover {
+  background: var(--primary-color);
+  filter: brightness(1.2);
+}
+
+.faq-question {
+  font-size: 20px;
+  color: #333;
+  font-weight: bold;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.faq-icon {
+  font-size: 20px;
+  color: var(--primary-color);
+  margin-right: 6px;
+}
+
+.faq-content {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #555;
+  text-align: left;
+}
+
+.faq-meta {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+}
+
+.faq-status {
+  font-weight: bold;
+}
+
+.faq-status.active {
+  color: green;
+}
+
+.faq-status.inactive {
+  color: red;
+}
+
+/* Hiệu ứng xuất hiện */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -7,9 +7,11 @@ const AdminLayout = () => {
   // Định nghĩa các route và tiêu đề tương ứng
   const routeTitles = {
     "/admin/courses": "Quản lý khóa học",
+    "/admin/faqs": "Quản lý faqs",
     "/admin/users": "Quản lý người dùng",
     "/admin/lessons": "Quản lý bài học",
     "/admin/progress": "Quản lý tiến độ",
+    "/admin/blogs": "Quản lý blog",
     "/admin": "Dashboard",
   };
 
@@ -72,6 +74,22 @@ const AdminLayout = () => {
                 to="/admin/progress"
               >
                 Quản lý tiến độ
+              </Link>
+            </li>
+            <li className="admin__nav-item">
+              <Link
+                className="admin__nav-link"
+                to="/admin/blogs"
+              >
+                Quản lý blog
+              </Link>
+            </li>
+            <li className="admin__nav-item">
+              <Link
+                className="admin__nav-link"
+                to="/admin/faqs"
+              >
+                Quản lý Faqs
               </Link>
             </li>
           </ul>

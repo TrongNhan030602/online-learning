@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import lessonApi from "../../api/lessonApi";
-import "../../styles/course/admin-lesson-detail.css";
-import { useToast } from "../../hooks/useToast";
-import ConfirmDialog from "../../components/Common/ConfirmDialog";
-import Loading from "../../components/Common/Loading";
+import lessonApi from "../../../api/lessonApi";
+import "../../../styles/course/admin-lesson-detail.css";
+import { useToast } from "../../../hooks/useToast";
+import ConfirmDialog from "../../../components/Common/ConfirmDialog";
+import Loading from "../../../components/Common/Loading";
 
 const AdminLessonDetail = () => {
   const { courseId, lessonId } = useParams();
@@ -191,6 +191,7 @@ const AdminLessonDetail = () => {
             type="number"
             id="order"
             name="order"
+            min={1}
             value={formData.order}
             onChange={handleChange}
             className="admin-lesson-detail__input"
