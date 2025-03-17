@@ -1,5 +1,5 @@
-/* Block: course-form */
-.course-form {
+/* CouPon Form Styles */
+.coupon-form {
   background-color: #fff;
   border: 1px solid var(--secondary-color);
   padding: 20px;
@@ -10,7 +10,7 @@
   font-family: var(--primary-font);
 }
 
-.course-form__title {
+.coupon-form__title {
   font-size: 1.75rem;
   font-family: var(--heading-font);
   font-weight: bold;
@@ -19,26 +19,18 @@
   text-align: center;
 }
 
-.course-form__error {
-  color: var(--primary-color);
-  margin-bottom: 15px;
-  text-align: center;
-  font-weight: bold;
-}
-
-.course-form__group {
+.coupon-form__group {
   margin-bottom: 15px;
 }
 
-.course-form__label {
+.coupon-form__label {
   display: block;
   font-weight: 600;
   margin-bottom: 5px;
   color: var(--text-dark);
 }
 
-.course-form__input,
-.course-form__textarea {
+.coupon-form__input {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--secondary-color);
@@ -48,19 +40,13 @@
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.course-form__input:focus,
-.course-form__textarea:focus {
+.coupon-form__input:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 5px rgba(204, 0, 0, 0.3);
   outline: none;
 }
 
-.course-form__textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-.course-form__actions {
+.coupon-form__actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -68,7 +54,7 @@
 }
 
 /* Button styles */
-.course-form__button {
+.coupon-form__button {
   padding: 12px 20px;
   border: none;
   border-radius: 6px;
@@ -78,43 +64,28 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.course-form__button:hover {
+.coupon-form__button:hover {
   transform: scale(1.05);
 }
 
-.course-form__button:active {
+.coupon-form__button:active {
   transform: scale(0.98);
 }
 
-.course-form__button--submit {
+.coupon-form__button--submit {
   background-color: var(--primary-color);
   color: var(--text-white);
 }
 
-.course-form__button--submit:hover {
+.coupon-form__button--submit:hover {
   background-color: var(--primary-hover);
 }
 
-.course-form__button--cancel {
+.coupon-form__button--cancel {
   background-color: var(--secondary-color);
   color: var(--text-white);
 }
 
-.course-form__button--cancel:hover {
+.coupon-form__button--cancel:hover {
   background-color: var(--secondary-hover);
-}
-
-/* Responsive adjustments */
-@media (max-width: 576px) {
-  .course-form {
-    padding: 15px;
-    margin: 15px;
-  }
-  .course-form__actions {
-    flex-direction: column;
-  }
-  .course-form__button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
 }

@@ -9,7 +9,16 @@
   width: 100%;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-
+.course-list__search {
+  width: 100%;
+  max-width: 300px;
+  margin-left: 20px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
 /* Title */
 .course-list__title {
   font-size: 1.8rem;
@@ -20,7 +29,11 @@
   text-align: center;
   background-color: #f9f9f9;
 }
-
+.course-list__td {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
 /* Responsive table wrapper */
 .course-list__table-wrapper {
   width: 100%;
@@ -38,6 +51,7 @@
   padding: 16px;
   text-align: left;
   border-bottom: 1px solid #f1f1f1;
+  cursor: pointer;
 }
 
 .course-list__th {

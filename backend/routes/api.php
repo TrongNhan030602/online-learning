@@ -5,6 +5,8 @@ use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\CouponController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\ReviewController;
@@ -133,10 +135,34 @@ Route::prefix('faqs')->group(function () {
 
 
 
+Route::prefix('coupons')->group(function () {
 
+    // 📌 Quản lý mã giảm giá (CRUD)
+    Route::get('/', [CouponController::class, 'index']);  // ✅ Lấy danh sách mã giảm giá
+    Route::post('/', [CouponController::class, 'store']);  // ✅ Tạo mới mã giảm giá
+    Route::put('/{id}', [CouponController::class, 'update']);  // ✅ Cập nhật mã giảm giá
+    Route::delete('/{id}', [CouponController::class, 'destroy']);  // ✅ Xóa mã giảm giá
 
+    // 📌 Xử lý mã giảm giá
+    Route::get('/active', [CouponController::class, 'getActiveCoupons']); // ✅ Lấy danh sách mã còn hạn
+    Route::get('/{id}', [CouponController::class, 'show']); // ✅ Lấy chi tiết mã giảm giá
+    Route::get('/apply/{code}', [CouponController::class, 'applyCoupon']); // ✅ Kiểm tra & áp dụng mã
+    Route::post('/reset-usage/{id}', [CouponController::class, 'resetUsage']); // ✅ Reset số lần sử dụng
 
+});
 
+Route::prefix('orders')->group(function () {
+
+    Route::get('/', [OrderController::class, 'index']);  // ✅ Lấy danh sách đơn hàng
+    Route::get('/{id}', [OrderController::class, 'show']); // ✅ Xem chi tiết đơn hàng
+    Route::post('/', [OrderController::class, 'store']);  // ✅ Tạo đơn hàng mới
+    Route::put('/{id}', [OrderController::class, 'update']);  // ✅ Cập nhật đơn hàng
+    Route::delete('/{id}', [OrderController::class, 'destroy']);  // ✅ Xóa đơn hàng
+
+    // ✅ Áp dụng mã giảm giá vào đơn hàng
+    Route::post('/{orderId}/apply-coupon', [OrderController::class, 'applyCoupon']);
+
+});
 
 
 

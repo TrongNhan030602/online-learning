@@ -1,29 +1,26 @@
-import { Outlet, Link, useLocation, matchPath } from "react-router-dom";
+import { Outlet, NavLink, useLocation } from "react-router-dom";
 import "../styles/admin.css";
 import LogoutButton from "../components/Auth/LogoutButton";
+
 const AdminLayout = () => {
   const location = useLocation();
 
-  // Định nghĩa các route và tiêu đề tương ứng
+  // Định nghĩa tiêu đề cho các route
   const routeTitles = {
     "/admin/courses": "Quản lý khóa học",
-    "/admin/faqs": "Quản lý faqs",
+    "/admin/faqs": "Quản lý FAQs",
     "/admin/users": "Quản lý người dùng",
     "/admin/lessons": "Quản lý bài học",
     "/admin/progress": "Quản lý tiến độ",
     "/admin/blogs": "Quản lý blog",
+    "/admin/coupons": "Quản lý mã giảm giá",
     "/admin": "Dashboard",
   };
 
-  // Hàm trả về tiêu đề dựa trên URL hiện tại (matchPath để match các route con)
+  // Lấy tiêu đề theo URL hiện tại
   const getTitle = () => {
     const { pathname } = location;
-    for (const [path, title] of Object.entries(routeTitles)) {
-      if (matchPath({ path, end: false }, pathname)) {
-        return title;
-      }
-    }
-    return "Dashboard";
+    return routeTitles[pathname] || "Dashboard";
   };
 
   return (
@@ -31,7 +28,7 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <aside className="admin__sidebar">
         <div className="admin__sidebar-top">
-          <Link
+          <NavLink
             className="admin__logo"
             to="/admin"
           >
@@ -40,63 +37,72 @@ const AdminLayout = () => {
               alt="Logo"
               className="admin__logo-img"
             />
-          </Link>
+          </NavLink>
         </div>
         <nav className="admin__nav">
           <ul className="admin__nav-list">
             <li className="admin__nav-item">
-              <Link
+              <NavLink
                 className="admin__nav-link"
                 to="/admin"
+                end
               >
                 Dashboard
-              </Link>
+              </NavLink>
             </li>
             <li className="admin__nav-item">
-              <Link
+              <NavLink
                 className="admin__nav-link"
                 to="/admin/courses"
               >
                 Quản lý khóa học
-              </Link>
+              </NavLink>
             </li>
             <li className="admin__nav-item">
-              <Link
-                className="admin__nav-link"
-                to="/admin/users"
-              >
-                Quản lý người dùng
-              </Link>
-            </li>
-            <li className="admin__nav-item">
-              <Link
-                className="admin__nav-link"
-                to="/admin/progress"
-              >
-                Quản lý tiến độ
-              </Link>
-            </li>
-            <li className="admin__nav-item">
-              <Link
+              <NavLink
                 className="admin__nav-link"
                 to="/admin/blogs"
               >
                 Quản lý blog
-              </Link>
+              </NavLink>
             </li>
             <li className="admin__nav-item">
-              <Link
+              <NavLink
                 className="admin__nav-link"
                 to="/admin/faqs"
               >
-                Quản lý Faqs
-              </Link>
+                Quản lý FAQs
+              </NavLink>
+            </li>
+            <li className="admin__nav-item">
+              <NavLink
+                className="admin__nav-link"
+                to="/admin/coupons"
+              >
+                Quản lý mã giảm giá
+              </NavLink>
+            </li>
+            <li className="admin__nav-item">
+              <NavLink
+                className="admin__nav-link"
+                to="/admin/users"
+              >
+                Quản lý người dùng
+              </NavLink>
+            </li>
+            <li className="admin__nav-item">
+              <NavLink
+                className="admin__nav-link"
+                to="/admin/progress"
+              >
+                Quản lý tiến độ
+              </NavLink>
             </li>
           </ul>
         </nav>
       </aside>
 
-      {/* Main content area */}
+      {/* Main content */}
       <div className="admin__content">
         {/* Header */}
         <header className="admin__header">
@@ -130,15 +136,15 @@ const AdminLayout = () => {
               aria-labelledby="adminUserMenu"
             >
               <li>
-                <Link
+                <NavLink
                   className="dropdown-item"
                   to="/admin/profile"
                 >
                   Cập nhật thông tin
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <LogoutButton lassName="dropdown-item" />
+                <LogoutButton className="dropdown-item" />
               </li>
             </ul>
           </div>

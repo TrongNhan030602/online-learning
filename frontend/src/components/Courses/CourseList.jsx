@@ -7,6 +7,7 @@ import {
   faEdit,
   faTrash,
   faFolderOpen,
+  faSort,
 } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/course/course-list.css";
 
@@ -52,23 +53,68 @@ ExpandableText.propTypes = {
 };
 
 const CourseList = ({ courses, onEdit, onDelete, onSelect, onManageFiles }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  const handleSort = (field) => {
+    const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortOrder(order);
+  };
+
+  const filteredCourses = courses.filter((course) =>
+    course.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedCourses = [...filteredCourses].sort((a, b) => {
+    if (!sortField) return 0;
+    if (a[sortField] < b[sortField]) return sortOrder === "asc" ? -1 : 1;
+    if (a[sortField] > b[sortField]) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
   return (
     <div className="course-list">
       <h2 className="course-list__title">Danh sách khóa học</h2>
-      {courses && courses.length > 0 ? (
+      <input
+        type="text"
+        className="course-list__search"
+        placeholder="Tìm kiếm khóa học..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      {filteredCourses.length === 0 ? (
+        <p className="course-list__no-data">Không tìm khóa học phù hợp.</p>
+      ) : (
         <div className="course-list__table-wrapper">
           <table className="course-list__table">
             <thead>
               <tr className="course-list__tr">
-                <th className="course-list__th">ID</th>
-                <th className="course-list__th">Tiêu đề</th>
+                <th
+                  className="course-list__th"
+                  onClick={() => handleSort("id")}
+                >
+                  ID <FontAwesomeIcon icon={faSort} />
+                </th>
+                <th
+                  className="course-list__th"
+                  onClick={() => handleSort("title")}
+                >
+                  Tiêu đề <FontAwesomeIcon icon={faSort} />
+                </th>
                 <th className="course-list__th">Mô tả</th>
-                <th className="course-list__th">Giá</th>
+                <th
+                  className="course-list__th"
+                  onClick={() => handleSort("price")}
+                >
+                  Giá <FontAwesomeIcon icon={faSort} />
+                </th>
                 <th className="course-list__th">Hành động</th>
               </tr>
             </thead>
             <tbody>
-              {courses.map((course) => (
+              {sortedCourses.map((course) => (
                 <tr
                   key={course.id}
                   className="course-list__tr"
@@ -118,8 +164,6 @@ const CourseList = ({ courses, onEdit, onDelete, onSelect, onManageFiles }) => {
             </tbody>
           </table>
         </div>
-      ) : (
-        <p className="course-list__no-data">Không có khóa học nào.</p>
       )}
     </div>
   );

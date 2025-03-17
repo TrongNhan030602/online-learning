@@ -21,6 +21,10 @@ use App\Interfaces\BlogCommentRepositoryInterface;
 use App\Repositories\BlogCommentRepository;
 use App\Interfaces\FaqRepositoryInterface;
 use App\Repositories\FaqRepository;
+use App\Interfaces\CouponRepositoryInterface;
+use App\Repositories\CouponRepository;
+use App\Interfaces\OrderRepositoryInterface;
+use App\Repositories\OrderRepository;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -37,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BlogRepositoryInterface::class, BlogRepository::class);
         $this->app->bind(BlogCommentRepositoryInterface::class, BlogCommentRepository::class);
         $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
+        $this->app->bind(CouponRepositoryInterface::class, CouponRepository::class);
+        $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
     }
 
     /**

@@ -8,6 +8,24 @@
   width: 100%;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+/* Ô tìm kiếm */
+.blog-list__search {
+  width: 100%;
+  max-width: 300px;
+  margin-left: 20px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+/* Cột có thể sắp xếp */
+.blog-list__td {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
 
 .blog-list__title {
   font-size: 1.8rem;

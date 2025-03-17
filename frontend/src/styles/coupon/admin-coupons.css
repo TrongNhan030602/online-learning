@@ -1,24 +1,18 @@
-/* ============================= */
-/* Admin Courses Page Styles     */
-/* ============================= */
-
-/* Container chính */
-.admin-courses {
+.admin-coupons {
   padding: 30px;
   background-color: #f4f7fa;
   min-height: calc(100vh - 100px);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Header */
-.admin-courses__header {
+.admin-coupons__header {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 25px;
 }
 
-.admin-courses__title {
+.admin-coupons__title {
   font-size: 2.2rem;
   font-weight: 600;
   color: #333;
@@ -27,15 +21,14 @@
   letter-spacing: 0.5px;
 }
 
-/* Actions */
-.admin-courses__actions {
+.admin-coupons__actions {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-bottom: 20px;
 }
 
-.admin-courses__btn {
+.admin-coupons__btn {
   display: inline-block;
   padding: 10px 20px;
   margin: 0 10px;
@@ -46,11 +39,11 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.admin-courses__btn:hover {
+.admin-coupons__btn:hover {
   transform: scale(1.03);
 }
 
-.admin-courses__btn--primary {
+.admin-coupons__btn--primary {
   font-family: var(--primary-font);
   font-size: 1rem;
   border-radius: 0.25rem;
@@ -60,18 +53,4 @@
   background-color: var(--primary-color);
   color: #fff;
   transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.admin-courses__btn--primary:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-}
-
-/* Loading */
-.admin-courses__loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
 }

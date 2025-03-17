@@ -32,6 +32,24 @@
   object-fit: cover;
   margin-bottom: 10px;
 }
+.admin__nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 16px;
+  display: block;
+  transition: background 0.3s;
+}
+
+.admin__nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.admin__nav-link.active {
+  background: rgb(236, 84, 50) !important;
+  font-weight: bold !important;
+  border-left: 4px solid #fff !important;
+  color: #fff !important;
+}
 
 .admin__nav {
   flex: 1;

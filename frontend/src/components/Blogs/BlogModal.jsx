@@ -25,13 +25,14 @@ const BlogModal = ({ show, handleClose, initialData, onSuccess }) => {
       show={show}
       onHide={handleClose}
       centered
+      className="blog-modal"
     >
       <Modal.Header closeButton>
-        <Modal.Title>
+        <Modal.Title className="blog-modal__title">
           {initialData ? "Chỉnh sửa Blog" : "Thêm Blog Mới"}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="blog-modal__body">
         <BlogForm
           initialData={initialData}
           onSuccess={handleSuccess}

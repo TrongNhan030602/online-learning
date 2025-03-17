@@ -1,121 +1,107 @@
-/* Form container */
 .blog-form {
-  background: #fff;
-  padding: 25px;
-  width: 100%;
-  max-width: 500px;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  position: relative;
-  animation: fadeIn 0.3s ease-in-out;
+  background-color: #fff;
+  border: 1px solid var(--secondary-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Lỗi hiển thị */
-.blog-form__error {
-  color: #e74c3c;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 10px;
+.blog-form__title {
+  font-size: 1.75rem;
+  font-family: var(--heading-font);
   font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+  text-align: center;
 }
 
-/* Form group */
 .blog-form__group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   margin-bottom: 15px;
 }
 
-/* Label */
 .blog-form__label {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text-dark);
 }
 
-/* Input & Textarea */
 .blog-form__input,
 .blog-form__textarea {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s ease;
+  padding: 10px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 6px;
+  font-size: var(--base-font-size);
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .blog-form__input:focus,
 .blog-form__textarea:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(204, 0, 0, 0.3);
   outline: none;
 }
 
-/* Textarea */
 .blog-form__textarea {
   min-height: 120px;
   resize: vertical;
 }
 
-/* Button container */
 .blog-form__actions {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  align-items: center;
+  margin-top: 20px;
 }
 
-/* Button chung */
 .blog-form__button {
-  flex: 1;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  padding: 12px 20px;
   border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--base-font-size);
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Button submit */
+.blog-form__button:hover {
+  transform: scale(1.05);
+}
+
+.blog-form__button:active {
+  transform: scale(0.98);
+}
+
 .blog-form__button--submit {
-  background: linear-gradient(135deg, #3498db, #1d75bb);
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-white);
 }
 
 .blog-form__button--submit:hover {
-  background: linear-gradient(135deg, #2980b9, #1668a7);
-  transform: scale(1.05);
+  background-color: var(--primary-hover);
 }
 
-.blog-form__button--submit:active {
-  transform: scale(0.98);
-}
-
-/* Button cancel */
 .blog-form__button--cancel {
-  background: #e74c3c;
-  color: white;
+  background-color: var(--secondary-color);
+  color: var(--text-white);
 }
 
 .blog-form__button--cancel:hover {
-  background: #c0392b;
-  transform: scale(1.05);
+  background-color: var(--secondary-hover);
 }
 
-.blog-form__button--cancel:active {
-  transform: scale(0.98);
-}
-
-/* Hiệu ứng fade-in */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+@media (max-width: 576px) {
+  .blog-form {
+    padding: 15px;
+    margin: 15px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .blog-form__actions {
+    flex-direction: column;
+  }
+  .blog-form__button {
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
