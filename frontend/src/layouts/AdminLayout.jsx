@@ -12,6 +12,7 @@ const AdminLayout = () => {
     "/admin/users": "Quản lý người dùng",
     "/admin/lessons": "Quản lý bài học",
     "/admin/progress": "Quản lý tiến độ",
+    "/admin/chats": "Quản lý tin nhắn",
     "/admin/blogs": "Quản lý blog",
     "/admin/coupons": "Quản lý mã giảm giá",
     "/admin": "Dashboard",
@@ -96,6 +97,14 @@ const AdminLayout = () => {
                 to="/admin/progress"
               >
                 Quản lý tiến độ
+              </NavLink>
+            </li>
+            <li className="admin__nav-item">
+              <NavLink
+                className="admin__nav-link"
+                to="/admin/chats"
+              >
+                Quản lý tin nhắn
               </NavLink>
             </li>
           </ul>

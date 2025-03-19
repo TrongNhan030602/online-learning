@@ -1,0 +1,102 @@
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+  border-left: 2px solid #ddd;
+}
+
+/* Vùng tin nhắn */
+.chat-box__messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Tin nhắn */
+.chat-box__message {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 8px;
+  position: relative;
+}
+
+/* Tên người chat */
+.chat-box__user {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Nội dung tin nhắn */
+.chat-box__content {
+  font-size: 14px;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+/* Tin nhắn gửi */
+.chat-box__message.sent {
+  align-self: flex-end;
+  background: #ec5432;
+  color: white;
+}
+
+/* Tin nhắn nhận */
+.chat-box__message.received {
+  align-self: flex-start;
+  background: #ecf0f1;
+  color: #2c3e50;
+}
+
+/* Ô nhập tin nhắn */
+.chat-box__input {
+  display: flex;
+  border-top: 2px solid #ddd;
+  padding: 10px;
+}
+
+.chat-box__input input {
+  flex-grow: 1;
+  padding: 8px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.chat-box__input button {
+  background: #ec5432;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.chat-box__input button:hover {
+  background: #df4623;
+}
+/* Thêm hiệu ứng nổi bật cho tin nhắn mới */
+@keyframes highlightMessage {
+  0% {
+    background-color: #fffcf2;
+    transform: scale(1);
+  }
+  50% {
+    background-color: #fff6e1;
+    transform: scale(1.1);
+  }
+  100% {
+    background-color: #fffcf2;
+    transform: scale(1);
+  }
+}
+
+.new-message {
+  animation: highlightMessage 1.5s ease-in-out;
+  border-left: 4px solid #ff6f61;
+}

@@ -10,6 +10,7 @@ import AdminBlogs from "../pages/admin/Blogs/AdminBlogs";
 import AdminFaqs from "../pages/admin/Faqs/AdminFaqs";
 import FaqDetail from "../pages/admin/Faqs/FaqDetail";
 import AdminCoupons from "../pages/admin/CouPon/AdminCouPon";
+import AdminChat from "../pages/admin/Chat/AdminChat";
 const AdminRoutes = () => {
   return (
     <Routes>
@@ -59,6 +60,12 @@ const AdminRoutes = () => {
         <Route
           path="coupons"
           element={<AdminCoupons />}
+        />
+        {/* Route cho Chat */}
+
+        <Route
+          path="chats"
+          element={<AdminChat />}
         />
       </Route>
     </Routes>

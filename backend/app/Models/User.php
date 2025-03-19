@@ -36,7 +36,10 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
-
+    public function is_admin()
+    {
+        return $this->role === RoleEnum::Admin;
+    }
     /**
      * Get the attributes that should be cast.
      *

@@ -1,0 +1,70 @@
+.admin-chat {
+  display: flex;
+  height: 100vh;
+  background: #f4f4f4;
+  position: relative;
+}
+
+/* Sidebar */
+.chat-sidebar {
+  width: 280px;
+  background: #2c3e50;
+  color: white;
+  padding: 20px;
+  border-right: 2px solid #bdc3c7;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Chat Box mở rộng khi sidebar đóng */
+.chat-container {
+  flex-grow: 1;
+  transition: width 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+.admin-chat__placeholder {
+  display: flex;
+  justify-content: center;
+  padding: 60px;
+  font-weight: bold;
+}
+/* Khi sidebar mở */
+.chat-container.with-sidebar {
+  width: calc(100% - 280px);
+}
+
+/* Khi sidebar ẩn */
+.chat-container.full-width {
+  width: 100%;
+}
+
+/* Nút mở/đóng sidebar */
+.toggle-sidebar {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-sidebar:hover {
+  background: #ddd;
+}
+
+/* Thanh hiển thị người đang chat */
+.chat-header {
+  background: #ec5432;
+  color: white;
+  padding: 10px 15px;
+  font-size: 16px;
+  text-align: center;
+  border-bottom: 2px solid #ed4d29;
+}

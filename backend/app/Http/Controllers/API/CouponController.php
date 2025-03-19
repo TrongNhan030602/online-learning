@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CouPon\CouponRequest;
 use App\Http\Requests\CouPon\CouponUpdateRequest;
-
+use Exception;
 class CouponController extends Controller
 {
     protected $couponService;
@@ -26,7 +26,7 @@ class CouponController extends Controller
         try {
             $coupons = $this->couponService->getAllCoupons();
             return response()->json($coupons, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => 'Không thể lấy danh sách mã giảm giá.'], 500);
         }
     }
@@ -39,7 +39,7 @@ class CouponController extends Controller
         try {
             $coupon = $this->couponService->getCouponById($id);
             return response()->json($coupon, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => 'Không tìm thấy mã giảm giá.'], 404);
         }
     }
@@ -52,7 +52,7 @@ class CouponController extends Controller
         try {
             $coupon = $this->couponService->createCoupon($request->validated());
             return response()->json(['message' => 'Tạo mã giảm giá thành công!', 'data' => $coupon], 201);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => 'Lỗi khi tạo mã giảm giá.'], 500);
         }
     }
@@ -65,7 +65,7 @@ class CouponController extends Controller
         try {
             $coupon = $this->couponService->updateCoupon($id, $request->validated());
             return response()->json(['message' => 'Cập nhật mã giảm giá thành công!', 'data' => $coupon], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => 'Lỗi khi cập nhật mã giảm giá.'], 500);
         }
     }
@@ -78,7 +78,7 @@ class CouponController extends Controller
         try {
             $this->couponService->deleteCoupon($id);
             return response()->json(['message' => 'Xóa mã giảm giá thành công!'], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => 'Không thể xóa mã giảm giá.'], 500);
         }
     }
@@ -94,7 +94,7 @@ class CouponController extends Controller
             }
 
             return response()->json($coupons, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('Lỗi khi lấy danh sách mã giảm giá:', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Không thể lấy danh sách mã giảm giá còn hạn.'], 500);
         }
@@ -106,7 +106,7 @@ class CouponController extends Controller
         try {
             $coupon = $this->couponService->applyCouponForOrder($code);
             return response()->json(['message' => 'Mã giảm giá hợp lệ!', 'data' => $coupon], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -116,7 +116,7 @@ class CouponController extends Controller
         try {
             $this->couponService->resetUsage($id);
             return response()->json(['message' => 'Đã đặt lại số lần sử dụng mã giảm giá.'], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => 'Không thể đặt lại số lần sử dụng.'], 500);
         }
     }

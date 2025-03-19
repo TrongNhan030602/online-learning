@@ -10,6 +10,7 @@ use App\Http\Controllers\API\CouponController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\ReviewController;
+use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\ProgressController;
 use App\Http\Controllers\API\CourseFileController;
 use App\Http\Controllers\API\BlogCommentController;
@@ -163,6 +164,22 @@ Route::prefix('orders')->group(function () {
     Route::post('/{orderId}/apply-coupon', [OrderController::class, 'applyCoupon']);
 
 });
+
+// Chat
+Route::middleware('auth:api')->group(function () {
+    // Lấy tin nhắn của người dùng hiện tại
+    Route::get('/messages', [ChatController::class, 'index']);
+
+    // Gửi tin nhắn
+    Route::post('/messages', [ChatController::class, 'sendMessage']);
+
+    // Lấy danh sách học viên đã từng chat với Admin
+    Route::get('/students', [ChatController::class, 'getStudentsWhoChatted']);
+});
+
+
+
+
 
 
 

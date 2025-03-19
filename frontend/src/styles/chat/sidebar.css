@@ -1,0 +1,63 @@
+.chat-sidebar {
+  width: 300px;
+  height: 100vh;
+  background: #ec5432;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Thanh cuộn khi danh sách dài */
+  max-height: 100vh;
+}
+
+.chat-sidebar__title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 10px;
+}
+
+.chat-sidebar__list {
+  list-style: none;
+  padding: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.chat-sidebar__item {
+  padding: 12px;
+  margin: 5px 0;
+  background: #a73b23;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-sidebar__item:hover {
+  background: #8a1f07;
+}
+
+.chat-sidebar__icon {
+  /* color: #ecf0f1; */
+  font-size: 16px;
+}
+button.toggle-sidebar {
+  margin: -6px;
+}
+.chat-sidebar__item {
+  padding: 12px;
+  margin: 5px 0;
+  background: #a73b23;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
