@@ -1,232 +1,207 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import lessonApi from "../../api/lessonApi";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/course/lesson-form-modal.css";
+
+const schema = yup.object().shape({
+  title: yup.string().required("Tiêu đề không được để trống"),
+  order: yup
+    .number()
+    .typeError("Phải là số")
+    .min(1, "Thứ tự phải lớn hơn 0")
+    .required("Bắt buộc"),
+  video_url: yup.string().url("URL video không hợp lệ").nullable(),
+  document: yup.mixed().nullable(),
+});
 
 const LessonFormModal = ({
   show,
   courseId,
-  initialData = null,
+  initialData,
   handleClose,
   onSuccess,
 }) => {
-  const [formData, setFormData] = useState({
-    course_id: courseId,
-    title: "",
-    content: "",
-    video_url: "",
-    order: "",
-    document: null,
-  });
   const [error, setError] = useState("");
 
-  // Nếu có dữ liệu ban đầu (update) thì set lại formData
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      course_id: courseId,
+      title: initialData?.title || "",
+      content: initialData?.content || "",
+      video_url: initialData?.video_url || "",
+      order: initialData?.order || "",
+      document: null,
+    },
+  });
+
   useEffect(() => {
-    if (initialData) {
-      setFormData({
-        course_id: courseId,
-        title: initialData.title || "",
-        content: initialData.content || "",
-        video_url: initialData.video_url || "",
-        order: initialData.order || "",
-        document: null, // không tự động hiển thị file cũ, chỉ cập nhật khi upload file mới
-      });
-    } else {
-      // Nếu tạo mới thì reset form
-      setFormData({
-        course_id: courseId,
-        title: "",
-        content: "",
-        video_url: "",
-        order: "",
-        document: null,
-      });
-    }
-  }, [initialData, courseId]);
+    reset({
+      course_id: courseId,
+      title: initialData?.title || "",
+      content: initialData?.content || "",
+      video_url: initialData?.video_url || "",
+      order: initialData?.order || "",
+      document: null,
+    });
+    setError("");
+  }, [show, initialData, courseId, reset]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, document: e.target.files[0] }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setError("");
 
-    // Tạo đối tượng FormData để gửi dữ liệu kiểu multipart/form-data
-    const data = new FormData();
-    data.append("course_id", formData.course_id);
-    data.append("title", formData.title);
-    data.append("content", formData.content);
-    data.append("video_url", formData.video_url);
-    data.append("order", formData.order);
-    if (formData.document) {
-      data.append("document", formData.document);
-    }
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      if (data[key]) formData.append(key, data[key]);
+    });
 
-    // Nếu có initialData (update) thì gọi API update, ngược lại tạo mới
-    if (initialData && initialData.id) {
-      lessonApi
-        .updateLesson(initialData.id, data)
-        .then((res) => {
-          onSuccess(res.data);
-          handleClose();
-        })
-        .catch((err) => {
-          setError(err.response?.data?.message || "Cập nhật bài học thất bại.");
-        });
-    } else {
-      lessonApi
-        .createLesson(data)
-        .then((res) => {
-          onSuccess(res.data);
-          handleClose();
-        })
-        .catch((err) => {
-          setError(err.response?.data?.message || "Tạo bài học thất bại.");
-        });
+    try {
+      const response = initialData
+        ? await lessonApi.updateLesson(initialData.id, formData)
+        : await lessonApi.createLesson(formData);
+
+      onSuccess(response.data);
+      reset();
+      handleClose();
+    } catch (err) {
+      setError(err.response?.data?.message || "Có lỗi xảy ra.");
     }
   };
 
-  if (!show) return null;
-
   return (
-    <div className="lesson-form-modal__overlay">
-      <div className="lesson-form-modal">
-        <div className="lesson-form-modal__header">
-          <h3 className="lesson-form-modal__title">
-            {initialData ? "Cập nhật bài học" : "Thêm bài học mới"}
-          </h3>
-          <button
-            className="lesson-form-modal__close-btn"
-            onClick={handleClose}
-          >
-            &times;
-          </button>
-        </div>
-        <form
-          onSubmit={handleSubmit}
-          className="lesson-form-modal__form"
-        >
-          {error && <p className="lesson-form-modal__error">{error}</p>}
-          <input
-            type="hidden"
-            name="course_id"
-            value={courseId}
-          />
-          <div className="lesson-form-modal__form-group">
-            <label
-              htmlFor="title"
-              className="lesson-form-modal__label"
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title className="lesson-form__title">
+          {initialData ? "Cập nhật bài học" : "Thêm bài học mới"}
+        </Modal.Title>
+      </Modal.Header>
+      <Form
+        onSubmit={handleSubmit(onSubmit)}
+        className="lesson-form"
+      >
+        <Modal.Body>
+          {error && (
+            <Alert
+              variant="danger"
+              className="lesson-form__error"
             >
-              Tiêu đề:
-            </label>
-            <input
+              {error}
+            </Alert>
+          )}
+
+          <Form.Group className="lesson-form__group">
+            <Form.Label className="lesson-form__label">Tiêu đề:</Form.Label>
+            <Form.Control
               type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="lesson-form-modal__input"
-              required
+              {...register("title")}
+              className="lesson-form__input"
             />
-          </div>
-          <div className="lesson-form-modal__form-group">
-            <label
-              htmlFor="content"
-              className="lesson-form-modal__label"
-            >
-              Nội dung:
-            </label>
-            <textarea
-              id="content"
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-              className="lesson-form-modal__textarea"
-            ></textarea>
-          </div>
-          <div className="lesson-form-modal__form-group">
-            <label
-              htmlFor="video_url"
-              className="lesson-form-modal__label"
-            >
-              Video URL:
-            </label>
-            <input
+            {errors.title && (
+              <div className="text-danger small">{errors.title.message}</div>
+            )}
+          </Form.Group>
+
+          <Form.Group className="lesson-form__group">
+            <Form.Label className="lesson-form__label">Nội dung:</Form.Label>
+            <Form.Control
+              as="textarea"
+              {...register("content")}
+              className="lesson-form__textarea"
+            />
+          </Form.Group>
+
+          <Form.Group className="lesson-form__group">
+            <Form.Label className="lesson-form__label">Video URL:</Form.Label>
+            <Form.Control
               type="url"
-              id="video_url"
-              name="video_url"
-              value={formData.video_url}
-              onChange={handleChange}
-              className="lesson-form-modal__input"
+              {...register("video_url")}
+              className="lesson-form__input"
             />
-          </div>
-          <div className="lesson-form-modal__form-group">
-            <label
-              htmlFor="order"
-              className="lesson-form-modal__label"
-            >
-              Thứ tự:
-            </label>
-            <input
+            {errors.video_url && (
+              <div className="text-danger small">
+                {errors.video_url.message}
+              </div>
+            )}
+          </Form.Group>
+
+          <Form.Group className="lesson-form__group">
+            <Form.Label className="lesson-form__label">Thứ tự:</Form.Label>
+            <Form.Control
               type="number"
-              id="order"
-              name="order"
-              min={1}
-              value={formData.order}
-              onChange={handleChange}
-              className="lesson-form-modal__input"
-              required
+              {...register("order")}
+              className="lesson-form__input"
             />
-          </div>
-          <div className="lesson-form-modal__form-group">
-            <label
-              htmlFor="document"
-              className="lesson-form-modal__label"
-            >
-              Tài liệu (nếu có):
-            </label>
-            <input
+            {errors.order && (
+              <div className="text-danger small">{errors.order.message}</div>
+            )}
+          </Form.Group>
+
+          <Form.Group className="lesson-form__group">
+            <Form.Label className="lesson-form__label">Tài liệu:</Form.Label>
+            <Form.Control
               type="file"
-              id="document"
-              name="document"
-              onChange={handleFileChange}
-              className="lesson-form-modal__input-file"
               accept=".pdf,.mp4,.avi,.mov"
+              onChange={(e) => setValue("document", e.target.files[0])}
+              className="lesson-form__input"
             />
-          </div>
-          <div className="lesson-form-modal__actions">
-            <button
-              type="submit"
-              className="lesson-form-modal__btn lesson-form-modal__btn--primary"
-            >
-              {initialData ? "Cập nhật" : "Thêm"}
-            </button>
-            <button
-              type="button"
-              onClick={handleClose}
-              className="lesson-form-modal__btn lesson-form-modal__btn--secondary"
-            >
-              Hủy
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer className="lesson-form__actions">
+          <Button
+            variant="secondary"
+            onClick={handleClose}
+            className="lesson-form__button lesson-form__button--cancel"
+          >
+            Hủy
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting}
+            className="lesson-form__button lesson-form__button--submit"
+          >
+            {isSubmitting ? "Đang xử lý..." : initialData ? "Cập nhật" : "Thêm"}
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
   );
 };
 
+// 🔥 **Thêm kiểm tra kiểu dữ liệu bằng PropTypes**
 LessonFormModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  courseId: PropTypes.number.isRequired,
-  initialData: PropTypes.object,
+  show: PropTypes.bool.isRequired, // Trạng thái hiển thị modal
+  courseId: PropTypes.number.isRequired, // ID của khóa học
+  initialData: PropTypes.shape({
+    // Dữ liệu bài học (nếu có)
+    id: PropTypes.number,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    video_url: PropTypes.string,
+    order: PropTypes.number,
+  }),
   handleClose: PropTypes.func.isRequired,
   onSuccess: PropTypes.func.isRequired,
+};
+
+// Giá trị mặc định (tránh lỗi nếu không có initialData)
+LessonFormModal.defaultProps = {
+  initialData: null,
 };
 
 export default LessonFormModal;

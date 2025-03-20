@@ -5,6 +5,16 @@
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+.blog-form__error {
+  color: #d9534f;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.blog-form__input--error {
+  border-color: #d9534f;
+  background-color: #f8d7da;
+}
 
 .blog-form__title {
   font-size: 1.75rem;

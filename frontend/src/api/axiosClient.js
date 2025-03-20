@@ -7,28 +7,22 @@ const axiosClient = axios.create({
   },
 });
 
+// Interceptor để tự động gán token
 axiosClient.interceptors.request.use((config) => {
-  const tokenData = localStorage.getItem("token");
-  if (tokenData) {
-    let token;
-    try {
-      const parsed = tokenData;
-      token = parsed.access_token || tokenData;
-    } catch (error) {
-      token = tokenData;
-      console.log(error);
-    }
+  const token = localStorage.getItem("token");
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
+// Xử lý lỗi global
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
-      window.location.href = "/login"; // Redirect nếu token hết hạn
+      window.location.href = "/login"; // Chuyển hướng nếu hết hạn
     }
     return Promise.reject(error);
   }

@@ -1,102 +1,116 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import courseApi from "../../api/courseApi";
 import "../../styles/course/course-form.css";
 
+// ✅ Define validation schema với Yup
+const courseSchema = yup.object().shape({
+  title: yup.string().trim().required("Tiêu đề không được để trống"),
+  description: yup.string().trim().optional(),
+  price: yup
+    .number()
+    .typeError("Giá phải là một số")
+    .min(0, "Giá không thể nhỏ hơn 0")
+    .required("Giá không được để trống"),
+});
+
 const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
-  const [course, setCourse] = useState({
-    title: "",
-    description: "",
-    price: "",
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(courseSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      price: "",
+    },
   });
-  const [error, setError] = useState("");
 
   useEffect(() => {
     if (initialData) {
-      setCourse(initialData);
+      setValue("title", initialData.title);
+      setValue("description", initialData.description);
+      setValue("price", initialData.price);
     }
-  }, [initialData]);
+  }, [initialData, setValue]);
 
-  const handleChange = (e) => {
-    setCourse({ ...course, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
-    if (initialData && initialData.id) {
-      courseApi
-        .updateCourse(initialData.id, course)
-        .then((res) => onSuccess(res.data))
-        .catch((err) => {
-          setError(
-            err.response?.data?.message || "Cập nhật khóa học thất bại."
-          );
-        });
-    } else {
-      const formData = new FormData();
-      formData.append("title", course.title);
-      formData.append("description", course.description);
-      formData.append("price", course.price);
-      courseApi
-        .createCourse(formData)
-        .then((res) => onSuccess(res.data))
-        .catch((err) => {
-          setError(err.response?.data?.message || "Tạo khóa học thất bại.");
-        });
+  const onSubmit = async (data) => {
+    try {
+      if (initialData && initialData.id) {
+        const res = await courseApi.updateCourse(initialData.id, data);
+        onSuccess(res.data);
+      } else {
+        const res = await courseApi.createCourse(data);
+        onSuccess(res.data);
+      }
+    } catch (error) {
+      console.error("Lỗi khi gửi form:", error);
     }
   };
 
   return (
     <form
       className="course-form"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <h3 className="course-form__title">
         {initialData ? "Cập nhật khóa học" : "Thêm khóa học mới"}
       </h3>
-      {error && <p className="course-form__error">{error}</p>}
 
+      {/* Tiêu đề */}
       <div className="course-form__group">
         <label className="course-form__label">Tiêu đề:</label>
         <input
           type="text"
-          name="title"
-          className="course-form__input"
-          value={course.title}
-          onChange={handleChange}
-          required
+          className={`course-form__input ${errors.title ? "is-invalid" : ""}`}
+          {...register("title")}
         />
+        {errors.title && (
+          <p className="course-form__error">{errors.title.message}</p>
+        )}
       </div>
 
+      {/* Mô tả */}
       <div className="course-form__group">
         <label className="course-form__label">Mô tả:</label>
         <textarea
-          name="description"
-          className="course-form__textarea"
-          value={course.description}
-          onChange={handleChange}
+          className={`course-form__textarea ${
+            errors.description ? "is-invalid" : ""
+          }`}
+          {...register("description")}
         ></textarea>
+        {errors.description && (
+          <p className="course-form__error">{errors.description.message}</p>
+        )}
       </div>
 
+      {/* Giá */}
       <div className="course-form__group">
         <label className="course-form__label">Giá:</label>
         <input
           type="number"
-          name="price"
-          className="course-form__input"
-          value={course.price}
-          onChange={handleChange}
-          required
+          className={`course-form__input ${errors.price ? "is-invalid" : ""}`}
+          {...register("price")}
         />
+        {errors.price && (
+          <p className="course-form__error">{errors.price.message}</p>
+        )}
       </div>
 
+      {/* Nút hành động */}
       <div className="course-form__actions">
         <button
           type="submit"
           className="course-form__button course-form__button--submit"
+          disabled={isSubmitting}
         >
-          {initialData ? "Cập nhật" : "Thêm"}
+          {isSubmitting ? "Đang xử lý..." : initialData ? "Cập nhật" : "Thêm"}
         </button>
         <button
           type="button"

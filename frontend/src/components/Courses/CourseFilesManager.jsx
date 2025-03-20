@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, Form, Table, Spinner } from "react-bootstrap";
-import { useToast } from "../../hooks/useToast"; // Import useToast
+import { useToast } from "../../hooks/useToast";
 import courseApi from "../../api/courseApi";
 import courseFileApi from "../../api/courseFileApi";
 import Loading from "../../components/Common/Loading";
@@ -11,9 +11,10 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const { addToast } = useToast();
+  const toastRef = useRef(useToast()); // 🔥 Dùng useRef để giữ nguyên reference
 
   const fetchFiles = useCallback(() => {
+    if (!courseId) return;
     setLoading(true);
     courseApi
       .getCourseDetail(courseId)
@@ -21,7 +22,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
         setFiles(res.data.files || []);
       })
       .catch(() => {
-        addToast({
+        toastRef.current.addToast({
           title: "Lỗi",
           message: "Không thể tải danh sách tài liệu.",
           type: "error",
@@ -29,7 +30,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
         });
       })
       .finally(() => setLoading(false));
-  }, [courseId, addToast]); // ✅ Đảm bảo chỉ thay đổi khi courseId hoặc addToast thay đổi
+  }, [courseId]); // ✅ Bỏ `addToast` khỏi dependency
 
   useEffect(() => {
     if (show) fetchFiles();
@@ -40,9 +41,17 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
   };
 
   const handleUpload = () => {
-    if (!selectedFile) return;
-    setUploading(true);
+    if (!selectedFile) {
+      toastRef.current.addToast({
+        title: "Cảnh báo",
+        message: "Vui lòng chọn file trước khi tải lên.",
+        type: "warning",
+        duration: 3000,
+      });
+      return;
+    }
 
+    setUploading(true);
     const formData = new FormData();
     const fileType = selectedFile.type.startsWith("image/")
       ? "image"
@@ -53,7 +62,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
     courseFileApi
       .uploadFile(courseId, formData)
       .then(() => {
-        addToast({
+        toastRef.current.addToast({
           title: "Thành công",
           message: "Tải file lên thành công.",
           type: "success",
@@ -63,7 +72,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
         setSelectedFile(null);
       })
       .catch((err) => {
-        addToast({
+        toastRef.current.addToast({
           title: "Lỗi",
           message: err.response?.data?.message || "Tải file thất bại.",
           type: "error",
@@ -77,7 +86,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
     courseFileApi
       .deleteFile(courseId, fileId)
       .then(() => {
-        addToast({
+        toastRef.current.addToast({
           title: "Thành công",
           message: "Xóa file thành công.",
           type: "success",
@@ -86,7 +95,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
         fetchFiles();
       })
       .catch((err) => {
-        addToast({
+        toastRef.current.addToast({
           title: "Lỗi",
           message: err.response?.data?.message || "Xóa file thất bại.",
           type: "error",
@@ -119,7 +128,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
             variant="primary"
             className="mt-2 custom-btn custom-btn-primary"
             onClick={handleUpload}
-            disabled={!selectedFile || uploading}
+            disabled={uploading}
           >
             {uploading ? (
               <Spinner
@@ -134,12 +143,10 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
         <hr />
         <h5>Danh sách tài liệu</h5>
         {loading ? (
-          <div>
-            <Loading
-              text="Đang tải dữ liệu..."
-              size="lg"
-            />
-          </div>
+          <Loading
+            text="Đang tải dữ liệu..."
+            size="lg"
+          />
         ) : files.length > 0 ? (
           <Table
             striped
@@ -160,7 +167,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
                 <tr key={file.id}>
                   <td>{file.id}</td>
                   <td>{file.type}</td>
-                  <td>{file.file_path.split("/").pop()}</td>
+                  <td>{file.name || file.file_path.split("/").pop()}</td>
                   <td>
                     <Button
                       variant="danger"

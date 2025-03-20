@@ -10,34 +10,37 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (!localStorage.getItem("token")) {
-        setLoading(false);
-        return;
-      }
-      try {
-        const response = await authApi.getUser();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    // Fetch user nếu có token
+    authApi
+      .getUser()
+      .then((response) => {
         setUser(response.data);
-      } catch (error) {
-        console.log("Not logged in", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const login = async (email, password) => {
-    const response = await authApi.login({ email, password });
-    // Lưu token trực tiếp dưới dạng chuỗi
-    localStorage.setItem("token", response.data.access_token);
     try {
-      const userResponse = await authApi.getUser();
-      setUser(userResponse.data);
+      const response = await authApi.login({ email, password });
+      localStorage.setItem("token", response.data.access_token);
+
+      // Nếu API login đã trả về `role`, bạn có thể gán luôn user mà không cần gọi `getUser()`
+      setUser({ role: response.data.role });
+
+      return response; // Trả về để xử lý chuyển hướng
     } catch (error) {
-      console.error("Failed to fetch user after login:", error);
+      console.error("Login failed", error);
+      throw error;
     }
-    return response; // Trả về response để xử lý chuyển hướng ở LoginForm
   };
 
   const register = async (name, email, password) => {

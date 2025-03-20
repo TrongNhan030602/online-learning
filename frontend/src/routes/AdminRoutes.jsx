@@ -1,16 +1,24 @@
 import { Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import AdminLayout from "../layouts/AdminLayout";
-import AdminCourses from "../pages/admin/Courses/AdminCourses";
-import CourseDetail from "../pages/admin/Courses/CourseDetail";
-import AdminUsers from "../pages/admin/AdminUsers";
-import AdminProgress from "../pages/admin/AdminProgress";
-import AdminLessonDetail from "../pages/admin/Lessons/AdminLessonDetail";
-import AdminBlogs from "../pages/admin/Blogs/AdminBlogs";
-// import AdminBlogDetail from "../pages/admin/Blogs/AdminBlogDetail";
-import AdminFaqs from "../pages/admin/Faqs/AdminFaqs";
-import FaqDetail from "../pages/admin/Faqs/FaqDetail";
-import AdminCoupons from "../pages/admin/CouPon/AdminCouPon";
-import AdminChat from "../pages/admin/Chat/AdminChat";
+
+// Lazy load các trang
+const AdminCourses = lazy(() => import("../pages/admin/Courses/AdminCourses"));
+const CourseDetail = lazy(() => import("../pages/admin/Courses/CourseDetail"));
+const AdminUsers = lazy(() => import("../pages/admin/AdminUsers"));
+const AdminProgress = lazy(() => import("../pages/admin/AdminProgress"));
+const AdminLessonDetail = lazy(() =>
+  import("../pages/admin/Lessons/AdminLessonDetail")
+);
+const AdminBlogs = lazy(() => import("../pages/admin/Blogs/AdminBlogs"));
+const AdminFaqs = lazy(() => import("../pages/admin/Faqs/AdminFaqs"));
+const FaqDetail = lazy(() => import("../pages/admin/Faqs/FaqDetail"));
+const AdminCoupons = lazy(() => import("../pages/admin/CouPon/AdminCouPon"));
+const AdminChat = lazy(() => import("../pages/admin/Chat/AdminChat"));
+
+// Component hiển thị khi đang tải
+const Loading = () => <div>Đang tải...</div>;
+
 const AdminRoutes = () => {
   return (
     <Routes>
@@ -20,52 +28,83 @@ const AdminRoutes = () => {
       >
         <Route
           path="courses"
-          element={<AdminCourses />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminCourses />
+            </Suspense>
+          }
         />
         <Route
           path="users"
-          element={<AdminUsers />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminUsers />
+            </Suspense>
+          }
         />
         <Route
           path="courses/:id"
-          element={<CourseDetail />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <CourseDetail />
+            </Suspense>
+          }
         />
         <Route
           path="courses/:courseId/lessons/:lessonId"
-          element={<AdminLessonDetail />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminLessonDetail />
+            </Suspense>
+          }
         />
         <Route
           path="progress"
-          element={<AdminProgress />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminProgress />
+            </Suspense>
+          }
         />
         <Route
           path="blogs"
-          element={<AdminBlogs />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminBlogs />
+            </Suspense>
+          }
         />
-        {/* <Route
-          path="blogs/:id"
-          element={<AdminBlogDetail />}
-        /> */}
-
         <Route
-          path="/faqs"
-          element={<AdminFaqs />}
+          path="faqs"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminFaqs />
+            </Suspense>
+          }
         />
         <Route
           path="faqs/:id"
-          element={<FaqDetail />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <FaqDetail />
+            </Suspense>
+          }
         />
-
-        {/* Route cho CouPon */}
         <Route
           path="coupons"
-          element={<AdminCoupons />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminCoupons />
+            </Suspense>
+          }
         />
-        {/* Route cho Chat */}
-
         <Route
           path="chats"
-          element={<AdminChat />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminChat />
+            </Suspense>
+          }
         />
       </Route>
     </Routes>

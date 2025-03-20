@@ -1,84 +1,70 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { Form, Button } from "react-bootstrap";
 import couponApi from "../../api/couponApi";
 import { useToast } from "../../hooks/useToast";
 import "../../styles/coupon/coupon-form.css";
 
+const couponSchema = yup.object().shape({
+  code: yup
+    .string()
+    .trim()
+    .min(3, "Mã giảm giá phải có ít nhất 3 ký tự.")
+    .matches(/^[a-zA-Z0-9]+$/, "Mã giảm giá chỉ được chứa chữ cái và số.")
+    .required("Mã giảm giá không được để trống."),
+  discount: yup
+    .number()
+    .typeError("Giá trị giảm giá phải là số.")
+    .positive("Giá trị giảm giá phải lớn hơn 0.")
+    .max(100, "Giá trị giảm giá không được vượt quá 100%")
+    .required("Giá trị giảm giá không được để trống."),
+  expires_at: yup.string().required("Vui lòng chọn ngày hết hạn."),
+  usage_limit: yup
+    .number()
+    .typeError("Giới hạn sử dụng phải là số.")
+    .positive("Giới hạn sử dụng phải lớn hơn 0.")
+    .integer("Giới hạn sử dụng phải là số nguyên.")
+    .required("Giới hạn sử dụng không được để trống."),
+});
+
 const CouponForm = ({ initialData, onSuccess, onClose }) => {
   const { addToast } = useToast();
-  const [coupon, setCoupon] = useState({
-    code: "",
-    discount: "",
-    expires_at: "",
-    usage_limit: "",
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(couponSchema),
+    defaultValues: {
+      code: "",
+      discount: "",
+      expires_at: "",
+      usage_limit: "",
+    },
   });
 
-  const [errors, setErrors] = useState({});
-
+  // Reset form khi có initialData
   useEffect(() => {
     if (initialData) {
-      setCoupon({
+      reset({
         ...initialData,
         expires_at: initialData.expires_at.split("T")[0],
       });
-    } else {
-      setCoupon({
-        code: "",
-        discount: "",
-        expires_at: "",
-        usage_limit: "",
-      });
     }
-    setErrors({});
-  }, [initialData]);
+  }, [initialData, reset]);
 
-  const validate = () => {
-    let newErrors = {};
-    if (!coupon.code.trim()) {
-      newErrors.code = "Mã giảm giá không được để trống.";
-    } else if (coupon.code.length < 3) {
-      newErrors.code = "Mã giảm giá phải có ít nhất 3 ký tự.";
-    } else if (!/^[a-zA-Z0-9]+$/.test(coupon.code)) {
-      newErrors.code = "Mã giảm giá chỉ được chứa chữ cái và số.";
-    }
-
-    if (!coupon.discount || isNaN(coupon.discount) || coupon.discount <= 0) {
-      newErrors.discount = "Giá trị giảm giá phải lớn hơn 0.";
-    } else if (coupon.discount > 100) {
-      newErrors.discount = "Giá trị giảm giá không được vượt quá 100%";
-    }
-
-    if (!coupon.expires_at) {
-      newErrors.expires_at = "Vui lòng chọn ngày hết hạn.";
-    }
-
-    if (
-      !coupon.usage_limit ||
-      isNaN(coupon.usage_limit) ||
-      coupon.usage_limit <= 0
-    ) {
-      newErrors.usage_limit = "Giới hạn sử dụng phải lớn hơn 0.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e) => {
-    setCoupon({ ...coupon, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
-
+  const onSubmit = async (data) => {
     try {
-      // Check if we are editing or creating a new coupon
       if (initialData?.id) {
-        await couponApi.updateCoupon(initialData.id, coupon);
+        await couponApi.updateCoupon(initialData.id, data);
       } else {
-        await couponApi.createCoupon(coupon); // This sends the POST request
+        await couponApi.createCoupon(data);
       }
 
       addToast({
@@ -90,12 +76,17 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
         duration: 3000,
       });
 
-      onSuccess(); // Handle success logic
-      onClose(); // Close the form/modal
+      onSuccess();
+      onClose();
     } catch (err) {
       console.error("Lỗi khi lưu mã giảm giá:", err);
-      if (err.response && err.response.data) {
-        setErrors(err.response.data.errors || {}); // Set API errors
+      if (err.response && err.response.data.errors) {
+        Object.keys(err.response.data.errors).forEach((field) => {
+          setError(field, {
+            type: "server",
+            message: err.response.data.errors[field],
+          });
+        });
       } else {
         addToast({
           title: "Lỗi!",
@@ -109,7 +100,7 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
 
   return (
     <Form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="coupon-form"
     >
       <Form.Group
@@ -119,13 +110,12 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
         <Form.Label className="coupon-form__label">Mã giảm giá</Form.Label>
         <Form.Control
           type="text"
-          name="code"
-          value={coupon.code}
-          onChange={handleChange}
+          {...register("code")}
           className={`coupon-form__input ${errors.code ? "is-invalid" : ""}`}
-          required
         />
-        {errors.code && <div className="invalid-feedback">{errors.code}</div>}
+        {errors.code && (
+          <div className="invalid-feedback">{errors.code.message}</div>
+        )}
       </Form.Group>
 
       <Form.Group
@@ -135,17 +125,13 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
         <Form.Label className="coupon-form__label">Giảm giá (%)</Form.Label>
         <Form.Control
           type="number"
-          name="discount"
-          value={coupon.discount}
-          onChange={handleChange}
+          {...register("discount")}
           className={`coupon-form__input ${
             errors.discount ? "is-invalid" : ""
           }`}
-          required
-          min={1}
         />
         {errors.discount && (
-          <div className="invalid-feedback">{errors.discount}</div>
+          <div className="invalid-feedback">{errors.discount.message}</div>
         )}
       </Form.Group>
 
@@ -156,16 +142,13 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
         <Form.Label className="coupon-form__label">Ngày hết hạn</Form.Label>
         <Form.Control
           type="date"
-          name="expires_at"
-          value={coupon.expires_at}
-          onChange={handleChange}
+          {...register("expires_at")}
           className={`coupon-form__input ${
             errors.expires_at ? "is-invalid" : ""
           }`}
-          required
         />
         {errors.expires_at && (
-          <div className="invalid-feedback">{errors.expires_at}</div>
+          <div className="invalid-feedback">{errors.expires_at.message}</div>
         )}
       </Form.Group>
 
@@ -176,16 +159,13 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
         <Form.Label className="coupon-form__label">Giới hạn sử dụng</Form.Label>
         <Form.Control
           type="number"
-          name="usage_limit"
-          value={coupon.usage_limit}
-          onChange={handleChange}
+          {...register("usage_limit")}
           className={`coupon-form__input ${
             errors.usage_limit ? "is-invalid" : ""
           }`}
-          required
         />
         {errors.usage_limit && (
-          <div className="invalid-feedback">{errors.usage_limit}</div>
+          <div className="invalid-feedback">{errors.usage_limit.message}</div>
         )}
       </Form.Group>
 
@@ -193,12 +173,19 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
         <Button
           type="submit"
           className="coupon-form__button coupon-form__button--submit"
+          disabled={isSubmitting}
         >
-          {initialData ? "Cập nhật" : "Thêm mới"}
+          {isSubmitting
+            ? "Đang xử lý..."
+            : initialData
+            ? "Cập nhật"
+            : "Thêm mới"}
         </Button>
         <Button
+          type="button"
           onClick={onClose}
           className="coupon-form__button coupon-form__button--cancel"
+          disabled={isSubmitting}
         >
           Hủy
         </Button>
