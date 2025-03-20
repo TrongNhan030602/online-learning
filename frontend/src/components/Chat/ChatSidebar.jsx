@@ -1,49 +1,43 @@
-import { useEffect, useState } from "react";
-import chatApi from "../../api/chatApi";
+import PropTypes from "prop-types";
 import "../../styles/chat/sidebar.css";
 import Loading from "../Common/Loading";
+import { useState } from "react";
 
-// eslint-disable-next-line react/prop-types
-const ChatSidebar = ({ onSelectStudent }) => {
-  const [students, setStudents] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+const ChatSidebar = ({ students, onSelectStudent }) => {
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  const fetchStudents = async () => {
-    try {
-      const { data } = await chatApi.getStudentsWhoChatted();
-      setStudents(data);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Lỗi khi lấy danh sách học viên:", error);
-    }
+  const handleSelectStudent = (student) => {
+    setSelectedStudent(student.user_id);
+    onSelectStudent(student.user_id, student.user?.name);
   };
 
   return (
     <div className="chat-sidebar">
       <h3 className="chat-sidebar__title">Danh sách học viên</h3>
-      {isLoading && (
-        <div>
-          <Loading />
-        </div>
+      {students.length === 0 ? (
+        <Loading />
+      ) : (
+        <ul className="chat-sidebar__list">
+          {students.map((student) => (
+            <li
+              key={student.user_id}
+              className={`chat-sidebar__item ${
+                selectedStudent === student.user_id ? "active" : ""
+              }`}
+              onClick={() => handleSelectStudent(student)}
+            >
+              {student.user?.name}
+            </li>
+          ))}
+        </ul>
       )}
-      <ul className="chat-sidebar__list">
-        {students.map((student) => (
-          <li
-            key={student.user_id}
-            className="chat-sidebar__item"
-            onClick={() => onSelectStudent(student.user_id, student.user?.name)}
-          >
-            {student.user?.name}
-          </li>
-        ))}
-      </ul>
     </div>
   );
+};
+
+ChatSidebar.propTypes = {
+  students: PropTypes.array.isRequired,
+  onSelectStudent: PropTypes.func.isRequired,
 };
 
 export default ChatSidebar;

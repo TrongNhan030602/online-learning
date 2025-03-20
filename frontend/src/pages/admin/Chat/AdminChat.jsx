@@ -1,46 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import chatApi from "../../../api/chatApi";
 import "../../../styles/chat/admin-chat.css";
-import Loading from "../../../components/Common/Loading";
+
 // Import FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 import ChatSidebar from "../../../components/Chat/ChatSidebar";
 import ChatBox from "../../../components/Chat/ChatBox";
-import chatApi from "../../../api/chatApi";
 
 const AdminChat = () => {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedUserName, setSelectedUserName] = useState(""); // Tên người đang chat
+  const [selectedUserName, setSelectedUserName] = useState(""); // ✅ Lưu tên học viên
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null); // Khởi tạo state cho currentUser
+  const [students, setStudents] = useState([]); // ✅ Lưu danh sách học viên
+  const currentUser = { id: 1, name: "Admin", role: "admin" };
 
-  // Gọi API để lấy thông tin user hiện tại (Admin)
+  // ✅ Lấy danh sách học viên từ API khi mở sidebar
+  const fetchedStudents = useRef(false);
+
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const { data } = await chatApi.getCurrentUser();
-        setCurrentUser(data);
-      } catch (error) {
-        console.error("Lỗi khi lấy thông tin người dùng:", error);
-      }
-    };
+    if (isSidebarOpen && !fetchedStudents.current) {
+      fetchStudents();
+      fetchedStudents.current = true;
+    }
+  }, [isSidebarOpen]);
 
-    fetchCurrentUser();
-  }, []);
-
-  if (!currentUser) {
-    return (
-      <Loading
-        text="Đang tải dữ liệu..."
-        size="lg"
-      />
-    );
-  }
+  const fetchStudents = async () => {
+    try {
+      const { data } = await chatApi.getStudentsWhoChatted();
+      setStudents(data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách học viên:", error);
+    }
+  };
 
   return (
     <div className="admin-chat">
-      {/* Nút mở/đóng sidebar */}
       <button
         className="toggle-sidebar"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -48,9 +44,9 @@ const AdminChat = () => {
         <FontAwesomeIcon icon={isSidebarOpen ? faChevronLeft : faBars} />
       </button>
 
-      {/* Sidebar */}
       {isSidebarOpen && (
         <ChatSidebar
+          students={students}
           onSelectStudent={(userId, userName) => {
             setSelectedUser(userId);
             setSelectedUserName(userName);
@@ -58,7 +54,6 @@ const AdminChat = () => {
         />
       )}
 
-      {/* Chat Box */}
       <div
         className={`chat-container ${
           isSidebarOpen ? "with-sidebar" : "full-width"
@@ -66,13 +61,8 @@ const AdminChat = () => {
       >
         {selectedUser ? (
           <>
-            {/* Hiển thị tên người đang chat */}
             <div className="chat-header">
-              Đang chat với:{" "}
-              <strong>
-                {selectedUserName}{" "}
-                {currentUser.id === selectedUser ? "(bạn)" : ""}
-              </strong>
+              Đang chat với: <strong>{selectedUserName}</strong>
             </div>
             <ChatBox
               selectedUser={selectedUser}

@@ -1,35 +1,44 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import chatApi from "../../api/chatApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import pusher from "../../utils/pusher"; // ✅ Import Pusher
+import pusher from "../../utils/pusher";
 import "../../styles/chat/chat-box.css";
 
 const ChatBox = ({ selectedUser, currentUser }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const messagesEndRef = useRef(null); // Dùng để tham chiếu đến tin nhắn cuối cùng
+  const messagesEndRef = useRef(null);
+  const messagesRef = useRef([]); // ✅ Giữ state tin nhắn tránh re-render
 
-  // ✅ Lấy tin nhắn khi chọn user
+  // ✅ Hàm lấy tin nhắn (Dùng useCallback)
   const fetchMessages = useCallback(async () => {
-    if (!selectedUser) return;
+    if (!selectedUser || !currentUser) return;
     try {
-      const { data } = await chatApi.getMessages();
-      setMessages(
-        data.filter(
-          (msg) =>
-            msg.user_id === selectedUser || msg.recipient_id === selectedUser
-        )
+      const { data } = await chatApi.getMessages(selectedUser);
+
+      const filteredMessages = data.filter(
+        (msg) =>
+          (msg.user_id === currentUser.id &&
+            msg.recipient_id === selectedUser) ||
+          (msg.user_id === selectedUser && msg.recipient_id === currentUser.id)
       );
+
+      messagesRef.current = filteredMessages; // ✅ Cập nhật ref
+      setMessages(filteredMessages);
     } catch (error) {
       console.error("Lỗi khi lấy tin nhắn:", error);
     }
-  }, [selectedUser]);
+  }, [selectedUser, currentUser]);
 
+  // ✅ Chỉ gọi API khi đổi user
   useEffect(() => {
     fetchMessages();
-  }, [fetchMessages]);
+  }, [selectedUser, fetchMessages]);
+
+  // ✅ Dùng useMemo() để cache tin nhắn (giảm re-render)
+  const memoizedMessages = useMemo(() => messages, [messages]);
 
   // ✅ Gửi tin nhắn
   const handleSend = async () => {
@@ -37,7 +46,10 @@ const ChatBox = ({ selectedUser, currentUser }) => {
     try {
       const payload = { message, user_id: selectedUser };
       const { data } = await chatApi.sendMessage(payload);
-      setMessages([...messages, data.data]); // ✅ Hiển thị ngay tin nhắn gửi đi
+
+      // ✅ Cập nhật state tin nhắn ngay lập tức
+      messagesRef.current = [...messagesRef.current, data.data];
+      setMessages([...messagesRef.current]);
       setMessage("");
     } catch (error) {
       console.error("Lỗi khi gửi tin nhắn:", error);
@@ -51,23 +63,32 @@ const ChatBox = ({ selectedUser, currentUser }) => {
     }
   };
 
-  // ✅ Lắng nghe tin nhắn mới từ Pusher
-  useEffect(() => {
-    if (!selectedUser) return;
-
-    const channel = pusher.subscribe(`chat.${selectedUser}`);
-
-    channel.bind("message", (newMessage) => {
-      setMessages((prev) => [...prev, newMessage]);
-    });
-
-    return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
-    };
+  // ✅ WebSocket: Lắng nghe tin nhắn mới (useMemo() tránh re-subscribe)
+  const chatChannel = useMemo(() => {
+    if (!selectedUser) return null;
+    return pusher.subscribe(`chat.${selectedUser}`);
   }, [selectedUser]);
 
-  // ✅ Cuộn xuống tin nhắn cuối cùng mỗi khi messages thay đổi
+  useEffect(() => {
+    if (!chatChannel) return;
+
+    const handleNewMessage = (newMessage) => {
+      if (newMessage.user_id === selectedUser) {
+        messagesRef.current = [...messagesRef.current, newMessage];
+        setMessages([...messagesRef.current]);
+      }
+    };
+
+    chatChannel.bind("message", handleNewMessage);
+
+    return () => {
+      chatChannel.unbind("message", handleNewMessage);
+      chatChannel.unbind_all();
+      chatChannel.unsubscribe();
+    };
+  }, [chatChannel, selectedUser]);
+
+  // ✅ Cuộn xuống cuối danh sách tin nhắn khi có tin mới
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -77,7 +98,7 @@ const ChatBox = ({ selectedUser, currentUser }) => {
   return (
     <div className="chat-box">
       <div className="chat-box__messages">
-        {messages.map((msg, index) => (
+        {memoizedMessages.map((msg, index) => (
           <div
             key={index}
             className={`chat-box__message ${
@@ -87,7 +108,6 @@ const ChatBox = ({ selectedUser, currentUser }) => {
             <div className="chat-box__content">{msg.message}</div>
           </div>
         ))}
-        {/* Đặt phần tử này ở cuối danh sách tin nhắn để cuộn đến */}
         <div ref={messagesEndRef} />
       </div>
 
@@ -109,7 +129,6 @@ const ChatBox = ({ selectedUser, currentUser }) => {
 
 ChatBox.propTypes = {
   selectedUser: PropTypes.number.isRequired,
-  selectedUserName: PropTypes.string.isRequired,
   currentUser: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,

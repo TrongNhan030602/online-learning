@@ -1,13 +1,13 @@
 .chat-sidebar {
   width: 300px;
-  height: 100vh;
+  height: 100%;
   background: #ec5432;
   color: #fff;
   padding: 20px;
   display: flex;
   flex-direction: column;
   overflow-y: auto; /* Thanh cuộn khi danh sách dài */
-  max-height: 100vh;
+  max-height: 90vh;
 }
 
 .chat-sidebar__title {
