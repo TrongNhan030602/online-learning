@@ -25,6 +25,8 @@ use App\Interfaces\CouponRepositoryInterface;
 use App\Repositories\CouponRepository;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Repositories\OrderRepository;
+use App\Interfaces\UserProfileRepositoryInterface;
+use App\Repositories\UserProfileRepository;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
         $this->app->bind(CouponRepositoryInterface::class, CouponRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(UserProfileRepositoryInterface::class, UserProfileRepository::class);
     }
 
     /**

@@ -1,4 +1,3 @@
-// src/App.jsx
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,6 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { ToastProvider } from "./contexts/ToastContext.jsx";
+import { UserProvider } from "./providers/UserProvider.jsx";
 import Login from "./pages/authPages/Login.jsx";
 import Register from "./pages/authPages/Register.jsx";
 import ForgotPassword from "./pages/authPages/ForgotPassword.jsx";
@@ -18,54 +18,55 @@ import PrivateRoute from "./routes/PrivateRoute.jsx";
 function App() {
   return (
     <AuthProvider>
-      {/* Bọc ToastProvider để có thể gọi toast message từ bất cứ đâu */}
-      <ToastProvider>
-        <Router>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Navigate
-                  to="/login"
-                  replace
-                />
-              }
-            />
-            <Route
-              path="/login"
-              element={<Login />}
-            />
-            <Route
-              path="/register"
-              element={<Register />}
-            />
-            <Route
-              path="/forgot-password"
-              element={<ForgotPassword />}
-            />
-            <Route
-              path="/reset-password"
-              element={<ResetPassword />}
-            />
-            <Route
-              path="/admin/*"
-              element={
-                <PrivateRoute requiredRole="admin">
-                  <AdminRoutes />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/student"
-              element={
-                <PrivateRoute requiredRole="student">
-                  <StudentDashboard />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </Router>
-      </ToastProvider>
+      <UserProvider>
+        <ToastProvider>
+          <Router>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Navigate
+                    to="/login"
+                    replace
+                  />
+                }
+              />
+              <Route
+                path="/login"
+                element={<Login />}
+              />
+              <Route
+                path="/register"
+                element={<Register />}
+              />
+              <Route
+                path="/forgot-password"
+                element={<ForgotPassword />}
+              />
+              <Route
+                path="/reset-password"
+                element={<ResetPassword />}
+              />
+              <Route
+                path="/admin/*"
+                element={
+                  <PrivateRoute requiredRole="admin">
+                    <AdminRoutes />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/student"
+                element={
+                  <PrivateRoute requiredRole="student">
+                    <StudentDashboard />
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </Router>
+        </ToastProvider>
+      </UserProvider>
     </AuthProvider>
   );
 }

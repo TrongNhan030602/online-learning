@@ -73,6 +73,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id');
+    }
+
+
+
     // Định nghĩa các quan hệ
     public function enrollments()
     {

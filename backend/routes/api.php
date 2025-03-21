@@ -4,16 +4,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BlogController;
+use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\CouponController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\ReviewController;
-use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\ProgressController;
 use App\Http\Controllers\API\CourseFileController;
 use App\Http\Controllers\API\BlogCommentController;
+use App\Http\Controllers\API\UserProfileController;
 
 // Authentication routes
 Route::group(['prefix' => 'auth'], function () {
@@ -38,6 +39,15 @@ Route::prefix('users')->group(function () {
     Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('auth:api', 'role:admin');
     Route::post('/{id}/reset-password', [UserController::class, 'resetPassword'])->middleware('auth:api', 'role:admin');
 });
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [UserProfileController::class, 'show']);
+        Route::put('/', [UserProfileController::class, 'update']);
+        Route::post('/avatar', [UserProfileController::class, 'updateAvatar']);
+    });
+});
+
 
 // API quản lý khóa học
 Route::prefix('courses')->group(function () {
