@@ -1,39 +1,45 @@
+/* eslint-disable react/prop-types */
+import "../../styles/profile/change-avatar.css";
 import { useState } from "react";
 
-const ChangeAvatarTab = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+const ChangeAvatarTab = ({ onChange }) => {
+  const [preview, setPreview] = useState(null);
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
-  const handleUpload = () => {
-    console.log("Tải lên avatar:", selectedFile);
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreview(imageUrl);
+    }
+    onChange(event);
   };
 
   return (
-    <div className="profile-tab">
-      <h3>Đổi ảnh đại diện</h3>
-      <div className="file-drop-container">
-        <input
-          type="file"
-          id="avatarUpload"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        <label
-          htmlFor="avatarUpload"
-          className="drop-zone"
-        >
-          {selectedFile ? selectedFile.name : "Kéo thả hoặc chọn ảnh"}
-        </label>
+    <div className="change-avatar-container">
+      <h3 className="change-avatar-title">Đổi Hình Đại Diện</h3>
+      <div className="avatar-preview">
+        {preview ? (
+          <img
+            src={preview}
+            alt="Avatar Preview"
+          />
+        ) : (
+          <i className="fas fa-camera avatar-icon"></i>
+        )}
       </div>
-      <button
-        onClick={handleUpload}
-        disabled={!selectedFile}
+      <label
+        htmlFor="avatar-upload"
+        className="avatar-upload-label"
       >
-        Cập nhật Avatar
-      </button>
+        <i className="fas fa-upload"></i> Chọn ảnh
+      </label>
+      <input
+        id="avatar-upload"
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="avatar-upload-input"
+      />
     </div>
   );
 };

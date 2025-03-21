@@ -7,6 +7,7 @@ const userApi = {
     axiosClient.post("/profile/avatar", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }),
+  changePassword: (data) => axiosClient.post("/profile/change-password", data),
 };
 
 export default userApi;

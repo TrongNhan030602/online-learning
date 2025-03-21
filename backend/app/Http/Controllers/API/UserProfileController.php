@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UserProfile\UpdateAvatarRequest;
 use App\Http\Requests\UserProfile\UpdateProfileRequest;
+use App\Http\Requests\UserProfile\ChangePasswordRequest;
 
 class UserProfileController extends Controller
 {
@@ -67,7 +68,24 @@ class UserProfileController extends Controller
 
         return response()->json(['avatar' => 'avatars/' . $newName]);
     }
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $userId = Auth::id();  // Lấy user hiện tại từ JWT hoặc Auth
 
+        $data = $request->validated();  // Lấy dữ liệu từ request (current_password, new_password)
+
+        try {
+            $user = $this->profileService->changePassword($userId, $data['current_password'], $data['new_password']);
+            return response()->json([
+                'message' => 'Mật khẩu đã được thay đổi thành công.',
+                'user' => $user,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
 
 
 

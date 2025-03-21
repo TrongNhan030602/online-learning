@@ -9,7 +9,12 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    updateUser(); // Load dữ liệu khi component mount
+    const token = localStorage.getItem("token");
+    if (token) {
+      updateUser();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   // Hàm cập nhật toàn bộ dữ liệu user (gọi lại API)

@@ -16,13 +16,13 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Xử lý lỗi global
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      console.warn("Token hết hạn hoặc không hợp lệ, đăng xuất...");
       localStorage.removeItem("token");
-      window.location.href = "/login"; // Chuyển hướng nếu hết hạn
+      window.location.href = "/login"; // Chuyển hướng về trang login
     }
     return Promise.reject(error);
   }

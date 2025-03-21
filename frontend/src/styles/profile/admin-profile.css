@@ -1,0 +1,80 @@
+/* admin-profile.css */
+
+/* Tổng quan container */
+.admin-profile-container {
+  display: flex;
+  height: 100vh;
+}
+
+.admin-profile-sidebar {
+  width: 240px;
+  background-color: #f7f7f7;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.avatar-sidebar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.admin-profile-sidebar ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.admin-profile-sidebar li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-profile-sidebar li:hover {
+  background-color: #e9e9e9;
+}
+
+.admin-profile-sidebar li svg {
+  margin-right: 10px;
+}
+
+.admin-profile-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #fff;
+}
+/* Khi tab đang active */
+.admin-profile-sidebar li.active {
+  background-color: #ec5432; /* Màu nền khi active */
+  color: #fff; /* Màu chữ khi active */
+}
+
+.admin-profile-sidebar li.active svg {
+  color: #fff; /* Màu icon khi active */
+}
+
+@media (max-width: 768px) {
+  .admin-profile-container {
+    flex-direction: column;
+  }
+  .admin-profile-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+  .avatar-container {
+    display: none;
+  }
+}

@@ -101,7 +101,7 @@ class AuthController extends Controller
             // Nếu tạo token thành công
             if ($passwordReset) {
                 // Chọn mailer tùy thuộc vào người dùng
-                $mailer = $user->email === 'admin@gmail.com' ? 'ses' : 'smtp';
+                $mailer = $user->email === 'admin@gmail.com' ? 'smtp' : 'smtp';
 
                 $user->notify(new ResetPasswordRequest($passwordReset->token, $mailer));
             }
@@ -109,7 +109,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Email đặt lại mật khẩu đã được gửi'], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Email không tồn tại trong hệ thống'], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => 'Gửi mail thấy bại.', 'error' => $e->getMessage()], 500);
         }

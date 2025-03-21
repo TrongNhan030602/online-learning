@@ -1,14 +1,24 @@
+import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 import LogoutButton from "../Auth/LogoutButton";
 import { useUser } from "../../hooks/useUser"; // ✅ Import useUser
 import { getStorageUrl } from "../../utils/getStorageUrl"; // Import hàm xử lý URL
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faCaretDown } from "@fortawesome/free-solid-svg-icons"; // Import icon đúng
+
 import "../../styles/admin-header.css";
-import PropTypes from "prop-types";
 
 const AdminHeader = ({ title }) => {
-  const { user } = useUser(); // ✅ Lấy user từ Context
+  const { user, loading, updateUser } = useUser();
 
-  // Tránh lỗi khi `user` chưa tải xong
+  useEffect(() => {
+    if (!user && !loading) {
+      updateUser(); // Gọi lại hàm updateUser khi user chưa có hoặc đã tải xong
+    }
+  }, [user, loading, updateUser]);
+
+  // Tránh lỗi khi không có user
   if (!user) {
     return (
       <header className="admin__header">
@@ -48,7 +58,7 @@ const AdminHeader = ({ title }) => {
       </div>
       <div className="admin__header-right dropdown">
         <button
-          className="btn admin__user-btn dropdown-toggle"
+          className="btn admin__user-btn "
           type="button"
           id="adminUserMenu"
           data-bs-toggle="dropdown"
@@ -60,23 +70,39 @@ const AdminHeader = ({ title }) => {
             className="admin__user-avatar"
           />
           <span className="admin__user-name">
-            {`${user.first_name} ${user.last_name}`}
+            {user.first_name && user.last_name
+              ? `${user.first_name} ${user.last_name}`
+              : user.username}
           </span>
+          <FontAwesomeIcon
+            icon={faCaretDown}
+            className="admin__user-dropdown-icon"
+          />
         </button>
+
         <ul
           className="dropdown-menu dropdown-menu-end"
           aria-labelledby="adminUserMenu"
         >
           <li>
             <NavLink
-              className="dropdown-item"
+              className={({ isActive }) =>
+                isActive ? "dropdown-item active" : "dropdown-item"
+              }
               to="/admin/profile"
             >
+              <FontAwesomeIcon
+                icon={faUser}
+                className="dropdown-item-icon"
+              />
               Cập nhật thông tin
             </NavLink>
           </li>
           <li>
-            <LogoutButton className="dropdown-item" />
+            <div className="dropdown-divider"></div>
+          </li>
+          <li>
+            <LogoutButton className="dropdown-item">Đăng xuất</LogoutButton>
           </li>
         </ul>
       </div>

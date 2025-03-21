@@ -45,6 +45,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/', [UserProfileController::class, 'show']);
         Route::put('/', [UserProfileController::class, 'update']);
         Route::post('/avatar', [UserProfileController::class, 'updateAvatar']);
+        Route::post('/change-password', [UserProfileController::class, 'changePassword']);
     });
 });
 

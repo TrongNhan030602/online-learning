@@ -10,6 +10,7 @@
 
 .admin__header-left {
   flex: 1;
+  margin-left: auto;
 }
 
 .admin__header-title {
@@ -27,18 +28,21 @@
   border-radius: 0.25rem;
 }
 
-.admin__header-left {
-  margin-left: auto;
-}
-
+/* User Button */
 .admin__user-btn {
   display: flex;
   align-items: center;
   background: none;
   border: none;
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
+.admin__user-btn:hover {
+  transform: scale(1.05);
+}
+
+/* User Avatar & Name */
 .admin__user-avatar {
   width: 40px;
   height: 40px;
@@ -50,4 +54,70 @@
 .admin__user-name {
   font-weight: 500;
   color: #333;
+  font-size: 1rem;
+}
+
+/* FontAwesome Dropdown Arrow Icon */
+.admin__user-dropdown-icon {
+  font-size: 1.2rem;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.admin__user-btn[aria-expanded="true"] .admin__user-dropdown-icon {
+  transform: rotate(180deg); /* Quay mũi tên khi dropdown mở */
+}
+
+/* Dropdown Item */
+.dropdown-item {
+  padding: 6px 14px;
+  font-size: 1rem;
+  color: #333;
+  transition: background-color 0.3s ease, padding-left 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* Icon in dropdown */
+.dropdown-item-icon {
+  margin-right: 10px;
+}
+
+/* Active dropdown item */
+.dropdown-item.active {
+  background-color: #ec5432; /* Màu nền khi active */
+  color: #fff; /* Màu chữ khi active */
+}
+
+/* Hover effect on dropdown item */
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+  padding-left: 30px;
+  color: #953e41;
+}
+
+/* Divider between items */
+.dropdown-divider {
+  border-top: 2px solid #dee2e6;
+  margin: 5px 0;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  min-width: 200px;
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  padding: 10px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }

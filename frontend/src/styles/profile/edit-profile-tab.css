@@ -1,0 +1,90 @@
+.edit-profile {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-profile h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Form dạng lưới 2 cột */
+.edit-profile form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+/* Ô input có icon bên trái */
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.input-wrapper:focus-within {
+  border-color: #cd2027;
+  box-shadow: 0 0 5px rgba(227, 6, 24, 0.3);
+}
+
+.input-wrapper .fa-icon {
+  color: #6c757d;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.input-wrapper input,
+.input-wrapper select,
+.input-wrapper textarea {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Textarea chiếm full dòng */
+.full-width {
+  grid-column: span 2;
+}
+
+/* Nút bấm */
+.edit-profile button {
+  grid-column: span 2;
+  padding: 12px;
+  background-color: #cd2027;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.edit-profile button:hover {
+  background-color: #dc0b12;
+}

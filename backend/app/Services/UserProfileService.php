@@ -31,4 +31,8 @@ class UserProfileService
     {
         return $this->profileRepository->updateAvatar($userId, $avatarPath);
     }
+    public function changePassword($userId, $currentPassword, $newPassword)
+    {
+        return $this->profileRepository->changePassword($userId, $currentPassword, $newPassword);
+    }
 }

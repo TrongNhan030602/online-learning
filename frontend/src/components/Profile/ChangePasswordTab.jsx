@@ -1,60 +1,133 @@
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faKey, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "../../hooks/useToast"; // Đảm bảo bạn có Toast hook để thông báo
+import userApi from "../../api/userApi"; // Đảm bảo API đổi mật khẩu được import đúng
+import { useNavigate } from "react-router-dom"; // Dùng để điều hướng về trang đăng nhập
+import "../../styles/profile/change-password.css";
 
 const ChangePasswordTab = () => {
-  const [passwords, setPasswords] = useState({
-    currentPassword: "",
+  const [formData, setFormData] = useState({
+    oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+  const { addToast } = useToast(); // Sử dụng hook thông báo
+  const navigate = useNavigate(); // Dùng để điều hướng trang
 
   const handleChange = (e) => {
-    setPasswords({ ...passwords, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      alert("Mật khẩu mới không khớp!");
+
+    // Kiểm tra xác nhận mật khẩu
+    if (formData.newPassword !== formData.confirmPassword) {
+      addToast({
+        title: "Lỗi",
+        message: "Mật khẩu xác nhận không khớp.",
+        type: "error",
+        duration: 3000,
+      });
       return;
     }
-    console.log("Đổi mật khẩu thành công:", passwords);
+
+    try {
+      await userApi.changePassword({
+        current_password: formData.oldPassword,
+        new_password: formData.newPassword,
+        new_password_confirmation: formData.confirmPassword,
+      });
+
+      // Thông báo thành công
+      addToast({
+        title: "Thành công",
+        message: "Đổi mật khẩu thành công! Bạn sẽ được đăng xuất.",
+        type: "success",
+        duration: 3000,
+      });
+
+      // Đăng xuất
+      localStorage.removeItem("auth_token"); // Xóa token (hoặc xóa thông tin đăng nhập từ nơi bạn lưu trữ token)
+      navigate("/login"); // Điều hướng người dùng về trang đăng nhập
+
+      // Reset form
+      setFormData({
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      // Xử lý lỗi
+      console.error("Đổi mật khẩu thất bại:", error);
+      addToast({
+        title: "Lỗi",
+        message: "Đã có lỗi xảy ra khi đổi mật khẩu.",
+        type: "error",
+        duration: 3000,
+      });
+    }
   };
 
   return (
-    <div className="profile-tab">
-      <h3>Đổi mật khẩu</h3>
+    <div className="change-password">
+      <h3>Đổi Mật Khẩu</h3>
       <form
         onSubmit={handleSubmit}
-        className="form-horizontal"
+        className="password-form"
       >
-        <div className="form-group">
-          <label>Mật khẩu hiện tại</label>
+        <div className="input-group">
+          <FontAwesomeIcon
+            icon={faLock}
+            className="icon"
+          />
           <input
             type="password"
-            name="currentPassword"
-            value={passwords.currentPassword}
+            name="oldPassword"
+            value={formData.oldPassword}
             onChange={handleChange}
+            placeholder="Mật khẩu cũ"
+            required
           />
         </div>
-        <div className="form-group">
-          <label>Mật khẩu mới</label>
+
+        <div className="input-group">
+          <FontAwesomeIcon
+            icon={faKey}
+            className="icon"
+          />
           <input
             type="password"
             name="newPassword"
-            value={passwords.newPassword}
+            value={formData.newPassword}
             onChange={handleChange}
+            placeholder="Mật khẩu mới"
+            required
           />
         </div>
-        <div className="form-group">
-          <label>Xác nhận mật khẩu</label>
+
+        <div className="input-group">
+          <FontAwesomeIcon
+            icon={faCheck}
+            className="icon"
+          />
           <input
             type="password"
             name="confirmPassword"
-            value={passwords.confirmPassword}
+            value={formData.confirmPassword}
             onChange={handleChange}
+            placeholder="Xác nhận mật khẩu mới"
+            required
           />
         </div>
-        <button type="submit">Cập nhật mật khẩu</button>
+
+        <button
+          type="submit"
+          className="btn-submit"
+        >
+          Đổi mật khẩu
+        </button>
       </form>
     </div>
   );
