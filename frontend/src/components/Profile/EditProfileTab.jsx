@@ -33,83 +33,45 @@ const EditProfileTab = ({ profile, onSubmit }) => {
 
   return (
     <div className="edit-profile">
-      <h3>Sửa Hồ Sơ</h3>
-      <form onSubmit={handleSubmit}>
-        {/* Họ */}
-        <div className="form-group">
-          <label className="form-label">Họ</label>
-          <div className="input-wrapper">
-            <FontAwesomeIcon
-              icon={faUser}
-              className="fa-icon"
-            />
-            <input
-              type="text"
-              name="first_name"
-              value={formData.first_name}
-              onChange={handleChange}
-            />
+      <h3 className="edit-profile__title">Sửa Hồ Sơ</h3>
+      <form
+        className="edit-profile__form"
+        onSubmit={handleSubmit}
+      >
+        {[
+          { name: "first_name", label: "Họ", icon: faUser },
+          { name: "last_name", label: "Tên", icon: faUser },
+          { name: "phone", label: "Số điện thoại", icon: faPhone },
+          { name: "address", label: "Địa chỉ", icon: faMapMarkerAlt },
+          { name: "position", label: "Chức vụ", icon: faBriefcase },
+        ].map(({ name, label, icon }) => (
+          <div
+            className="edit-profile__group"
+            key={name}
+          >
+            <label className="edit-profile__label">{label}</label>
+            <div className="edit-profile__input-wrapper">
+              <FontAwesomeIcon
+                icon={icon}
+                className="edit-profile__icon"
+              />
+              <input
+                type="text"
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-        </div>
-
-        {/* Tên */}
-        <div className="form-group">
-          <label className="form-label">Tên</label>
-          <div className="input-wrapper">
-            <FontAwesomeIcon
-              icon={faUser}
-              className="fa-icon"
-            />
-            <input
-              type="text"
-              name="last_name"
-              value={formData.last_name}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        {/* Số điện thoại */}
-        <div className="form-group">
-          <label className="form-label">Số điện thoại</label>
-          <div className="input-wrapper">
-            <FontAwesomeIcon
-              icon={faPhone}
-              className="fa-icon"
-            />
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        {/* Địa chỉ */}
-        <div className="form-group">
-          <label className="form-label">Địa chỉ</label>
-          <div className="input-wrapper">
-            <FontAwesomeIcon
-              icon={faMapMarkerAlt}
-              className="fa-icon"
-            />
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
+        ))}
 
         {/* Giới tính */}
-        <div className="form-group">
-          <label className="form-label">Giới tính</label>
-          <div className="input-wrapper">
+        <div className="edit-profile__group">
+          <label className="edit-profile__label">Giới tính</label>
+          <div className="edit-profile__input-wrapper">
             <FontAwesomeIcon
               icon={faVenusMars}
-              className="fa-icon"
+              className="edit-profile__icon"
             />
             <select
               name="gender"
@@ -124,30 +86,13 @@ const EditProfileTab = ({ profile, onSubmit }) => {
           </div>
         </div>
 
-        {/* Chức vụ */}
-        <div className="form-group">
-          <label className="form-label">Chức vụ</label>
-          <div className="input-wrapper">
-            <FontAwesomeIcon
-              icon={faBriefcase}
-              className="fa-icon"
-            />
-            <input
-              type="text"
-              name="position"
-              value={formData.position}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
         {/* Giới thiệu */}
-        <div className="form-group full-width">
-          <label className="form-label">Giới thiệu</label>
-          <div className="input-wrapper">
+        <div className="edit-profile__group edit-profile__group--full">
+          <label className="edit-profile__label">Giới thiệu</label>
+          <div className="edit-profile__input-wrapper">
             <FontAwesomeIcon
               icon={faInfoCircle}
-              className="fa-icon"
+              className="edit-profile__icon"
             />
             <textarea
               name="info"
@@ -158,12 +103,18 @@ const EditProfileTab = ({ profile, onSubmit }) => {
           </div>
         </div>
 
-        {/* Nút lưu */}
-        <button type="submit">Lưu thay đổi</button>
+        {/* Nút Lưu */}
+        <button
+          type="submit"
+          className="edit-profile__button"
+        >
+          Lưu thay đổi
+        </button>
       </form>
     </div>
   );
 };
+
 EditProfileTab.propTypes = {
   profile: PropTypes.shape({
     first_name: PropTypes.string,

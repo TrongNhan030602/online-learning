@@ -5,7 +5,7 @@
 /* Container chính */
 .admin-courses {
   padding: 30px;
-  background-color: #f4f7fa;
+  background-color: var(--bg-light);
   min-height: calc(100vh - 100px);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -21,7 +21,7 @@
 .admin-courses__title {
   font-size: 2.2rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -40,7 +40,6 @@
   padding: 10px 20px;
   margin: 0 10px;
   border: none;
-  border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -50,16 +49,12 @@
   transform: scale(1.03);
 }
 
+/* Nút chính */
 .admin-courses__btn--primary {
-  font-family: var(--primary-font);
-  font-size: 1rem;
-  border-radius: 0.25rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
   background-color: var(--primary-color);
   color: #fff;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  border-radius: 22px;
+  padding: 10px 20px;
 }
 
 .admin-courses__btn--primary:hover {

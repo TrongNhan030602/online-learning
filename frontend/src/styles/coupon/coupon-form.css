@@ -1,3 +1,17 @@
+:root {
+  --primary-font: "IBM Plex Sans", "Arial", sans-serif;
+  --heading-font: "Montserrat", sans-serif;
+  --primary-color: #cc0000;
+  --primary-hover: #b70707;
+  --secondary-color: #6c757d;
+  --secondary-hover: #545b62;
+  --base-font-size: 1rem;
+  --base-line-height: 1.5;
+  --text-white: #f0f0f0;
+  --text-gray: #8b95a5;
+  --text-dark: #212522;
+}
+
 /* CouPon Form Styles */
 .coupon-form {
   background-color: #fff;
@@ -79,6 +93,11 @@
 
 .coupon-form__button--submit:hover {
   background-color: var(--primary-hover);
+  color: var(--text-white);
+}
+.coupon-form__button--submit:active {
+  background-color: var(--primary-hover) !important;
+  color: var(--text-white) !important;
 }
 
 .coupon-form__button--cancel {
@@ -88,4 +107,9 @@
 
 .coupon-form__button--cancel:hover {
   background-color: var(--secondary-hover);
+  color: var(--text-white);
+}
+.coupon-form__button--cancel:active {
+  background-color: var(--secondary-hover) !important;
+  color: var(--text-white) !important;
 }

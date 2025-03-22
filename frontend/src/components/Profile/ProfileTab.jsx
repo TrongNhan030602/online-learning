@@ -17,12 +17,12 @@ const ProfileTab = ({ profile }) => {
 
   return (
     <div className="profile-tab">
-      <h3 className="profile-title">Hồ Sơ Cá Nhân</h3>
-      <div className="profile-info">
-        <div className="profile-item">
+      <h3 className="profile-tab__title">Hồ Sơ Cá Nhân</h3>
+      <div className="profile-tab__info">
+        <div className="profile-tab__item">
           <FontAwesomeIcon
             icon={faUser}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Họ và tên:</span>
           <strong>
@@ -30,64 +30,64 @@ const ProfileTab = ({ profile }) => {
           </strong>
         </div>
 
-        <div className="profile-item">
+        <div className="profile-tab__item">
           <FontAwesomeIcon
             icon={faIdBadge}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Tên đăng nhập:</span>
           <strong>{profile?.username}</strong>
         </div>
 
-        <div className="profile-item">
+        <div className="profile-tab__item">
           <FontAwesomeIcon
             icon={faEnvelope}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Email:</span>
           <strong>{profile?.email}</strong>
         </div>
 
-        <div className="profile-item">
+        <div className="profile-tab__item">
           <FontAwesomeIcon
             icon={faPhone}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Số điện thoại:</span>
           <strong>{profile?.phone}</strong>
         </div>
 
-        <div className="profile-item">
+        <div className="profile-tab__item">
           <FontAwesomeIcon
             icon={faMapMarkerAlt}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Địa chỉ:</span>
           <strong>{profile?.address}</strong>
         </div>
 
-        <div className="profile-item">
+        <div className="profile-tab__item">
           <FontAwesomeIcon
             icon={faVenusMars}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Giới tính:</span>
           <strong>{profile?.gender}</strong>
         </div>
 
-        <div className="profile-item">
+        <div className="profile-tab__item">
           <FontAwesomeIcon
             icon={faBriefcase}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Chức vụ:</span>
           <strong>{profile?.position}</strong>
         </div>
 
-        <div className="profile-item full-width">
+        <div className="profile-tab__item profile-tab__item--full">
           <FontAwesomeIcon
             icon={faInfoCircle}
-            className="icon"
+            className="profile-tab__icon"
           />
           <span>Giới thiệu bản thân:</span>
           <p>{profile?.info}</p>
@@ -96,6 +96,7 @@ const ProfileTab = ({ profile }) => {
     </div>
   );
 };
+
 ProfileTab.propTypes = {
   profile: PropTypes.shape({
     first_name: PropTypes.string,

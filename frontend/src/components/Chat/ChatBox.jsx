@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import chatApi from "../../api/chatApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,14 +10,12 @@ const ChatBox = ({ selectedUser, currentUser }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef(null);
-  const messagesRef = useRef([]); // ✅ Giữ state tin nhắn tránh re-render
+  const messagesRef = useRef([]);
 
-  // ✅ Hàm lấy tin nhắn (Dùng useCallback)
   const fetchMessages = useCallback(async () => {
     if (!selectedUser || !currentUser) return;
     try {
       const { data } = await chatApi.getMessages(selectedUser);
-
       const filteredMessages = data.filter(
         (msg) =>
           (msg.user_id === currentUser.id &&
@@ -25,57 +23,41 @@ const ChatBox = ({ selectedUser, currentUser }) => {
           (msg.user_id === selectedUser && msg.recipient_id === currentUser.id)
       );
 
-      messagesRef.current = filteredMessages; // ✅ Cập nhật ref
+      messagesRef.current = filteredMessages;
       setMessages(filteredMessages);
     } catch (error) {
       console.error("Lỗi khi lấy tin nhắn:", error);
     }
   }, [selectedUser, currentUser]);
 
-  // ✅ Chỉ gọi API khi đổi user
   useEffect(() => {
     fetchMessages();
   }, [selectedUser, fetchMessages]);
 
-  // ✅ Dùng useMemo() để cache tin nhắn (giảm re-render)
-  const memoizedMessages = useMemo(() => messages, [messages]);
-
-  // ✅ Gửi tin nhắn
   const handleSend = async () => {
     if (!message.trim()) return;
     try {
       const payload = { message, user_id: selectedUser };
       const { data } = await chatApi.sendMessage(payload);
 
-      // ✅ Cập nhật state tin nhắn ngay lập tức
-      messagesRef.current = [...messagesRef.current, data.data];
-      setMessages([...messagesRef.current]);
+      setMessages((prev) => [...prev, data.data]);
       setMessage("");
     } catch (error) {
       console.error("Lỗi khi gửi tin nhắn:", error);
     }
   };
 
-  // ✅ Nhấn Enter để gửi
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSend();
-    }
+    if (e.key === "Enter") handleSend();
   };
 
-  // ✅ WebSocket: Lắng nghe tin nhắn mới (useMemo() tránh re-subscribe)
-  const chatChannel = useMemo(() => {
-    if (!selectedUser) return null;
-    return pusher.subscribe(`chat.${selectedUser}`);
-  }, [selectedUser]);
-
   useEffect(() => {
-    if (!chatChannel) return;
+    if (!selectedUser) return;
+    const chatChannel = pusher.subscribe(`chat.${selectedUser}`);
 
     const handleNewMessage = (newMessage) => {
       if (newMessage.user_id === selectedUser) {
-        messagesRef.current = [...messagesRef.current, newMessage];
-        setMessages([...messagesRef.current]);
+        setMessages((prev) => [...prev, newMessage]);
       }
     };
 
@@ -83,22 +65,18 @@ const ChatBox = ({ selectedUser, currentUser }) => {
 
     return () => {
       chatChannel.unbind("message", handleNewMessage);
-      chatChannel.unbind_all();
       chatChannel.unsubscribe();
     };
-  }, [chatChannel, selectedUser]);
+  }, [selectedUser]);
 
-  // ✅ Cuộn xuống cuối danh sách tin nhắn khi có tin mới
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
     <div className="chat-box">
       <div className="chat-box__messages">
-        {memoizedMessages.map((msg, index) => (
+        {messages.map((msg, index) => (
           <div
             key={index}
             className={`chat-box__message ${
@@ -111,7 +89,7 @@ const ChatBox = ({ selectedUser, currentUser }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="chat-box__input">
+      <div className="chat-box__input-container">
         <input
           type="text"
           value={message}

@@ -7,7 +7,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.edit-profile h3 {
+.edit-profile__title {
   text-align: center;
   margin-bottom: 20px;
   font-size: 22px;
@@ -16,18 +16,18 @@
 }
 
 /* Form dạng lưới 2 cột */
-.edit-profile form {
+.edit-profile__form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-.form-group {
+.edit-profile__group {
   display: flex;
   flex-direction: column;
 }
 
-.form-label {
+.edit-profile__label {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -35,7 +35,7 @@
 }
 
 /* Ô input có icon bên trái */
-.input-wrapper {
+.edit-profile__input-wrapper {
   display: flex;
   align-items: center;
   background: #f8f9fa;
@@ -45,20 +45,20 @@
   transition: all 0.3s ease;
 }
 
-.input-wrapper:focus-within {
+.edit-profile__input-wrapper:focus-within {
   border-color: #cd2027;
   box-shadow: 0 0 5px rgba(227, 6, 24, 0.3);
 }
 
-.input-wrapper .fa-icon {
+.edit-profile__icon {
   color: #6c757d;
   font-size: 16px;
   margin-right: 10px;
 }
 
-.input-wrapper input,
-.input-wrapper select,
-.input-wrapper textarea {
+.edit-profile__input-wrapper input,
+.edit-profile__input-wrapper select,
+.edit-profile__input-wrapper textarea {
   flex: 1;
   border: none;
   background: transparent;
@@ -67,12 +67,12 @@
 }
 
 /* Textarea chiếm full dòng */
-.full-width {
+.edit-profile__group--full {
   grid-column: span 2;
 }
 
 /* Nút bấm */
-.edit-profile button {
+.edit-profile__button {
   grid-column: span 2;
   padding: 12px;
   background-color: #cd2027;
@@ -85,6 +85,6 @@
   font-weight: 500;
 }
 
-.edit-profile button:hover {
+.edit-profile__button:hover {
   background-color: #dc0b12;
 }

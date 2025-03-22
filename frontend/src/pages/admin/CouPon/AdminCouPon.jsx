@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import couponApi from "../../../api/couponApi";
 import CouponList from "../../../components/CouPons/CouponList";
 import CouponModal from "../../../components/CouPons/CouponModal";
@@ -21,36 +21,31 @@ const AdminCoupons = () => {
   const { addToast } = useToast();
 
   // 🟢 Lấy danh sách mã giảm giá
-  const fetchCoupons = () => {
+  const fetchCoupons = useCallback(() => {
     setLoading(true);
     couponApi
       .getCoupons()
       .then((res) => {
         setCoupons(res.data);
-        setLoading(false);
       })
-      .catch((err) => {
-        console.error("Lỗi khi lấy danh sách mã giảm giá:", err);
-        setLoading(false);
-      });
-  };
+      .catch((err) => console.error("Lỗi khi lấy danh sách mã giảm giá:", err))
+      .finally(() => setLoading(false));
+  }, []);
 
   // 🔵 Lấy danh sách mã giảm giá còn hạn
-  const fetchActiveCoupons = () => {
+  const fetchActiveCoupons = useCallback(() => {
     couponApi
       .getActiveCoupons()
-      .then((res) => {
-        setActiveCoupons(res.data);
-      })
-      .catch((err) => {
-        console.error("Lỗi khi lấy danh sách mã còn hạn:", err);
-      });
-  };
+      .then((res) => setActiveCoupons(res.data))
+      .catch((err) =>
+        console.error("Lỗi khi lấy danh sách mã giảm giá còn hạn:", err)
+      );
+  }, []);
 
   useEffect(() => {
     fetchCoupons();
     fetchActiveCoupons();
-  }, []);
+  }, [fetchCoupons, fetchActiveCoupons]);
 
   const handleEdit = (coupon) => {
     setEditingCoupon(coupon);
@@ -77,7 +72,7 @@ const AdminCoupons = () => {
           duration: 3000,
         });
         fetchCoupons();
-        fetchActiveCoupons();
+        fetchActiveCoupons(); // Chỉ gọi khi cần
       })
       .catch((err) => {
         addToast({
@@ -86,8 +81,8 @@ const AdminCoupons = () => {
           type: "error",
           duration: 3000,
         });
-      });
-    setConfirmDelete({ isOpen: false, couponId: null });
+      })
+      .finally(() => setConfirmDelete({ isOpen: false, couponId: null }));
   };
 
   return (
@@ -112,7 +107,7 @@ const AdminCoupons = () => {
       ) : (
         <CouponList
           coupons={coupons}
-          activeCoupons={activeCoupons} // Truyền danh sách mã giảm giá còn hạn
+          activeCoupons={activeCoupons}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />

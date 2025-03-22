@@ -1,3 +1,10 @@
+:root {
+  --chat-primary: #ec5432;
+  --chat-secondary: #a73b23;
+  --chat-light: #ecf0f1;
+  --chat-text-dark: #2c3e50;
+}
+
 .chat-box {
   display: flex;
   flex-direction: column;
@@ -24,7 +31,6 @@
   position: relative;
 }
 
-/* Nội dung tin nhắn */
 .chat-box__content {
   font-size: 14px;
   padding: 8px;
@@ -34,25 +40,25 @@
 /* Tin nhắn gửi */
 .chat-box__message.sent {
   align-self: flex-end;
-  background: #ec5432;
+  background: var(--chat-primary);
   color: white;
 }
 
 /* Tin nhắn nhận */
 .chat-box__message.received {
   align-self: flex-start;
-  background: #ecf0f1;
-  color: #2c3e50;
+  background: var(--chat-light);
+  color: var(--chat-text-dark);
 }
 
 /* Ô nhập tin nhắn */
-.chat-box__input {
+.chat-box__input-container {
   display: flex;
   border-top: 2px solid #ddd;
   padding: 10px;
 }
 
-.chat-box__input input {
+.chat-box__input-container input {
   flex-grow: 1;
   padding: 8px;
   border: none;
@@ -60,8 +66,8 @@
   font-size: 14px;
 }
 
-.chat-box__input button {
-  background: #ec5432;
+.chat-box__input-container button {
+  background: var(--chat-primary);
   border: none;
   color: white;
   padding: 8px 12px;
@@ -69,11 +75,11 @@
   font-size: 18px;
 }
 
-.chat-box__input button:hover {
+.chat-box__input-container button:hover {
   background: #df4623;
 }
 
-/* Thêm hiệu ứng nổi bật cho tin nhắn mới */
+/* Hiệu ứng nổi bật */
 @keyframes highlightMessage {
   0% {
     background-color: #fffcf2;

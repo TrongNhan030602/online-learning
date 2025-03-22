@@ -86,7 +86,7 @@ const AdminBlogs = () => {
         <h2 className="admin-blogs__title">Quản lý Blog</h2>
         <div className="admin-blog__actions">
           <button
-            className="admin-blogs__btn admin-blog__btn--primary"
+            className="admin-blogs__btn admin-blogs__btn--primary"
             onClick={handleAdd}
           >
             + Thêm Blog

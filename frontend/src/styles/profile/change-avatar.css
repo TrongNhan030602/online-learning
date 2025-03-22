@@ -1,4 +1,4 @@
-.change-avatar-container {
+.change-avatar {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,14 +12,14 @@
   text-align: center;
 }
 
-.change-avatar-title {
+.change-avatar__title {
   font-size: 1.6rem;
   font-weight: 600;
   color: #333;
   margin-bottom: 10px;
 }
 
-.avatar-preview {
+.change-avatar__preview {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -32,18 +32,18 @@
   border: 3px solid #cd2027;
 }
 
-.avatar-preview img {
+.change-avatar__preview-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.avatar-icon {
+.change-avatar__preview-icon {
   font-size: 40px;
   color: #cd2027;
 }
 
-.avatar-upload-label {
+.change-avatar__upload-label {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,16 +60,16 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.avatar-upload-label i {
+.change-avatar__upload-label i {
   margin-right: 8px;
   font-size: 1.2rem;
 }
 
-.avatar-upload-label:hover {
+.change-avatar__upload-label:hover {
   background: linear-gradient(135deg, #7f3538, #d2575b);
   transform: scale(1.05);
 }
 
-.avatar-upload-input {
+.change-avatar__upload-input {
   display: none;
 }

@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import "../../styles/profile/change-avatar.css";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const ChangeAvatarTab = ({ onChange }) => {
   const [preview, setPreview] = useState(null);
@@ -15,21 +15,22 @@ const ChangeAvatarTab = ({ onChange }) => {
   };
 
   return (
-    <div className="change-avatar-container">
-      <h3 className="change-avatar-title">Đổi Hình Đại Diện</h3>
-      <div className="avatar-preview">
+    <div className="change-avatar">
+      <h3 className="change-avatar__title">Đổi Hình Đại Diện</h3>
+      <div className="change-avatar__preview">
         {preview ? (
           <img
             src={preview}
             alt="Avatar Preview"
+            className="change-avatar__preview-image"
           />
         ) : (
-          <i className="fas fa-camera avatar-icon"></i>
+          <i className="change-avatar__preview-icon fas fa-camera"></i>
         )}
       </div>
       <label
         htmlFor="avatar-upload"
-        className="avatar-upload-label"
+        className="change-avatar__upload-label"
       >
         <i className="fas fa-upload"></i> Chọn ảnh
       </label>
@@ -38,10 +39,13 @@ const ChangeAvatarTab = ({ onChange }) => {
         type="file"
         accept="image/*"
         onChange={handleFileChange}
-        className="avatar-upload-input"
+        className="change-avatar__upload-input"
       />
     </div>
   );
+};
+ChangeAvatarTab.propTypes = {
+  onChange: PropTypes.func.isRequired,
 };
 
 export default ChangeAvatarTab;

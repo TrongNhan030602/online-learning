@@ -1,3 +1,11 @@
+:root {
+  --primary-color: #cd2027;
+  --text-color: #333;
+  --text-light: #555;
+  --bg-light: #f8f9fa;
+  --border-color: #ddd;
+}
+
 .profile-tab {
   max-width: 600px;
   margin: 0 auto;
@@ -7,60 +15,60 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.profile-title {
+.profile-tab__title {
   text-align: center;
   font-size: 22px;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 20px;
 }
 
-.profile-info {
+.profile-tab__info {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.profile-item {
+.profile-tab__item {
   display: flex;
   align-items: center;
-  background: #f8f9fa;
+  background: var(--bg-light);
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
 }
 
-.icon {
-  color: #cd2027;
+.profile-tab__icon {
+  color: var(--primary-color);
   font-size: 16px;
   margin-right: 10px;
 }
 
-.profile-item span {
+.profile-tab__item span {
   font-size: 14px;
   font-weight: 600;
-  color: #555;
+  color: var(--text-light);
   flex: 1;
 }
 
-.profile-item strong {
+.profile-tab__item strong {
   font-size: 14px;
-  color: #222;
+  color: var(--text-color);
 }
 
-.full-width {
+.profile-tab__item--full {
   flex-direction: column;
   align-items: flex-start;
 }
 
-.full-width p {
+.profile-tab__item--full p {
   margin-top: 4px;
   font-size: 14px;
-  color: #444;
+  color: var(--text-color);
 }
 
 .loading {
   text-align: center;
   font-size: 16px;
-  color: #cd2027;
+  color: var(--primary-color);
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,7 @@ import {
   faEnvelope,
   faKey,
 } from "@fortawesome/free-solid-svg-icons";
+import { validateEmail, validatePassword } from "../../utils/auth-validate";
 import "../../styles/authForm.css";
 
 const LoginForm = () => {
@@ -14,54 +15,37 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "", form: "" });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const validateEmail = (value) => {
-    if (!value) return "Email không được để trống.";
-    if (typeof value !== "string") return "Email phải là một chuỗi.";
-    if (value.length > 255) return "Email không được vượt quá 255 ký tự.";
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) return "Email không hợp lệ.";
-    return "";
-  };
-
-  const validatePassword = (value) => {
-    if (!value) return "Mật khẩu không được để trống.";
-    if (typeof value !== "string") return "Mật khẩu phải là một chuỗi.";
-    if (value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự.";
-    if (value.length > 32) return "Mật khẩu không được vượt quá 32 ký tự.";
-    return "";
-  };
-
-  const handleBlur = (field, value) => {
-    let errorMsg = "";
-    if (field === "email") errorMsg = validateEmail(value);
-    if (field === "password") errorMsg = validatePassword(value);
-    setErrors((prevErrors) => ({ ...prevErrors, [field]: errorMsg }));
-  };
+  const handleBlur = useCallback((field, value) => {
+    const errorMsg =
+      field === "email" ? validateEmail(value) : validatePassword(value);
+    setErrors((prev) => ({ ...prev, [field]: errorMsg }));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-    setErrors({ email: emailError, password: passwordError, form: "" });
 
-    if (emailError || passwordError) return;
+    if (emailError || passwordError) {
+      setErrors({ email: emailError, password: passwordError });
+      return;
+    }
 
+    setLoading(true);
     try {
       const response = await login(email, password);
-      // Kiểm tra role và chuyển hướng
-      if (response.data.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/student");
-      }
+      navigate(response.data.role === "admin" ? "/admin" : "/student");
     } catch (err) {
       console.error("Login failed", err);
-      setErrors((prevErrors) => ({
-        ...prevErrors,
+      setErrors((prev) => ({
+        ...prev,
         form: "Email hoặc mật khẩu không đúng.",
       }));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,7 +63,9 @@ const LoginForm = () => {
           />
         </h2>
         <p className="custom-subtitle">Chào mừng bạn quay lại.</p>
+
         {errors.form && <div className="alert alert-danger">{errors.form}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label
@@ -110,6 +96,7 @@ const LoginForm = () => {
               <div className="invalid-feedback d-block">{errors.email}</div>
             )}
           </div>
+
           <div className="mb-3">
             <label
               htmlFor="loginPassword"
@@ -141,12 +128,15 @@ const LoginForm = () => {
               <div className="invalid-feedback d-block">{errors.password}</div>
             )}
           </div>
+
           <button
             type="submit"
             className="custom-btn-submit"
+            disabled={loading}
           >
-            ĐĂNG NHẬP
+            {loading ? "Đang đăng nhập..." : "ĐĂNG NHẬP"}
           </button>
+
           <div className="text-center mt-3">
             <span className="me-1 text-muted">Quên mật khẩu?</span>
             <Link
@@ -157,6 +147,7 @@ const LoginForm = () => {
             </Link>
             <span> ngay.</span>
           </div>
+
           <div className="text-center mt-2">
             <span className="text-muted">Chưa có tài khoản? </span>
             <Link

@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
-import "../../styles/chat/sidebar.css";
-import Loading from "../Common/Loading";
 import { useState } from "react";
+import PropTypes from "prop-types";
+import Loading from "../Common/Loading";
+import "../../styles/chat/sidebar.css";
 
 const ChatSidebar = ({ students, onSelectStudent }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);

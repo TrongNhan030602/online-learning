@@ -38,7 +38,7 @@ const AdminChat = () => {
   return (
     <div className="admin-chat">
       <button
-        className="toggle-sidebar"
+        className="admin-chat__toggle-sidebar"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         <FontAwesomeIcon icon={isSidebarOpen ? faChevronLeft : faBars} />
@@ -51,17 +51,20 @@ const AdminChat = () => {
             setSelectedUser(userId);
             setSelectedUserName(userName);
           }}
+          className="admin-chat__sidebar"
         />
       )}
 
       <div
-        className={`chat-container ${
-          isSidebarOpen ? "with-sidebar" : "full-width"
+        className={`admin-chat__container ${
+          isSidebarOpen
+            ? "admin-chat__container--with-sidebar"
+            : "admin-chat__container--full-width"
         }`}
       >
         {selectedUser ? (
           <>
-            <div className="chat-header">
+            <div className="admin-chat__header">
               Đang chat với: <strong>{selectedUserName}</strong>
             </div>
             <ChatBox

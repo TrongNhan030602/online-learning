@@ -91,8 +91,10 @@
   color: var(--text-white);
 }
 
-.lesson-form__button--submit:hover {
-  background-color: var(--primary-hover);
+.lesson-form__button--submit:hover,
+.lesson-form__button--submit:active {
+  background-color: var(--primary-hover) !important;
+  color: var(--text-white) !important;
 }
 
 .lesson-form__button--cancel {
@@ -100,8 +102,10 @@
   color: var(--text-white);
 }
 
-.lesson-form__button--cancel:hover {
-  background-color: var(--secondary-hover);
+.lesson-form__button--cancel:hover,
+.lesson-form__button--cancel:active {
+  background-color: var(--secondary-hover) !important;
+  color: var(--text-white) !important;
 }
 
 /* Responsive adjustments */

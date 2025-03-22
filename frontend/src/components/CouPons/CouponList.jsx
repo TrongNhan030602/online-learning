@@ -9,40 +9,37 @@ const CouponList = ({ coupons, onEdit, onDelete }) => {
   const [sortField, setSortField] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc"); // 'asc' hoặc 'desc'
 
-  // Hàm lọc danh sách mã giảm giá theo mã code
+  // Lọc danh sách theo mã code
   const filteredCoupons = coupons.filter((coupon) =>
     coupon.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Hàm sắp xếp danh sách
+  // Sắp xếp danh sách
   const sortedCoupons = [...filteredCoupons].sort((a, b) => {
     if (!sortField) return 0;
     let valueA = a[sortField];
     let valueB = b[sortField];
 
-    if (
-      sortField === "discount" ||
-      sortField === "usage_limit" ||
-      sortField === "times_used"
-    ) {
+    if (["discount", "usage_limit", "times_used"].includes(sortField)) {
       valueA = parseFloat(valueA);
       valueB = parseFloat(valueB);
     }
 
-    if (
-      sortField === "expires_at" ||
-      sortField === "created_at" ||
-      sortField === "updated_at"
-    ) {
+    if (["expires_at", "created_at", "updated_at"].includes(sortField)) {
       valueA = new Date(valueA);
       valueB = new Date(valueB);
     }
 
-    if (sortOrder === "asc") return valueA > valueB ? 1 : -1;
-    return valueA < valueB ? 1 : -1;
+    return sortOrder === "asc"
+      ? valueA > valueB
+        ? 1
+        : -1
+      : valueA < valueB
+      ? 1
+      : -1;
   });
 
-  // Hàm đổi trạng thái sắp xếp
+  // Đổi trạng thái sắp xếp
   const handleSort = (field) => {
     if (sortField === field) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -74,45 +71,41 @@ const CouponList = ({ coupons, onEdit, onDelete }) => {
                   className="coupon-list__td"
                   onClick={() => handleSort("id")}
                 >
-                  ID <FontAwesomeIcon icon={faSort} />
+                  <FontAwesomeIcon icon={faSort} /> ID
                 </th>
                 <th className="coupon-list__td">Mã Code</th>
                 <th
                   className="coupon-list__td"
                   onClick={() => handleSort("discount")}
                 >
-                  Giảm giá <FontAwesomeIcon icon={faSort} />
-                </th>
-                <th
-                  className="coupon-list__td"
-                  onClick={() => handleSort("expires_at")}
-                >
-                  Hạn sử dụng <FontAwesomeIcon icon={faSort} />
+                  <FontAwesomeIcon icon={faSort} /> Giảm giá
                 </th>
                 <th
                   className="coupon-list__td"
                   onClick={() => handleSort("usage_limit")}
                 >
-                  Giới hạn sử dụng <FontAwesomeIcon icon={faSort} />
+                  <FontAwesomeIcon icon={faSort} />
+                  Giới hạn sử dụng
                 </th>
                 <th
                   className="coupon-list__td"
                   onClick={() => handleSort("times_used")}
                 >
-                  Số lần đã dùng <FontAwesomeIcon icon={faSort} />
+                  <FontAwesomeIcon icon={faSort} /> Số lần đã dùng
+                </th>
+                <th
+                  className="coupon-list__td"
+                  onClick={() => handleSort("expires_at")}
+                >
+                  <FontAwesomeIcon icon={faSort} /> Hạn sử dụng
                 </th>
                 <th
                   className="coupon-list__td"
                   onClick={() => handleSort("created_at")}
                 >
-                  Ngày tạo <FontAwesomeIcon icon={faSort} />
+                  <FontAwesomeIcon icon={faSort} /> Ngày tạo
                 </th>
-                <th
-                  className="coupon-list__td"
-                  onClick={() => handleSort("updated_at")}
-                >
-                  Ngày cập nhật <FontAwesomeIcon icon={faSort} />
-                </th>
+
                 <th className="coupon-list__td">Hành động</th>
               </tr>
             </thead>
@@ -124,17 +117,15 @@ const CouponList = ({ coupons, onEdit, onDelete }) => {
                   <td className="coupon-list__td">
                     {parseFloat(coupon.discount)}%
                   </td>
-                  <td className="coupon-list__td">
-                    {new Date(coupon.expires_at).toLocaleDateString("vi-VN")}
-                  </td>
                   <td className="coupon-list__td">{coupon.usage_limit}</td>
                   <td className="coupon-list__td">{coupon.times_used}</td>
                   <td className="coupon-list__td">
-                    {new Date(coupon.created_at).toLocaleDateString("vi-VN")}
+                    {new Date(coupon.expires_at).toLocaleDateString("vi-VN")}
                   </td>
                   <td className="coupon-list__td">
-                    {new Date(coupon.updated_at).toLocaleDateString("vi-VN")}
+                    {new Date(coupon.created_at).toLocaleDateString("vi-VN")}
                   </td>
+
                   <td className="coupon-list__td">
                     <button
                       onClick={() => onEdit(coupon)}
@@ -168,10 +159,10 @@ CouponList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       code: PropTypes.string.isRequired,
-      discount: PropTypes.string.isRequired,
-      expires_at: PropTypes.string.isRequired,
+      discount: PropTypes.number.isRequired,
       usage_limit: PropTypes.number.isRequired,
       times_used: PropTypes.number.isRequired,
+      expires_at: PropTypes.string.isRequired,
       created_at: PropTypes.string.isRequired,
       updated_at: PropTypes.string.isRequired,
     })

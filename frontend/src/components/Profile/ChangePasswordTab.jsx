@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faKey, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { useToast } from "../../hooks/useToast"; // Đảm bảo bạn có Toast hook để thông báo
-import userApi from "../../api/userApi"; // Đảm bảo API đổi mật khẩu được import đúng
-import { useNavigate } from "react-router-dom"; // Dùng để điều hướng về trang đăng nhập
+import { useToast } from "../../hooks/useToast";
+import userApi from "../../api/userApi";
+import { useNavigate } from "react-router-dom";
 import "../../styles/profile/change-password.css";
 
 const ChangePasswordTab = () => {
@@ -12,8 +12,8 @@ const ChangePasswordTab = () => {
     newPassword: "",
     confirmPassword: "",
   });
-  const { addToast } = useToast(); // Sử dụng hook thông báo
-  const navigate = useNavigate(); // Dùng để điều hướng trang
+  const { addToast } = useToast();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,8 +22,46 @@ const ChangePasswordTab = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const { oldPassword, newPassword, confirmPassword } = formData;
+
+    // Kiểm tra mật khẩu cũ
+    if (!oldPassword) {
+      addToast({
+        title: "Lỗi",
+        message: "Vui lòng nhập mật khẩu cũ.",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    // Kiểm tra độ dài mật khẩu mới
+    if (newPassword.length < 8) {
+      addToast({
+        title: "Lỗi",
+        message: "Mật khẩu mới phải có ít nhất 8 ký tự.",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    // Kiểm tra mật khẩu mới có chữ hoa, chữ thường, số và ký tự đặc biệt
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      addToast({
+        title: "Lỗi",
+        message:
+          "Mật khẩu mới phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.",
+        type: "error",
+        duration: 4000,
+      });
+      return;
+    }
+
     // Kiểm tra xác nhận mật khẩu
-    if (formData.newPassword !== formData.confirmPassword) {
+    if (newPassword !== confirmPassword) {
       addToast({
         title: "Lỗi",
         message: "Mật khẩu xác nhận không khớp.",
@@ -35,12 +73,11 @@ const ChangePasswordTab = () => {
 
     try {
       await userApi.changePassword({
-        current_password: formData.oldPassword,
-        new_password: formData.newPassword,
-        new_password_confirmation: formData.confirmPassword,
+        current_password: oldPassword,
+        new_password: newPassword,
+        new_password_confirmation: confirmPassword,
       });
 
-      // Thông báo thành công
       addToast({
         title: "Thành công",
         message: "Đổi mật khẩu thành công! Bạn sẽ được đăng xuất.",
@@ -48,18 +85,11 @@ const ChangePasswordTab = () => {
         duration: 3000,
       });
 
-      // Đăng xuất
-      localStorage.removeItem("auth_token"); // Xóa token (hoặc xóa thông tin đăng nhập từ nơi bạn lưu trữ token)
-      navigate("/login"); // Điều hướng người dùng về trang đăng nhập
+      localStorage.removeItem("auth_token");
+      navigate("/login");
 
-      // Reset form
-      setFormData({
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
+      setFormData({ oldPassword: "", newPassword: "", confirmPassword: "" });
     } catch (error) {
-      // Xử lý lỗi
       console.error("Đổi mật khẩu thất bại:", error);
       addToast({
         title: "Lỗi",
@@ -72,15 +102,15 @@ const ChangePasswordTab = () => {
 
   return (
     <div className="change-password">
-      <h3>Đổi Mật Khẩu</h3>
+      <h3 className="change-password__title">Đổi Mật Khẩu</h3>
       <form
         onSubmit={handleSubmit}
-        className="password-form"
+        className="change-password__form"
       >
-        <div className="input-group">
+        <div className="change-password__input-group">
           <FontAwesomeIcon
             icon={faLock}
-            className="icon"
+            className="change-password__icon"
           />
           <input
             type="password"
@@ -89,13 +119,14 @@ const ChangePasswordTab = () => {
             onChange={handleChange}
             placeholder="Mật khẩu cũ"
             required
+            className="change-password__input"
           />
         </div>
 
-        <div className="input-group">
+        <div className="change-password__input-group">
           <FontAwesomeIcon
             icon={faKey}
-            className="icon"
+            className="change-password__icon"
           />
           <input
             type="password"
@@ -104,13 +135,14 @@ const ChangePasswordTab = () => {
             onChange={handleChange}
             placeholder="Mật khẩu mới"
             required
+            className="change-password__input"
           />
         </div>
 
-        <div className="input-group">
+        <div className="change-password__input-group">
           <FontAwesomeIcon
             icon={faCheck}
-            className="icon"
+            className="change-password__icon"
           />
           <input
             type="password"
@@ -119,12 +151,13 @@ const ChangePasswordTab = () => {
             onChange={handleChange}
             placeholder="Xác nhận mật khẩu mới"
             required
+            className="change-password__input"
           />
         </div>
 
         <button
           type="submit"
-          className="btn-submit"
+          className="change-password__btn-submit"
         >
           Đổi mật khẩu
         </button>

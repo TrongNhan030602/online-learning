@@ -163,7 +163,7 @@ const LessonFormModal = ({
         </Modal.Body>
         <Modal.Footer className="lesson-form__actions">
           <Button
-            variant="secondary"
+            variant="none"
             onClick={handleClose}
             className="lesson-form__button lesson-form__button--cancel"
           >
@@ -171,7 +171,7 @@ const LessonFormModal = ({
           </Button>
           <Button
             type="submit"
-            variant="primary"
+            variant="none"
             disabled={isSubmitting}
             className="lesson-form__button lesson-form__button--submit"
           >

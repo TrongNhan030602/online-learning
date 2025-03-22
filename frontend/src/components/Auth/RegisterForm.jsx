@@ -4,8 +4,15 @@ import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/authForm.css";
+import { useToast } from "../../hooks/useToast";
+import {
+  validateName,
+  validateEmail,
+  validatePassword,
+} from "../../utils/auth-validate";
 
 const RegisterForm = () => {
+  const { addToast } = useToast();
   const { register } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -13,39 +20,6 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  // Validation Tên
-  const validateName = (value) => {
-    if (!value) return "Tên không được để trống.";
-    if (value.length < 3 || value.length > 50)
-      return "Tên phải từ 3 đến 50 ký tự.";
-    const nameRegex = /^[\p{L}\s\\-]+$/u;
-    if (!nameRegex.test(value))
-      return "Tên chỉ được chứa chữ cái, khoảng trắng và dấu '-'.";
-    return "";
-  };
-
-  // Validation Email
-  const validateEmail = (value) => {
-    if (!value) return "Email không được để trống.";
-    if (value.length > 255) return "Email không được vượt quá 255 ký tự.";
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) return "Email không hợp lệ.";
-    return "";
-  };
-
-  // Validation Mật khẩu
-  const validatePassword = (value) => {
-    if (!value) return "Mật khẩu không được để trống.";
-    if (value.length < 8 || value.length > 32)
-      return "Mật khẩu phải từ 8 đến 32 ký tự.";
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
-    if (!passwordRegex.test(value))
-      return "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 số và 1 ký tự đặc biệt (@$!%*?&).";
-    return "";
-  };
-
-  // Xử lý khi blur input
   const handleBlur = (field, value) => {
     let errorMsg = "";
     if (field === "name") errorMsg = validateName(value);
@@ -54,7 +28,6 @@ const RegisterForm = () => {
     setErrors((prevErrors) => ({ ...prevErrors, [field]: errorMsg }));
   };
 
-  // Xử lý submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     const nameError = validateName(name);
@@ -72,18 +45,22 @@ const RegisterForm = () => {
 
     try {
       await register(name, email, password);
-      navigate("/login");
+      addToast({
+        title: "Thành công",
+        message: "Bạn đã đăng ký thành công!. Hãy tiến hành đăng nhập!!",
+        type: "success",
+        duration: 3000,
+      });
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
     } catch (err) {
       console.error("Registration failed", err);
-      // Kiểm tra nếu API trả về thông báo lỗi từ server
       const serverMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
         "Đăng ký thất bại. Vui lòng thử lại.";
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        form: serverMessage,
-      }));
+      setErrors((prevErrors) => ({ ...prevErrors, form: serverMessage }));
     }
   };
 

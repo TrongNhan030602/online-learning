@@ -174,6 +174,7 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
           type="submit"
           className="coupon-form__button coupon-form__button--submit"
           disabled={isSubmitting}
+          variant="none"
         >
           {isSubmitting
             ? "Đang xử lý..."
@@ -186,6 +187,7 @@ const CouponForm = ({ initialData, onSuccess, onClose }) => {
           onClick={onClose}
           className="coupon-form__button coupon-form__button--cancel"
           disabled={isSubmitting}
+          variant="none"
         >
           Hủy
         </Button>
