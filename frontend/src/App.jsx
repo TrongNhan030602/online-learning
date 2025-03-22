@@ -4,8 +4,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext.jsx";
-import { ToastProvider } from "./contexts/ToastContext.jsx";
+import { AuthProvider } from "./providers/AuthProvider.jsx";
+import { ToastProvider } from "./providers/ToastProvider.jsx";
 import { UserProvider } from "./providers/UserProvider.jsx";
 import Login from "./pages/authPages/Login.jsx";
 import Register from "./pages/authPages/Register.jsx";

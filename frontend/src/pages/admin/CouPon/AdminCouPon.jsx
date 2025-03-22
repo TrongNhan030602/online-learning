@@ -101,8 +101,10 @@ const AdminCoupons = () => {
 
       {loading ? (
         <Loading
-          text="Đang tải mã giảm giá..."
+          text="Đang tải dữ liệu..."
           size="lg"
+          variant="danger"
+          textVariant="danger"
         />
       ) : (
         <CouponList

@@ -25,7 +25,15 @@ const FaqDetail = () => {
       });
   }, [id]);
 
-  if (loading) return <Loading text="Đang tải chi tiết FAQ..." />;
+  if (loading)
+    return (
+      <Loading
+        text="Đang tải dữ liệu..."
+        size="lg"
+        variant="danger"
+        textVariant="danger"
+      />
+    );
 
   return (
     <div className="faq-detail">

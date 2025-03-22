@@ -96,8 +96,10 @@ const AdminBlogs = () => {
 
       {loading ? (
         <Loading
-          text="Đang tải blog..."
+          text="Đang tải dữ liệu..."
           size="lg"
+          variant="danger"
+          textVariant="danger"
         />
       ) : (
         <BlogList

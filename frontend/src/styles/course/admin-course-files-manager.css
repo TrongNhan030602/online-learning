@@ -1,0 +1,63 @@
+.course-files {
+  padding: 20px;
+}
+
+.course-files__upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.course-files__upload input {
+  flex: 1;
+}
+
+.course-files__list {
+  margin-top: 20px;
+}
+
+.course-files__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.course-files__table th,
+.course-files__table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.course-files__table th {
+  background-color: #f8f9fa;
+}
+
+.course-files__actions {
+  display: flex;
+  gap: 5px;
+}
+
+.course-files__button {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.course-files__upload-button {
+  background-color: var(--primary-color) !important;
+  color: white;
+  border: none;
+}
+.course-files__upload-button {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+
+.course-files__button--danger {
+  background-color: #dc3545;
+  color: white;
+}
+button.course-files__upload-button.btn.btn-primary {
+  margin-bottom: -30px;
+  margin-left: 30px;
+}

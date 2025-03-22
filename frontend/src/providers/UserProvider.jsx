@@ -9,31 +9,36 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const token = localStorage.getItem("token");
+
     if (token) {
-      updateUser();
+      updateUser(isMounted);
     } else {
       setLoading(false);
     }
+
+    return () => {
+      isMounted = false; // Cleanup tránh cập nhật state khi unmount
+    };
   }, []);
 
   // Hàm cập nhật toàn bộ dữ liệu user (gọi lại API)
-  const updateUser = async () => {
+  const updateUser = async (isMounted = true) => {
     try {
       const response = await userApi.getProfile();
-      setUser(response.data);
+      if (isMounted) setUser(response.data);
     } catch (error) {
       console.error("❌ Error fetching user data:", error);
+      if (isMounted) setUser(null);
     } finally {
-      setLoading(false);
+      if (isMounted) setLoading(false);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-
   return (
-    <UserContext.Provider value={{ user, setUser, updateUser }}>
-      {children}
+    <UserContext.Provider value={{ user, setUser, updateUser, loading }}>
+      {loading ? null : children}
     </UserContext.Provider>
   );
 };

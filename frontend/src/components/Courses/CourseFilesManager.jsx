@@ -5,13 +5,14 @@ import { useToast } from "../../hooks/useToast";
 import courseApi from "../../api/courseApi";
 import courseFileApi from "../../api/courseFileApi";
 import Loading from "../../components/Common/Loading";
+import "../../styles/course/admin-course-files-manager.css";
 
 const CourseFilesManager = ({ show, handleClose, courseId }) => {
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const toastRef = useRef(useToast()); // 🔥 Dùng useRef để giữ nguyên reference
+  const toastRef = useRef(useToast());
 
   const fetchFiles = useCallback(() => {
     if (!courseId) return;
@@ -30,7 +31,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
         });
       })
       .finally(() => setLoading(false));
-  }, [courseId]); // ✅ Bỏ `addToast` khỏi dependency
+  }, [courseId]);
 
   useEffect(() => {
     if (show) fetchFiles();
@@ -115,18 +116,24 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
         <Modal.Title>Quản lý tài liệu khóa học</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group controlId="fileUpload">
-            <Form.Label>Chọn file để tải lên</Form.Label>
+        <Form className="course-files__upload">
+          <Form.Group
+            controlId="fileUpload"
+            className="course-files__upload-group"
+          >
+            <Form.Label className="course-files__upload-label">
+              Chọn file để tải lên
+            </Form.Label>
             <Form.Control
               type="file"
               onChange={handleFileChange}
               disabled={uploading}
+              className="course-files__upload-input"
             />
           </Form.Group>
           <Button
             variant="primary"
-            className="mt-2 custom-btn custom-btn-primary"
+            className="course-files__upload-button"
             onClick={handleUpload}
             disabled={uploading}
           >
@@ -141,11 +148,14 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
           </Button>
         </Form>
         <hr />
-        <h5>Danh sách tài liệu</h5>
+        <h5 className="course-files__title">Danh sách tài liệu</h5>
         {loading ? (
           <Loading
             text="Đang tải dữ liệu..."
             size="lg"
+            className="course-files__loading"
+            variant="danger"
+            textVariant="danger"
           />
         ) : files.length > 0 ? (
           <Table
@@ -153,6 +163,7 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
             bordered
             hover
             responsive
+            className="course-files__table"
           >
             <thead>
               <tr>
@@ -164,15 +175,21 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
             </thead>
             <tbody>
               {files.map((file) => (
-                <tr key={file.id}>
-                  <td>{file.id}</td>
-                  <td>{file.type}</td>
-                  <td>{file.name || file.file_path.split("/").pop()}</td>
-                  <td>
+                <tr
+                  key={file.id}
+                  className="course-files__row"
+                >
+                  <td className="course-files__id">{file.id}</td>
+                  <td className="course-files__type">{file.type}</td>
+                  <td className="course-files__name">
+                    {file.name || file.file_path.split("/").pop()}
+                  </td>
+                  <td className="course-files__actions">
                     <Button
                       variant="danger"
                       size="sm"
                       onClick={() => handleDelete(file.id)}
+                      className="course-files__delete-button"
                     >
                       Xóa
                     </Button>
@@ -182,13 +199,14 @@ const CourseFilesManager = ({ show, handleClose, courseId }) => {
             </tbody>
           </Table>
         ) : (
-          <p>Không có tài liệu nào.</p>
+          <p className="course-files__empty">Không có tài liệu nào.</p>
         )}
       </Modal.Body>
       <Modal.Footer>
         <Button
           variant="secondary"
           onClick={handleClose}
+          className="course-files__close-button"
         >
           Đóng
         </Button>

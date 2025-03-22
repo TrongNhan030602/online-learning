@@ -81,7 +81,12 @@ const AdminFaqs = () => {
       </div>
 
       {loading ? (
-        <Loading text="Đang tải dữ liệu..." />
+        <Loading
+          text="Đang tải dữ liệu..."
+          size="lg"
+          variant="danger"
+          textVariant="danger"
+        />
       ) : (
         <FaqList
           faqs={faqs}

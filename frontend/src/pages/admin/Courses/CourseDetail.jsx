@@ -48,6 +48,8 @@ const CourseDetail = () => {
         <Loading
           text="Đang tải dữ liệu..."
           size="lg"
+          variant="danger"
+          textVariant="danger"
         />
       </div>
     );
