@@ -1,13 +1,12 @@
 import axiosClient from "./axiosClient";
 
 const userApi = {
-  getProfile: () => axiosClient.get("/profile"),
-  updateProfile: (data) => axiosClient.put("/profile", data),
-  updateAvatar: (formData) =>
-    axiosClient.post("/profile/avatar", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    }),
-  changePassword: (data) => axiosClient.post("/profile/change-password", data),
+  getUsers: (params) => axiosClient.get("/users", { params }),
+  getUserDetail: (id) => axiosClient.get(`/users/${id}`),
+  createUser: (data) => axiosClient.post("/users", data),
+  updateUser: (id, data) => axiosClient.put(`/users/${id}`, data),
+  deleteUser: (id) => axiosClient.delete(`/users/${id}`),
+  resetPassword: (id) => axiosClient.post(`/users/${id}/reset-password`),
 };
 
 export default userApi;

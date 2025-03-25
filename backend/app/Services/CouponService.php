@@ -84,6 +84,7 @@ class CouponService
         return $coupon;
     }
 
+
     public function resetUsage($id)
     {
         return $this->couponRepository->resetUsage($id);

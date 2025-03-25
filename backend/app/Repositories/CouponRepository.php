@@ -81,12 +81,15 @@ class CouponRepository implements CouponRepositoryInterface
         $coupon = Coupon::where('code', $code)->first();
 
         if (!$coupon || $coupon->expires_at < now() || ($coupon->usage_limit !== null && $coupon->times_used >= $coupon->usage_limit)) {
-            return null;
+            return null;  // Không áp dụng mã giảm giá
         }
 
+        // Tăng số lần sử dụng mã giảm giá
         $coupon->increment('times_used');
-        return $coupon;
+
+        return $coupon;  // Trả về mã giảm giá hoặc một đối tượng đã xử lý nếu cần
     }
+
 
     public function resetUsage($id)
     {

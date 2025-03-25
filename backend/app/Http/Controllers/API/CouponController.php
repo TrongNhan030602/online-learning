@@ -111,6 +111,7 @@ class CouponController extends Controller
         }
     }
 
+
     public function resetUsage($id): JsonResponse
     {
         try {

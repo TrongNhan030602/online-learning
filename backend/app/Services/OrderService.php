@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Interfaces\OrderRepositoryInterface;
+use Exception;
 
 class OrderService
 {
@@ -15,10 +16,6 @@ class OrderService
     public function getAllOrders()
     {
         return $this->orderRepository->getAll();
-    }
-    public function applyCouponToOrder($orderId, $couponCode)
-    {
-        return $this->orderRepository->applyCoupon($orderId, $couponCode);
     }
 
     public function getOrderById($id)
@@ -40,4 +37,27 @@ class OrderService
     {
         return $this->orderRepository->delete($id);
     }
+
+    public function cancelOrder($id)
+    {
+        return $this->orderRepository->cancel($id);
+    }
+
+    public function checkout($id)
+    {
+        return $this->orderRepository->checkout($id);
+    }
+
+    public function confirmPayment($id, $paymentData)
+    {
+        return $this->orderRepository->confirmPayment($id, $paymentData);
+    }
+
+    public function handlePaymentFailure($id)
+    {
+        return $this->orderRepository->handlePaymentFailure($id);
+    }
+
+
+
 }

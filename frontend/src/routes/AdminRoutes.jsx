@@ -5,7 +5,7 @@ import AdminLayout from "../layouts/AdminLayout";
 // Lazy load các trang
 const AdminCourses = lazy(() => import("../pages/admin/Courses/AdminCourses"));
 const CourseDetail = lazy(() => import("../pages/admin/Courses/CourseDetail"));
-const AdminUsers = lazy(() => import("../pages/admin/AdminUsers"));
+const AdminUsers = lazy(() => import("../pages/admin/Users/AdminUsers"));
 const AdminProgress = lazy(() => import("../pages/admin/AdminProgress"));
 const AdminLessonDetail = lazy(() =>
   import("../pages/admin/Lessons/AdminLessonDetail")

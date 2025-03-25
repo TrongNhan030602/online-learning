@@ -1,10 +1,16 @@
 <?php
+
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Services\OrderService;
+use Exception;
+use App\Enums\RoleEnum;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Services\OrderService;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Exceptions\ApiExceptionHandler;
+use App\Http\Requests\Order\StoreOrderRequest;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class OrderController extends Controller
 {
@@ -15,67 +21,157 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function index()
+    /**
+     * Lấy danh sách tất cả các đơn hàng
+     *
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
-        $orders = $this->orderService->getAllOrders();
-        return response()->json($orders);
+        try {
+            $orders = $this->orderService->getAllOrders();
+            return response()->json($orders);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
+        }
     }
 
-    public function show($id)
+    /**
+     * Lấy chi tiết đơn hàng
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function show($id): JsonResponse
     {
-        $order = $this->orderService->getOrderById($id);
-        return response()->json($order);
+        try {
+            $order = $this->orderService->getOrderById($id);
+            return response()->json($order);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
+        }
     }
-    public function applyCoupon(Request $request, $orderId)
-    {
-        $validator = Validator::make($request->all(), [
-            'coupon_code' => 'required|string|exists:coupons,code',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+    /**
+     * Cập nhật thông tin đơn hàng
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        try {
+            $updatedOrder = $this->orderService->updateOrder($id, $request->all());
+            return response()->json($updatedOrder);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
+        }
+    }
+
+    /**
+     * Tạo đơn hàng mới
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function store(StoreOrderRequest $request): JsonResponse
+    {
+        if (auth()->user()->role !== RoleEnum::Student) {
+            throw new AccessDeniedHttpException("Chỉ học viên mới có thể đăng ký khóa học.");
         }
 
-        $order = $this->orderService->applyCouponToOrder($orderId, $request->coupon_code);
-        return response()->json($order);
-    }
+        try {
+            // Lấy ID của người dùng đang đăng nhập
+            $data = $request->validated();
+            $data['user_id'] = auth()->id();
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'total_price' => 'required|numeric|min:0',
-            'status' => 'required|in:pending,paid,cancelled',
-            'payment_method' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            $order = $this->orderService->createOrder($data);
+            return response()->json($order->load('orderItems.course'), 201);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
         }
-
-        $order = $this->orderService->createOrder($request->all());
-        return response()->json($order, 201);
     }
 
-    public function update(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            'total_price' => 'sometimes|numeric|min:0',
-            'status' => 'sometimes|in:pending,paid,cancelled',
-            'payment_method' => 'sometimes|string',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+    /**
+     * Xóa đơn hàng
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function destroy($id): JsonResponse
+    {
+        try {
+            $this->orderService->deleteOrder($id);
+            return response()->json(['message' => 'Xóa đơn hàng thành công!']);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
         }
-
-        $order = $this->orderService->updateOrder($id, $request->all());
-        return response()->json($order);
     }
 
-    public function destroy($id)
+    /**
+     * Hủy đơn hàng
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function cancel($id): JsonResponse
     {
-        $this->orderService->deleteOrder($id);
-        return response()->json(['message' => 'Order deleted successfully']);
+        try {
+            $this->orderService->cancelOrder($id);
+            return response()->json(['message' => 'Đơn hàng đã được hủy thành công!']);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
+        }
+    }
+
+
+
+    /**
+     * Tiến hành thanh toán
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function checkout($id): JsonResponse
+    {
+        try {
+            $checkout = $this->orderService->checkout($id);
+            return response()->json($checkout);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
+        }
+    }
+    /**
+     * Xác nhận thanh toán
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function confirmPayment(Request $request, $id): JsonResponse
+    {
+        try {
+            $paymentConfirmation = $this->orderService->confirmPayment($id, $request->all());
+            return response()->json($paymentConfirmation);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
+        }
+    }
+    /**
+     * Xử lý lỗi thanh toán
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function handlePaymentFailure($id): JsonResponse
+    {
+        try {
+            $response = $this->orderService->handlePaymentFailure($id);
+            return response()->json($response);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
+        }
     }
 }

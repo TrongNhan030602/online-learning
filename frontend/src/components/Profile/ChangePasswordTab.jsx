@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faKey, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "../../hooks/useToast";
-import userApi from "../../api/userApi";
+import userProfileApi from "../../api/userProfileApi";
 import { useNavigate } from "react-router-dom";
 import "../../styles/profile/change-password.css";
 
@@ -72,7 +72,7 @@ const ChangePasswordTab = () => {
     }
 
     try {
-      await userApi.changePassword({
+      await userProfileApi.changePassword({
         current_password: oldPassword,
         new_password: newPassword,
         new_password_confirmation: confirmPassword,

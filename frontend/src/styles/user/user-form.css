@@ -1,0 +1,117 @@
+.user-form {
+  background-color: #fff;
+  border: 1px solid var(--secondary-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.user-form__error {
+  color: #d9534f;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.user-form__input--error {
+  border-color: #d9534f;
+  background-color: #f8d7da;
+}
+
+.user-form__title {
+  font-size: 1.75rem;
+  font-family: var(--heading-font);
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+.user-form__group {
+  margin-bottom: 15px;
+}
+
+.user-form__label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text-dark);
+}
+
+.user-form__input,
+.user-form__textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 6px;
+  font-size: var(--base-font-size);
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-form__input:focus,
+.user-form__textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(204, 0, 0, 0.3);
+  outline: none;
+}
+
+.user-form__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.user-form__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.user-form__button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--base-font-size);
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.user-form__button:hover {
+  transform: scale(1.05);
+}
+
+.user-form__button:active {
+  transform: scale(0.98);
+}
+
+.user-form__button--submit {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+.user-form__button--submit:hover {
+  background-color: var(--primary-hover);
+}
+
+.user-form__button--cancel {
+  background-color: var(--secondary-color);
+  color: var(--text-white);
+}
+
+.user-form__button--cancel:hover {
+  background-color: var(--secondary-hover);
+}
+
+@media (max-width: 576px) {
+  .user-form {
+    padding: 15px;
+    margin: 15px;
+  }
+  .user-form__actions {
+    flex-direction: column;
+  }
+  .user-form__button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

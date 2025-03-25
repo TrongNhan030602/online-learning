@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { UserContext } from "../contexts/UserContext";
-import userApi from "../api/userApi";
+import userProfileApi from "../api/userProfileApi";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -26,7 +26,7 @@ export const UserProvider = ({ children }) => {
   // Hàm cập nhật toàn bộ dữ liệu user (gọi lại API)
   const updateUser = async (isMounted = true) => {
     try {
-      const response = await userApi.getProfile();
+      const response = await userProfileApi.getProfile();
       if (isMounted) setUser(response.data);
     } catch (error) {
       console.error("❌ Error fetching user data:", error);

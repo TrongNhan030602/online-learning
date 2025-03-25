@@ -14,7 +14,7 @@ class OrderItem extends Model
         'course_id',
         'price',
     ];
-
+    public $timestamps = false;
     /**
      * Mối quan hệ N - 1: Chi tiết đơn hàng thuộc về một đơn hàng
      */

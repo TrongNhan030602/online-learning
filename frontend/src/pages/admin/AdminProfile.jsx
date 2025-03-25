@@ -14,7 +14,7 @@ import ProfileTab from "../../components/Profile/ProfileTab";
 import EditProfileTab from "../../components/Profile/EditProfileTab";
 import ChangeAvatarTab from "../../components/Profile/ChangeAvatarTab";
 import ChangePasswordTab from "../../components/Profile/ChangePasswordTab";
-import userApi from "../../api/userApi";
+import userProfileApi from "../../api/userProfileApi";
 
 const AdminProfile = () => {
   const { user, updateUser } = useUser();
@@ -23,7 +23,7 @@ const AdminProfile = () => {
 
   const handleUpdateProfile = async (formData) => {
     try {
-      await userApi.updateProfile(formData);
+      await userProfileApi.updateProfile(formData);
       addToast({
         title: "Thành công",
         message: "Cập nhật hồ sơ thành công!",
@@ -47,7 +47,7 @@ const AdminProfile = () => {
     formData.append("avatar", event.target.files[0]);
 
     try {
-      await userApi.updateAvatar(formData);
+      await userProfileApi.updateAvatar(formData);
       addToast({
         title: "Thành công",
         message: "Cập nhật avatar thành công!",

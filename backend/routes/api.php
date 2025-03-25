@@ -163,18 +163,29 @@ Route::prefix('coupons')->group(function () {
 
 });
 
+
 Route::prefix('orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
+    Route::get('/{id}', [OrderController::class, 'show']);
+    Route::put('/{id}', [OrderController::class, 'update']);
+    Route::delete('/{id}', [OrderController::class, 'destroy']);
 
-    Route::get('/', [OrderController::class, 'index']);  // ✅ Lấy danh sách đơn hàng
-    Route::get('/{id}', [OrderController::class, 'show']); // ✅ Xem chi tiết đơn hàng
-    Route::post('/', [OrderController::class, 'store']);  // ✅ Tạo đơn hàng mới
-    Route::put('/{id}', [OrderController::class, 'update']);  // ✅ Cập nhật đơn hàng
-    Route::delete('/{id}', [OrderController::class, 'destroy']);  // ✅ Xóa đơn hàng
+    // **Tạo đơn hàng mới**
+    Route::post('/', [OrderController::class, 'store']);
 
-    // ✅ Áp dụng mã giảm giá vào đơn hàng
-    Route::post('/{orderId}/apply-coupon', [OrderController::class, 'applyCoupon']);
+    // **Hủy đơn hàng**
+    Route::post('/{orderId}/cancel', [OrderController::class, 'cancel']);
 
+    // **Xử lý thanh toán**
+    Route::post('/{orderId}/checkout', [OrderController::class, 'checkout']);
+    Route::post('/{orderId}/confirm', [OrderController::class, 'confirmPayment']);
+    Route::post('/{orderId}/payment-failure', [OrderController::class, 'handlePaymentFailure']);
 });
+
+
+
+
+
 
 // Chat
 Route::middleware('auth:api')->group(function () {
