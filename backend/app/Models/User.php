@@ -20,6 +20,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var list<string>
      */
+    protected $tabel = "users";
     protected $fillable = [
         'name',
         'email',
@@ -78,13 +79,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(UserProfile::class, 'user_id');
     }
 
-
-
-    // Định nghĩa các quan hệ
     public function enrollments()
     {
-        return $this->hasMany(Enrollment::class);
+        return $this->hasMany(Enrollment::class, 'user_id');
     }
+
 
     public function reviews()
     {

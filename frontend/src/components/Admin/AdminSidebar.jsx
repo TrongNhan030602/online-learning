@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import "../../styles/admin-sidebar.css";
+import logo from "../../assets/img/bc-logo@2x.webp";
 const AdminSidebar = () => {
   return (
     <aside className="admin__sidebar">
@@ -9,7 +10,7 @@ const AdminSidebar = () => {
           to="/admin"
         >
           <img
-            src="https://www.brandcamp.asia/build/img/bc-logo@2x.png"
+            src={logo}
             alt="Logo"
             className="admin__logo-img"
           />

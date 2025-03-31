@@ -28,17 +28,23 @@ class UserRepository implements UserRepositoryInterface
                 });
             }
 
-            // Phân trang, ví dụ: 10 bản ghi/trang
-            return $query->paginate(10);
+            // Lấy tất cả kết quả mà không phân trang
+            return $query->get();
         } catch (Exception $e) {
             throw new Exception("Lỗi trong quá trình truy vấn người dùng: " . $e->getMessage());
         }
     }
 
+
     public function getUserById($id)
     {
-        return User::findOrFail($id);
+        try {
+            return User::with('profile')->findOrFail($id);
+        } catch (Exception $e) {
+            throw new Exception("Lỗi trong quá trình truy vấn người dùng: " . $e->getMessage());
+        }
     }
+
 
     public function updateUser($id, array $data)
     {

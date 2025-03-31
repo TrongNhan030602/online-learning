@@ -2,33 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Enrollment extends Model
 {
     use HasFactory;
 
+    protected $table = 'enrollments';
+
     protected $fillable = [
+        'classroom_id',
         'user_id',
-        'course_id',
+        'status'
     ];
 
-    public $timestamps = false; // Vì bảng này chỉ có enrolled_at nên không cần timestamps mặc định
+    protected $casts = [
+        'status' => 'string'
+    ];
 
-    /**
-     * Mối quan hệ N - 1: Đăng ký thuộc về một học viên
-     */
-    public function user()
+    // Một ghi danh thuộc về một lớp học
+    public function classroom()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(ClassRoom::class, 'classroom_id');
     }
 
-    /**
-     * Mối quan hệ N - 1: Đăng ký thuộc về một khóa học
-     */
-    public function course()
+
+    // Một ghi danh thuộc về một học viên (user)
+    public function student()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

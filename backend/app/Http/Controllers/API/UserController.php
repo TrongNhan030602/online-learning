@@ -39,7 +39,7 @@ class UserController extends Controller
         try {
             $user = $this->userService->getUserById((int) $id);
             // Eager load các quan hệ: enrollments, reviews, progress
-            $user->load(['enrollments', 'reviews', 'progress']);
+            $user->load(['profile']);
             return response()->json($user, 200);
         } catch (Exception $e) {
             return response()->json([

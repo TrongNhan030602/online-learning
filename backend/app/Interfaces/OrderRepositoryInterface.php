@@ -14,9 +14,9 @@ interface OrderRepositoryInterface
     public function applyCoupon($couponId, $totalPrice);
     public function cancel($id);
     // Thanh toán
-    public function checkout($id);
-    public function confirmPayment($id, $paymentData);
-    public function handlePaymentFailure($id);
+    public function checkout($orderId);
+    public function confirmPayment($orderId, $paymentData);
+    public function handlePaymentFailure($orderId);
 
 
 }

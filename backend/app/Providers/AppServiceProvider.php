@@ -27,6 +27,14 @@ use App\Interfaces\OrderRepositoryInterface;
 use App\Repositories\OrderRepository;
 use App\Interfaces\UserProfileRepositoryInterface;
 use App\Repositories\UserProfileRepository;
+use App\Interfaces\TrainingProgramRepositoryInterface;
+use App\Repositories\TrainingProgramRepository;
+use App\Interfaces\ClassRoomRepositoryInterface;
+use App\Repositories\ClassRoomRepository;
+use App\Interfaces\EnrollmentRepositoryInterface;
+use App\Repositories\EnrollmentRepository;
+use App\Interfaces\ClassSessionRepositoryInterface;
+use App\Repositories\ClassSessionRepository;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -46,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CouponRepositoryInterface::class, CouponRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(UserProfileRepositoryInterface::class, UserProfileRepository::class);
+        $this->app->bind(TrainingProgramRepositoryInterface::class, TrainingProgramRepository::class);
+        $this->app->bind(ClassRoomRepositoryInterface::class, ClassRoomRepository::class);
+        $this->app->bind(EnrollmentRepositoryInterface::class, EnrollmentRepository::class);
+        $this->app->bind(ClassSessionRepositoryInterface::class, ClassSessionRepository::class);
     }
 
     /**

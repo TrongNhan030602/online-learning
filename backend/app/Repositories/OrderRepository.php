@@ -6,12 +6,26 @@ use App\Models\Order;
 use App\Models\Coupon;
 use App\Models\Course;
 use App\Models\OrderItem;
+use App\Models\Enrollment;
 use App\Models\Transaction;
+use App\Services\PayPalService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use App\Interfaces\OrderRepositoryInterface;
 
 class OrderRepository implements OrderRepositoryInterface
 {
+    protected $paypalBaseUrl;
+    protected $clientId;
+    protected $clientSecret;
+
+    public function __construct()
+    {
+        $this->paypalBaseUrl = config('services.paypal.base_url');
+        $this->clientId = config('services.paypal.client_id');
+        $this->clientSecret = config('services.paypal.client_secret');
+    }
     public function getAll()
     {
         return Order::with(['user', 'orderItems.course', 'transaction'])->orderBy('created_at', 'desc')->get();
@@ -210,81 +224,119 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
     // **Xử lý thanh toán**
-    public function checkout($id)
+    public function checkout($orderId)
     {
-        try {
-            $order = Order::findOrFail($id);
+        $order = Order::findOrFail($orderId);
 
-            if ($order->status !== 'pending') {
-                throw new Exception("Đơn hàng không hợp lệ để thanh toán.");
+        if ($order->status !== 'pending') {
+            return ['status' => 'error', 'message' => 'Đơn hàng không hợp lệ hoặc đã được xử lý.'];
+        }
+
+        try {
+            // Gửi yêu cầu tạo thanh toán đến PayPal
+            $paypalService = new PayPalService();
+            $paymentUrl = $paypalService->createPayment($order);
+
+            if ($paymentUrl) {
+                // Lưu giao dịch ngay từ đầu
+                Transaction::create([
+                    'order_id' => $order->id,
+                    'transaction_id' => null, // PayPal có thể chưa trả transaction ID
+                    'payment_status' => 'pending',
+                    'payment_provider' => 'paypal',
+                ]);
+
+                return ['status' => 'success', 'redirect_url' => $paymentUrl];
             }
 
-            \Log::info("Bắt đầu thanh toán cho đơn hàng #{$order->id}");
+            return ['status' => 'error', 'message' => 'Không thể tạo thanh toán PayPal.'];
+        } catch (Exception $e) {
+            return ['status' => 'error', 'message' => 'Lỗi hệ thống: ' . $e->getMessage()];
+        }
+    }
 
-            // Tạo transaction_id ngẫu nhiên
-            $transactionId = 'TXN' . time() . rand(1000, 9999);
+    // **Xác nhận thanh toán**
+    public function confirmPayment($orderId, $paymentData)
+    {
+        $order = Order::findOrFail($orderId);
+        $transaction = Transaction::where('order_id', $order->id)->first();
 
-            // Tạo transaction
-            $transaction = Transaction::create([
-                'order_id' => $order->id,
-                'transaction_id' => $transactionId, // BẮT BUỘC phải có
-                'payment_provider' => $order->payment_method,
-                'payment_status' => 'pending', // Mặc định trạng thái chờ
+        if (!$transaction || $transaction->payment_status !== 'pending') {
+            return ['status' => 'error', 'message' => 'Giao dịch không hợp lệ hoặc đã được xử lý.'];
+        }
+
+        try {
+            // Xác minh thanh toán với PayPal
+            $paypalService = new PayPalService();
+            $isValid = $paypalService->verifyPayment($paymentData['transaction_id']);
+
+            if ($isValid) {
+                DB::beginTransaction(); // 🔥 Bắt đầu transaction để đảm bảo tính nhất quán
+
+                // ✅ Cập nhật đơn hàng
+                $order->update([
+                    'status' => 'completed',
+                    'payment_method' => 'paypal',
+                ]);
+
+                // ✅ Cập nhật giao dịch
+                $transaction->update([
+                    'transaction_id' => $paymentData['transaction_id'],
+                    'payment_status' => 'success',
+                ]);
+
+                // ✅ Lấy danh sách khóa học từ order_items và ghi danh học viên
+                $orderItems = OrderItem::where('order_id', $order->id)->get();
+
+                foreach ($orderItems as $item) {
+                    Enrollment::create([
+                        'user_id' => $order->user_id,
+                        'course_id' => $item->course_id,
+                        'order_id' => $order->id,
+                    ]);
+                }
+
+                DB::commit(); // 🔥 Xác nhận transaction
+
+                return ['status' => 'success', 'message' => 'Thanh toán thành công! Học viên đã được ghi danh vào các khóa học.'];
+            } else {
+                return $this->handlePaymentFailure($orderId);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack(); // 🔥 Hoàn tác nếu có lỗi
+            return ['status' => 'error', 'message' => 'Lỗi hệ thống: ' . $e->getMessage()];
+        }
+    }
+
+    // **Xử lý thanh toán thất bại**
+    public function handlePaymentFailure($orderId)
+    {
+        try {
+            $order = Order::findOrFail($orderId);
+            $transaction = Transaction::where('order_id', $order->id)->first();
+
+            DB::beginTransaction();
+
+            if ($transaction) {
+                $transaction->update([
+                    'payment_status' => 'failed',
+                ]);
+            }
+
+            $order->update([
+                'status' => 'cancelled',
             ]);
 
-            \Log::info("Tạo transaction thành công: ", ['transaction_id' => $transaction->transaction_id]);
+            DB::commit();
 
-            return [
-                'message' => 'Đang xử lý thanh toán',
-                'transaction_id' => $transaction->transaction_id
-            ];
-
-        } catch (Exception $e) {
-            \Log::error("Checkout Error: " . $e->getMessage());
-            throw $e;
+            return ['status' => 'error', 'message' => 'Thanh toán thất bại. Đơn hàng đã bị hủy.'];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ['status' => 'error', 'message' => 'Lỗi hệ thống: ' . $e->getMessage()];
         }
     }
 
 
 
-    public function confirmPayment($id, $paymentData)
-    {
-        try {
-            $order = Order::findOrFail($id);
-            $transaction = Transaction::where('order_id', $id)
-                ->where('transaction_id', $paymentData['transaction_id'])
-                ->firstOrFail();
 
-            if ($order->status !== 'pending') {
-                throw new Exception("Đơn hàng đã được xử lý trước đó.");
-            }
-
-            // Cập nhật trạng thái giao dịch & đơn hàng
-            $transaction->update(['payment_status' => 'success']);
-            $order->update(['status' => 'completed']);
-
-            return [
-                'message' => 'Thanh toán thành công',
-                'order' => $order
-            ];
-        } catch (Exception $e) {
-            \Log::error("Lỗi xác nhận thanh toán: " . $e->getMessage());
-            return response()->json([
-                'error' => 'Lỗi hệ thống!',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-
-    public function handlePaymentFailure($id)
-    {
-        $order = Order::findOrFail($id);
-        $transaction = Transaction::where('order_id', $id)->firstOrFail();
-
-        $transaction->update(['status' => 'failed']);
-        $order->update(['status' => 'failed']);
-
-        return ['message' => 'Thanh toán thất bại'];
-    }
 }

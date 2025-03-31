@@ -13,8 +13,12 @@ class Course extends Model
         'title',
         'description',
         'price',
+        'image_url'
     ];
-
+    public function files()
+    {
+        return $this->hasMany(CourseFile::class);
+    }
     /**
      * Mối quan hệ 1 - N: Một khóa học có nhiều bài học
      */
@@ -23,14 +27,12 @@ class Course extends Model
         return $this->hasMany(Lesson::class);
     }
 
-    /**
-     * Mối quan hệ N - N: Một khóa học có nhiều học viên đăng ký
-     */
-    public function students()
+    // Một khóa học có nhiều lớp học
+    public function classRooms()
     {
-        return $this->belongsToMany(User::class, 'enrollments', 'course_id', 'user_id')
-            ->withTimestamps();
+        return $this->hasMany(ClassRoom::class);
     }
+
 
     /**
      * Mối quan hệ 1 - N: Một khóa học có nhiều đánh giá
@@ -48,8 +50,5 @@ class Course extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function files()
-    {
-        return $this->hasMany(CourseFile::class);
-    }
+
 }
