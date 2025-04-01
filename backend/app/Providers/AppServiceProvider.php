@@ -35,6 +35,8 @@ use App\Interfaces\EnrollmentRepositoryInterface;
 use App\Repositories\EnrollmentRepository;
 use App\Interfaces\ClassSessionRepositoryInterface;
 use App\Repositories\ClassSessionRepository;
+use App\Interfaces\AttendanceRepositoryInterface;
+use App\Repositories\AttendanceRepository;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -58,6 +60,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ClassRoomRepositoryInterface::class, ClassRoomRepository::class);
         $this->app->bind(EnrollmentRepositoryInterface::class, EnrollmentRepository::class);
         $this->app->bind(ClassSessionRepositoryInterface::class, ClassSessionRepository::class);
+        $this->app->bind(AttendanceRepositoryInterface::class, AttendanceRepository::class);
     }
 
     /**

@@ -20,7 +20,7 @@ class ClassSession extends Model
     // Một buổi học thuộc về một lớp học
     public function classRoom()
     {
-        return $this->belongsTo(ClassRoom::class);
+        return $this->belongsTo(ClassRoom::class, 'classroom_id');
     }
 
     // Một buổi học có nhiều lượt điểm danh

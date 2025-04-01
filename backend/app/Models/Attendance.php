@@ -18,7 +18,7 @@ class Attendance extends Model
     // Một bản ghi điểm danh thuộc về một buổi học
     public function session()
     {
-        return $this->belongsTo(ClassSession::class);
+        return $this->belongsTo(ClassSession::class, 'class_session_id');
     }
 
     // Một bản ghi điểm danh thuộc về một học viên

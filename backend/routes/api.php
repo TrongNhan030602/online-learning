@@ -13,6 +13,7 @@ use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\ProgressController;
 use App\Http\Controllers\API\ClassRoomController;
+use App\Http\Controllers\API\AttendanceController;
 use App\Http\Controllers\API\CourseFileController;
 use App\Http\Controllers\API\EnrollmentController;
 use App\Http\Controllers\API\BlogCommentController;
@@ -164,7 +165,14 @@ Route::prefix('classrooms')->group(function () {
 });
 
 
-
+// API quản lý điểm danh
+Route::prefix('attendance')->group(function () {
+    Route::post('/', [AttendanceController::class, 'markAttendance']);  // Điểm danh
+    Route::get('/session/{classSessionId}', [AttendanceController::class, 'getBySession']); // Lấy danh sách điểm danh theo buổi học
+    Route::get('/student/{userId}', [AttendanceController::class, 'getByStudent']); // Lấy lịch sử điểm danh của học viên
+    Route::put('/{id}', [AttendanceController::class, 'updateAttendance']); // Cập nhật điểm danh
+    Route::delete('/{id}', [AttendanceController::class, 'deleteAttendance']); // Xóa điểm danh
+});
 
 
 

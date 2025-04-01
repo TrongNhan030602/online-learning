@@ -35,7 +35,7 @@ class ClassRoom extends Model
     // ✅ Một lớp học có nhiều buổi học
     public function sessions()
     {
-        return $this->hasMany(ClassSession::class);
+        return $this->hasMany(ClassSession::class, 'classroom_id');
     }
 
     // ✅ Một lớp học có nhiều học viên ghi danh (Enrollment)
