@@ -49,21 +49,11 @@ class LessonController extends Controller
         }
     }
 
-    // Thêm bài học mới (xử lý file cho trường document nếu có)
+    // Thêm bài học mới (Không xử lý file cho trường document )
     public function store(LessonStoreRequest $request)
     {
         try {
             $data = $request->validated();
-
-            if ($request->hasFile('document')) {
-                $originalName = $request->file('document')->getClientOriginalName();
-                $extension = $request->file('document')->getClientOriginalExtension();
-                $nameWithoutExt = pathinfo($originalName, PATHINFO_FILENAME);
-                $sanitizedName = preg_replace('/[^A-Za-z0-9\-_]/', '-', $nameWithoutExt);
-                $newName = $sanitizedName . '-' . time() . '.' . $extension;
-                $data['document'] = $request->file('document')->storeAs('lesson_documents', $newName, 'public');
-            }
-
             $lesson = $this->lessonService->createLesson($data);
             return response()->json($lesson, 201);
         } catch (Exception $e) {
@@ -73,6 +63,7 @@ class LessonController extends Controller
             ], 500);
         }
     }
+
 
     // Cập nhật thông tin bài học (không cập nhật file)
     public function update(LessonUpdateRequest $request, $id)
@@ -115,6 +106,42 @@ class LessonController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Lỗi: Gán tài liệu cho bài học thất bại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function addDocuments(Request $request, $lessonId)
+    {
+        try {
+            $request->validate([
+                'documents.*' => 'required|file|mimes:pdf,docx,png,jpg,pptx,mp4,avi,mov|max:10240' // Thêm định dạng và giới hạn kích thước (10MB)
+            ]);
+
+
+            $documents = $request->file('documents'); // Lấy tất cả tài liệu từ request
+
+            // Thêm tài liệu vào bài học
+            $lesson = $this->lessonService->addDocumentsToLesson($lessonId, $documents);
+
+            return response()->json($lesson, 200); // Trả về thông tin bài học kèm tài liệu
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi: Không thể thêm tài liệu vào bài học.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteDocument($lessonId, $documentId)
+    {
+        try {
+            $this->lessonService->deleteDocument($lessonId, $documentId);
+            return response()->json(['message' => 'Tài liệu đã được xóa thành công.'], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi: Không thể xóa tài liệu vào bài học.',
                 'error' => $e->getMessage()
             ], 500);
         }

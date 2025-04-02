@@ -27,7 +27,26 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'role',
     ];
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id');
+    }
 
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'user_id');
+    }
+
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -74,26 +93,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    public function profile()
-    {
-        return $this->hasOne(UserProfile::class, 'user_id');
-    }
 
-    public function enrollments()
-    {
-        return $this->hasMany(Enrollment::class, 'user_id');
-    }
-
-
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
-    public function progress()
-    {
-        return $this->hasMany(Progress::class);
-    }
 
     // Sử dụng model event để xóa các dữ liệu liên quan khi xóa user
     protected static function booted()

@@ -5,9 +5,9 @@ import * as yup from "yup";
 import userApi from "../../api/userApi";
 import "../../styles/user/user-form.css";
 
-// Schema validation bằng Yup
-const schema = yup.object().shape({
-  fullName: yup
+// Schema validation cho việc tạo mới người dùng
+const createSchema = yup.object().shape({
+  name: yup
     .string()
     .required("Họ và tên không được để trống")
     .min(3, "Họ và tên phải có ít nhất 3 ký tự"),
@@ -15,11 +15,49 @@ const schema = yup.object().shape({
     .string()
     .required("Email không được để trống")
     .email("Email không hợp lệ"),
-  phone: yup.string().matches(/^\d{10,11}$/, "Số điện thoại không hợp lệ"),
+  password: yup
+    .string()
+    .required("Mật khẩu không được để trống")
+    .min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+  password_confirmation: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Mật khẩu xác nhận không khớp"),
   role: yup.string().required("Vai trò không được để trống"),
+  first_name: yup.string().required("Tên riêng không được để trống"),
+  last_name: yup.string().required("Họ không được để trống"),
+  phone: yup
+    .string()
+    .matches(/^\d{10,11}$/, "Số điện thoại không hợp lệ")
+    .required("Số điện thoại không được để trống"),
+  address: yup.string().required("Địa chỉ không được để trống"),
+  gender: yup.string().required("Giới tính không được để trống"),
+  position: yup.string().required("Vị trí không được để trống"),
+  info: yup.string().required("Thông tin không được để trống"),
+});
+
+// Schema validation cho việc cập nhật người dùng
+const updateSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Họ và tên không được để trống")
+    .min(3, "Họ và tên phải có ít nhất 3 ký tự"),
+  first_name: yup.string().required("Tên riêng không được để trống"),
+  last_name: yup.string().required("Họ không được để trống"),
+  phone: yup
+    .string()
+    .matches(/^\d{10,11}$/, "Số điện thoại không hợp lệ")
+    .required("Số điện thoại không được để trống"),
+  address: yup.string().required("Địa chỉ không được để trống"),
+  gender: yup.string().required("Giới tính không được để trống"),
+  position: yup.string().required("Vị trí không được để trống"),
+  info: yup.string().required("Thông tin không được để trống"),
 });
 
 const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
+  // Chọn schema validation phù hợp khi tạo mới hoặc cập nhật
+
+  const schema = initialData ? updateSchema : createSchema;
+
   const {
     register,
     handleSubmit,
@@ -27,21 +65,42 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
     reset,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: initialData || {
-      fullName: "",
-      email: "",
-      phone: "",
-      role: "",
-    },
+    defaultValues: initialData
+      ? {
+          name: initialData.name || "",
+          email: initialData.email || "",
+          role: initialData.role || "",
+          first_name: initialData.profile?.first_name || "",
+          last_name: initialData.profile?.last_name || "",
+          phone: initialData.profile?.phone || "",
+          address: initialData.profile?.address || "",
+          gender: initialData.profile?.gender || "",
+          position: initialData.profile?.position || "",
+          info: initialData.profile?.info || "",
+        }
+      : {
+          name: "",
+          email: "",
+          password: "",
+          password_confirmation: "",
+          role: "",
+          first_name: "",
+          last_name: "",
+          phone: "",
+          address: "",
+          gender: "",
+          position: "",
+          info: "",
+        },
   });
 
   // Xử lý gửi form
   const onSubmit = async (data) => {
     try {
       if (initialData) {
-        await userApi.updateUser(initialData.id, data);
+        await userApi.updateUser(initialData.id, data); // Cập nhật người dùng
       } else {
-        await userApi.createUser(data);
+        await userApi.createUser(data); // Thêm mới người dùng
       }
       onSuccess(data);
       reset();
@@ -56,33 +115,108 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="user-form__group">
-        <label className="user-form__label">Họ và tên:</label>
+        <label className="user-form__label">Tên tài khoản:</label>
         <input
           type="text"
-          {...register("fullName")}
+          {...register("name")}
           className={`user-form__input ${
-            errors.fullName ? "user-form__input--error" : ""
+            errors.name ? "user-form__input--error" : ""
           }`}
         />
-        {errors.fullName && (
-          <p className="user-form__error">{errors.fullName.message}</p>
+        {errors.name && (
+          <p className="user-form__error">{errors.name.message}</p>
         )}
       </div>
+
+      {!initialData && ( // Chỉ hiển thị email và mật khẩu khi tạo mới
+        <>
+          <div className="user-form__group">
+            <label className="user-form__label">Email:</label>
+            <input
+              type="email"
+              {...register("email")}
+              className={`user-form__input ${
+                errors.email ? "user-form__input--error" : ""
+              }`}
+            />
+            {errors.email && (
+              <p className="user-form__error">{errors.email.message}</p>
+            )}
+          </div>
+
+          <div className="user-form__group">
+            <label className="user-form__label">Mật khẩu:</label>
+            <input
+              type="password"
+              {...register("password")}
+              className={`user-form__input ${
+                errors.password ? "user-form__input--error" : ""
+              }`}
+            />
+            {errors.password && (
+              <p className="user-form__error">{errors.password.message}</p>
+            )}
+          </div>
+
+          <div className="user-form__group">
+            <label className="user-form__label">Xác nhận mật khẩu:</label>
+            <input
+              type="password"
+              {...register("password_confirmation")}
+              className={`user-form__input ${
+                errors.password_confirmation ? "user-form__input--error" : ""
+              }`}
+            />
+            {errors.password_confirmation && (
+              <p className="user-form__error">
+                {errors.password_confirmation.message}
+              </p>
+            )}
+          </div>
+
+          <div className="user-form__group">
+            <label className="user-form__label">Vai trò:</label>
+            <select
+              {...register("role")}
+              className="user-form__input"
+            >
+              <option value="">Chọn vai trò</option>
+              <option value="student">Học viên</option>
+              <option value="admin">Admin</option>
+            </select>
+            {errors.role && (
+              <p className="user-form__error">{errors.role.message}</p>
+            )}
+          </div>
+        </>
+      )}
 
       <div className="user-form__group">
-        <label className="user-form__label">Email:</label>
+        <label className="user-form__label">Họ:</label>
         <input
-          type="email"
-          {...register("email")}
+          type="text"
+          {...register("last_name")}
           className={`user-form__input ${
-            errors.email ? "user-form__input--error" : ""
+            errors.last_name ? "user-form__input--error" : ""
           }`}
         />
-        {errors.email && (
-          <p className="user-form__error">{errors.email.message}</p>
+        {errors.last_name && (
+          <p className="user-form__error">{errors.last_name.message}</p>
         )}
       </div>
-
+      <div className="user-form__group">
+        <label className="user-form__label">Tên</label>
+        <input
+          type="text"
+          {...register("first_name")}
+          className={`user-form__input ${
+            errors.first_name ? "user-form__input--error" : ""
+          }`}
+        />
+        {errors.first_name && (
+          <p className="user-form__error">{errors.first_name.message}</p>
+        )}
+      </div>
       <div className="user-form__group">
         <label className="user-form__label">Số điện thoại:</label>
         <input
@@ -98,17 +232,57 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
       </div>
 
       <div className="user-form__group">
-        <label className="user-form__label">Vai trò:</label>
+        <label className="user-form__label">Địa chỉ:</label>
+        <input
+          type="text"
+          {...register("address")}
+          className={`user-form__input ${
+            errors.address ? "user-form__input--error" : ""
+          }`}
+        />
+        {errors.address && (
+          <p className="user-form__error">{errors.address.message}</p>
+        )}
+      </div>
+
+      <div className="user-form__group">
+        <label className="user-form__label">Giới tính:</label>
         <select
-          {...register("role")}
+          {...register("gender")}
           className="user-form__input"
         >
-          <option value="">Chọn vai trò</option>
-          <option value="admin">Admin</option>
-          <option value="user">User</option>
+          <option value="male">Nam</option>
+          <option value="female">Nữ</option>
         </select>
-        {errors.role && (
-          <p className="user-form__error">{errors.role.message}</p>
+        {errors.gender && (
+          <p className="user-form__error">{errors.gender.message}</p>
+        )}
+      </div>
+
+      <div className="user-form__group">
+        <label className="user-form__label">Vị trí:</label>
+        <input
+          type="text"
+          {...register("position")}
+          className={`user-form__input ${
+            errors.position ? "user-form__input--error" : ""
+          }`}
+        />
+        {errors.position && (
+          <p className="user-form__error">{errors.position.message}</p>
+        )}
+      </div>
+
+      <div className="user-form__group">
+        <label className="user-form__label">Thông tin:</label>
+        <textarea
+          {...register("info")}
+          className={`user-form__input ${
+            errors.info ? "user-form__input--error" : ""
+          }`}
+        />
+        {errors.info && (
+          <p className="user-form__error">{errors.info.message}</p>
         )}
       </div>
 

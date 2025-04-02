@@ -26,7 +26,11 @@ class CourseRepository implements CourseRepositoryInterface
 
     public function getCourseById($id)
     {
-        return Course::with(['files', 'lessons.selectedFiles'])->findOrFail($id);
+        return Course::with([
+            'files',
+            'lessons.selectedFiles',
+            'lessons.documents', // Thêm mối quan hệ tài liệu cho mỗi bài học
+        ])->findOrFail($id);
     }
 
 

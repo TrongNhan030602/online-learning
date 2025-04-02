@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,6 +15,14 @@ const courseSchema = yup.object().shape({
     .typeError("Giá phải là một số")
     .min(0, "Giá không thể nhỏ hơn 0")
     .required("Giá không được để trống"),
+  image_url: yup.mixed().test("required", "Ảnh là bắt buộc", function (value) {
+    const { parent } = this;
+    // Chỉ kiểm tra trường ảnh nếu không có dữ liệu ban đầu
+    if (!parent.id && !value) {
+      return this.createError({ message: "Ảnh là bắt buộc" });
+    }
+    return true;
+  }),
 });
 
 const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
@@ -32,6 +40,8 @@ const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
     },
   });
 
+  const [imagePreview, setImagePreview] = useState(null);
+
   useEffect(() => {
     if (initialData) {
       setValue("title", initialData.title);
@@ -42,15 +52,31 @@ const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
 
   const onSubmit = async (data) => {
     try {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("price", data.price);
+      if (data.image_url) {
+        formData.append("image_url", data.image_url[0]);
+      }
+
       if (initialData && initialData.id) {
-        const res = await courseApi.updateCourse(initialData.id, data);
+        const res = await courseApi.updateCourse(initialData.id, formData);
         onSuccess(res.data);
       } else {
-        const res = await courseApi.createCourse(data);
+        const res = await courseApi.createCourse(formData);
         onSuccess(res.data);
       }
     } catch (error) {
       console.error("Lỗi khi gửi form:", error);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+      setValue("image_url", e.target.files);
     }
   };
 
@@ -102,6 +128,34 @@ const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
           <p className="course-form__error">{errors.price.message}</p>
         )}
       </div>
+
+      {/* Ảnh */}
+      {!initialData && (
+        <div className="course-form__group course-form__group--image">
+          <label className="course-form__image-label">Hình ảnh:</label>
+          <label className="course-form__image-upload-btn">
+            Chọn ảnh
+            <input
+              type="file"
+              accept="image/*"
+              className="course-form__image-input"
+              onChange={handleImageChange}
+            />
+          </label>
+
+          {imagePreview && (
+            <div className="course-form__preview">
+              <img
+                src={imagePreview}
+                alt="Xem trước"
+              />
+            </div>
+          )}
+          {errors.image_url && (
+            <p className="course-form__error">{errors.image_url.message}</p>
+          )}
+        </div>
+      )}
 
       {/* Nút hành động */}
       <div className="course-form__actions">

@@ -13,7 +13,11 @@ class UserService
     {
         $this->userRepository = $userRepository;
     }
-
+    public function createUser(array $data, array $profileData)
+    {
+        // Gọi repository để tạo người dùng
+        return $this->userRepository->createUser($data, $profileData);
+    }
     public function listUsers(array $filters)
     {
         try {
@@ -32,14 +36,15 @@ class UserService
         }
     }
 
-    public function updateUser($id, array $data)
+    public function updateUser($id, array $data, array $profileData)
     {
         try {
-            return $this->userRepository->updateUser($id, $data);
+            return $this->userRepository->updateUser($id, $data, $profileData);
         } catch (Exception $e) {
             throw new Exception("Lỗi khi cập nhật người dùng: " . $e->getMessage());
         }
     }
+
 
     public function deleteUser($id)
     {

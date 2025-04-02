@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Services\UserService;
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Requests\User\UserResetPasswordRequest;
 
@@ -17,7 +19,29 @@ class UserController extends Controller
     {
         $this->userService = $userService;
     }
+    public function store(UserCreateRequest $request)
+    {
+        // Lấy dữ liệu từ request
+        $data = $request->only(['name', 'email', 'password', 'role']);
+        $profileData = $request->only(['first_name', 'last_name', 'phone', 'address', 'gender', 'position', 'info', 'avatar']);
 
+        // Mã hóa mật khẩu
+        $data['password'] = Hash::make($data['password']);
+
+        // Tạo người dùng qua service
+        $user = $this->userService->createUser($data, $profileData);
+
+        // Nếu có ảnh đại diện, lưu vào thư mục và cập nhật avatar
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $user->profile->update(['avatar' => $avatarPath]);
+        }
+
+        return response()->json([
+            'message' => 'Tạo tài khoản thành công!',
+            'user' => $user,
+        ], 201);
+    }
     // Lấy danh sách người dùng với lọc và tìm kiếm
     public function index(Request $request)
     {
@@ -51,19 +75,19 @@ class UserController extends Controller
 
 
     // Cập nhật thông tin người dùng
-    public function update(UserUpdateRequest $request, $id)
+    public function update($id, UserUpdateRequest $request)
     {
-        try {
-            $data = $request->validated();
-            $user = $this->userService->updateUser($id, $data);
-            return response()->json($user, 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Lỗi: Cập nhật thông tin người dùng thất bại.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        // Không cần cập nhật password, email và role
+        $data = $request->only(['name']);
+        $profileData = $request->only(['first_name', 'last_name', 'phone', 'address', 'gender', 'position', 'info', 'avatar']);
+
+        // Cập nhật thông tin người dùng và thông tin hồ sơ
+        $user = $this->userService->updateUser($id, $data, $profileData);
+
+        return response()->json($user);
     }
+
+
 
     // Xóa người dùng và các dữ liệu liên quan
     public function destroy($id)

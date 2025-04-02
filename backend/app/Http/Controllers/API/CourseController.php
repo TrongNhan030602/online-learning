@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Services\CourseService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Course\CourseStoreRequest;
 use App\Http\Requests\Course\CourseUpdateRequest;
 
@@ -38,6 +39,12 @@ class CourseController extends Controller
     {
         try {
             $data = $request->validated();
+
+            // Xử lý ảnh nếu có
+            if ($request->hasFile('image_url')) {
+                $data['image_url'] = $this->uploadImage($request->file('image_url'));
+            }
+
             $course = $this->courseService->createNewCourse($data);
             return response()->json($course, 201);
         } catch (Exception $e) {
@@ -63,7 +70,7 @@ class CourseController extends Controller
     }
 
 
-    // Cập nhật thông tin khóa học 
+    // Cập nhật thông tin khóa học (KHÔNG CẬP NHẬT ẢNH)
     public function update(CourseUpdateRequest $request, $id)
     {
         try {
@@ -79,16 +86,57 @@ class CourseController extends Controller
     }
 
 
-
     // Xóa khóa học và các file liên quan
     public function destroy($id)
     {
         try {
+            $this->deleteOldImage($id);
             $this->courseService->deleteCourseById($id);
             return response()->json(['message' => 'Khóa học đã được xóa thành công'], 200);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Lỗi: Xóa khóa học thất bại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    // Các phương thức xử lý ảnh
+    // Hàm upload ảnh
+    private function uploadImage($image)
+    {
+        $filename = time() . '-' . $image->getClientOriginalName();
+        $path = $image->storeAs('courses', $filename, 'public');
+        return $path;
+    }
+
+    private function deleteOldImage($courseId)
+    {
+        $course = $this->courseService->getCourseById($courseId);
+        if ($course->image_url) {
+            Storage::disk('public')->delete($course->image_url);
+        }
+    }
+    // Cập nhật ảnh khóa học RIÊNG BIỆT
+    public function updateImage(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            // Xóa ảnh cũ nếu có
+            $this->deleteOldImage($id);
+
+            // Upload ảnh mới
+            $imagePath = $this->uploadImage($request->file('image_url'));
+
+            // Cập nhật ảnh mới trong database
+            $course = $this->courseService->updateExistingCourse($id, ['image_url' => $imagePath]);
+
+            return response()->json($course, 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi: Cập nhật ảnh thất bại.',
                 'error' => $e->getMessage()
             ], 500);
         }

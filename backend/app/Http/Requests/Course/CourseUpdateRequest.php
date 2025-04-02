@@ -8,7 +8,6 @@ class CourseUpdateRequest extends FormRequest
 {
     public function authorize()
     {
-
         return true;
     }
 
@@ -20,7 +19,7 @@ class CourseUpdateRequest extends FormRequest
         return [
             'title' => 'sometimes|required|string|max:255|unique:courses,title,' . $courseId,
             'description' => 'sometimes|nullable|string',
-            'price' => 'sometimes|required|numeric|min:0'
+            'price' => 'sometimes|required|numeric|min:0',
         ];
     }
 

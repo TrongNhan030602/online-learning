@@ -37,6 +37,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 // API quản lý người dùng
 Route::prefix('users')->group(function () {
+    Route::post('/', [UserController::class, 'store'])->middleware('auth:api', 'role:admin');
     Route::get('/statistics', [UserController::class, 'statistics'])->middleware('auth:api', 'role:admin');
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class, 'show']);
@@ -68,7 +69,8 @@ Route::prefix('courses')->group(function () {
 
     // Cập nhật thông tin khóa học (không cập nhật file) (chỉ admin)
     Route::put('/{id}', [CourseController::class, 'update'])->middleware('auth:api', 'role:admin');
-
+    Route::post('/{id}/update-image', [CourseController::class, 'updateImage'])
+        ->middleware('auth:api', 'role:admin');
     // Xóa khóa học (và xóa các file liên quan) (chỉ admin)
     Route::delete('/{id}', [CourseController::class, 'destroy'])->middleware('auth:api', 'role:admin');
 
@@ -87,11 +89,13 @@ Route::prefix('lessons')->group(function () {
     Route::post('/', [LessonController::class, 'store'])->middleware('auth:api', 'role:admin');
     Route::put('/{id}', [LessonController::class, 'update'])->middleware('auth:api', 'role:admin');
     Route::delete('/{id}', [LessonController::class, 'destroy'])->middleware('auth:api', 'role:admin');
-
+    // Endpoint để thêm tài liệu vào bài học
+    Route::post('/{lessonId}/documents', [LessonController::class, 'addDocuments'])->middleware('auth:api', 'role:admin');
     // Endpoint riêng để gán file cho bài học
     Route::post('/{lessonId}/selected-files', [LessonController::class, 'assignFiles'])->middleware('auth:api', 'role:admin');
+    Route::delete('/{lessonId}/documents/{documentId}', [LessonController::class, 'deleteDocument'])
+        ->middleware('auth:api', 'role:admin');
 });
-
 
 
 // API quản lý tiến độ học viên

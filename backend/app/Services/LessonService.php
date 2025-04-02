@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Interfaces\LessonRepositoryInterface;
 use Exception;
+use PhpParser\Node\Stmt\TryCatch;
 
 class LessonService
 {
@@ -56,6 +57,25 @@ class LessonService
             return $this->lessonRepository->deleteLesson($id);
         } catch (Exception $e) {
             throw new Exception("Lỗi khi xóa bài học: " . $e->getMessage());
+        }
+    }
+
+    // Thêm tài liệu vào bài học
+    public function addDocumentsToLesson($lessonId, array $documents)
+    {
+        try {
+            return $this->lessonRepository->addDocumentsToLesson($lessonId, $documents);
+        } catch (Exception $e) {
+            throw new Exception("Lỗi khi thêm tài liệu vào bài học: " . $e->getMessage());
+        }
+    }
+
+    public function deleteDocument($lessonId, $documentId)
+    {
+        try {
+            return $this->lessonRepository->deleteDocument($lessonId, $documentId);
+        } catch (Exception $e) {
+            throw new Exception("Lỗi khi khóa tài liệu vào bài học: " . $e->getMessage());
         }
     }
 }

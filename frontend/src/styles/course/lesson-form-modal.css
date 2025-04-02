@@ -5,7 +5,7 @@
   padding: 20px;
   border-radius: 8px;
   max-width: 600px;
-  margin: 20px auto;
+  margin: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: var(--primary-font);
 }

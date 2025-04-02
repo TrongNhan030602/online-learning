@@ -14,10 +14,15 @@ class Lesson extends Model
         'title',
         'content',
         'video_url',
-        'document',
         'order',
     ];
-
+    /**
+     * Mối quan hệ với bảng LessonDocuments.
+     */
+    public function documents()
+    {
+        return $this->hasMany(LessonDocument::class, 'lesson_id');
+    }
     public function course()
     {
         return $this->belongsTo(Course::class);

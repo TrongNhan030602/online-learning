@@ -18,6 +18,7 @@ class CourseStoreRequest extends FormRequest
             'title' => 'required|string|max:255|unique:courses,title',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 

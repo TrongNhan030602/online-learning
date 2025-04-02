@@ -16,7 +16,6 @@ const schema = yup.object().shape({
     .min(1, "Thứ tự phải lớn hơn 0")
     .required("Bắt buộc"),
   video_url: yup.string().url("URL video không hợp lệ").nullable(),
-  document: yup.mixed().nullable(),
 });
 
 const LessonFormModal = ({
@@ -32,7 +31,6 @@ const LessonFormModal = ({
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
@@ -42,7 +40,6 @@ const LessonFormModal = ({
       content: initialData?.content || "",
       video_url: initialData?.video_url || "",
       order: initialData?.order || "",
-      document: null,
     },
   });
 
@@ -53,7 +50,6 @@ const LessonFormModal = ({
       content: initialData?.content || "",
       video_url: initialData?.video_url || "",
       order: initialData?.order || "",
-      document: null,
     });
     setError("");
   }, [show, initialData, courseId, reset]);
@@ -149,16 +145,6 @@ const LessonFormModal = ({
             {errors.order && (
               <div className="text-danger small">{errors.order.message}</div>
             )}
-          </Form.Group>
-
-          <Form.Group className="lesson-form__group">
-            <Form.Label className="lesson-form__label">Tài liệu:</Form.Label>
-            <Form.Control
-              type="file"
-              accept=".pdf,.mp4,.avi,.mov"
-              onChange={(e) => setValue("document", e.target.files[0])}
-              className="lesson-form__input"
-            />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer className="lesson-form__actions">

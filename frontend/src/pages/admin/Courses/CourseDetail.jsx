@@ -1,15 +1,22 @@
 // src/pages/admin/CourseDetail.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import courseApi from "../../../api/courseApi";
+import lessonApi from "../../../api/lessonApi";
 import { getStorageUrl } from "../../../utils/getStorageUrl";
 import LessonFormModal from "../../../components/Lessons/LessonFormModal";
 import LessonFilesModal from "../../../components/Lessons/LessonFilesModal";
+import AddDocumentModal from "../../../components/Lessons/AddDocumentModal";
 import "../../../styles/course/admin-course-detail.css";
 import Loading from "../../../components/Common/Loading";
 import { useToast } from "../../../hooks/useToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faCamera,
+  faTrash,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -18,9 +25,10 @@ const CourseDetail = () => {
   const [error, setError] = useState("");
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [showLessonFilesModal, setShowLessonFilesModal] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(false);
   const [currentLesson, setCurrentLesson] = useState(null);
   const { addToast } = useToast();
-
+  const fileInputRef = useRef(null);
   useEffect(() => {
     courseApi
       .getCourseDetail(id)
@@ -87,6 +95,72 @@ const CourseDetail = () => {
     setShowLessonFilesModal(true);
   };
 
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      await courseApi.updateCourseImage(id, file);
+      const updatedCourse = await courseApi.getCourseDetail(id);
+      setCourse(updatedCourse.data);
+      addToast({
+        title: "Thành công!",
+        message: "Ảnh khóa học đã được cập nhật.",
+        type: "success",
+        duration: 3000,
+      });
+    } catch (err) {
+      console.log(err);
+      addToast({
+        title: "Lỗi!",
+        message: "Không thể cập nhật ảnh khóa học.",
+        type: "error",
+        duration: 3000,
+      });
+    }
+  };
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleAddDocument = (lesson) => {
+    setCurrentLesson(lesson);
+    setShowDocumentModal(true);
+  };
+  // Hàm cập nhật tài liệu cho bài học sau khi thêm mới
+  const handleDocumentAdded = () => {
+    // Reload lại chi tiết khóa học
+    courseApi.getCourseDetail(id).then((res) => setCourse(res.data));
+    addToast({
+      title: "Thành công!",
+      message: "Tài liệu đã được thêm cho bài học.",
+      type: "success",
+      duration: 3000,
+    });
+  };
+
+  // Thêm hàm xóa tài liệu cho bài học
+  const handleDeleteDocument = async (lessonId, documentId) => {
+    try {
+      await lessonApi.deleteDocument(lessonId, documentId);
+      courseApi.getCourseDetail(id).then((res) => setCourse(res.data));
+      addToast({
+        title: "Thành công!",
+        message: "Tài liệu đã được xóa.",
+        type: "success",
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error("Xóa tài liệu thất bại", error);
+      addToast({
+        title: "Lỗi!",
+        message: "Không thể xóa tài liệu.",
+        type: "error",
+        duration: 3000,
+      });
+    }
+  };
+
   return (
     <div className="admin-course-detail">
       <header className="admin-course-detail__header">
@@ -107,10 +181,48 @@ const CourseDetail = () => {
             ← Danh sách khóa học
           </Link>
         </div>
-        <p className="admin-course-detail__description">{course.description}</p>
-        <p className="admin-course-detail__price">
-          Giá: <strong>{course.price}</strong>
-        </p>
+        <div className="admin-course-detail__content">
+          <div className="admin-course-detail__left">
+            {/* Mô tả khóa học */}
+            <p className="admin-course-detail__description">
+              {course.description}
+            </p>
+          </div>
+
+          <div className="admin-course-detail__middle">
+            {/* Hiển thị ảnh khóa học */}
+            {course.image_url && (
+              <div className="admin-course-detail__image-container">
+                <img
+                  src={getStorageUrl(course.image_url)}
+                  alt={course.title}
+                  className="admin-course-detail__image"
+                />
+                <button
+                  className="admin-course-detail__image-edit"
+                  onClick={triggerFileInput}
+                >
+                  <FontAwesomeIcon icon={faCamera} />
+                </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="admin-course-detail__image-input"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  style={{ display: "none" }}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="admin-course-detail__right">
+            {/* Giá khóa học */}
+            <p className="admin-course-detail__price">
+              Giá: <strong>{course.price}</strong>
+            </p>
+          </div>
+        </div>
       </header>
 
       <section className="admin-course-detail__files-section">
@@ -133,6 +245,7 @@ const CourseDetail = () => {
         </div>
       </section>
 
+      {/* Lesstions */}
       <section className="admin-course-detail__lessons-section">
         <h3 className="admin-course-detail__section-title">
           Danh sách bài học
@@ -188,18 +301,46 @@ const CourseDetail = () => {
                         </a>
                       </p>
                     )}
-                    {lesson.document && (
-                      <p className="admin-course-detail__lesson-document">
-                        Tài liệu:{" "}
-                        <a
-                          href={getStorageUrl(lesson.document)}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="admin-course-detail__lesson-document-link"
-                        >
-                          Xem tài liệu
-                        </a>
-                      </p>
+                    <button
+                      className="admin-course-detail__add-btn"
+                      onClick={() => handleAddDocument(lesson)}
+                      title="Thêm tài liệu"
+                    >
+                      <FontAwesomeIcon icon={faPlus} /> Thêm tài liệu
+                    </button>
+                    {lesson.documents && lesson.documents.length > 0 && (
+                      <div className="admin-course-detail__lesson-documents">
+                        <h5 className="admin-course-detail__lesson-documents-title">
+                          Tài liệu bài học:
+                        </h5>
+                        <ul className="admin-course-detail__lesson-documents-list">
+                          {lesson.documents.map((doc) => (
+                            <li
+                              key={doc.id}
+                              className="admin-course-detail__lesson-documents-item"
+                            >
+                              Tài liệu:{" "}
+                              <a
+                                href={getStorageUrl(doc.file_path)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="admin-course-detail__lesson-documents-link"
+                              >
+                                Xem tài liệu
+                              </a>
+                              <button
+                                className="admin-course-detail__delete-btn"
+                                onClick={() =>
+                                  handleDeleteDocument(lesson.id, doc.id)
+                                }
+                                title="Xóa tài liệu"
+                              >
+                                <FontAwesomeIcon icon={faTrash} />
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
                     {lesson.selected_files &&
                       lesson.selected_files.length > 0 && (
@@ -235,7 +376,7 @@ const CourseDetail = () => {
                       >
                         Chọn tài liệu
                       </button>
-                      {/* Nút sửa bài học */}
+
                       <Link
                         to={`/admin/courses/${course.id}/lessons/${lesson.id}`}
                         className="btn admin-course-detail__btn-detail"
@@ -296,6 +437,14 @@ const CourseDetail = () => {
               ? currentLesson.selected_files.map((file) => file.id)
               : []
           }
+        />
+      )}
+      {showDocumentModal && currentLesson && (
+        <AddDocumentModal
+          show={showDocumentModal}
+          handleClose={() => setShowDocumentModal(false)}
+          lessonId={currentLesson.id}
+          onDocumentAdded={handleDocumentAdded}
         />
       )}
     </div>

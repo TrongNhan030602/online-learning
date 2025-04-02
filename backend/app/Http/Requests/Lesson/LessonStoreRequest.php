@@ -27,7 +27,6 @@ class LessonStoreRequest extends FormRequest
                     return $query->where('course_id', $this->input('course_id'));
                 }),
             ],
-            'document' => 'nullable|mimes:pdf,mp4,avi,mov|max:10240',
         ];
     }
 
@@ -42,8 +41,6 @@ class LessonStoreRequest extends FormRequest
             'order.integer' => 'Thứ tự bài học phải là số nguyên.',
             'order.min' => 'Thứ tự bài học phải lớn hơn hoặc bằng 1.',
             'order.unique' => 'Thứ tự bài học đã tồn tại cho khóa học này. Vui lòng sử dụng thứ tự khác (ví dụ: 1, 2, 3, ...).',
-            'document.mimes' => 'Tài liệu phải là file PDF, mp4, avi, hoặc mov.',
-            'document.max' => 'Dung lượng tài liệu không được vượt quá 10MB.',
         ];
     }
 }

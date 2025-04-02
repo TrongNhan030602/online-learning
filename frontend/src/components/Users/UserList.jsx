@@ -15,7 +15,6 @@ const UserList = ({ users, onEdit, onDelete }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState("id");
   const [sortOrder, setSortOrder] = useState("asc");
-
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -79,7 +78,8 @@ const UserList = ({ users, onEdit, onDelete }) => {
                   />
                 </th>
                 <th>Email</th>
-                <th>Role</th>
+                <th>Vai trò</th>
+                <th>Ngày tạo</th>
                 <th>Hành động</th>
               </tr>
             </thead>
@@ -95,16 +95,23 @@ const UserList = ({ users, onEdit, onDelete }) => {
                       {user.name}
                     </Link>
                   </td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
+                  <td className="user-list__td">{user.email}</td>
+                  <td className="user-list__td">{user.role}</td>
+                  <td className="user-list__td">
+                    {new Date(user.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="user-list__td">
                     <button
-                      onClick={() => onEdit(user)}
+                      className="user-list__action-button"
+                      onClick={() => {
+                        onEdit(user);
+                      }}
                       title="Sửa"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
+                      className="user-list__action-button user-list__action-button--delete"
                       onClick={() => onDelete(user.id)}
                       title="Xóa"
                     >

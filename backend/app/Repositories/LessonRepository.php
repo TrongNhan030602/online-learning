@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\LessonRepositoryInterface;
-use App\Models\Lesson;
-use Illuminate\Support\Facades\Storage;
 use Exception;
+use App\Models\Lesson;
+use Illuminate\Support\Str;
+use App\Models\LessonDocument;
+use Illuminate\Support\Facades\Storage;
+use App\Interfaces\LessonRepositoryInterface;
 
 class LessonRepository implements LessonRepositoryInterface
 {
@@ -49,5 +51,48 @@ class LessonRepository implements LessonRepositoryInterface
             Storage::disk('public')->delete($lesson->document);
         }
         return $lesson->delete();
+    }
+    // Lưu nhiều tài liệu cho bài học
+    // Lưu nhiều tài liệu cho bài học
+    public function addDocumentsToLesson($lessonId, array $documents)
+    {
+        $lesson = Lesson::findOrFail($lessonId);
+        $lessonTitleSlug = Str::slug($lesson->title); // Chuyển tiêu đề bài học thành slug
+
+        foreach ($documents as $document) {
+            $originalFileName = pathinfo($document->getClientOriginalName(), PATHINFO_FILENAME); // Lấy tên file gốc
+            $fileExtension = $document->getClientOriginalExtension(); // Lấy đuôi file
+
+            // Tạo tên file theo định dạng: {slug-bai-hoc}-{slug-file-goc}.{duoi-file}
+            $newFileName = "{$lessonTitleSlug}-" . Str::slug($originalFileName) . ".{$fileExtension}";
+
+            // Lưu tài liệu vào storage với tên mới
+            $path = $document->storeAs('lesson_documents', $newFileName, 'public');
+
+            // Lưu thông tin tài liệu vào bảng lesson_documents
+            LessonDocument::create([
+                'lesson_id' => $lesson->id,
+                'file_path' => $path,
+                'file_type' => $fileExtension, // Lưu loại tài liệu
+            ]);
+        }
+
+        return $lesson->load('documents'); // Load lại tài liệu đã được thêm
+    }
+
+    public function deleteDocument($lessonId, $documentId)
+    {
+        // Tìm tài liệu theo lessonId và documentId
+        $document = LessonDocument::where('lesson_id', $lessonId)
+            ->where('id', $documentId)
+            ->firstOrFail();
+
+        // Xóa file khỏi storage
+        Storage::disk('public')->delete($document->file_path);
+
+        // Xóa tài liệu khỏi database
+        $document->delete();
+
+        return true;
     }
 }

@@ -5,7 +5,6 @@ import { useToast } from "../../hooks/useToast";
 
 const UserModal = ({ show, handleClose, initialData, onSuccess }) => {
   const { addToast } = useToast();
-
   const handleSuccess = (data) => {
     addToast({
       title: "Thành công!",

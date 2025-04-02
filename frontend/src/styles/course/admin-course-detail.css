@@ -51,6 +51,28 @@
   flex: 1;
   text-align: center;
 }
+/* Content Course */
+.admin-course-detail__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.admin-course-detail__left,
+.admin-course-detail__middle,
+.admin-course-detail__right {
+  flex: 1;
+  min-width: 250px;
+}
+
+.admin-course-detail__image-container {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
 .admin-course-detail__description {
   font-size: 1rem;
   color: #555;
@@ -59,6 +81,45 @@
 .admin-course-detail__price {
   font-size: 1.2rem;
   color: var(--primary-color);
+}
+
+/* Ảnh khóa học - thu nhỏ kích thước */
+.admin-course-detail__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+/* Hiệu ứng khi hover vào ảnh */
+.admin-course-detail__image-container:hover .admin-course-detail__image {
+  transform: scale(1.05);
+}
+
+/* Nút thay đổi ảnh (icon máy ảnh) */
+.admin-course-detail__image-edit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.admin-course-detail__image-container:hover .admin-course-detail__image-edit {
+  opacity: 1;
 }
 
 /* Files Section */
@@ -141,14 +202,14 @@
   color: #fff;
 }
 .admin-course-detail__lesson-video-link,
-.admin-course-detail__lesson-document-link {
+.admin-course-detail__lesson-documents-link {
   font-size: 1rem;
   color: var(--primary-color);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 .admin-course-detail__lesson-video-link,
-.admin-course-detail__lesson-document-link:hover {
+.admin-course-detail__lesson-documents-link:hover {
   filter: brightness(1.2);
 }
 
@@ -170,6 +231,43 @@
   background-color: var(--primary-color);
   color: #fff;
 }
+.admin-course-detail__delete-btn {
+  padding: 8px;
+  margin-left: 4px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+.admin-course-detail__delete-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng hover */
+}
+/* Nút thêm tài liệu */
+.admin-course-detail__add-btn {
+  display: inline-block;
+  padding: 6px 10px;
+  background-color: transparent;
+  outline: 1.5px solid var(--primary-color);
+  color: var(--primary-color);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+  font-weight: 500;
+  margin: 8px;
+}
+
+.admin-course-detail__add-btn:hover {
+  filter: brightness(1.2);
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.admin-course-detail__add-btn .fa-plus {
+  margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .admin-course-detail__title {

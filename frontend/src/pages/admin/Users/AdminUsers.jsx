@@ -24,7 +24,7 @@ const AdminUsers = () => {
     userApi
       .getUsers()
       .then((res) => {
-        setUsers(res.data.data);
+        setUsers(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -38,6 +38,7 @@ const AdminUsers = () => {
   }, []);
 
   const handleEdit = (user) => {
+    console.log("Editing user:", user);
     setEditingUser(user);
     setShowUserModal(true);
   };
@@ -94,12 +95,14 @@ const AdminUsers = () => {
           size="lg"
           variant="danger"
         />
-      ) : (
+      ) : users.length > 0 ? (
         <UserList
           users={users}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
+      ) : (
+        <p>Không có người dùng nào để hiển thị.</p>
       )}
 
       <UserModal

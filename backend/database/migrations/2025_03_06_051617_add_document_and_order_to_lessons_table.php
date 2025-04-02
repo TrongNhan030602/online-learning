@@ -9,10 +9,8 @@ class AddDocumentAndOrderToLessonsTable extends Migration
     public function up()
     {
         Schema::table('lessons', function (Blueprint $table) {
-            // Thêm cột 'document' để lưu đường dẫn file (ví dụ: PDF, video), có thể để null nếu không có tài liệu
-            $table->string('document')->nullable()->after('video_url');
             // Thêm cột 'order' để xác định thứ tự bài học, mặc định là 1
-            $table->integer('order')->default(1)->after('document');
+            $table->integer('order')->default(1)->after('	video_url');
         });
     }
 
@@ -20,7 +18,6 @@ class AddDocumentAndOrderToLessonsTable extends Migration
     {
         Schema::table('lessons', function (Blueprint $table) {
             $table->dropColumn('order');
-            $table->dropColumn('document');
         });
     }
 }
