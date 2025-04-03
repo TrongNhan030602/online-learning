@@ -5,37 +5,38 @@ import { useAuth } from "../hooks/useAuth";
 const PrivateRoute = ({ children, requiredRole }) => {
   const { user, loading } = useAuth();
 
+  // Nếu vẫn đang tải dữ liệu về user, hiển thị loading
   if (loading) return <div>Loading...</div>;
 
-  if (!user)
+  // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang login
+  if (!user) {
     return (
       <Navigate
         to="/login"
         replace
       />
     );
+  }
 
-  // Kiểm tra role nếu requiredRole được chỉ định
+  // Kiểm tra quyền truy cập theo role
   if (requiredRole && user.role !== requiredRole) {
-    return requiredRole === "admin" ? (
+    // Chuyển hướng đến trang sai quyền khi người dùng không có quyền truy cập
+    const redirectPath = user.role === "admin" ? "/admin" : "/student";
+    return (
       <Navigate
-        to="/student"
-        replace
-      />
-    ) : (
-      <Navigate
-        to="/admin"
+        to={redirectPath}
         replace
       />
     );
   }
 
+  // Nếu mọi điều kiện đều hợp lệ, render children
   return children;
 };
 
 PrivateRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  requiredRole: PropTypes.string,
+  requiredRole: PropTypes.string, // Kiểu role như "admin", "student", v.v...
 };
 
 export default PrivateRoute;

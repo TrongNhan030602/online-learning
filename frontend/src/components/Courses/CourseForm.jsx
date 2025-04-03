@@ -33,10 +33,11 @@ const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(courseSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       title: "",
       description: "",
       price: "",
+      image_url: "",
     },
   });
 
@@ -52,18 +53,26 @@ const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
 
   const onSubmit = async (data) => {
     try {
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("price", data.price);
-      if (data.image_url) {
-        formData.append("image_url", data.image_url[0]);
-      }
-
       if (initialData && initialData.id) {
-        const res = await courseApi.updateCourse(initialData.id, formData);
+        // Cập nhật khóa học
+        const updateData = {
+          title: data.title,
+          description: data.description,
+          price: data.price,
+        };
+
+        const res = await courseApi.updateCourse(initialData.id, updateData);
         onSuccess(res.data);
       } else {
+        // Tạo mới khóa học
+        const formData = new FormData();
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+        formData.append("price", data.price);
+        if (data.image_url) {
+          formData.append("image_url", data.image_url[0]);
+        }
+
         const res = await courseApi.createCourse(formData);
         onSuccess(res.data);
       }
@@ -76,14 +85,16 @@ const CourseForm = ({ initialData = null, onSuccess, onCancel }) => {
     const file = e.target.files[0];
     if (file) {
       setImagePreview(URL.createObjectURL(file));
-      setValue("image_url", e.target.files);
+      setValue("image_url", e.target.files); // Đảm bảo bạn đã set giá trị đúng
     }
   };
 
   return (
     <form
       className="course-form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={(e) => {
+        handleSubmit(onSubmit)(e);
+      }}
     >
       <h3 className="course-form__title">
         {initialData ? "Cập nhật khóa học" : "Thêm khóa học mới"}

@@ -1,0 +1,146 @@
+/* Đặt kiểu dáng chung cho container */
+.user-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.user-detail__header {
+  display: flex;
+  justify-content: space-between;
+}
+/* Nút quay lại */
+.user-detail__back {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+.user-detail__back:hover {
+  filter: brightness(1.1);
+}
+/* Tiêu đề */
+.user-detail__title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Thẻ card chứa thông tin */
+.card {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.card-body h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.card-body p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Thẻ danh sách lớp học */
+.user-detail__class {
+  padding: 10px;
+  background-color: #faf7f6;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.user-detail__class h5 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.user-detail__class p {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Thông tin trạng thái */
+.status-approved {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Danh sách buổi học */
+.user-detail__sessions {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.user-detail__session {
+  font-size: 16px;
+  margin: 10px 0;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-detail__session strong {
+  color: var(--primary-color);
+}
+
+/* Hiệu ứng khi hover vào buổi học */
+.user-detail__session:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+  transform: translateY(-2px);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Loading và Error thông báo */
+.user-detail__loading,
+.user-detail__error {
+  text-align: center;
+  font-size: 18px;
+  color: #ff6347;
+  margin-top: 20px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .user-detail__title {
+    font-size: 1.5rem;
+  }
+
+  .user-detail__name {
+    font-size: 1.25rem;
+  }
+
+  .user-detail__class h5 {
+    font-size: 1rem;
+  }
+
+  .user-detail__session {
+    font-size: 0.9rem;
+  }
+}

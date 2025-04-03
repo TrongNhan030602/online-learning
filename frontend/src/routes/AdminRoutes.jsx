@@ -5,11 +5,13 @@ import AdminLayout from "../layouts/AdminLayout";
 // Lazy load các trang
 const AdminCourses = lazy(() => import("../pages/admin/Courses/AdminCourses"));
 const CourseDetail = lazy(() => import("../pages/admin/Courses/CourseDetail"));
-const AdminUsers = lazy(() => import("../pages/admin/Users/AdminUsers"));
 const AdminProgress = lazy(() => import("../pages/admin/AdminProgress"));
 const AdminLessonDetail = lazy(() =>
   import("../pages/admin/Lessons/AdminLessonDetail")
 );
+const AdminUsers = lazy(() => import("../pages/admin/Users/AdminUsers"));
+const UserDetail = lazy(() => import("../pages/admin/Users/UserDetail"));
+
 const AdminBlogs = lazy(() => import("../pages/admin/Blogs/AdminBlogs"));
 const AdminFaqs = lazy(() => import("../pages/admin/Faqs/AdminFaqs"));
 const FaqDetail = lazy(() => import("../pages/admin/Faqs/FaqDetail"));
@@ -43,6 +45,15 @@ const AdminRoutes = () => {
             </Suspense>
           }
         />
+        <Route
+          path="users/:id"
+          element={
+            <Suspense fallback={<Loading />}>
+              <UserDetail />
+            </Suspense>
+          }
+        />
+
         <Route
           path="courses/:id"
           element={
