@@ -29,6 +29,8 @@ class UpdateClassSessionRequest extends FormRequest
             'session_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'lesson_ids' => 'nullable|array',
+            'lesson_ids.*' => 'exists:lessons,id',
         ];
     }
 
@@ -45,6 +47,8 @@ class UpdateClassSessionRequest extends FormRequest
             'start_time.required' => 'Vui lòng nhập giờ bắt đầu buổi học.',
             'end_time.required' => 'Vui lòng nhập giờ kết thúc buổi học.',
             'end_time.after' => 'Giờ kết thúc phải sau giờ bắt đầu.',
+            'lesson_ids.array' => 'Dữ liệu bài học phải là một mảng.',
+            'lesson_ids.*.exists' => 'Mỗi bài học phải tồn tại trong hệ thống.',
         ];
     }
 }

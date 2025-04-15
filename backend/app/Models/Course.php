@@ -19,6 +19,10 @@ class Course extends Model
     {
         return $this->hasMany(CourseFile::class);
     }
+    public function trainingPrograms()
+    {
+        return $this->hasMany(TrainingProgram::class);
+    }
     /**
      * Mối quan hệ 1 - N: Một khóa học có nhiều bài học
      */

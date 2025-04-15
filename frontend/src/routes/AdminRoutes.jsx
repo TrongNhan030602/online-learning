@@ -18,6 +18,7 @@ const FaqDetail = lazy(() => import("../pages/admin/Faqs/FaqDetail"));
 const AdminCoupons = lazy(() => import("../pages/admin/CouPon/AdminCouPon"));
 const AdminChat = lazy(() => import("../pages/admin/Chat/AdminChat"));
 const AdminProfile = lazy(() => import("../pages/admin/AdminProfile"));
+const AdminClasses = lazy(() => import("../pages/admin/Classes/AdminClasses"));
 
 // Component hiển thị khi đang tải
 const Loading = () => <div>Đang tải...</div>;
@@ -34,6 +35,14 @@ const AdminRoutes = () => {
           element={
             <Suspense fallback={<Loading />}>
               <AdminCourses />
+            </Suspense>
+          }
+        />
+        <Route
+          path="classes"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminClasses />
             </Suspense>
           }
         />

@@ -27,16 +27,28 @@ class Lesson extends Model
     {
         return $this->belongsTo(Course::class);
     }
-
-    public function progress()
-    {
-        return $this->hasMany(Progress::class);
-    }
-
     // Quan hệ many-to-many: Bài học chọn các tài liệu từ khóa học
     public function selectedFiles()
     {
         return $this->belongsToMany(CourseFile::class, 'course_file_lesson', 'lesson_id', 'course_file_id')
             ->withTimestamps();
     }
+
+
+
+    // Quan hệ many-to-many giữa bài học và buổi học 
+    public function classSessions()
+    {
+        return $this->belongsToMany(ClassSession::class, 'class_session_lesson', 'lesson_id', 'class_session_id')
+            ->withTimestamps();
+    }
+
+
+
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
+
+
 }

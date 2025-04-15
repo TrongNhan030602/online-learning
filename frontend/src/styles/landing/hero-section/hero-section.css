@@ -1,0 +1,5 @@
+.hero-section {
+  position: relative;
+  max-height: 100vh !important;
+  height: auto;
+}

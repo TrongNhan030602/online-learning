@@ -1,0 +1,117 @@
+:root {
+  --programs-glass-bg: rgba(50, 49, 49, 0.4);
+  --programs-glass-border: rgba(255, 255, 255, 0.25);
+  --programs-text-light: #ffffff;
+  --programs-text-muted: #e0e0e0;
+  --programs-accent: #e19624;
+  --programs-radius: 1.5rem;
+  --programs-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  --programs-gradient-bg: linear-gradient(135deg, #072b4e, #0d4883);
+}
+
+.programs {
+  background: var(--programs-gradient-bg);
+  padding: 5rem 1rem;
+  color: var(--programs-text-light);
+  text-align: center;
+}
+
+.programs__title {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 4rem;
+  text-transform: uppercase;
+  color: var(--programs-accent);
+}
+
+.programs__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.programs__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  min-height: 450px;
+  width: 100%;
+  border-radius: var(--programs-radius);
+  overflow: hidden;
+  box-shadow: var(--programs-shadow);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.programs__item:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.programs__image-wrapper {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.programs__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.programs__item:hover .programs__image {
+  transform: scale(1.1);
+}
+
+.programs__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--programs-glass-bg);
+  backdrop-filter: blur(4px);
+  padding: 1.5rem;
+  height: 6.25rem;
+  text-align: center;
+  border-bottom: 1px solid var(--programs-glass-border);
+  z-index: 2;
+}
+
+.programs__name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--programs-accent);
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .programs__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .programs__list {
+    grid-template-columns: 1fr;
+  }
+
+  .programs__image-wrapper {
+    height: 300px;
+  }
+
+  .programs__overlay {
+    padding: 1rem;
+  }
+
+  .programs__name {
+    font-size: 1.3rem;
+  }
+}

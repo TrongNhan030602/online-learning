@@ -1,0 +1,67 @@
+.hero-slider {
+  width: 100%;
+  position: relative;
+  background-color: #000;
+  z-index: 1;
+}
+
+/* Slide wrapper tự động cao theo nội dung (ảnh) */
+.hero-slider__slide {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.hero-slider__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 1.5s ease;
+  will-change: transform;
+  background-size: cover;
+}
+
+.slick-active .hero-slider__image {
+  transform: scale(1.02);
+}
+/* Vị trí của dots (nằm dưới slider) */
+.hero-slider .slick-dots {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex !important;
+  justify-content: center;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+.hero-slider .slick-dots li button {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: rgba(106, 104, 104, 0.5);
+  border: 1px solid;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Ẩn mặc định */
+.hero-slider .slick-dots li button::before {
+  display: none;
+}
+
+.hero-slider .slick-dots li.slick-active button {
+  background-color: #02b29c;
+  transform: scale(1.3);
+}
+.hero-slider .slick-dots li button:hover {
+  background-color: #fafafa;
+  border: 1px solid #dada;
+  transform: scale(1.1);
+}

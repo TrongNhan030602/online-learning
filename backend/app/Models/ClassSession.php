@@ -22,7 +22,12 @@ class ClassSession extends Model
     {
         return $this->belongsTo(ClassRoom::class, 'classroom_id');
     }
-
+    // Quan hệ many-to-many giữa buổi học và bài học
+    public function lessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'class_session_lesson', 'class_session_id', 'lesson_id')
+            ->withTimestamps();
+    }
     // Một buổi học có nhiều lượt điểm danh
     public function attendances()
     {

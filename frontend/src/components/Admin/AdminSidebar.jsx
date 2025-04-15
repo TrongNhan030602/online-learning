@@ -30,9 +30,25 @@ const AdminSidebar = () => {
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
+              to="/admin/users"
+            >
+              Quản lý người dùng
+            </NavLink>
+          </li>
+          <li className="admin__nav-item">
+            <NavLink
+              className="admin__nav-link"
               to="/admin/courses"
             >
               Quản lý khóa học
+            </NavLink>
+          </li>
+          <li className="admin__nav-item">
+            <NavLink
+              className="admin__nav-link"
+              to="/admin/classes"
+            >
+              Quản lý lớp học
             </NavLink>
           </li>
           <li className="admin__nav-item">
@@ -59,14 +75,7 @@ const AdminSidebar = () => {
               Quản lý mã giảm giá
             </NavLink>
           </li>
-          <li className="admin__nav-item">
-            <NavLink
-              className="admin__nav-link"
-              to="/admin/users"
-            >
-              Quản lý người dùng
-            </NavLink>
-          </li>
+
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"

@@ -33,4 +33,19 @@ class ClassSessionService
     {
         return $this->classSessionRepository->delete($sessionId);
     }
+    public function addLessonsToSession($sessionId, $lessonIds)
+    {
+        return $this->classSessionRepository->addLessonsToSession($sessionId, $lessonIds);
+    }
+    // Cập nhật bài học cho buổi học
+    public function updateLessons($sessionId, $lessonIds)
+    {
+        return $this->classSessionRepository->updateLessons($sessionId, $lessonIds);
+    }
+
+    // Xóa một bài học khỏi buổi học
+    public function removeLesson($sessionId, $lessonId)
+    {
+        return $this->classSessionRepository->removeLesson($sessionId, $lessonId);
+    }
 }

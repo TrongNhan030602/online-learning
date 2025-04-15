@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BlogController;
@@ -20,6 +21,24 @@ use App\Http\Controllers\API\BlogCommentController;
 use App\Http\Controllers\API\UserProfileController;
 use App\Http\Controllers\API\ClassSessionController;
 use App\Http\Controllers\API\TrainingProgramController;
+
+
+// Truy cập ảnh
+
+
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path("app/public/" . $path);
+
+    if (!File::exists($filePath)) {
+        abort(404, 'File not found.');
+    }
+
+    $file = File::get($filePath);
+    $mimeType = File::mimeType($filePath);
+
+    return response($file, 200)->header('Content-Type', $mimeType);
+})->where('path', '.*');
+
 
 // Authentication routes
 Route::group(['prefix' => 'auth'], function () {
@@ -98,27 +117,6 @@ Route::prefix('lessons')->group(function () {
 });
 
 
-// API quản lý tiến độ học viên
-Route::prefix('progress')->middleware('auth:api')->group(function () {
-    Route::get('/', [ProgressController::class, 'index']); // Lấy danh sách tiến độ
-    Route::get('/{id}', [ProgressController::class, 'show']); // Lấy chi tiết tiến độ
-    Route::post('/', [ProgressController::class, 'store']); // Tạo mới tiến độ
-    Route::put('/{id}', [ProgressController::class, 'update'])->middleware('auth:api', 'role:admin'); // Cập nhật tiến độ
-    Route::put('/{id}/complete', [ProgressController::class, 'markLessonComplete']); // Đánh dấu bài học hoàn thành
-    Route::get('/user/{userId}/completed-lessons', [ProgressController::class, 'getCompletedLessons']); // Danh sách bài học hoàn thành
-    Route::post('/{courseId}/review', [ProgressController::class, 'submitReview']); // Đánh giá khóa học
-    Route::get('/admin/users-progress', [ProgressController::class, 'adminViewProgress'])->middleware('auth:api', 'role:admin'); // Admin xem tiến độ học viên
-});
-
-
-
-
-// API quản lý đánh giá khóa học
-Route::prefix('reviews')->group(function () {
-    Route::get('/', [ReviewController::class, 'index']);          // Lấy danh sách đánh giá
-    Route::put('/{id}/approve', [ReviewController::class, 'approve']); // Duyệt đánh giá
-    Route::delete('/{id}', [ReviewController::class, 'destroy']); // Xóa đánh giá
-});
 
 // API quản lý chương trình đào tạo
 
@@ -166,6 +164,10 @@ Route::prefix('classrooms')->group(function () {
 
     // Xóa buổi học
     Route::delete('/{classroomId}/sessions/{sessionId}', [ClassSessionController::class, 'destroy']);
+    // Thêm bài học vào buổi học    
+    Route::post('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'addLessons']);
+    Route::put('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'updateLessons']);
+    Route::delete('/{classroomId}/sessions/{sessionId}/lessons/{lessonId}', [ClassSessionController::class, 'removeLesson']);
 });
 
 
@@ -232,6 +234,27 @@ Route::prefix('coupons')->group(function () {
 
 });
 
+// API quản lý tiến độ học viên
+Route::prefix('progress')->middleware('auth:api')->group(function () {
+    Route::get('/', [ProgressController::class, 'index']); // Lấy danh sách tiến độ
+    Route::get('/{id}', [ProgressController::class, 'show']); // Lấy chi tiết tiến độ
+    Route::post('/', [ProgressController::class, 'store']); // Tạo mới tiến độ
+    Route::put('/{id}', [ProgressController::class, 'update'])->middleware('auth:api', 'role:admin'); // Cập nhật tiến độ
+    Route::put('/{id}/complete', [ProgressController::class, 'markLessonComplete']); // Đánh dấu bài học hoàn thành
+    Route::get('/user/{userId}/completed-lessons', [ProgressController::class, 'getCompletedLessons']); // Danh sách bài học hoàn thành
+    Route::post('/{courseId}/review', [ProgressController::class, 'submitReview']); // Đánh giá khóa học
+    Route::get('/admin/users-progress', [ProgressController::class, 'adminViewProgress'])->middleware('auth:api', 'role:admin'); // Admin xem tiến độ học viên
+});
+
+
+
+
+// API quản lý đánh giá khóa học
+Route::prefix('reviews')->group(function () {
+    Route::get('/', [ReviewController::class, 'index']);          // Lấy danh sách đánh giá
+    Route::put('/{id}/approve', [ReviewController::class, 'approve']); // Duyệt đánh giá
+    Route::delete('/{id}', [ReviewController::class, 'destroy']); // Xóa đánh giá
+});
 
 Route::prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);

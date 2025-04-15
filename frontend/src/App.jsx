@@ -1,12 +1,8 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./providers/AuthProvider.jsx";
 import { ToastProvider } from "./providers/ToastProvider.jsx";
 import { UserProvider } from "./providers/UserProvider.jsx";
+import LandingRoute from "./routes/LandingRoute.jsx";
 import Login from "./pages/authPages/Login.jsx";
 import Register from "./pages/authPages/Register.jsx";
 import ForgotPassword from "./pages/authPages/ForgotPassword.jsx";
@@ -23,14 +19,10 @@ function App() {
           <Router>
             <Routes>
               <Route
-                path="/"
-                element={
-                  <Navigate
-                    to="/login"
-                    replace
-                  />
-                }
+                path="/*"
+                element={<LandingRoute />}
               />
+
               <Route
                 path="/login"
                 element={<Login />}

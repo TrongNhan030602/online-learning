@@ -116,6 +116,7 @@ const LoginForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 onBlur={() => handleBlur("password", password)}
                 required
+                autoComplete="current-password"
               />
               <span className="input-group-text">
                 <FontAwesomeIcon

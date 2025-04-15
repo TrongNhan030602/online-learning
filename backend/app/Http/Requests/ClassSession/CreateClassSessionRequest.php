@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Requests\ClassSession;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,6 +27,8 @@ class CreateClassSessionRequest extends FormRequest
             'session_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'lesson_ids' => 'nullable|array', // Trường lesson_ids có thể trống, nếu có phải là mảng
+            'lesson_ids.*' => 'exists:lessons,id', // Mỗi phần tử trong mảng phải là id hợp lệ trong bảng lessons
         ];
     }
 
@@ -44,6 +45,8 @@ class CreateClassSessionRequest extends FormRequest
             'start_time.required' => 'Vui lòng nhập giờ bắt đầu buổi học.',
             'end_time.required' => 'Vui lòng nhập giờ kết thúc buổi học.',
             'end_time.after' => 'Giờ kết thúc phải sau giờ bắt đầu.',
+            'lesson_ids.array' => 'Dữ liệu bài học phải là một mảng.',
+            'lesson_ids.*.exists' => 'Mỗi bài học phải tồn tại trong hệ thống.',
         ];
     }
 }

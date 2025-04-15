@@ -1,0 +1,159 @@
+.class-form {
+  background-color: #fff;
+  border: 1px solid var(--secondary-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.class-form__error {
+  color: #d9534f;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.class-form__input--error {
+  border-color: #d9534f;
+  background-color: #f8d7da;
+}
+.class-form__hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.class-form__title {
+  font-size: 1.75rem;
+  font-family: var(--heading-font);
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+.class-form__group {
+  margin-bottom: 15px;
+}
+
+.class-form__label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text-dark);
+}
+
+.class-form__input,
+.class-form__textarea,
+.class-form__select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 6px;
+  font-size: var(--base-font-size);
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.class-form__input:focus,
+.class-form__textarea:focus,
+.class-form__select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(204, 0, 0, 0.3);
+  outline: none;
+}
+
+.class-form__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.class-form__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.class-form__button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--base-font-size);
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.class-form__button:hover {
+  transform: scale(1.05);
+}
+
+.class-form__button:active {
+  transform: scale(0.98);
+}
+
+.class-form__button--submit {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+.class-form__button--submit:hover {
+  background-color: var(--primary-hover);
+}
+
+.class-form__button--cancel {
+  background-color: var(--secondary-color);
+  color: var(--text-white);
+}
+
+.class-form__button--cancel:hover {
+  background-color: var(--secondary-hover);
+}
+/*  React select */
+.react-select__control {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 6px;
+  font-size: var(--base-font-size);
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.react-select__control--is-focused {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 5px rgba(204, 0, 0, 0.3) !important;
+}
+
+.react-select__option {
+  font-size: var(--base-font-size);
+  padding: 10px;
+}
+
+.react-select__option--is-selected {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+.react-select__option--is-focused {
+  background-color: var(--primary-hover);
+  color: var(--text-white);
+}
+.react-select__control:focus {
+  outline: none;
+}
+
+@media (max-width: 576px) {
+  .class-form {
+    padding: 15px;
+    margin: 15px;
+  }
+  .class-form__actions {
+    flex-direction: column;
+  }
+  .class-form__button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

@@ -1,0 +1,50 @@
+.landing-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.landing-header.hide {
+  transform: translateY(-100%);
+}
+
+.landing-header .logo img {
+  height: 48px;
+  transition: transform 0.3s ease;
+}
+
+.landing-header .logo img:hover {
+  transform: scale(1.05);
+}
+
+.header-nav .nav-link {
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.header-nav .nav-link:hover {
+  color: var(--accent, #00c9a7);
+}
+
+.header-nav .btn {
+  background: linear-gradient(135deg, #00c9a7, #0f3461);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 500;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+}
+
+.header-nav .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(15, 52, 97, 0.3);
+}
