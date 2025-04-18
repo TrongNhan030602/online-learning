@@ -1,0 +1,18 @@
+.add-lesson-modal__loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.add-lesson-modal__item {
+  margin-bottom: 0.5rem;
+}
+
+.add-lesson-modal__empty {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  margin-top: 1rem;
+}

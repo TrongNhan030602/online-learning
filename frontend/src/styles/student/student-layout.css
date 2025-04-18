@@ -1,0 +1,17 @@
+.student {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Chiếm toàn bộ chiều cao của trang */
+}
+
+.student__main {
+  flex: 1; /* Tạo không gian cho main để chiếm toàn bộ không gian còn lại */
+  padding: 20px;
+}
+
+.student-footer {
+  background-color: #f8f9fa;
+  padding: 10px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+}

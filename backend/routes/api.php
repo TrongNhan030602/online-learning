@@ -1,8 +1,9 @@
 <?php
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\API\FaqController;
+use App\Http\Controllers\ApiDataController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\ChatController;
@@ -20,6 +21,8 @@ use App\Http\Controllers\API\EnrollmentController;
 use App\Http\Controllers\API\BlogCommentController;
 use App\Http\Controllers\API\UserProfileController;
 use App\Http\Controllers\API\ClassSessionController;
+use App\Http\Controllers\API\LandingSlideController;
+use App\Http\Controllers\API\StudentClassController;
 use App\Http\Controllers\API\TrainingProgramController;
 
 
@@ -128,6 +131,17 @@ Route::prefix('training-program')->group(function () {
     Route::delete('/{id}', [TrainingProgramController::class, 'delete']);
     Route::put('/{id}', [TrainingProgramController::class, 'update']);
 });
+// API quản lý slide (banner landing page)
+Route::prefix('landing/slides')->group(function () {
+    // Lấy danh sách slide
+    Route::get('/', [LandingSlideController::class, 'index']);
+
+    // Tạo mới slide
+    Route::post('/', [LandingSlideController::class, 'store']);
+
+    // Xoá slide
+    Route::delete('/{id}', [LandingSlideController::class, 'destroy']);
+});
 
 // API quản lý lớp học
 Route::prefix('classes')->group(function () {
@@ -168,6 +182,9 @@ Route::prefix('classrooms')->group(function () {
     Route::post('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'addLessons']);
     Route::put('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'updateLessons']);
     Route::delete('/{classroomId}/sessions/{sessionId}/lessons/{lessonId}', [ClassSessionController::class, 'removeLesson']);
+    // Thêm route mới để lấy bài học của một buổi học
+    Route::get('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'getLessons']);
+
 });
 
 
@@ -180,7 +197,11 @@ Route::prefix('attendance')->group(function () {
     Route::delete('/{id}', [AttendanceController::class, 'deleteAttendance']); // Xóa điểm danh
 });
 
-
+// API xem tài liệu của học viên
+Route::middleware(['auth:api'])->prefix('student')->group(function () {
+    Route::get('/my-classes', [StudentClassController::class, 'getMyClasses']);
+    Route::get('/my-classes/{classroom}/sessions-with-lessons', [StudentClassController::class, 'getSessionsWithLessons']);
+});
 
 // API quản lý blog
 Route::prefix('blogs')->group(function () {
@@ -297,7 +318,20 @@ Route::middleware('auth:api')->group(function () {
 
 
 
+// API trả về phía mobile
+Route::prefix('mobile')->group(function () {
+    Route::get('/courses', [ApiDataController::class, 'getCourses']);
+    Route::get('/training-programs/all', [ApiDataController::class, 'getAllTrainingPrograms']);
+    Route::get('/training-programs/{courseId}', [ApiDataController::class, 'getTrainingProgramsByCourse']);
+    Route::get('/students/all', [ApiDataController::class, 'getAllStudents']);
+    Route::get('/users', [ApiDataController::class, 'getUsers']);
 
+
+    Route::get('/classes', [ApiDataController::class, 'getClasses']);
+    Route::get('/sessions/all', [ApiDataController::class, 'getAllSessions']);
+    Route::get('/sessions/{classId}', [ApiDataController::class, 'getSessionsByClass']);
+    Route::get('/students/{classId}', [ApiDataController::class, 'getStudentsByClass']);
+});
 
 
 

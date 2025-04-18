@@ -1,0 +1,181 @@
+/* General Styles for header */
+.student-header {
+  --header-height: 64px;
+  --header-bg: #ffffff;
+  --header-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --nav-link-color: var(--text-gray);
+  --nav-link-hover: var(--primary-color);
+  --nav-link-active: var(--primary-color);
+  --icon-size: 1.25rem;
+  --gap: 1.25rem;
+  --dropdown-bg: #fff;
+  --dropdown-border: #ccc;
+  --nav-link-hover-bg: #f4f4f4;
+
+  background-color: var(--header-bg);
+  box-shadow: var(--header-shadow);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  padding: 0 1rem;
+}
+
+.student-header__container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.student-header__logo img {
+  height: 40px;
+  object-fit: contain;
+}
+
+.student-header__nav-list {
+  list-style: none;
+  display: flex;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+}
+
+.student-header__nav-link {
+  text-decoration: none;
+  color: var(--nav-link-color);
+  font-weight: 700;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.student-header__nav-link:hover {
+  color: var(--nav-link-hover);
+  background-color: var(--nav-link-hover-bg);
+  border-radius: 6px;
+}
+
+.student-header__nav-link--active::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--nav-link-active);
+  border-radius: 4px;
+}
+
+.student-header__icon {
+  margin-right: 0.5rem;
+  color: var(--primary-color);
+}
+
+.student-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.student-header__icon-link {
+  color: var(--nav-link-color);
+  transition: color 0.3s ease;
+}
+
+.student-header__icon-link:hover {
+  color: var(--nav-link-hover);
+}
+
+/* Dropdown Styles */
+.student-header__dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.student-header__dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--dropdown-bg);
+  min-width: 160px;
+  max-width: 250px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  z-index: 9999;
+}
+
+.student-header__dropdown-content.show {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.student-header__dropdown-link {
+  color: var(--text-dark);
+  text-decoration: none;
+  display: block;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, padding 0.3s ease, transform 0.3s ease;
+}
+
+.student-header__dropdown-link:hover {
+  background-color: #d3c6c6;
+  padding-left: 1.25rem;
+  transform: translateX(5px);
+}
+
+.student-header__dropdown-link:active {
+  background-color: var(--nav-link-active);
+  color: var(--header-bg);
+}
+
+.student-header__dropdown-content .student-header__dropdown-link:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.student-header__dropdown-content .student-header__dropdown-link:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* User info in dropdown */
+.student-header__user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.student-header__user-info:hover {
+  background-color: #f0f0f0;
+}
+
+.student-header__username {
+  margin-left: 0.5rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.student-header__user-info .student-header__icon {
+  margin-right: 0.5rem;
+}

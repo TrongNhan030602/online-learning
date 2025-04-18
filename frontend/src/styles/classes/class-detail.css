@@ -1,0 +1,202 @@
+/* Bố cục chung */
+.class-detail {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: var(--primary-font);
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  position: relative;
+}
+
+.class-detail__back-btn {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--text-white);
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.class-detail__back-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.class-detail__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.class-detail__subtitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.class-detail__add-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.class-detail__add-btn:hover {
+  background-color: var(--primary-color);
+  filter: brightness(1.1);
+}
+
+/* Phần thông tin khóa học */
+.class-detail__section {
+  margin-bottom: 30px;
+}
+
+.class-detail__section p {
+  font-size: var(--base-font-size);
+  line-height: var(--base-line-height);
+  margin-bottom: 10px;
+  color: var(--text-dark);
+}
+
+.class-detail__section strong {
+  color: var(--text-dark);
+}
+
+/* Hình ảnh khóa học */
+.class-detail__course-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+/* Thông báo lỗi và loading */
+.class-detail__error,
+.class-detail__loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #f44336; /* Màu đỏ nổi bật */
+  margin-top: 50px;
+}
+
+.class-detail__loading {
+  color: var(--primary-color);
+}
+
+/* Danh sách học viên */
+.class-detail__subtitle {
+  font-size: 1.5rem;
+  font-family: var(--heading-font);
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+}
+
+.class-detail__list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.class-detail__student {
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.class-detail__student:last-child {
+  margin-bottom: 0;
+}
+
+/* Lịch học */
+.class-detail__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.class-detail__table th,
+.class-detail__table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.class-detail__table th {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.class-detail__table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.class-detail__table td {
+  color: var(--text-dark);
+}
+.class-detail__table-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.class-detail__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  color: #fff;
+}
+
+/* Nút Edit */
+.class-detail__action-btn--edit {
+  background-color: var(--primary-color);
+}
+
+.class-detail__action-btn--edit:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+/* Nút Delete */
+.class-detail__action-btn--delete {
+  background-color: var(--secondary-color);
+}
+
+.class-detail__action-btn--delete:hover {
+  background-color: var(--secondary-hover);
+  transform: scale(1.05);
+}
+.class-detail__action-btn--add-lesson {
+  color: #28a745;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 4px;
+  font-size: 16px;
+}
+
+.class-detail__action-btn--add-lesson:hover {
+  color: #218838;
+}

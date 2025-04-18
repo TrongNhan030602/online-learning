@@ -11,6 +11,7 @@ const AdminLayout = () => {
     "/admin": "Dashboard",
     "/admin/users": "Quản lý người dùng",
     "/admin/courses": "Quản lý khóa học",
+    "/admin/training-programs": "Quản lý CTĐT",
     "/admin/classes": "Quản lý lớp học",
     "/admin/lessons": "Quản lý bài học",
     "/admin/faqs": "Quản lý FAQs",

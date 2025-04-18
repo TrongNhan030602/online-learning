@@ -1,0 +1,28 @@
+/* src/styles/StudentMyClasses.css */
+.class-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.class-item {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.class-item:hover {
+  background-color: #f0f0f0;
+}
+
+.class-item h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.class-item p {
+  margin: 5px 0;
+  color: #666;
+}

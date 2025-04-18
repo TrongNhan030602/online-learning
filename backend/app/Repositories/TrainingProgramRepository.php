@@ -9,7 +9,7 @@ class TrainingProgramRepository implements TrainingProgramRepositoryInterface
 {
     public function getByCourseId($courseId)
     {
-        return TrainingProgram::where('course_id', $courseId)->first();
+        return TrainingProgram::where('course_id', $courseId)->get();
     }
 
 
@@ -20,14 +20,15 @@ class TrainingProgramRepository implements TrainingProgramRepositoryInterface
 
     public function getById($id)
     {
-        return TrainingProgram::find($id);
+        return TrainingProgram::with([
+            'course',
+            'course.classRooms',
+        ])->find($id);
     }
+
+
     public function create(array $data)
     {
-        // Kiểm tra nếu khóa học đã có chương trình đào tạo
-        if (TrainingProgram::where('course_id', $data['course_id'])->exists()) {
-            throw new \Exception('Khóa học này đã có chương trình đào tạo!');
-        }
 
         return TrainingProgram::create($data);
     }

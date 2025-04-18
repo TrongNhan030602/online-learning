@@ -13,7 +13,7 @@ class StoreTrainingProgramRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'course_id' => 'required|exists:courses,id|unique:training_programs,course_id',
+            'course_id' => 'required|exists:courses,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'duration' => 'required|integer|min:1',
@@ -27,7 +27,6 @@ class StoreTrainingProgramRequest extends FormRequest
         return [
             'course_id.required' => 'Khóa học không được để trống.',
             'course_id.exists' => 'Khóa học không tồn tại.',
-            'course_id.unique' => 'Khóa học này đã có chương trình đào tạo, không thể tạo thêm.',
             'name.required' => 'Tên chương trình đào tạo không được để trống.',
             'name.string' => 'Tên chương trình đào tạo phải là chuỗi ký tự.',
             'name.max' => 'Tên chương trình đào tạo không được vượt quá 255 ký tự.',

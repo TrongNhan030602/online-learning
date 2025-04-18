@@ -8,7 +8,7 @@ import Register from "./pages/authPages/Register.jsx";
 import ForgotPassword from "./pages/authPages/ForgotPassword.jsx";
 import ResetPassword from "./pages/authPages/ResetPassword.jsx";
 import AdminRoutes from "./routes/AdminRoutes.jsx";
-import StudentDashboard from "./pages/students/StudentDashboard.jsx";
+import StudentRoutes from "./routes/StudentRoutes.jsx";
 import PrivateRoute from "./routes/PrivateRoute.jsx";
 
 function App() {
@@ -48,10 +48,10 @@ function App() {
                 }
               />
               <Route
-                path="/student"
+                path="/student/*"
                 element={
                   <PrivateRoute requiredRole="student">
-                    <StudentDashboard />
+                    <StudentRoutes />
                   </PrivateRoute>
                 }
               />

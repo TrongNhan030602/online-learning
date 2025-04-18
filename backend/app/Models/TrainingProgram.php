@@ -9,6 +9,7 @@ class TrainingProgram extends Model
 {
     use HasFactory;
 
+    protected $table = 'training_programs';
     protected $fillable = [
         'course_id',
         'name',
@@ -22,6 +23,10 @@ class TrainingProgram extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+    public function slides()
+    {
+        return $this->hasMany(LandingSlide::class);
     }
 
 

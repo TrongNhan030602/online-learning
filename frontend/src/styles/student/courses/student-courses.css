@@ -1,0 +1,117 @@
+.student-courses {
+  --primary-font: "IBM Plex Sans", "Arial", sans-serif;
+  --heading-font: "Montserrat", sans-serif;
+  --primary-color: #cc0000;
+  --primary-hover: #b70707;
+  --text-dark: #212522;
+  --text-gray: #3a3b3c;
+
+  padding: 2rem clamp(1rem, 5vw, 3rem);
+  background-color: #f9f9f9;
+  font-family: var(--primary-font);
+}
+
+.student-courses h1 {
+  font-family: var(--heading-font);
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.courses-list {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.course-card {
+  background-color: #fff;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.35s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+}
+
+.course-card__image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.course-card:hover .course-card__image {
+  transform: scale(1.05);
+}
+
+.course-card__info {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 0.6rem;
+}
+
+.course-card__info h2 {
+  font-family: var(--heading-font);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.course-card__info p {
+  font-size: 0.95rem;
+  color: var(--text-gray);
+  line-height: 1.6;
+}
+
+.course-card__price {
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  margin-top: auto;
+}
+
+.course-card__link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  background: var(--primary-color);
+  color: white;
+  transition: background-color 0.3s;
+  text-decoration: none;
+}
+
+.course-card__link:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Ribbon "Mới" */
+.course-card__ribbon {
+  position: absolute;
+  top: 12px;
+  left: -36px;
+  background-color: #ff4742;
+  color: white;
+  padding: 4px 40px;
+  transform: rotate(-45deg);
+  font-size: 0.75rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

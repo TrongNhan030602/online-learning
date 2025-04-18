@@ -1,7 +1,10 @@
 import axiosClient from "./axiosClient";
 
 const lessonApi = {
-  getLessons: (filters) => axiosClient.get("/lessons", { params: filters }),
+  getLessons: (courseId) =>
+    axiosClient.get("/lessons", { params: { course_id: courseId } }),
+  getSessionsByClass: (classId) =>
+    axiosClient.get(`/classrooms/${classId}/sessions`),
   getLessonDetail: (id) => axiosClient.get(`/lessons/${id}`),
   createLesson: (data) =>
     axiosClient.post("/lessons", data, {

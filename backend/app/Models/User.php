@@ -37,7 +37,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Enrollment::class, 'user_id');
     }
 
-
+    // Lấy danh sách lớp học mà học viên đã tham gia (nếu có)
+    public function classrooms()
+    {
+        return $this->belongsToMany(ClassRoom::class, 'enrollments', 'user_id', 'classroom_id')
+            ->withTimestamps();
+    }
     public function reviews()
     {
         return $this->hasMany(Review::class);

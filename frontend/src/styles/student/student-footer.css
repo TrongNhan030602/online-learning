@@ -1,0 +1,59 @@
+.student-footer {
+  background-color: #1c1c1c;
+  color: #fff;
+  padding: 20px 0;
+  font-size: 14px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+}
+
+.student-footer__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.student-footer__text {
+  margin-bottom: 15px;
+}
+
+.student-footer__links {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.student-footer__link-item {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.student-footer__link-item a {
+  color: #bbb;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.student-footer__link-item a:hover {
+  color: #ff6f61;
+}
+
+.student-footer__contact {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.student-footer__contact-link {
+  color: #bbb;
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.student-footer__contact-link:hover {
+  color: #ff6f61;
+}
+
+.student-footer__icon {
+  font-size: 24px;
+}

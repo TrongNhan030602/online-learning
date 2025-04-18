@@ -163,4 +163,7 @@ class ClassSessionController extends Controller
             return response()->json(['message' => 'Có lỗi xảy ra.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    // Lấy danh sách bài học trong buổi học
+
 }

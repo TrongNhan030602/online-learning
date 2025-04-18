@@ -1,0 +1,79 @@
+.add-session-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  color: var(--text-dark);
+}
+
+.add-session-modal__field {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-session-modal__field label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-gray);
+  font-family: var(--primary-font);
+}
+
+.add-session-modal__input {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #fff;
+  font-family: var(--primary-font);
+  color: var(--text-dark);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-session-modal__input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.25);
+  outline: none;
+}
+
+.add-session-modal__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.add-session-modal__submit-btn,
+.add-session-modal__cancel-btn {
+  font-family: var(--primary-font);
+  font-size: 1rem;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Dùng class custom đã có trong global.css */
+.add-session-modal__submit-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.add-session-modal__submit-btn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.add-session-modal__cancel-btn {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.add-session-modal__cancel-btn:hover {
+  background-color: var(--secondary-hover);
+  transform: translateY(-1px);
+}

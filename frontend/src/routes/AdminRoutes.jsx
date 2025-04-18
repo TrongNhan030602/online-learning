@@ -19,7 +19,13 @@ const AdminCoupons = lazy(() => import("../pages/admin/CouPon/AdminCouPon"));
 const AdminChat = lazy(() => import("../pages/admin/Chat/AdminChat"));
 const AdminProfile = lazy(() => import("../pages/admin/AdminProfile"));
 const AdminClasses = lazy(() => import("../pages/admin/Classes/AdminClasses"));
-
+const ClassDetail = lazy(() => import("../pages/admin/Classes/ClassDetail"));
+const AdminTrainingPrograms = lazy(() =>
+  import("../pages/admin/TrainingPrograms/AdminTrainingPrograms")
+);
+const TrainingProgramDetail = lazy(() =>
+  import("../pages/admin/TrainingPrograms/TrainingProgramDetail")
+);
 // Component hiển thị khi đang tải
 const Loading = () => <div>Đang tải...</div>;
 
@@ -39,6 +45,23 @@ const AdminRoutes = () => {
           }
         />
         <Route
+          path="training-programs"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminTrainingPrograms />
+            </Suspense>
+          }
+        />
+        <Route
+          path="training-programs/:id"
+          element={
+            <Suspense fallback={<Loading />}>
+              <TrainingProgramDetail />
+            </Suspense>
+          }
+        />
+
+        <Route
           path="classes"
           element={
             <Suspense fallback={<Loading />}>
@@ -46,6 +69,15 @@ const AdminRoutes = () => {
             </Suspense>
           }
         />
+        <Route
+          path="classes/:id"
+          element={
+            <Suspense fallback={<Loading />}>
+              <ClassDetail />
+            </Suspense>
+          }
+        />
+
         <Route
           path="users"
           element={

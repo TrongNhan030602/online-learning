@@ -113,12 +113,18 @@ const ClassForm = ({ initialData = null, onSuccess, onCancel, courses }) => {
 
   const onSubmit = async (data) => {
     try {
-      // Fix: Ensure only the 'value' from status is passed as a string
+      // Sử dụng Date để loại bỏ giờ, đảm bảo ngày đúng
+      const startDate = new Date(data.start_date);
+      const endDate = new Date(data.end_date);
+
+      // Chuyển đổi ngày sang định dạng yyyy-mm-dd mà không có phần giờ
       const preparedData = {
         ...data,
-        course_id: data.course_id?.value || data.course_id, // Ensure correct course id (value from ReactSelect)
-        status: data.status?.value || data.status, // Ensure status is a string value
+        course_id: data.course_id?.value || data.course_id,
+        status: data.status?.value || data.status,
         max_students: Number(data.max_students),
+        start_date: startDate.toISOString().slice(0, 10), // Cắt giờ
+        end_date: endDate.toISOString().slice(0, 10), // Cắt giờ
       };
 
       // Gửi dữ liệu lên backend

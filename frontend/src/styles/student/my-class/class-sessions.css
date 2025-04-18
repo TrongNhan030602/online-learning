@@ -1,0 +1,86 @@
+.class-sessions {
+  padding: 2rem;
+}
+
+.class-sessions__title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.session {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.session__title {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.session__date,
+.session__time {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.session__lessons {
+  margin-top: 1rem;
+}
+
+.lesson {
+  padding: 1rem;
+  background: #f7f9fc;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.lesson__title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.lesson__content {
+  margin-bottom: 0.75rem;
+}
+
+.lesson__link {
+  color: #1d4ed8;
+  text-decoration: underline;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.lesson__documents {
+  margin-top: 1rem;
+}
+
+.lesson__video {
+  width: 100%;
+  max-width: 640px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.lesson__empty {
+  font-style: italic;
+  color: #888;
+  padding: 8px 0;
+}
+
+.lesson__download {
+  display: inline-block;
+  background: #4f46e5;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.lesson__download:hover {
+  background: #3730a3;
+}

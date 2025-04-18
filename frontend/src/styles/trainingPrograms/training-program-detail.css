@@ -1,0 +1,128 @@
+/* general styles for the page */
+.training-program-detail {
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  font-family: var(--primary-font);
+}
+.training-program-detail__back {
+  margin-bottom: 1rem;
+}
+
+.training-program-detail__back button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.training-program-detail__back button:hover {
+  background-color: var(--primary-hover);
+}
+
+.training-program-detail__header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.training-program-detail__title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary-color); /* Màu chủ đạo */
+  margin-bottom: 10px;
+}
+
+.training-program-detail__description {
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.training-program-detail__info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.training-program-detail__duration,
+.training-program-detail__requirements,
+.training-program-detail__objectives {
+  flex: 1;
+  min-width: 250px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.training-program-detail__course-info {
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.training-program-detail__course h2 {
+  font-size: 2rem;
+  color: var(--primary-color); /* Màu chủ đạo */
+  margin-bottom: 20px;
+}
+
+.training-program-detail__course {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.training-program-detail__course-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.training-program-detail__course-description {
+  max-width: 600px;
+}
+
+.training-program-detail__course-price {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: var(--primary-color); /* Màu chủ đạo */
+}
+
+.training-program-detail__classrooms {
+  margin-top: 40px;
+}
+
+.training-program-detail__classroom {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.training-program-detail__classroom h4 {
+  font-size: 1.5rem;
+  color: var(--primary-color); /* Màu chủ đạo */
+}
+
+.training-program-detail__classroom p {
+  font-size: 1rem;
+  color: var(--text-dark);
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--primary-color); /* Màu chủ đạo */
+}

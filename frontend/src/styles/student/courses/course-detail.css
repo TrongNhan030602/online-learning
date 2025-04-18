@@ -1,0 +1,239 @@
+/* General styles */
+.course-detail {
+  font-family: "Roboto", sans-serif;
+  color: #333;
+  margin: 2rem;
+}
+
+.course-detail__title {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: var(--primary-color, #1e40af);
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+}
+
+.course-detail__title:hover {
+  filter: brightness(1.1);
+}
+
+/* Section styles */
+.course-detail__section {
+  margin-bottom: 2.5rem;
+}
+
+.course-detail__section h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #1e40af;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.course-detail__section:hover h2 {
+  transform: scale(1.05);
+}
+
+/* Training programs card styles */
+.training-programs__title {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #1e40af;
+}
+
+.training-program-card {
+  background: linear-gradient(145deg, #f9f9f9, #e4e4e4);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.training-program-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.training-program-card__title {
+  font-size: 1.35rem;
+  color: #4caf50;
+  margin-bottom: 1rem;
+}
+
+.training-program-card__description {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.training-program-card__duration,
+.training-program-card__requirements,
+.training-program-card__objectives {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+/* Class card styles */
+.classes__title {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.class-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.class-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.class-card__name {
+  font-size: 1.35rem;
+  color: #1e40af;
+  margin-bottom: 1rem;
+}
+
+.class-card__date,
+.class-card__students {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.class-card__status-label {
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.class-card__status-label--open {
+  background-color: #4caf50;
+  color: white;
+}
+
+.class-card__status-label--closed {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Lesson card styles */
+.lessons__title {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.lesson-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lesson-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.lesson-card__title {
+  font-size: 1.35rem;
+  color: #1e40af;
+  margin-bottom: 1rem;
+}
+
+.lesson-card__content {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* Video styles */
+.lesson-video {
+  margin-top: 1rem;
+}
+
+.lesson-video__link {
+  color: #4caf50;
+  text-decoration: underline;
+}
+
+.lesson-video__link:hover {
+  color: #1e40af;
+}
+
+/* Message styles */
+.training-programs__message,
+.classes__message,
+.lessons__message {
+  color: #f44336;
+  font-size: 1rem;
+  text-align: center;
+}
+/* Button xem chi tiết lớp học */
+.class-card__view-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.class-card__view-btn:hover {
+  background-color: #0056b3;
+}
+
+.class-card__view-btn .fa-eye {
+  margin-right: 8px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .course-detail__title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .course-detail__section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .training-program-card,
+  .class-card,
+  .lesson-card {
+    padding: 1rem;
+  }
+
+  .training-program-card__title,
+  .class-card__name,
+  .lesson-card__title {
+    font-size: 1.25rem;
+  }
+
+  .training-program-card__description,
+  .training-program-card__duration,
+  .training-program-card__requirements,
+  .training-program-card__objectives,
+  .class-card__date,
+  .class-card__students,
+  .lesson-card__content {
+    font-size: 0.875rem;
+  }
+
+  .lesson-video__link {
+    font-size: 0.875rem;
+  }
+}
