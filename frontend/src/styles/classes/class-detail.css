@@ -200,3 +200,24 @@
 .class-detail__action-btn--add-lesson:hover {
   color: #218838;
 }
+/* Nút xem tài liệu */
+.class-detail__action-btn--view-documents {
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+}
+
+.class-detail__action-btn--view-documents:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.class-detail__action-btn--view-documents:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5);
+}
+
+/* Tùy chỉnh icon của nút xem tài liệu */
+.class-detail__action-btn--view-documents svg {
+  font-size: 20px; /* Đặt kích thước icon */
+}

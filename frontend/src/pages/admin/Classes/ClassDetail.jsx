@@ -2,15 +2,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import classApi from "../../../api/classApi";
 import sessionApi from "../../../api/sessionApi";
+import enrollmentApi from "../../../api/enrollmentApi";
 import { useToast } from "../../../hooks/useToast";
 import { getStorageUrl } from "../../../utils/getStorageUrl";
 import ConfirmDialog from "../../../components/Common/ConfirmDialog";
 import AddSessionModal from "../../../components/Sessions/AddSessionModal";
 import EditSessionModal from "../../../components/Sessions/EditSessionModal";
 import AddLessonModal from "../../../components/Sessions/AddLessonModal";
+import DeleteLessonModal from "../../../components/Sessions/DeleteLessonModal";
+import AddStudentModal from "../../../components/Classes/AddStudentModal";
 
 import "../../../styles/classes/class-detail.css";
 
@@ -24,9 +27,20 @@ const ClassDetail = () => {
   const [selectedSession, setSelectedSession] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState({
+    isOpen: false,
+    message: "",
+    onConfirm: () => {},
+    onCancel: () => {},
+  });
+
   const [selectedSessionForLesson, setSelectedSessionForLesson] =
     useState(null);
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
+  const [isDeleteLessonModalOpen, setIsDeleteLessonModalOpen] = useState(false);
+  const [sessionForDeletingLesson, setSessionForDeletingLesson] =
+    useState(null);
+  const [showAddStudentModal, setShowAddStudentModal] = useState(false);
 
   useEffect(() => {
     classApi
@@ -44,17 +58,15 @@ const ClassDetail = () => {
   const formatDate = (dateStr) => dayjs(dateStr).format("DD/MM/YYYY");
   const formatTime = (timeStr) => timeStr?.substring(0, 5);
 
-  // Mở/đóng modal
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   // Cập nhật lại danh sách buổi học khi thêm mới và hiển thị thông báo thành công
   const handleSessionAdded = (newSession) => {
     setClassData((prevData) => ({
       ...prevData,
-      sessions: [...prevData.sessions, newSession], // Thêm buổi học mới vào danh sách
+      sessions: [...prevData.sessions, newSession],
     }));
 
-    // Hiển thị thông báo thành công
     addToast({
       title: "Thành công!",
       message: "Buổi học đã được thêm.",
@@ -74,11 +86,15 @@ const ClassDetail = () => {
     setSelectedSession(session);
     setIsDeleteModalOpen(true); // Mở modal xác nhận
   };
+  // Mở modal xóa bài học
+  const handleDeleteLesson = (session) => {
+    setSessionForDeletingLesson(session);
+    setIsDeleteLessonModalOpen(true);
+  };
 
   // Xử lý xóa buổi học khi xác nhận
   const handleConfirmDeleteSession = async () => {
     try {
-      // Gọi API xóa buổi học
       await sessionApi.deleteSession(id, selectedSession.id);
 
       // Cập nhật lại danh sách buổi học sau khi xóa
@@ -101,9 +117,50 @@ const ClassDetail = () => {
     }
   };
   const handleAddLesson = (session) => {
-    console.log("Buổi học được chọn để thêm bài học:", session);
     setSelectedSessionForLesson(session);
     setIsLessonModalOpen(true);
+  };
+  const handleDeleteEnrollment = (enrollmentId) => {
+    // Mở ConfirmDialog với thông điệp xác nhận xóa học viên
+    setShowConfirmDialog({
+      isOpen: true,
+      message: "Bạn có chắc chắn muốn xoá học viên này khỏi lớp?",
+      onConfirm: async () => {
+        try {
+          // Gọi API xóa học viên
+          await enrollmentApi.remove(enrollmentId);
+
+          // Cập nhật lại danh sách học viên sau khi xóa
+          setClassData((prevData) => ({
+            ...prevData,
+            students: prevData.students.filter(
+              (student) => student.pivot.id !== enrollmentId
+            ),
+          }));
+
+          addToast({
+            title: "Thành công!",
+            message: "Học viên đã được xóa khỏi lớp.",
+            type: "success",
+            duration: 3000,
+          });
+        } catch (error) {
+          console.error("Lỗi khi xóa học viên:", error);
+          addToast({
+            title: "Thất bại!",
+            message: "Không thể xóa học viên. Thử lại sau.",
+            type: "error",
+            duration: 3000,
+          });
+        }
+        // Đóng ConfirmDialog sau khi xóa
+        setShowConfirmDialog({ isOpen: false });
+      },
+      onCancel: () => {
+        // Đóng ConfirmDialog nếu người dùng từ chối
+        setShowConfirmDialog({ isOpen: false });
+      },
+    });
   };
 
   if (loading) return <div className="class-detail__loading">Đang tải...</div>;
@@ -120,6 +177,14 @@ const ClassDetail = () => {
     students,
     sessions,
   } = classData;
+  const reloadClassData = () => {
+    classApi
+      .getClassById(id)
+      .then((res) => setClassData(res.data))
+      .catch((err) =>
+        console.error("Lỗi khi reload lớp học sau khi cập nhật bài học:", err)
+      );
+  };
 
   return (
     <div className="class-detail">
@@ -156,9 +221,19 @@ const ClassDetail = () => {
       </div>
 
       <div className="class-detail__section">
-        <h2 className="class-detail__subtitle">
-          Danh sách học viên ({students?.length || 0})
-        </h2>
+        <div className="class-detail__header">
+          <h2 className="class-detail__subtitle">
+            Danh sách học viên ({students?.length || 0})
+          </h2>
+          <button
+            className="class-detail__add-btn"
+            onClick={() => setShowAddStudentModal(true)}
+            title="Thêm học viên"
+          >
+            <FontAwesomeIcon icon={faUserPlus} /> Thêm
+          </button>
+        </div>
+
         {students?.length > 0 ? (
           <ul className="class-detail__list">
             {students.map((s) => (
@@ -167,6 +242,14 @@ const ClassDetail = () => {
                 className="class-detail__student"
               >
                 👤 {s.name} - {s.email}
+                {/* Button xóa học viên */}
+                <button
+                  className="btn btn-danger btn-sm ms-2"
+                  onClick={() => handleDeleteEnrollment(s.pivot.id)} // Gọi hàm xoá với pivot.id
+                  title="Xoá học viên"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
               </li>
             ))}
           </ul>
@@ -232,6 +315,13 @@ const ClassDetail = () => {
                     >
                       ➕
                     </button>
+                    <button
+                      className="class-detail__action-btn class-detail__action-btn--delete-lesson"
+                      onClick={() => handleDeleteLesson(session)}
+                      title="Xóa bài học"
+                    >
+                      ❌
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -250,6 +340,13 @@ const ClassDetail = () => {
         onConfirm={handleConfirmDeleteSession}
         onCancel={() => setIsDeleteModalOpen(false)}
       />
+      <ConfirmDialog
+        isOpen={showConfirmDialog.isOpen}
+        title="Xoá học viên"
+        message={showConfirmDialog.message}
+        onConfirm={showConfirmDialog.onConfirm}
+        onCancel={showConfirmDialog.onCancel}
+      />
 
       {/* Modal để thêm buổi học */}
       <AddSessionModal
@@ -258,13 +355,29 @@ const ClassDetail = () => {
         classId={id}
         onSessionAdded={handleSessionAdded}
       />
+
+      {/* Modal để chỉnh sửa buổi học */}
+      <EditSessionModal
+        show={isEditModalOpen}
+        handleClose={() => setIsEditModalOpen(false)}
+        session={selectedSession}
+        classroomId={id}
+        onSessionUpdated={(updatedSession) => {
+          setClassData((prevData) => ({
+            ...prevData,
+            sessions: prevData.sessions.map((s) =>
+              s.id === updatedSession.id ? updatedSession : s
+            ),
+          }));
+        }}
+      />
+
       <AddLessonModal
         show={isLessonModalOpen}
         handleClose={() => setIsLessonModalOpen(false)}
-        classroomId={id} // Truyền classId vào đây
-        session={selectedSessionForLesson} // Truyền thông tin buổi học vào đây
-        courseId={course.id} // Truyền courseId vào để lấy danh sách bài học
+        session={selectedSessionForLesson}
         onLessonAdded={() => {
+          reloadClassData();
           addToast({
             title: "Thành công!",
             message: "Đã thêm bài học vào buổi học.",
@@ -274,20 +387,33 @@ const ClassDetail = () => {
         }}
       />
 
-      {/* Modal để chỉnh sửa buổi học */}
-      <EditSessionModal
-        show={isEditModalOpen}
-        handleClose={() => setIsEditModalOpen(false)}
-        session={selectedSession}
-        classroomId={id} // Truyền `classroomId` từ `useParams()` vào
-        onSessionUpdated={(updatedSession) => {
-          setClassData((prevData) => ({
-            ...prevData,
-            sessions: prevData.sessions.map((s) =>
-              s.id === updatedSession.id ? updatedSession : s
-            ),
-          }));
+      {/* Modal để xóa bài học */}
+      <DeleteLessonModal
+        show={isDeleteLessonModalOpen}
+        handleClose={() => setIsDeleteLessonModalOpen(false)}
+        session={sessionForDeletingLesson}
+        onLessonDeleted={() => {
+          reloadClassData();
+          addToast({
+            title: "Thành công!",
+            message: "Đã xóa bài học khỏi buổi học.",
+            type: "success",
+            duration: 2000,
+          });
+          setSessionForDeletingLesson(null);
+
+          // Đóng modal sau khi xóa
+          setIsDeleteLessonModalOpen(false);
         }}
+      />
+
+      {/* Modal để thêm học viên */}
+      <AddStudentModal
+        show={showAddStudentModal}
+        handleClose={() => setShowAddStudentModal(false)}
+        classroomId={id}
+        onStudentAdded={reloadClassData}
+        enrolledStudents={students}
       />
     </div>
   );

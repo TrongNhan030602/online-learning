@@ -105,9 +105,11 @@ const CourseDetail = () => {
             >
               <h3 className="class-card__name">{classItem.name}</h3>
               <p className="class-card__date">
-                Thời gian: {new Date(classItem.start_date).toLocaleDateString()}{" "}
-                - {new Date(classItem.end_date).toLocaleDateString()}
+                Thời gian:{" "}
+                {new Date(classItem.start_date).toLocaleDateString("en-GB")} -{" "}
+                {new Date(classItem.end_date).toLocaleDateString("en-GB")}
               </p>
+
               <p className="class-card__students">
                 Số học viên: {classItem.current_students}/
                 {classItem.max_students}

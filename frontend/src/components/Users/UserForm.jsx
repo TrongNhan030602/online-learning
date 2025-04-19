@@ -260,7 +260,7 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
       </div>
 
       <div className="user-form__group">
-        <label className="user-form__label">Vị trí:</label>
+        <label className="user-form__label">Vị trí (chức vụ):</label>
         <input
           type="text"
           {...register("position")}

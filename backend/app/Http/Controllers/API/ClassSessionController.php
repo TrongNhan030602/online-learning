@@ -96,74 +96,77 @@ class ClassSessionController extends Controller
             return ApiExceptionHandler::handle($e);  // Xử lý lỗi
         }
     }
-    public function addLessons(Request $request, $classroomId, $sessionId)
+
+    // Lấy danh sách bài học có thể thêm cho buổi học
+    public function availableLessons($sessionId)
     {
         try {
-            // Validate request
-            $lessonIds = $request->input('lesson_ids');
-            if (empty($lessonIds)) {
-                return response()->json([
-                    'message' => 'Vui lòng cung cấp danh sách bài học.'
-                ], 400);
-            }
+            $availableLessons = $this->classSessionService->getAvailableLessons($sessionId);
 
-            // Gọi service để thêm bài học vào buổi học
-            $session = $this->classSessionService->addLessonsToSession($sessionId, $lessonIds);
-
-            if (!$session) {
+            // Kiểm tra nếu không có bài học có thể thêm vào
+            if ($availableLessons->isEmpty()) {
                 return response()->json([
-                    'message' => 'Không tìm thấy buổi học!'
+                    'message' => 'Không tìm thấy bài học có sẵn để thêm vào buổi học.'
                 ], 404);
             }
 
-            return response()->json([
-                'message' => 'Bài học đã được thêm vào buổi học thành công.'
-            ], 200);
-
+            return response()->json($availableLessons);
         } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Có lỗi xảy ra.',
-                'error' => $e->getMessage()
-            ], 500);
+            return ApiExceptionHandler::handle($e);
         }
     }
-    // Cập nhật bài học trong buổi học
-    public function updateLessons(Request $request, $classroomId, $sessionId)
+
+
+    // Lấy danh sách bài học đang có cho buổi học
+    public function currentLessons($sessionId)
     {
         try {
-            $lessonIds = $request->input('lesson_ids');
-            if (empty($lessonIds)) {
-                return response()->json(['message' => 'Vui lòng cung cấp danh sách bài học.'], 400);
+            $currentLessons = $this->classSessionService->getCurrentLessons($sessionId);
+
+            // Kiểm tra xem danh sách có trống không
+            if ($currentLessons->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không tìm thấy bài học đang có trong buổi học.'
+                ], 404);
             }
 
-            $session = $this->classSessionService->updateLessons($sessionId, $lessonIds);
-
-            if (!$session) {
-                return response()->json(['message' => 'Không tìm thấy buổi học!'], 404);
-            }
-
-            return response()->json(['message' => 'Bài học đã được cập nhật trong buổi học thành công.']);
+            return response()->json($currentLessons);
         } catch (Exception $e) {
-            return response()->json(['message' => 'Có lỗi xảy ra.', 'error' => $e->getMessage()], 500);
+            return ApiExceptionHandler::handle($e);
+        }
+    }
+
+
+    // Thêm bài học vào buổi học
+    public function addLesson(Request $request, $sessionId)
+    {
+        try {
+            $request->validate([
+                'lesson_ids' => 'required|array',
+                'lesson_ids.*' => 'exists:lessons,id'
+            ]);
+
+            $this->classSessionService->addLessonsToSession($sessionId, $request->lesson_ids);
+
+            return response()->json([
+                'message' => 'Thêm bài học vào buổi học thành công.'
+            ], 200);
+        } catch (Exception $e) {
+            return ApiExceptionHandler::handle($e);
         }
     }
 
     // Xóa bài học khỏi buổi học
-    public function removeLesson($classroomId, $sessionId, $lessonId)
+    public function removeLesson($sessionId, $lessonId)
     {
         try {
-            $isRemoved = $this->classSessionService->removeLesson($sessionId, $lessonId);
+            $this->classSessionService->removeLessonFromSession($sessionId, $lessonId);
 
-            if (!$isRemoved) {
-                return response()->json(['message' => 'Không tìm thấy bài học hoặc buổi học!'], 404);
-            }
-
-            return response()->json(['message' => 'Bài học đã được xóa khỏi buổi học thành công.']);
+            return response()->json([
+                'message' => 'Xóa bài học khỏi buổi học thành công.'
+            ], 200);
         } catch (Exception $e) {
-            return response()->json(['message' => 'Có lỗi xảy ra.', 'error' => $e->getMessage()], 500);
+            return ApiExceptionHandler::handle($e);
         }
     }
-
-    // Lấy danh sách bài học trong buổi học
-
 }

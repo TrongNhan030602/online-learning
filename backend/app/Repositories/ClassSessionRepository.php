@@ -55,47 +55,52 @@ class ClassSessionRepository implements ClassSessionRepositoryInterface
         return false;
     }
 
-    public function addLessonsToSession($sessionId, $lessonIds)
+    // Lấy danh sách bài học có sẵn cho buổi học
+    public function getAvailableLessons($sessionId)
     {
         $session = ClassSession::find($sessionId);
-
         if (!$session) {
             return null;
         }
 
-        // Gắn các bài học vào buổi học nếu có
-        $session->lessons()->syncWithoutDetaching($lessonIds);
-
-        return $session;
+        $courseId = $session->classroom->course_id;
+        return Lesson::where('course_id', $courseId)
+            ->whereNotIn('id', $session->lessons->pluck('id'))
+            ->get();
     }
-    // Cập nhật các bài học cho buổi học
-    public function updateLessons($sessionId, $lessonIds)
+
+    // Thêm các bài học vào buổi học
+    public function addLessonsToSession($sessionId, array $lessonIds)
     {
         $session = ClassSession::find($sessionId);
-        if ($session) {
-            // Lấy danh sách các bài học hiện tại của buổi học
-            $currentLessonIds = $session->lessons->pluck('id')->toArray();
-
-            // Lọc các bài học mới chưa có trong buổi học (tránh trùng)
-            $newLessonIds = array_diff($lessonIds, $currentLessonIds);
-
-            // Đồng bộ lại các bài học (giữ bài học cũ và thêm bài học mới)
-            $session->lessons()->sync(array_merge($currentLessonIds, $newLessonIds));
-
-            return $session;
+        if (!$session) {
+            return false;
         }
-        return null;
+
+        $session->lessons()->attach($lessonIds);
+        return true;
     }
 
-
-    // Xóa một bài học khỏi buổi học
-    public function removeLesson($sessionId, $lessonId)
+    // Xóa bài học khỏi buổi học
+    public function removeLessonFromSession($sessionId, $lessonId)
     {
         $session = ClassSession::find($sessionId);
-        if ($session) {
-            $session->lessons()->detach($lessonId);
-            return true;
+        if (!$session) {
+            return false;
         }
-        return false;
+
+        $session->lessons()->detach($lessonId);
+        return true;
     }
+    // Lấy danh sách bài học đã có trong buổi học
+    public function getCurrentLessons($sessionId)
+    {
+        $session = ClassSession::find($sessionId);
+        if (!$session) {
+            return null;
+        }
+
+        return $session->lessons; // Trả về danh sách bài học đã có
+    }
+
 }

@@ -178,13 +178,17 @@ Route::prefix('classrooms')->group(function () {
 
     // Xóa buổi học
     Route::delete('/{classroomId}/sessions/{sessionId}', [ClassSessionController::class, 'destroy']);
-    // Thêm bài học vào buổi học    
-    Route::post('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'addLessons']);
-    Route::put('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'updateLessons']);
-    Route::delete('/{classroomId}/sessions/{sessionId}/lessons/{lessonId}', [ClassSessionController::class, 'removeLesson']);
-    // Thêm route mới để lấy bài học của một buổi học
-    Route::get('/{classroomId}/sessions/{sessionId}/lessons', [ClassSessionController::class, 'getLessons']);
+    // Xủ lý Thêm , xóa bài học vào buổi học    
+    // Lấy danh sách bài học chưa có cho buổi học
+    Route::get('/sessions/{sessionId}/available-lessons', [ClassSessionController::class, 'availableLessons']);
+    // Lấy danh sách bài học đang có cho buổi học
+    Route::get('/sessions/{sessionId}/current-lessons', [ClassSessionController::class, 'currentLessons']);
 
+    // Thêm bài học vào buổi học
+    Route::post('/sessions/{sessionId}/lessons', [ClassSessionController::class, 'addLesson']);
+
+    // Xóa bài học khỏi buổi học
+    Route::delete('/sessions/{sessionId}/lessons/{lessonId}', [ClassSessionController::class, 'removeLesson']);
 });
 
 

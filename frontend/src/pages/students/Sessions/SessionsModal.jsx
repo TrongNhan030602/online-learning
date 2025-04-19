@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap"; // Sử dụng React Bootstrap
-import lessonApi from "../../../api/lessonApi"; // Giả sử API này lấy dữ liệu buổi học
+import PropTypes from "prop-types";
+import { Modal, Button } from "react-bootstrap";
+import lessonApi from "../../../api/lessonApi";
 import "../../../styles/student/sessions/session-modal.css";
 
 const SessionModal = ({ showModal, handleClose, classId }) => {
@@ -36,34 +36,39 @@ const SessionModal = ({ showModal, handleClose, classId }) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Danh sách buổi học</Modal.Title>
+        <Modal.Title className="sessions__modal-title">
+          Danh sách buổi học
+        </Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         {loading ? (
-          <div>Đang tải...</div>
+          <div className="sessions__loading">Đang tải...</div>
         ) : error ? (
-          <div>{error}</div>
+          <div className="sessions__error">{error}</div>
         ) : (
-          <div className="sessions-list">
+          <div className="sessions__list">
             {sessions.length > 0 ? (
               sessions.map((session) => (
                 <div
                   key={session.id}
-                  className="session-card"
+                  className="sessions__card"
                 >
-                  <h5 className="session-card__title">{session.title}</h5>
-                  <p className="session-card__date">
-                    Ngày: {new Date(session.session_date).toLocaleDateString()}
+                  <h5 className="sessions__card-title">{session.title}</h5>
+                  <p className="sessions__card-date">
+                    Ngày:{" "}
+                    {new Date(session.session_date).toLocaleDateString("en-GB")}
                   </p>
-                  <p className="session-card__time">
+                  <p className="sessions__card-time">
                     Thời gian: {formatTime(session.start_time)} -{" "}
                     {formatTime(session.end_time)}
                   </p>
                 </div>
               ))
             ) : (
-              <p>Không có buổi học nào trong lớp này.</p>
+              <p className="sessions__empty-message">
+                Không có buổi học nào trong lớp này.
+              </p>
             )}
           </div>
         )}
@@ -79,6 +84,11 @@ const SessionModal = ({ showModal, handleClose, classId }) => {
       </Modal.Footer>
     </Modal>
   );
+};
+SessionModal.propTypes = {
+  showModal: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  classId: PropTypes.string.isRequired,
 };
 
 export default SessionModal;

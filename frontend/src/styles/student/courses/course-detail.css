@@ -3,6 +3,9 @@
   font-family: "Roboto", sans-serif;
   color: #333;
   margin: 2rem;
+  background-color: #f7f9fc;
+  border-radius: 10px;
+  padding: 2rem;
 }
 
 .course-detail__title {
@@ -10,12 +13,13 @@
   margin-bottom: 1rem;
   text-align: center;
   color: var(--primary-color, #1e40af);
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, filter 0.3s ease;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .course-detail__title:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.2);
 }
 
 /* Section styles */
@@ -26,13 +30,14 @@
 .course-detail__section h2 {
   font-size: 1.75rem;
   margin-bottom: 1rem;
-  color: #1e40af;
+  color: var(--primary-color);
   font-weight: bold;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .course-detail__section:hover h2 {
   transform: scale(1.05);
+  color: #007bff;
 }
 
 /* Training programs card styles */
@@ -100,6 +105,7 @@
   font-size: 1.35rem;
   color: #1e40af;
   margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .class-card__date,
@@ -149,6 +155,7 @@
   font-size: 1.35rem;
   color: #1e40af;
   margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .lesson-card__content {
@@ -165,6 +172,7 @@
 .lesson-video__link {
   color: #4caf50;
   text-decoration: underline;
+  font-weight: 500;
 }
 
 .lesson-video__link:hover {
@@ -179,6 +187,7 @@
   font-size: 1rem;
   text-align: center;
 }
+
 /* Button xem chi tiết lớp học */
 .class-card__view-btn {
   background-color: #007bff;
@@ -189,6 +198,8 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .class-card__view-btn:hover {

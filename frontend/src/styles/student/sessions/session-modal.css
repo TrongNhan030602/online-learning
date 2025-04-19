@@ -1,28 +1,72 @@
-/* Modal custom styles */
-.modal-header {
-  background-color: #007bff;
-  color: white;
-  font-size: 1.25rem;
+/* Modal title */
+.sessions__modal-title {
+  font-family: var(--heading-font);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
 }
 
-.close-icon {
-  cursor: pointer;
-  font-size: 1.5rem;
-}
-
-.session-card {
-  margin-bottom: 15px;
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-}
-
-.session-card__title {
+/* Loading and error messages */
+.sessions__loading,
+.sessions__error {
+  font-family: var(--primary-font);
   font-size: 1.1rem;
-  font-weight: bold;
+  color: var(--secondary-color);
+  text-align: center;
+  margin-top: 20px;
 }
 
-.session-card__date,
-.session-card__time {
-  font-size: 0.9rem;
+/* List of sessions */
+.sessions__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sessions__card {
+  background: var(--text-white);
+  padding: 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sessions__card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.sessions__card-title {
+  font-family: var(--heading-font);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.sessions__card-date,
+.sessions__card-time {
+  font-family: var(--primary-font);
+  font-size: 1rem;
+  color: var(--text-gray);
+  margin-bottom: 0.5rem;
+}
+
+.sessions__card-date {
+  font-weight: 500;
+}
+
+.sessions__card-time {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* Empty message */
+.sessions__empty-message {
+  text-align: center;
+  font-family: var(--primary-font);
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin-top: 20px;
 }

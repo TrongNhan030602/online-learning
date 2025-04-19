@@ -1,28 +1,131 @@
-/* src/styles/StudentMyClasses.css */
-.class-list {
-  display: flex;
-  flex-direction: column;
+/* Sử dụng biến CSS chung cho các phần tử */
+.student-my-classes {
+  padding: 20px;
+  font-family: var(--primary-font);
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.student-my-classes__title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.student-my-classes__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
+  padding: 0;
 }
 
-.class-item {
-  padding: 15px;
+.student-my-classes__item {
+  background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: background-color 0.3s;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.class-item:hover {
-  background-color: #f0f0f0;
+.student-my-classes__item:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.class-item h3 {
+/* Thêm lớp overlay khi hover */
+.student-my-classes__item:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(204, 0, 0, 0.1); /* Thêm nền đỏ nhẹ */
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.student-my-classes__item-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  z-index: 2;
+}
+
+.student-my-classes__item-icon {
+  color: var(--primary-color);
+  margin-right: 10px;
+  font-size: 1.3em;
+}
+
+.student-my-classes__item-title {
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1.4em;
+  color: var(--text-dark);
+  font-weight: bold;
+  flex-grow: 1;
+  z-index: 2;
 }
 
-.class-item p {
-  margin: 5px 0;
-  color: #666;
+.student-my-classes__item-course-title {
+  color: var(--secondary-color);
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  z-index: 2;
+}
+
+.student-my-classes__item-date {
+  display: flex;
+  align-items: center;
+  color: var(--secondary-color);
+  font-size: 0.95em;
+  z-index: 2;
+}
+
+.student-my-classes__item-date span {
+  margin-left: 5px;
+  font-size: 0.95em;
+}
+
+.student-my-classes__item-icon {
+  font-size: 1.1em;
+  color: var(--primary-color);
+  z-index: 2;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .student-my-classes {
+    padding: 15px;
+  }
+
+  .student-my-classes__title {
+    font-size: 1.7rem;
+  }
+
+  .student-my-classes__item {
+    padding: 15px;
+  }
+
+  .student-my-classes__item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .student-my-classes__item-title {
+    font-size: 1.2em;
+  }
+
+  .student-my-classes__item-course-title {
+    font-size: 1em;
+  }
+
+  .student-my-classes__item-date {
+    font-size: 0.85em;
+  }
 }

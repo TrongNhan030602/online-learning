@@ -1,14 +1,24 @@
-// src/pages/students/MyClasses/StudentMyClasses.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import studentClassApi from "../../../api/studentClassApi";
 import Loading from "../../../components/Common/Loading";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import "../../../styles/student/my-class/my-class.css";
+
 const StudentMyClasses = () => {
   const [myClasses, setMyClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Hàm format ngày theo dd/mm/yyyy
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   useEffect(() => {
     const fetchMyClasses = async () => {
@@ -30,7 +40,6 @@ const StudentMyClasses = () => {
     fetchMyClasses();
   }, []);
 
-  // Chuyển hướng khi nhấp vào lớp học
   const handleClassClick = (classroomId) => {
     navigate(`/student/my-classes/${classroomId}`);
   };
@@ -46,19 +55,37 @@ const StudentMyClasses = () => {
     );
 
   return (
-    <div>
-      <h2>Danh sách lớp học của bạn</h2>
-      <div className="class-list">
+    <div className="student-my-classes">
+      <h2 className="student-my-classes__title">Danh sách lớp học của bạn</h2>
+      <div className="student-my-classes__list">
         {myClasses.length > 0 ? (
           myClasses.map((classroom) => (
             <div
               key={classroom.id}
-              className="class-item"
+              className="student-my-classes__item"
               onClick={() => handleClassClick(classroom.id)}
             >
-              <h3>{classroom.name}</h3>
-              <p>{classroom.course.title}</p>
-              <p>{`Thời gian học: ${classroom.start_date} - ${classroom.end_date}`}</p>
+              <div className="student-my-classes__item-header">
+                <FontAwesomeIcon
+                  icon={faBook}
+                  className="student-my-classes__item-icon"
+                />
+                <h3 className="student-my-classes__item-title">
+                  {classroom.name}
+                </h3>
+              </div>
+              <p className="student-my-classes__item-course-title">
+                {classroom.course.title}
+              </p>
+              <div className="student-my-classes__item-date">
+                <FontAwesomeIcon
+                  icon={faCalendarAlt}
+                  className="student-my-classes__item-icon"
+                />
+                <span>{`Thời gian học: ${formatDate(
+                  classroom.start_date
+                )} - ${formatDate(classroom.end_date)}`}</span>
+              </div>
             </div>
           ))
         ) : (

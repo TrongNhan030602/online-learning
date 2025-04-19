@@ -33,19 +33,26 @@ class ClassSessionService
     {
         return $this->classSessionRepository->delete($sessionId);
     }
-    public function addLessonsToSession($sessionId, $lessonIds)
+
+    // Lấy danh sách bài học có sẵn cho buổi học
+    public function getAvailableLessons($sessionId)
+    {
+        return $this->classSessionRepository->getAvailableLessons($sessionId);
+    }
+    public function getCurrentLessons($sessionId)
+    {
+        return $this->classSessionRepository->getCurrentLessons($sessionId);
+    }
+
+    // Thêm bài học vào buổi học
+    public function addLessonsToSession($sessionId, array $lessonIds)
     {
         return $this->classSessionRepository->addLessonsToSession($sessionId, $lessonIds);
     }
-    // Cập nhật bài học cho buổi học
-    public function updateLessons($sessionId, $lessonIds)
-    {
-        return $this->classSessionRepository->updateLessons($sessionId, $lessonIds);
-    }
 
-    // Xóa một bài học khỏi buổi học
-    public function removeLesson($sessionId, $lessonId)
+    // Xóa bài học khỏi buổi học
+    public function removeLessonFromSession($sessionId, $lessonId)
     {
-        return $this->classSessionRepository->removeLesson($sessionId, $lessonId);
+        return $this->classSessionRepository->removeLessonFromSession($sessionId, $lessonId);
     }
 }

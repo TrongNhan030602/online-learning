@@ -51,8 +51,10 @@ class ClassRoom extends Model
     public function students()
     {
         return $this->belongsToMany(User::class, 'enrollments', 'classroom_id', 'user_id')
+            ->withPivot('id') // <- Lấy enrollment_id từ bảng enrollments
             ->withTimestamps();
     }
+
 
     // ✅ Một lớp học có nhiều bản ghi điểm danh thông qua buổi học
     public function attendances()

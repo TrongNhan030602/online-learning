@@ -2,31 +2,31 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Spinner, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBook, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import sessionApi from "../../api/sessionApi";
 import { useToast } from "../../hooks/useToast";
 
-const AddLessonModal = ({ show, handleClose, session, onLessonAdded }) => {
+const DeleteLessonModal = ({ show, handleClose, session, onLessonDeleted }) => {
   const { addToast } = useToast();
-  const [availableLessons, setAvailableLessons] = useState([]);
+  const [currentLessons, setCurrentLessons] = useState([]);
   const [selectedLessons, setSelectedLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Load danh sách bài học có thể thêm
+  // Load danh sách bài học hiện có cho buổi học
   useEffect(() => {
     if (show && session?.id) {
       setLoading(true);
       sessionApi
-        .getAvailableLessons(session.id)
+        .getCurrentLessons(session.id)
         .then((res) => {
-          setAvailableLessons(res.data);
+          setCurrentLessons(res.data);
         })
         .catch((err) => {
-          console.error("Lỗi khi lấy bài học có sẵn:", err);
+          console.error("Lỗi khi lấy bài học hiện có:", err);
           addToast({
             title: "Lỗi!",
-            message: "Không thể tải danh sách bài học có sẵn.",
+            message: "Không thể tải danh sách bài học hiện có.",
             type: "error",
           });
         })
@@ -47,22 +47,27 @@ const AddLessonModal = ({ show, handleClose, session, onLessonAdded }) => {
 
     setSubmitting(true);
     try {
-      await sessionApi.addLessonsToSession(session.id, selectedLessons);
+      // Xóa các bài học đã chọn
+      await Promise.all(
+        selectedLessons.map((lessonId) =>
+          sessionApi.removeLessonFromSession(session.id, lessonId)
+        )
+      );
 
       addToast({
         title: "Thành công!",
-        message: "Đã thêm bài học vào buổi học.",
+        message: "Đã xóa bài học khỏi buổi học.",
         type: "success",
       });
 
-      onLessonAdded();
+      onLessonDeleted?.(selectedLessons); // Gọi callback sau khi xóa
       handleClose();
       setSelectedLessons([]);
     } catch (err) {
-      console.error("Lỗi khi thêm bài học:", err);
+      console.error("Lỗi khi xóa bài học:", err);
       addToast({
         title: "Lỗi!",
-        message: "Có lỗi xảy ra khi thêm bài học.",
+        message: "Có lỗi xảy ra khi xóa bài học.",
         type: "error",
       });
     } finally {
@@ -75,22 +80,22 @@ const AddLessonModal = ({ show, handleClose, session, onLessonAdded }) => {
       show={show}
       onHide={handleClose}
       centered
-      dialogClassName="add-lesson-modal"
+      dialogClassName="delete-lesson-modal"
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          <FontAwesomeIcon icon={faBook} /> Thêm bài học vào buổi:{" "}
+          <FontAwesomeIcon icon={faBook} /> Xóa bài học khỏi buổi:{" "}
           <strong>{session?.title}</strong>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {loading ? (
-          <div className="add-lesson-modal__loading">
+          <div className="delete-lesson-modal__loading">
             <Spinner animation="border" /> Đang tải bài học...
           </div>
         ) : (
           <Form>
-            {availableLessons.map((lesson) => (
+            {currentLessons.map((lesson) => (
               <Form.Check
                 key={lesson.id}
                 type="checkbox"
@@ -98,12 +103,12 @@ const AddLessonModal = ({ show, handleClose, session, onLessonAdded }) => {
                 label={lesson.title}
                 checked={selectedLessons.includes(lesson.id)}
                 onChange={() => handleLessonToggle(lesson.id)}
-                className="add-lesson-modal__item"
+                className="delete-lesson-modal__item"
               />
             ))}
-            {availableLessons.length === 0 && (
-              <p className="add-lesson-modal__empty">
-                Tất cả bài học đã được thêm vào buổi học.
+            {currentLessons.length === 0 && (
+              <p className="delete-lesson-modal__empty">
+                Không có bài học nào để xóa.
               </p>
             )}
           </Form>
@@ -117,15 +122,15 @@ const AddLessonModal = ({ show, handleClose, session, onLessonAdded }) => {
           Hủy
         </Button>
         <Button
-          variant="success"
+          variant="danger"
           onClick={handleSubmit}
           disabled={submitting || selectedLessons.length === 0}
         >
           {submitting ? (
-            "Đang thêm..."
+            "Đang xóa..."
           ) : (
             <>
-              <FontAwesomeIcon icon={faCheckCircle} /> Thêm bài học
+              <FontAwesomeIcon icon={faTrashAlt} /> Xóa bài học
             </>
           )}
         </Button>
@@ -134,4 +139,4 @@ const AddLessonModal = ({ show, handleClose, session, onLessonAdded }) => {
   );
 };
 
-export default AddLessonModal;
+export default DeleteLessonModal;

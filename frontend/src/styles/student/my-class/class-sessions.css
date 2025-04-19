@@ -1,86 +1,169 @@
+/* Cấu trúc chính */
 .class-sessions {
-  padding: 2rem;
+  padding: 20px;
+  font-family: var(--primary-font);
+  background-color: #f9f9f9;
+  min-height: 100vh;
 }
 
 .class-sessions__title {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #333;
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-bottom: 30px;
 }
 
+.class-sessions__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Mỗi session */
 .session {
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  background-color: #fdfdfd;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
 }
 
+.session:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Tiêu đề session */
 .session__title {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.6em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--text-dark);
 }
 
+/* Ngày và giờ */
 .session__date,
 .session__time {
-  color: #666;
-  margin-bottom: 0.5rem;
+  color: var(--secondary-color);
+  font-size: 1.1em;
+  margin-bottom: 5px;
 }
 
 .session__lessons {
-  margin-top: 1rem;
+  margin-top: 20px;
 }
 
+/* Mỗi lesson */
 .lesson {
-  padding: 1rem;
-  background: #f7f9fc;
-  border-radius: 10px;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
 .lesson__title {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--primary-color);
 }
 
 .lesson__content {
-  margin-bottom: 0.75rem;
+  color: var(--text-gray);
+  font-size: 1em;
+  margin-bottom: 10px;
 }
 
 .lesson__link {
-  color: #1d4ed8;
+  display: inline-block;
+  color: var(--primary-color);
+  font-size: 1.1em;
+  margin-bottom: 10px;
   text-decoration: underline;
-  display: block;
-  margin-bottom: 0.5rem;
+  transition: color 0.3s;
 }
 
+.lesson__link:hover {
+  color: var(--primary-hover);
+}
+
+/* Tài liệu lesson */
 .lesson__documents {
-  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.lesson__document {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .lesson__video {
-  width: 100%;
-  max-width: 640px;
+  max-width: 100%;
   border-radius: 8px;
-  margin-bottom: 1rem;
-}
-.lesson__empty {
-  font-style: italic;
-  color: #888;
-  padding: 8px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .lesson__download {
-  display: inline-block;
-  background: #4f46e5;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.3s ease;
+  color: var(--primary-color);
+  font-size: 1.1em;
+  text-decoration: underline;
+  transition: color 0.3s;
 }
 
 .lesson__download:hover {
-  background: #3730a3;
+  color: var(--primary-hover);
+}
+
+.lesson__empty {
+  color: var(--secondary-color);
+  font-size: 1.2em;
+  font-style: italic;
+}
+
+/* Thêm hiệu ứng cho khi video đang phát */
+.lesson__video:playing {
+  opacity: 0.9;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .class-sessions {
+    padding: 15px;
+  }
+
+  .class-sessions__title {
+    font-size: 1.7rem;
+  }
+
+  .session {
+    padding: 15px;
+  }
+
+  .session__title {
+    font-size: 1.4em;
+  }
+
+  .session__date,
+  .session__time {
+    font-size: 1em;
+  }
+
+  .lesson__title {
+    font-size: 1.1em;
+  }
+
+  .lesson__content {
+    font-size: 0.95em;
+  }
+
+  .lesson__link {
+    font-size: 1em;
+  }
+
+  .lesson__download {
+    font-size: 1em;
+  }
 }

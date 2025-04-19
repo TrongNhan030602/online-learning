@@ -10,7 +10,7 @@ const ClassSessions = () => {
   const { classroomId } = useParams();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [watchedTimes, setWatchedTimes] = useState({}); // { [lessonId]: seconds }
+  const [watchedTimes, setWatchedTimes] = useState({});
 
   useEffect(() => {
     const fetchSessions = async () => {
