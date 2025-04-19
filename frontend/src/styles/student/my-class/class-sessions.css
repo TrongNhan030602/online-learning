@@ -1,169 +1,226 @@
-/* Cấu trúc chính */
+/* Cấu trúc chung */
 .class-sessions {
-  padding: 20px;
   font-family: var(--primary-font);
-  background-color: #f9f9f9;
-  min-height: 100vh;
-}
-
-.class-sessions__title {
-  text-align: center;
-  font-size: 2rem;
-  color: var(--primary-color);
-  font-weight: bold;
-  margin-bottom: 30px;
-}
-
-.class-sessions__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-}
-
-/* Mỗi session */
-.session {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  position: relative;
+  background-color: #f9f9f9;
 }
 
-.session:hover {
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+/* Phần header thông tin lớp học */
+.class-sessions__header {
+  background-color: #f4f4f4;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Tiêu đề session */
-.session__title {
-  font-size: 1.6em;
+.class-sessions__class-name {
+  font-family: var(--heading-font);
+  font-size: 2rem;
   font-weight: bold;
+  color: var(--primary-color);
   margin-bottom: 10px;
-  color: var(--text-dark);
 }
 
-/* Ngày và giờ */
-.session__date,
-.session__time {
+.class-sessions__class-description {
+  font-size: 1.2rem;
   color: var(--secondary-color);
-  font-size: 1.1em;
-  margin-bottom: 5px;
-}
-
-.session__lessons {
-  margin-top: 20px;
-}
-
-/* Mỗi lesson */
-.lesson {
   margin-bottom: 20px;
 }
 
-.lesson__title {
-  font-size: 1.2em;
+.class-sessions__course-info {
+  margin-bottom: 20px;
+}
+
+.class-sessions__class-dates,
+.class-sessions__class-students {
+  font-size: var(--base-font-size);
+  color: var(--text-gray);
+  margin-bottom: 8px;
+}
+
+.class-sessions__class-dates strong,
+.class-sessions__class-students strong {
+  color: var(--text-dark);
+}
+
+/* Danh sách các buổi học */
+.class-sessions__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.session {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.session:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+.session__title {
+  font-family: var(--heading-font);
+  font-size: 1.6rem;
   font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.session__date,
+.session__time {
+  font-size: var(--base-font-size);
+  color: var(--secondary-color);
+  margin-bottom: 5px;
+}
+
+/* Các bài học trong mỗi buổi học */
+.session__lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lesson {
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.lesson:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.lesson__title {
+  font-family: var(--heading-font);
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
   color: var(--primary-color);
 }
 
 .lesson__content {
+  font-size: var(--base-font-size);
   color: var(--text-gray);
-  font-size: 1em;
   margin-bottom: 10px;
 }
 
-.lesson__link {
-  display: inline-block;
-  color: var(--primary-color);
-  font-size: 1.1em;
-  margin-bottom: 10px;
-  text-decoration: underline;
-  transition: color 0.3s;
+/* Video giới thiệu (YouTube) */
+.lesson__video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* Tỷ lệ khung hình 16:9 */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  background-color: #000;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
-.lesson__link:hover {
-  color: var(--primary-hover);
+.lesson__video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
 }
 
-/* Tài liệu lesson */
+/* Video bài giảng */
+.lesson__video {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Tải tài liệu */
 .lesson__documents {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .lesson__document {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
-.lesson__video {
-  max-width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.lesson__document-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.25s;
 }
 
-.lesson__download {
-  color: var(--primary-color);
-  font-size: 1.1em;
-  text-decoration: underline;
-  transition: color 0.3s;
+.lesson__document-link:hover {
+  background-color: #e0e0e0;
+  color: #000;
 }
 
-.lesson__download:hover {
-  color: var(--primary-hover);
+.lesson__document-icon {
+  font-size: 1rem;
 }
 
+/* Trường hợp không có bài học */
 .lesson__empty {
-  color: var(--secondary-color);
-  font-size: 1.2em;
-  font-style: italic;
+  color: #ff0000;
+  font-weight: bold;
+  text-align: center;
 }
 
-/* Thêm hiệu ứng cho khi video đang phát */
-.lesson__video:playing {
-  opacity: 0.9;
-}
-
-/* Responsive styles */
+/* Cải thiện bố cục cho các phần tử */
 @media (max-width: 768px) {
-  .class-sessions {
-    padding: 15px;
-  }
-
-  .class-sessions__title {
-    font-size: 1.7rem;
-  }
-
-  .session {
-    padding: 15px;
-  }
-
   .session__title {
-    font-size: 1.4em;
+    font-size: 1.4rem;
   }
 
   .session__date,
   .session__time {
-    font-size: 1em;
+    font-size: 0.9rem;
   }
 
   .lesson__title {
-    font-size: 1.1em;
+    font-size: 1rem;
   }
 
   .lesson__content {
-    font-size: 0.95em;
+    font-size: 0.9rem;
   }
 
-  .lesson__link {
-    font-size: 1em;
+  /* Cải thiện giao diện cho header thông tin lớp học */
+  .class-sessions__header {
+    padding: 15px;
   }
 
-  .lesson__download {
-    font-size: 1em;
+  .class-sessions__class-name {
+    font-size: 1.6rem;
+  }
+
+  .class-sessions__class-description {
+    font-size: 1rem;
+  }
+
+  .class-sessions__class-dates,
+  .class-sessions__class-students {
+    font-size: 0.9rem;
+  }
+
+  .class-sessions__title {
+    font-size: 1.6rem;
   }
 }
