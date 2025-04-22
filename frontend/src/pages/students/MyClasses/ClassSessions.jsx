@@ -14,6 +14,8 @@ import Loading from "../../../components/Common/Loading";
 import useYouTubeAPI from "../../../hooks/useYouTubeAPI";
 import YouTubePlayer from "../../../components/Common/YouTubePlayer";
 
+import { Container, Row, Col, Card } from "react-bootstrap";
+
 import "../../../styles/student/my-class/class-sessions.css";
 
 const ClassSessions = () => {
@@ -23,7 +25,7 @@ const ClassSessions = () => {
   const [loading, setLoading] = useState(true);
   const [watchedTimes, setWatchedTimes] = useState({});
 
-  useYouTubeAPI(); // Đảm bảo API YouTube được tải
+  useYouTubeAPI();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,33 +35,24 @@ const ClassSessions = () => {
           studentClassApi.getSessionsWithLessons(classroomId),
         ]);
 
-        if (classroomRes.status) {
-          setClassroom(classroomRes.data);
-        }
-
-        if (sessionsRes.status) {
-          setSessions(sessionsRes.data.data);
-        }
+        if (classroomRes.status) setClassroom(classroomRes.data);
+        if (sessionsRes.status) setSessions(sessionsRes.data.data);
       } catch (error) {
         console.error("Lỗi khi tải lớp học hoặc buổi học:", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [classroomId]);
 
   const handleTimeUpdate = (e, lessonId) => {
     const currentTime = e.target.currentTime;
     const duration = e.target.duration;
-
     const percentageWatched = (currentTime / duration) * 100;
 
-    // Nếu đã hoàn thành rồi thì bỏ qua
     if (watchedTimes[lessonId]?.completed) return;
 
-    // Nếu chưa lưu thì chỉ lưu thời gian
     setWatchedTimes((prev) => ({
       ...prev,
       [lessonId]: {
@@ -68,7 +61,6 @@ const ClassSessions = () => {
       },
     }));
 
-    // Nếu xem đủ 90% thì đánh dấu hoàn thành
     if (percentageWatched >= 90) {
       setWatchedTimes((prev) => ({
         ...prev,
@@ -77,14 +69,12 @@ const ClassSessions = () => {
           completed: true,
         },
       }));
-      console.log(`✅ Bài học ${lessonId} đã được xem đủ 90%`);
       handleVideoEnd(lessonId);
     }
   };
 
   const handleVideoEnd = (lessonId) => {
     if (!watchedTimes[lessonId]?.completed) {
-      console.log(`🎉 Bài học ${lessonId} đã hoàn thành.`);
       setWatchedTimes((prev) => ({
         ...prev,
         [lessonId]: {
@@ -92,13 +82,15 @@ const ClassSessions = () => {
           completed: true,
         },
       }));
-      // Gọi API đánh dấu hoàn thành nếu cần
     }
   };
 
   const formatDate = (date) => {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(date).toLocaleDateString("en-GB", options);
+    return new Date(date).toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
   };
 
   const getYouTubeVideoId = (url) => {
@@ -111,7 +103,7 @@ const ClassSessions = () => {
   if (loading) {
     return (
       <Loading
-        text="Đang tải buổi học..."
+        text="Đang tải thông tin lớp..."
         size="lg"
         variant="danger"
         textVariant="danger"
@@ -120,20 +112,18 @@ const ClassSessions = () => {
   }
 
   return (
-    <div className="class-sessions">
+    <Container className="class-sessions">
       {classroom && (
         <div className="class-sessions__header">
           <h1 className="class-sessions__class-name">{classroom.name}</h1>
           <p className="class-sessions__class-description">
             {classroom.description}
           </p>
-
           <div className="class-sessions__course-info">
             <p>
               <strong>Khóa học:</strong> {classroom.course.title}
             </p>
           </div>
-
           <div className="class-sessions__class-details">
             <p>
               <strong>Ngày bắt đầu:</strong> {formatDate(classroom.start_date)}
@@ -150,104 +140,107 @@ const ClassSessions = () => {
       )}
 
       <h2 className="class-sessions__title">Danh sách buổi học</h2>
-      <div className="class-sessions__list">
+      <Row className="class-sessions__list">
         {sessions.length > 0 ? (
-          sessions.map((session) => (
-            <div
+          sessions.map((session, index) => (
+            <Col
               key={session.id}
+              md={12}
               className="session"
             >
-              <h3 className="session__title">{session.title}</h3>
-              <p className="session__date">📅 {session.date}</p>
-              <p className="session__time">
-                🕒 {session.start_time} - {session.end_time}
-              </p>
+              <Card className="session__card">
+                <Card.Body>
+                  <Card.Title className="session__title">
+                    Buổi {index + 1}: {session.title}
+                  </Card.Title>
+                  <Card.Subtitle className="session__date mb-2 text-muted">
+                    📅 {formatDate(session.date)} - 🕒 {session.start_time} -{" "}
+                    {session.end_time}
+                  </Card.Subtitle>
+                  <div className="session__lessons">
+                    {session.lessons.length > 0 ? (
+                      session.lessons.map((lesson, index) => (
+                        <div
+                          key={lesson.id}
+                          className="lesson"
+                        >
+                          <h4 className="lesson__title">
+                            Bài {index + 1}: {lesson.title}
+                          </h4>
+                          <p className="lesson__content">{lesson.content}</p>
+                          {lesson.video_url &&
+                            getYouTubeVideoId(lesson.video_url) && (
+                              <div className="lesson__video-container">
+                                <YouTubePlayer
+                                  videoId={getYouTubeVideoId(lesson.video_url)}
+                                  lessonId={lesson.id}
+                                  onComplete={handleVideoEnd}
+                                />
+                              </div>
+                            )}
+                          <div className="lesson__documents">
+                            {lesson.documents.map((doc, index) => {
+                              const fileUrl = getStorageUrl(
+                                doc.file_path.replace(/^\/+/, "")
+                              );
+                              const isVideo = ["mp4", "webm"].includes(
+                                doc.file_type
+                              );
+                              let fileIcon = faFileArrowDown;
+                              if (doc.file_type === "pdf") fileIcon = faFilePdf;
+                              else if (["doc", "docx"].includes(doc.file_type))
+                                fileIcon = faFileWord;
 
-              <div className="session__lessons">
-                {session.lessons.length > 0 ? (
-                  session.lessons.map((lesson) => (
-                    <div
-                      key={lesson.id}
-                      className="lesson"
-                    >
-                      <h4 className="lesson__title">{lesson.title}</h4>
-                      <p className="lesson__content">{lesson.content}</p>
-
-                      {/* YouTube Video nếu có */}
-                      {lesson.video_url &&
-                        getYouTubeVideoId(lesson.video_url) && (
-                          <div className="lesson__video-container">
-                            <YouTubePlayer
-                              videoId={getYouTubeVideoId(lesson.video_url)}
-                              lessonId={lesson.id}
-                              onComplete={handleVideoEnd}
-                            />
+                              return (
+                                <div
+                                  key={index}
+                                  className="lesson__document"
+                                >
+                                  {isVideo ? (
+                                    <video
+                                      controls
+                                      onTimeUpdate={(e) =>
+                                        handleTimeUpdate(e, lesson.id)
+                                      }
+                                    >
+                                      <source
+                                        src={fileUrl}
+                                        type={`video/${doc.file_type}`}
+                                      />
+                                    </video>
+                                  ) : (
+                                    <a
+                                      href={fileUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="lesson__document-link"
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={fileIcon}
+                                        className="lesson__document-icon"
+                                      />
+                                      <span>Xem tài liệu</span>
+                                    </a>
+                                  )}
+                                </div>
+                              );
+                            })}
                           </div>
-                        )}
-
-                      {/* Tài liệu và video bài giảng */}
-                      <div className="lesson__documents">
-                        {lesson.documents.map((doc, index) => {
-                          const fileUrl = getStorageUrl(
-                            doc.file_path.replace(/^\/+/, "")
-                          ); // Loại bỏ dấu / thừa đầu path
-                          const isVideo = ["mp4", "webm"].includes(
-                            doc.file_type
-                          );
-
-                          let fileIcon = faFileArrowDown;
-                          if (doc.file_type === "pdf") fileIcon = faFilePdf;
-                          else if (["doc", "docx"].includes(doc.file_type))
-                            fileIcon = faFileWord;
-
-                          return (
-                            <div
-                              key={index}
-                              className="lesson__document"
-                            >
-                              {isVideo ? (
-                                <video
-                                  controls
-                                  onTimeUpdate={(e) =>
-                                    handleTimeUpdate(e, lesson.id)
-                                  }
-                                >
-                                  <source
-                                    src={fileUrl}
-                                    type={`video/${doc.file_type}`}
-                                  />
-                                </video>
-                              ) : (
-                                <a
-                                  href={fileUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="lesson__document-link"
-                                >
-                                  <FontAwesomeIcon
-                                    icon={fileIcon}
-                                    className="lesson__document-icon"
-                                  />
-                                  <span>Xem tài liệu</span>
-                                </a>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>Không có bài giảng nào cho buổi học này.</p>
-                )}
-              </div>
-            </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>Không có bài giảng nào cho buổi học này.</p>
+                    )}
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
           ))
         ) : (
           <p>Không có buổi học nào.</p>
         )}
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
 };
 

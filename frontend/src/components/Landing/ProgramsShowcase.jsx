@@ -41,7 +41,8 @@ const ProgramsShowcase = () => {
         {programs.map((prog) => (
           <Link
             key={prog.id}
-            to={`/program/${prog.id}`}
+            to={`/#`}
+            // to={`/program/${prog.id}`}
             state={prog} // ← truyền toàn bộ object qua state
             className="programs__item"
           >

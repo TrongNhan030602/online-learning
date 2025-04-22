@@ -1,90 +1,66 @@
-/* General Styles */
 .student-dashboard {
-  --primary-color: #4caf50;
-  --primary-dark: #388e3c;
-  --text-dark: #333;
-  --text-gray: #777;
-  --white: #fff;
-
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  background-color: #f5f6fa;
+  padding: 0 1rem;
 }
-
-.student-dashboard h1 {
-  font-size: 2rem;
+/* Tiêu đề phần */
+.dashboard__section-title {
+  font-size: 1.6rem;
   font-weight: 600;
-  color: var(--text-dark);
+  color: var(--primary-color);
   margin-bottom: 2rem;
-}
-
-/* Widget Container */
-.dashboard__widgets {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-/* Widget Styling */
-.widget {
-  background-color: var(--white);
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: inline-block;
   position: relative;
 }
 
-.widget:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.widget h3 {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: var(--text-dark);
-  margin-top: 1rem;
-}
-
-.widget p {
-  font-size: 0.875rem;
-  color: var(--text-gray);
-  margin-top: 0.5rem;
-}
-
-.widget svg {
-  font-size: 3rem;
+.dashboard__section-title svg {
+  margin-right: 10px;
   color: var(--primary-color);
-  transition: color 0.3s ease;
 }
 
-.widget:hover svg {
-  color: var(--primary-dark);
+/* Đường chéo dưới tiêu đề */
+.dashboard__section-title::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: var(--primary-color);
+  bottom: -5px;
+  left: 0;
+  border-radius: 10px;
+}
+/* Slogan */
+.dashboard__slogan {
+  background-color: #f5f6fa;
+  border-left: 4px solid var(--primary-color);
+  padding: 1rem 1.25rem;
+  margin: 0.5rem auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  max-width: 900px;
+  text-align: center;
+  animation: fadeSlideShort 0.5s ease-in-out;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .student-dashboard {
-    padding: 1.5rem;
-  }
+.dashboard__slogan-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.3rem;
+}
 
-  .student-dashboard h1 {
-    font-size: 1.75rem;
-  }
+.dashboard__slogan-subtext {
+  font-size: 1rem;
+  color: #444;
+  margin: 0;
+}
 
-  .dashboard__widgets {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+@keyframes fadeSlideShort {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
   }
-
-  .widget {
-    padding: 1.5rem;
-  }
-
-  .widget svg {
-    font-size: 2.5rem;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

@@ -10,10 +10,12 @@ const StudentCourses = lazy(() =>
 const CourseDetail = lazy(() =>
   import("../pages/students/Courses/CourseDetail")
 );
+const Blogs = lazy(() => import("../pages/students/Blogs/Blogs"));
+const BlogDetail = lazy(() => import("../pages/students/Blogs/BlogDetail"));
 const StudentProfile = lazy(() => import("../pages/students/StudentProfile"));
 const StudentProgress = lazy(() => import("../pages/students/StudentProgress"));
 const StudentDashboard = lazy(() =>
-  import("../pages/students/StudentDashboard")
+  import("../pages/students/StudentDashboard/StudentDashboard")
 );
 const StudentNotifications = lazy(() =>
   import("../pages/students/StudentNotifications")
@@ -87,6 +89,40 @@ const StudentRoutes = () => {
               }
             >
               <CourseDetail />
+            </Suspense>
+          }
+        />
+        <Route
+          path="blogs"
+          element={
+            <Suspense
+              fallback={
+                <Loading
+                  text="Đang tải dữ liệu..."
+                  size="lg"
+                  variant="danger"
+                  textVariant="danger"
+                />
+              }
+            >
+              <Blogs />
+            </Suspense>
+          }
+        />
+        <Route
+          path="blogs/:id"
+          element={
+            <Suspense
+              fallback={
+                <Loading
+                  text="Đang tải dữ liệu..."
+                  size="lg"
+                  variant="danger"
+                  textVariant="danger"
+                />
+              }
+            >
+              <BlogDetail />
             </Suspense>
           }
         />

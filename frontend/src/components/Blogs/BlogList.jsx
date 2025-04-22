@@ -119,7 +119,9 @@ const BlogList = ({ blogs, onEdit, onDelete, onManageImages }) => {
                       {blog.title}
                     </a>
                   </td>
-                  <td className="blog-list__td">{blog.content}</td>
+                  <td className="blog-list__td">
+                    <div className="blog-list__content">{blog.content}</div>
+                  </td>
                   <td className="blog-list__td">
                     <button
                       onClick={() => onEdit(blog)}

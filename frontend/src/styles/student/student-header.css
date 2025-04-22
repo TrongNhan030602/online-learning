@@ -1,8 +1,8 @@
 /* General Styles for header */
 .student-header {
-  --header-height: 64px;
+  --header-height: 4rem; /* 64px */
   --header-bg: #ffffff;
-  --header-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --header-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.08);
   --nav-link-color: var(--text-gray);
   --nav-link-hover: var(--primary-color);
   --nav-link-active: var(--primary-color);
@@ -11,6 +11,7 @@
   --dropdown-bg: #fff;
   --dropdown-border: #ccc;
   --nav-link-hover-bg: #f4f4f4;
+  --transition-time: 0.3s;
 
   background-color: var(--header-bg);
   box-shadow: var(--header-shadow);
@@ -24,17 +25,17 @@
 }
 
 .student-header__container {
-  max-width: 1200px;
+  max-width: 75rem; /* 1200px */
   width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: var(--gap);
 }
 
 .student-header__logo img {
-  height: 40px;
+  height: 2.5rem; /* 40px */
   object-fit: contain;
 }
 
@@ -50,7 +51,7 @@
   text-decoration: none;
   color: var(--nav-link-color);
   font-weight: 700;
-  transition: all 0.3s ease;
+  transition: all var(--transition-time) ease;
   position: relative;
   padding: 1rem 0;
   display: flex;
@@ -60,18 +61,18 @@
 .student-header__nav-link:hover {
   color: var(--nav-link-hover);
   background-color: var(--nav-link-hover-bg);
-  border-radius: 6px;
+  border-radius: 0.375rem; /* 6px */
 }
 
 .student-header__nav-link--active::before {
   content: "";
   position: absolute;
-  top: -4px;
+  top: -0.25rem; /* -4px */
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 0.125rem; /* 2px */
   background-color: var(--nav-link-active);
-  border-radius: 4px;
+  border-radius: 0.25rem; /* 4px */
 }
 
 .student-header__icon {
@@ -82,12 +83,12 @@
 .student-header__actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--gap);
 }
 
 .student-header__icon-link {
   color: var(--nav-link-color);
-  transition: color 0.3s ease;
+  transition: color var(--transition-time) ease;
 }
 
 .student-header__icon-link:hover {
@@ -105,15 +106,16 @@
   position: absolute;
   right: 0;
   background-color: var(--dropdown-bg);
-  min-width: 160px;
-  max-width: 250px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  min-width: 10rem; /* 160px */
+  max-width: 15.625rem; /* 250px */
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem; /* 8px */
   padding: 0.5rem 0;
-  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--transition-time) ease,
+    opacity var(--transition-time) ease, box-shadow var(--transition-time) ease;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
+  transform: translateY(0.625rem); /* 10px */
   z-index: 9999;
 }
 
@@ -122,7 +124,7 @@
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
 }
 
 .student-header__dropdown-link {
@@ -131,14 +133,15 @@
   display: block;
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, padding 0.3s ease, transform 0.3s ease;
+  border-radius: 0.25rem; /* 4px */
+  transition: background-color var(--transition-time) ease,
+    padding var(--transition-time) ease, transform var(--transition-time) ease;
 }
 
 .student-header__dropdown-link:hover {
   background-color: #d3c6c6;
   padding-left: 1.25rem;
-  transform: translateX(5px);
+  transform: translateX(0.3125rem); /* 5px */
 }
 
 .student-header__dropdown-link:active {
@@ -147,13 +150,13 @@
 }
 
 .student-header__dropdown-content .student-header__dropdown-link:first-child {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 0.5rem; /* 8px */
+  border-top-right-radius: 0.5rem; /* 8px */
 }
 
 .student-header__dropdown-content .student-header__dropdown-link:last-child {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 0.5rem; /* 8px */
+  border-bottom-right-radius: 0.5rem; /* 8px */
 }
 
 /* User info in dropdown */
@@ -162,8 +165,8 @@
   align-items: center;
   cursor: pointer;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
+  border-radius: 0.5rem; /* 8px */
+  transition: background-color var(--transition-time) ease;
 }
 
 .student-header__user-info:hover {
@@ -178,4 +181,75 @@
 
 .student-header__user-info .student-header__icon {
   margin-right: 0.5rem;
+}
+
+/* CSS cho việc slide-in */
+.student-header__menu {
+  position: fixed;
+  top: 0;
+  left: -15.625rem; /* 250px */
+  width: 15.625rem; /* 250px */
+  height: 100%;
+  background-color: var(--header-bg);
+  box-shadow: 0.125rem 0 0.375rem rgba(0, 0, 0, 0.1);
+  transition: left var(--transition-time) ease-in-out;
+  z-index: 9998;
+  padding-top: var(--header-height);
+}
+
+.student-header__menu.show {
+  left: 0;
+}
+
+.student-header__menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.student-header__menu li {
+  padding: 0.9375rem; /* 15px */
+}
+
+.student-header__menu a {
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 500;
+  display: block;
+}
+
+.student-header__menu a:hover {
+  background-color: var(--nav-link-hover-bg);
+}
+
+.student-header__menu-btn {
+  display: none;
+}
+
+/* CSS cho màn hình tablet và mobile */
+@media (max-width: 60rem) {
+  .student-header__logo {
+    flex-grow: 1;
+  }
+
+  .student-header__menu-btn {
+    display: block;
+    color: var(--primary-color);
+    padding: 0.625rem 0.9375rem; /* 10px 15px */
+    border-radius: 0.375rem; /* 6px */
+    cursor: pointer;
+    font-size: 1.25rem; /* 20px */
+  }
+
+  .student-header__nav {
+    display: none;
+  }
+
+  /* Active item style for mobile */
+  .student-header__nav-link--active {
+    background-color: var(--nav-link-hover-bg);
+    color: var(--nav-link-active);
+    font-weight: 700;
+    border-radius: 0.375rem;
+  }
 }

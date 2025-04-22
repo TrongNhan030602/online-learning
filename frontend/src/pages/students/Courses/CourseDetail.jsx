@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import trainingProgramApi from "../../../api/trainingProgramApi";
 import lessonApi from "../../../api/lessonApi";
 import classApi from "../../../api/classApi";
+import { Accordion } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import SessionModal from "../Sessions/SessionsModal";
@@ -21,22 +22,19 @@ const CourseDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Lấy danh sách chương trình đào tạo
         const programResponse = await trainingProgramApi.getByCourseId(id);
         setTrainingPrograms(programResponse.data);
 
-        // Lấy danh sách bài học
         const lessonResponse = await lessonApi.getLessons({ course_id: id });
         setLessons(lessonResponse.data);
 
-        // Lấy danh sách lớp học
         const classResponse = await classApi.getClassesByCourse(id);
         setClasses(classResponse.data);
 
         setLoading(false);
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu:", err);
-        setError("Lỗi khi lấy dữ liệu.");
+        setError("Không thể kết nối với máy chủ. Vui lòng thử lại.");
         setLoading(false);
       }
     };
@@ -44,28 +42,28 @@ const CourseDetail = () => {
     fetchData();
   }, [id]);
 
-  // Hàm mở modal khi click vào icon con mắt
   const handleViewClassDetails = (classId) => {
     setSelectedClassId(classId);
     setShowModal(true);
   };
 
-  // Hàm đóng modal
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedClassId(null);
   };
 
-  if (loading) return <div>Đang tải dữ liệu...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading)
+    return <div className="loading-spinner">Đang tải dữ liệu...</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="course-detail">
       <h1 className="course-detail__title">Chi tiết khóa học</h1>
 
-      {/* Hiển thị chương trình đào tạo */}
       <section className="course-detail__section training-programs">
-        <h2 className="training-programs__title">Các chương trình đào tạo</h2>
+        <h2 className="training-programs__title">
+          Chương trình đào tạo của khóa
+        </h2>
         {trainingPrograms.length > 0 ? (
           trainingPrograms.map((program) => (
             <div
@@ -94,7 +92,6 @@ const CourseDetail = () => {
         )}
       </section>
 
-      {/* Hiển thị danh sách lớp học */}
       <section className="course-detail__section classes">
         <h2 className="classes__title">Danh sách lớp học</h2>
         {classes.length > 0 ? (
@@ -109,21 +106,18 @@ const CourseDetail = () => {
                 {new Date(classItem.start_date).toLocaleDateString("en-GB")} -{" "}
                 {new Date(classItem.end_date).toLocaleDateString("en-GB")}
               </p>
-
               <p className="class-card__students">
                 Số học viên: {classItem.current_students}/
                 {classItem.max_students}
               </p>
               <p className="class-card__status">
-                Trạng thái:
+                Trạng thái:{" "}
                 <span
                   className={`class-card__status-label class-card__status-label--${classItem.status}`}
                 >
                   {classItem.status === "open" ? "Mở" : "Đóng"}
                 </span>
               </p>
-
-              {/* Icon con mắt để xem chi tiết lớp học */}
               <button
                 className="class-card__view-btn"
                 onClick={() => handleViewClassDetails(classItem.id)}
@@ -139,40 +133,32 @@ const CourseDetail = () => {
         )}
       </section>
 
-      {/* Hiển thị Modal với buổi học */}
       <SessionModal
         showModal={showModal}
         handleClose={handleCloseModal}
-        classId={selectedClassId} // Truyền classId vào modal
+        classId={selectedClassId}
       />
 
-      {/* Hiển thị danh sách bài học */}
       <section className="course-detail__section lessons">
         <h2 className="lessons__title">Danh sách bài học</h2>
         {lessons.length > 0 ? (
-          lessons.map((lesson) => (
-            <div
-              key={lesson.id}
-              className="lesson-card"
-            >
-              <h3 className="lesson-card__title">{lesson.title}</h3>
-              <p className="lesson-card__content">{lesson.content}</p>
+          <Accordion>
+            {lessons.map((lesson, index) => (
+              <Accordion.Item
+                eventKey={index.toString()}
+                key={lesson.id}
+              >
+                <Accordion.Header>
+                  <span className="lesson-index">Bài {index + 1}:</span>{" "}
+                  {lesson.title}
+                </Accordion.Header>
 
-              {/* Hiển thị video bài học nếu có */}
-              {lesson.video_url && (
-                <div className="lesson-video">
-                  <a
-                    href={lesson.video_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="lesson-video__link"
-                  >
-                    Xem video giới thiệu
-                  </a>
-                </div>
-              )}
-            </div>
-          ))
+                <Accordion.Body>
+                  <p>{lesson.content}</p>
+                </Accordion.Body>
+              </Accordion.Item>
+            ))}
+          </Accordion>
         ) : (
           <p className="lessons__message">
             Không có bài học nào cho khóa học này.

@@ -1,21 +1,21 @@
 /* General styles */
 .course-detail {
-  font-family: "Roboto", sans-serif;
-  color: #333;
-  margin: 2rem;
-  background-color: #f7f9fc;
-  border-radius: 10px;
+  font-family: var(--primary-font);
+  color: var(--text-dark);
+  background-color: #fff;
+  border-radius: 0.75rem;
   padding: 2rem;
 }
 
 .course-detail__title {
+  font-family: var(--heading-font);
   font-size: 2.25rem;
   margin-bottom: 1rem;
   text-align: center;
-  color: var(--primary-color, #1e40af);
-  transition: color 0.3s ease, filter 0.3s ease;
-  text-transform: uppercase;
+  color: var(--primary-color);
   font-weight: 600;
+  text-transform: uppercase;
+  transition: color 0.3s ease, filter 0.3s ease;
 }
 
 .course-detail__title:hover {
@@ -28,6 +28,7 @@
 }
 
 .course-detail__section h2 {
+  font-family: var(--heading-font);
   font-size: 1.75rem;
   margin-bottom: 1rem;
   color: var(--primary-color);
@@ -36,82 +37,75 @@
 }
 
 .course-detail__section:hover h2 {
-  transform: scale(1.05);
-  color: #007bff;
+  color: var(--primary-hover);
 }
 
-/* Training programs card styles */
+/* Training Program */
 .training-programs__title {
   font-size: 1.75rem;
   margin-bottom: 1rem;
-  color: #1e40af;
+  color: var(--primary-color);
 }
 
 .training-program-card {
   background: linear-gradient(145deg, #f9f9f9, #e4e4e4);
-  border-radius: 10px;
+  border-radius: 0.75rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   padding: 1.25rem;
   margin-bottom: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .training-program-card:hover {
-  transform: translateY(-8px);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
 .training-program-card__title {
   font-size: 1.35rem;
-  color: #4caf50;
+  color: var(--primary-hover);
   margin-bottom: 1rem;
 }
 
-.training-program-card__description {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
+.training-program-card__description,
 .training-program-card__duration,
 .training-program-card__requirements,
 .training-program-card__objectives {
-  font-size: 1rem;
-  color: #333;
+  font-size: var(--base-font-size);
+  color: var(--text-gray);
   margin-bottom: 0.75rem;
 }
 
-/* Class card styles */
+/* Class cards */
 .classes__title {
   font-size: 1.75rem;
   margin-bottom: 1rem;
+  color: var(--primary-color);
 }
 
 .class-card {
   background: #fff;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1.25rem;
   margin-bottom: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .class-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .class-card__name {
   font-size: 1.35rem;
-  color: #1e40af;
-  margin-bottom: 1rem;
+  color: var(--primary-color);
   font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .class-card__date,
 .class-card__students {
   font-size: 1rem;
-  color: #333;
+  color: var(--text-gray);
   margin-bottom: 0.75rem;
 }
 
@@ -119,83 +113,26 @@
   padding: 0.5rem;
   border-radius: 5px;
   font-weight: bold;
+  display: inline-block;
 }
 
 .class-card__status-label--open {
-  background-color: #4caf50;
-  color: white;
+  background-color: #198754;
+  color: var(--text-white);
 }
 
 .class-card__status-label--closed {
-  background-color: #f44336;
-  color: white;
+  background-color: #dc3545;
+  color: var(--text-white);
 }
 
-/* Lesson card styles */
-.lessons__title {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-}
-
-.lesson-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.lesson-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-}
-
-.lesson-card__title {
-  font-size: 1.35rem;
-  color: #1e40af;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-.lesson-card__content {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
-/* Video styles */
-.lesson-video {
-  margin-top: 1rem;
-}
-
-.lesson-video__link {
-  color: #4caf50;
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-.lesson-video__link:hover {
-  color: #1e40af;
-}
-
-/* Message styles */
-.training-programs__message,
-.classes__message,
-.lessons__message {
-  color: #f44336;
-  font-size: 1rem;
-  text-align: center;
-}
-
-/* Button xem chi tiết lớp học */
 .class-card__view-btn {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-hover);
+  color: var(--text-white);
   border: none;
   padding: 8px 12px;
-  cursor: pointer;
   border-radius: 5px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -203,48 +140,120 @@
 }
 
 .class-card__view-btn:hover {
-  background-color: #0056b3;
+  background-color: #8a0000;
 }
 
 .class-card__view-btn .fa-eye {
   margin-right: 8px;
 }
 
-/* Responsive Styles */
+/* Lessons (Accordion) */
+.course-detail__section.lessons .accordion-item {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+}
+
+.course-detail__section.lessons .accordion-item:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.course-detail__section.lessons .accordion-header,
+.course-detail__section.lessons .accordion-button {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: var(--primary-color);
+}
+
+.course-detail__section.lessons .accordion-button:not(.collapsed) {
+  background-color: #e7f1ff;
+  color: var(--primary-hover);
+}
+
+.course-detail__section.lessons .accordion-button:hover {
+  background-color: #e2e6ea;
+  color: var(--primary-hover);
+}
+
+.course-detail__section.lessons .accordion-button::after {
+  transition: transform 0.3s ease;
+}
+
+.course-detail__section.lessons .accordion-button:not(.collapsed)::after {
+  transform: rotate(90deg);
+}
+
+.course-detail__section.lessons .accordion-body {
+  padding: 1rem 1.25rem;
+  background-color: #fff;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  line-height: var(--base-line-height);
+  border-top: 1px solid #dee2e6;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.lesson-index {
+  font-weight: bold;
+  margin-right: 0.5rem;
+  color: var(--primary-hover);
+}
+
+/* Message */
+.training-programs__message,
+.classes__message,
+.lessons__message {
+  color: var(--primary-hover);
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .course-detail__title {
     font-size: 2rem;
-    margin-bottom: 1rem;
   }
 
   .course-detail__section h2 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
   }
 
   .training-program-card,
-  .class-card,
-  .lesson-card {
+  .class-card {
     padding: 1rem;
   }
 
   .training-program-card__title,
-  .class-card__name,
-  .lesson-card__title {
+  .class-card__name {
     font-size: 1.25rem;
   }
 
   .training-program-card__description,
-  .training-program-card__duration,
-  .training-program-card__requirements,
-  .training-program-card__objectives,
   .class-card__date,
   .class-card__students,
-  .lesson-card__content {
+  .course-detail__section.lessons .accordion-body {
     font-size: 0.875rem;
   }
 
-  .lesson-video__link {
-    font-size: 0.875rem;
+  .course-detail__section.lessons .accordion-button {
+    padding: 1rem;
+    font-size: 0.95rem;
   }
 }

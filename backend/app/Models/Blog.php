@@ -9,7 +9,10 @@ class Blog extends Model
     use HasFactory;
     protected $table = 'blogs';
     protected $fillable = ['title', 'content', 'author_id'];
-
+    public function images()
+    {
+        return $this->hasMany(BlogImage::class);
+    }
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
@@ -19,8 +22,5 @@ class Blog extends Model
     {
         return $this->hasMany(BlogComment::class, 'blog_id');
     }
-    public function images()
-    {
-        return $this->hasMany(BlogImage::class);
-    }
+
 }

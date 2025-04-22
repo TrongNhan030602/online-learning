@@ -7,11 +7,16 @@
 }
 
 .student-my-classes__title {
-  text-align: center;
   font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
   color: var(--primary-color);
-  font-weight: bold;
-  margin-bottom: 30px;
+  font-family: var(--heading-font);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  position: relative;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .student-my-classes__list {

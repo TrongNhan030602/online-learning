@@ -49,12 +49,14 @@ const SessionModal = ({ showModal, handleClose, classId }) => {
         ) : (
           <div className="sessions__list">
             {sessions.length > 0 ? (
-              sessions.map((session) => (
+              sessions.map((session, index) => (
                 <div
                   key={session.id}
                   className="sessions__card"
                 >
-                  <h5 className="sessions__card-title">{session.title}</h5>
+                  <h5 className="sessions__card-title">
+                    Buổi {index + 1}: {session.title}
+                  </h5>
                   <p className="sessions__card-date">
                     Ngày:{" "}
                     {new Date(session.session_date).toLocaleDateString("en-GB")}

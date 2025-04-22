@@ -1,0 +1,199 @@
+.blogs {
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.blogs__page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
+  color: var(--primary-color);
+  font-family: var(--heading-font);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  position: relative;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Bố cục tìm kiếm và lọc */
+.blogs__controls {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.blogs__search-box {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.blogs__search-input {
+  padding-left: 2.5rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.blogs__search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+.blogs__filter-box {
+  min-width: 200px;
+}
+
+.blogs__filter-select {
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+}
+
+.blogs__intro {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 40px;
+  font-style: italic;
+}
+
+.blogs__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Hiển thị 4 card trên PC */
+  gap: 24px;
+  padding: 0 10px;
+}
+
+.blogs__card {
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #fff;
+  height: 100%;
+}
+
+.blogs__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.blogs__image {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+  display: block;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.blogs__image:hover {
+  filter: brightness(0.8);
+  transition: filter 0.3s ease;
+}
+.blogs__info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.blogs__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.blogs__title:hover {
+  color: var(--primary-color);
+}
+
+.blogs__meta {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 12px;
+}
+
+.blogs__description {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.blogs__link {
+  display: inline-block;
+  font-weight: 500;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  margin-top: 10px;
+}
+
+.blogs__link:hover {
+  color: var(--primary-color);
+}
+
+.blogs__ribbon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading and error styling */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  color: #666;
+}
+
+.error-message {
+  text-align: center;
+  color: #dc3545;
+  font-weight: bold;
+  margin-top: 100px;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .blogs__list {
+    grid-template-columns: repeat(
+      3,
+      1fr
+    ); /* Hiển thị 3 card trên màn hình vừa */
+  }
+}
+
+@media (max-width: 900px) {
+  .blogs__list {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* Hiển thị 2 card trên màn hình nhỏ */
+  }
+}
+
+@media (max-width: 600px) {
+  .blogs__list {
+    grid-template-columns: 1fr; /* Hiển thị 1 card trên màn hình điện thoại */
+  }
+}

@@ -26,7 +26,16 @@
   cursor: pointer;
   user-select: none;
 }
-
+.blog-list__content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* số dòng hiển thị */
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  line-height: 1.5em;
+  color: #444;
+}
 .blog-list__title {
   font-size: 1.8rem;
   font-weight: 600;
