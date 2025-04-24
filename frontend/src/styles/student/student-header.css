@@ -1,5 +1,6 @@
 /* General Styles for header */
 .student-header {
+  --primary-color: #0983e8;
   --header-height: 4rem; /* 64px */
   --header-bg: #ffffff;
   --header-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.08);
@@ -34,9 +35,28 @@
   gap: var(--gap);
 }
 
-.student-header__logo img {
-  height: 2.5rem; /* 40px */
+.student-header__logo {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  gap: 0.5rem; /* Khoảng cách giữa logo và text */
+  text-decoration: none;
+}
+
+.student-header__logo-img {
+  height: 2.5rem; /* ~40px */
   object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.student-header__logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 
 .student-header__nav-list {
@@ -195,6 +215,7 @@
   transition: left var(--transition-time) ease-in-out;
   z-index: 9998;
   padding-top: var(--header-height);
+  overflow-y: auto;
 }
 
 .student-header__menu.show {
@@ -224,6 +245,90 @@
 
 .student-header__menu-btn {
   display: none;
+}
+
+/* dropdown CTĐT */
+/* CSS cho menu chính */
+/* Vị trí và ẩn mặc định của dropdown */
+.student-header__nav-item {
+  position: relative;
+}
+
+.student-header__dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  animation: fadeInSlide 0.3s ease forwards;
+  border: 1px solid #e0e0e0;
+  max-height: none; /* hoặc giá trị đủ lớn, ví dụ: 400px */
+  overflow: visible;
+  list-style-type: none;
+}
+
+/* Hiển thị khi hover vào nav-item */
+.student-header__nav-item:hover .student-header__dropdown-menu {
+  display: block;
+}
+
+/* Link trong dropdown */
+.student-header__dropdown-link {
+  display: block;
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+}
+
+.student-header__dropdown-link:hover {
+  background-color: #f0f4f8;
+  color: #0056b3;
+  padding-left: 28px;
+}
+
+/* Icon trượt vào khi hover */
+.student-header__dropdown-link::before {
+  content: "›";
+  position: absolute;
+  left: 16px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: #0056b3;
+}
+
+.student-header__dropdown-link:hover::before {
+  opacity: 1;
+  transform: translateX(-4px);
+}
+
+/* Icon xuống xoay khi hover */
+.student-header__icon-dropdown {
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.student-header__nav-item:hover .student-header__icon-dropdown {
+  transform: rotate(180deg);
+}
+
+/* Hiệu ứng xuất hiện */
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* CSS cho màn hình tablet và mobile */

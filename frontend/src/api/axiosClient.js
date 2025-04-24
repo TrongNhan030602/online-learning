@@ -25,7 +25,7 @@ axiosClient.interceptors.response.use(
     if (error.response?.status === 401) {
       console.warn("Token hết hạn hoặc không hợp lệ, đăng xuất...");
       localStorage.removeItem("token");
-      window.location.href = "/login"; // Chuyển hướng về trang login
+      window.location.href = "/"; // Chuyển hướng về trang chủ
     }
     return Promise.reject(error);
   }

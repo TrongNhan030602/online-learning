@@ -1,0 +1,88 @@
+.training-software {
+  padding: 120px 20px;
+  background: #ffffff;
+  color: #333;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.training-software__text {
+  max-width: 800px;
+  margin: 0 auto 50px;
+}
+
+.training-software__title {
+  font-size: 2.6rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #113f73;
+}
+
+.training-software__desc {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.training-software__list {
+  list-style: none;
+  padding-left: 0;
+  line-height: 1.8;
+  font-size: 1rem;
+  color: #333;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.training-software__list li {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 14px;
+}
+
+.training-software__list li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: #00b894;
+  font-weight: bold;
+}
+
+.training-software__images {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.training-software__image-wrapper {
+  width: 100%;
+  max-width: 70%;
+  overflow: hidden;
+  border-radius: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.training-software__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.4s ease;
+}
+
+.training-software__image-wrapper:hover .training-software__image {
+  filter: brightness(0.95);
+}
+
+@media (max-width: 768px) {
+  .training-software__title {
+    font-size: 2rem;
+  }
+
+  .training-software__desc,
+  .training-software__list {
+    font-size: 0.95rem;
+  }
+}

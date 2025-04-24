@@ -2,7 +2,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
 import "../../styles/landing/program-showcase/program-detail.css";
 import gameArtImage from "../../assets/img/landing/landing-slider2.jpg";
-import LandingHeader from "../../components/Landing/HeroSection/LandingHeader";
+import LandingHeader from "../../components/Landing/LandingHeader";
 
 const advertisingDesignProgram = {
   id: "adgad",

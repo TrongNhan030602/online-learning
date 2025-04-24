@@ -2,9 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { Card, OverlayTrigger, Tooltip } from "react-bootstrap";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faNewspaper } from "@fortawesome/free-solid-svg-icons";
-
 import blogApi from "../../../api/blogApi";
 import { getStorageUrl } from "../../../utils/getStorageUrl";
 import "slick-carousel/slick/slick.css";
@@ -70,10 +67,6 @@ const BlogSlider = () => {
 
   return (
     <section className="dashboard__section blog-slider-section">
-      {/* <h2 className="dashboard__section-title">
-        <FontAwesomeIcon icon={faNewspaper} /> Blog nổi bật
-      </h2> */}
-
       <Slider
         {...settings}
         className="dashboard__slider"

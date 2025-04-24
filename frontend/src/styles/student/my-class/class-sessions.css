@@ -3,8 +3,8 @@
 :root {
   --primary-font: "IBM Plex Sans", "Arial", sans-serif;
   --heading-font: "Montserrat", sans-serif;
-  --primary-color: #cc0000;
-  --primary-hover: #b70707;
+  --primary-color: #0983e8;
+  --primary-hover: #066ec4;
   --secondary-color: #6c757d;
   --secondary-hover: #545b62;
   --base-font-size: 1rem;
@@ -24,7 +24,7 @@
 /* --- Header --- */
 .class-sessions__header {
   margin-bottom: 32px;
-  background: #d74b4b;
+  background: var(--primary-color);
   color: var(--text-white);
   padding: 24px;
   border-radius: 16px;

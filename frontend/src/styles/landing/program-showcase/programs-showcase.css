@@ -1,4 +1,4 @@
-:root {
+.programs {
   --programs-glass-bg: rgba(50, 49, 49, 0.4);
   --programs-glass-border: rgba(255, 255, 255, 0.25);
   --programs-text-light: #ffffff;
@@ -77,7 +77,7 @@
   left: 0;
   right: 0;
   background: var(--programs-glass-bg);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
   padding: 1.5rem;
   height: 6.25rem;
   text-align: center;
@@ -89,6 +89,7 @@
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--programs-accent);
+  text-transform: uppercase;
 }
 
 /* Responsive tweaks */

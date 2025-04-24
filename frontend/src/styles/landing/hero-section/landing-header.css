@@ -1,12 +1,13 @@
 .landing-header {
   position: fixed;
+  padding: 24px 40px;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 999;
-  background: rgba(0, 0, 0, 0.6);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #113f73; /* Màu nền đậm cố định */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transition: transform 0.3s ease-in-out;
 }
 
@@ -22,6 +23,63 @@
 .landing-header .logo img:hover {
   transform: scale(1.05);
 }
+.landing-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* khoảng cách giữa ảnh logo và text */
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.landing-header .logo .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.landing-header .logo .nav-link:hover {
+  color: var(--accent, #00c9a7);
+}
+
+.header-nav {
+  display: none;
+}
+
+.header-nav.open {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.95);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 16px;
+  gap: 16px;
+  z-index: 998;
+}
+
+/* Default: hidden on mobile */
+.header-nav {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .header-nav {
+    display: flex;
+    position: static;
+    background: none;
+    flex-direction: row;
+    padding: 0;
+    gap: 24px;
+  }
+}
 
 .header-nav .nav-link {
   color: white;
@@ -34,17 +92,90 @@
   color: var(--accent, #00c9a7);
 }
 
-.header-nav .btn {
-  background: linear-gradient(135deg, #00c9a7, #0f3461);
+.btn-accent {
+  background: linear-gradient(135deg, #01b67f, #0a7152);
   color: white;
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-weight: 500;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-.header-nav .btn:hover {
+.btn-accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(15, 52, 97, 0.3);
+  box-shadow: 0 6px 12px #0a7152;
+}
+
+.menu-toggle {
+  cursor: pointer;
+}
+.header-nav .nav-link.active {
+  color: var(--accent, #00c9a7);
+}
+
+/* Dropdown container */
+/* Container for dropdown */
+.header-nav .nav-item.dropdown {
+  position: relative;
+}
+.dropdown-item.active {
+  background-color: rgba(19, 188, 160, 0.5) !important;
+  color: #00c9a7;
+}
+/* Style for the "Đào tạo" label */
+/* Style for the "Đào tạo" label */
+.header-nav .dropdown-toggle {
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+  padding: 8px 12px;
+  display: inline-block;
+}
+
+.header-nav .dropdown-toggle:hover {
+  color: var(--accent, #00c9a7);
+  transform: scale(1.05); /* Zoom effect when hover */
+}
+
+/* Hidden dropdown initially */
+.header-nav .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 10px 0;
+  min-width: 220px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  display: none; /* Initially hidden */
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+/* When hover: show dropdown */
+.header-nav .nav-item.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  display: block; /* Display dropdown when hovering */
+  visibility: visible;
+  transform: translateY(0) scale(1.05); /* Zoom effect on dropdown */
+}
+
+/* Style each item */
+.header-nav .dropdown-item {
+  color: white;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.header-nav .dropdown-item:hover {
+  background-color: rgba(0, 201, 167, 0.1);
+  color: #00c9a7;
+  transform: translateX(10px); /* Slide effect */
 }

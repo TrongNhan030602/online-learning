@@ -1,0 +1,253 @@
+.about-page {
+  background: linear-gradient(135deg, #113f73, #0f294d);
+  padding: 80px 0 0 0;
+}
+/* Intro */
+.about-page__intro {
+  color: white;
+}
+.about-page__intro-text .about-page__label {
+  color: #00c48c;
+  font-size: 20px;
+  letter-spacing: 1px;
+  line-height: 26px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+.about-page__title {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  line-height: 60px;
+}
+
+.about-page__subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+.about-page__intro-text p {
+  font-size: 18px;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.about-page__intro-image img {
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.about-page__intro-image img:hover {
+  transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .about-page__intro {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .about-page__title {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+
+  .about-page__intro-image {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .about-page__subtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .about-page__intro-text {
+    text-align: center;
+    padding: 0 10px;
+  }
+}
+
+/* About us */
+/* SECTION: About Us With Image */
+.about-us-with-image {
+  position: relative;
+  padding: 60px 0;
+  background: linear-gradient(135deg, #10335f, #0f294d);
+  color: white;
+}
+
+.about-us-with-image__image img {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.about-us-with-image__text {
+  color: white;
+}
+
+.about-us-with-image__text .about-us-with-label {
+  color: #00c48c;
+  font-size: 20px;
+  letter-spacing: 1px;
+  line-height: 26px;
+  font-weight: 600;
+}
+
+.about-us-with-image__title {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  line-height: 60px;
+  line-height: 56px;
+}
+
+.about-us-with-image__text p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.about-us-with-image__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.2rem;
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.about-us-with-image__list li {
+  flex: 0 0 48%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.about-us-with-image__list .list-icon {
+  color: #00c48c;
+  font-size: 1.2rem;
+}
+
+/* Box số liệu học viên */
+.about-us-with-image__stat-box {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px 40px;
+  border-radius: 4px;
+  border-top-left-radius: 60px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  color: #10335f;
+  z-index: 2;
+}
+
+.about-us-with-image__stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.about-us-with-image__icon {
+  font-size: 2rem;
+  color: #f7760d;
+}
+
+.about-us-with-image__stat-box h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.about-us-with-image__stat-box p {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ff8015;
+}
+
+/* Responsive */
+/* Base: PC lớn */
+
+/* Laptop, Tablet dọc */
+@media (max-width: 1199.98px) {
+  .about-us-with-image {
+    padding: 40px 0;
+  }
+
+  .about-us-with-image__title {
+    font-size: 32px;
+    line-height: 48px;
+  }
+
+  .about-us-with-image__text p {
+    font-size: 1.1rem;
+  }
+
+  .about-us-with-image__list li {
+    flex: 0 0 100%;
+  }
+
+  .about-us-with-image__stat-box {
+    top: 16px;
+    left: 16px;
+    padding: 16px 32px;
+  }
+
+  .about-us-with-image__stat-box p {
+    font-size: 1.4rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+  .about-us-with-image__image {
+    margin-bottom: 2rem;
+  }
+
+  .about-us-with-image__title {
+    font-size: 24px;
+    line-height: 36px;
+    text-align: center;
+  }
+
+  .about-us-with-image__text {
+    text-align: center;
+  }
+
+  .about-us-with-image__text p {
+    font-size: 1rem;
+  }
+
+  .about-us-with-image__list {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .about-us-with-image__list li {
+    padding: 8px 12px;
+    font-size: 1rem;
+  }
+
+  .about-us-with-image__stat-box {
+    position: static;
+    margin-top: 1.5rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .about-us-with-image__stat-content {
+    justify-content: center;
+  }
+}
+/* SECTION: About Us With Image - End */

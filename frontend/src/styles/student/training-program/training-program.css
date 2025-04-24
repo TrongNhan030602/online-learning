@@ -1,0 +1,44 @@
+.training-program {
+  padding: 3rem 0;
+  background: #f9fafd;
+}
+
+.training-program__title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #113f73;
+  margin-bottom: 2.5rem;
+}
+
+.training-program__table th,
+.training-program__table td {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
+  padding: 0.5rem;
+}
+
+.training-program__table th {
+  background-color: #113f73;
+  color: #fff;
+  font-weight: 600;
+}
+
+.training-program__learn-btn {
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.training-program__learn-btn:hover {
+  background-color: #113f73;
+  color: #fff;
+  border-color: #113f73;
+}
+.training-program__semester-row td {
+  background-color: #e6f0ff;
+  font-weight: 600;
+  text-align: left;
+  padding-left: 1rem;
+  color: #113f73;
+}

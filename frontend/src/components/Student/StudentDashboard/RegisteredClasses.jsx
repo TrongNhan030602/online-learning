@@ -3,6 +3,7 @@ import { Card, Row, Col, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { getStorageUrl } from "../../../utils/getStorageUrl";
 import studentClassApi from "../../../api/studentClassApi";
 import "../../../styles/student/my-class/registered-classes.css";
 
@@ -66,12 +67,12 @@ const RegisteredClasses = () => {
                 <Card className="dashboard__card class-card h-100">
                   <Card.Img
                     variant="top"
-                    src={item.course.image_url}
+                    src={getStorageUrl(item.course.image_url)}
                     alt={item.course.title}
                     className="class-card__image"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "/fallback-image.jpg"; // ảnh dự phòng nếu lỗi
+                      e.target.src = "/fallback-image.jpg";
                     }}
                   />
                   <Card.Body>

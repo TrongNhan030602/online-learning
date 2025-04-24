@@ -34,7 +34,7 @@ class StudentClassController extends Controller
                         'id' => $classroom->course->id,
                         'title' => $classroom->course->title,
                         'description' => $classroom->course->description,
-                        'image_url' => asset('storage/' . $classroom->course->image_url),
+                        'image_url' => $classroom->course->image_url,
                         'price' => $classroom->course->price,
                     ]
                 ];

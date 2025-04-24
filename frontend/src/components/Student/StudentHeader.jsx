@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from "react";
 import authApi from "../../api/authApi"; // logout()
 import { useNavigate, NavLink } from "react-router-dom";
@@ -5,17 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faUserCircle,
-  faBookOpen,
-  faTableCells,
-  faChartLine,
-  faCircleQuestion,
-  faPeopleRoof,
+  // faMapSigns,
+  // faTableCells,
+  faGraduationCap,
+  // faCircleQuestion,
+  // faPeopleRoof,
+  // faSitemap,
   faAlignLeft as faBars,
+  // faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/student/student-header.css";
-import logo from "../../assets/img/bc-logo@2x.webp";
+import logo from "/logo.webp";
 
-// eslint-disable-next-line react/prop-types
 const NavLinkItem = ({ to, icon, label, onClick }) => (
   <li>
     <NavLink
@@ -36,6 +38,37 @@ const NavLinkItem = ({ to, icon, label, onClick }) => (
   </li>
 );
 
+// const DropdownMenu = ({ label, icon, items }) => {
+//   return (
+//     <li className="student-header__nav-item dropdown">
+//       <div className="student-header__nav-link">
+//         <FontAwesomeIcon
+//           icon={icon}
+//           className="student-header__icon"
+//         />
+//         {label}
+//         <FontAwesomeIcon
+//           icon={faChevronDown}
+//           className="student-header__icon-dropdown"
+//         />
+//       </div>
+//       <ul className="student-header__dropdown-menu fancy-dropdown">
+//         {items.map((item, index) => (
+//           <li key={index}>
+//             <NavLink
+//               to={item.to}
+//               className="student-header__dropdown-link"
+//               onClick={item.onClick}
+//             >
+//               {item.label}
+//             </NavLink>
+//           </li>
+//         ))}
+//       </ul>
+//     </li>
+//   );
+// };
+
 const StudentHeader = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
@@ -48,7 +81,7 @@ const StudentHeader = () => {
     try {
       await authApi.logout();
       localStorage.removeItem("token");
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error("Đăng xuất thất bại:", error);
     }
@@ -120,12 +153,14 @@ const StudentHeader = () => {
           <FontAwesomeIcon icon={faBars} />
         </div>
         <div className="student-header__logo">
-          <NavLink to="/student/dashboard">
+          {/* <NavLink to="/student/dashboard"> */}
+          <NavLink to="/student/training-program">
             <img
               src={logo}
               alt="eLearning"
               className="student-header__logo-img"
-            />
+            />{" "}
+            HỌC VIỆN DESIGN24
           </NavLink>
         </div>
 
@@ -135,72 +170,176 @@ const StudentHeader = () => {
           className={`student-header__menu ${isMenuOpen ? "show" : ""}`}
         >
           <ul>
-            <NavLinkItem
+            {/* <NavLinkItem
               to="/student/courses"
               icon={faTableCells}
               label="Khóa học"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
-            />
-            <NavLinkItem
+              onClick={handleNavItemClick}
+            /> */}
+            {/* <NavLinkItem
               to="/student/my-classes"
               icon={faPeopleRoof}
-              label="Lớp học của tôi"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
+              label="Lớp học"
+              onClick={handleNavItemClick}
+            /> */}
+            <NavLinkItem
+              to="/student/training-program"
+              icon={faGraduationCap}
+              label="CTĐT"
+              onClick={handleNavItemClick}
             />
             <NavLinkItem
-              to="/student/progress"
-              icon={faChartLine}
-              label="Tiến độ"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
+              to="/student/schedule"
+              icon={faGraduationCap}
+              label="Lịch thi"
+              onClick={handleNavItemClick}
             />
             <NavLinkItem
+              to="/student/routine"
+              icon={faGraduationCap}
+              label="KQ rèn luyện"
+              onClick={handleNavItemClick}
+            />
+            <NavLinkItem
+              to="/student/learning-result"
+              icon={faGraduationCap}
+              label="KQ học tập"
+              onClick={handleNavItemClick}
+            />
+            <NavLinkItem
+              to="/student/exam-registration"
+              icon={faGraduationCap}
+              label="ĐK thi lần 2"
+              onClick={handleNavItemClick}
+            />
+
+            {/* Thêm dropdown cho "Học vụ" */}
+            {/* <DropdownMenu
+              label="Học vụ"
+              icon={faSitemap}
+              items={[
+                {
+                  to: "/student/schedule",
+                  label: "Lịch thi",
+                  onClick: handleNavItemClick,
+                },
+                {
+                  to: "/student/routine",
+                  label: "Kết quả rèn luyện",
+                  onClick: handleNavItemClick,
+                },
+                {
+                  to: "/student/learning-result",
+                  label: "Kết quả học tập",
+                  onClick: handleNavItemClick,
+                },
+                {
+                  to: "/student/exam-registration",
+                  label: "Đăng ký thi lần 2",
+                  onClick: handleNavItemClick,
+                },
+              ]}
+            /> */}
+            {/* <NavLinkItem
+              to="/student/blogs"
+              icon={faMapSigns}
+              label="Blog"
+              onClick={handleNavItemClick}
+            /> */}
+            {/* <NavLinkItem
               to="/student/chat"
               icon={faCircleQuestion}
-              label="Hỗ trợ"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
-            />
-            <NavLinkItem
-              to="/student/blogs"
-              icon={faBookOpen}
-              label="Blog học tập"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
-            />
+              label="Trợ giúp"
+              onClick={handleNavItemClick}
+            /> */}
           </ul>
         </div>
 
         {/* Navbar gốc trên desktop */}
         <nav className="student-header__nav">
           <ul className="student-header__nav-list">
-            <NavLinkItem
+            {/* <NavLinkItem
               to="/student/courses"
               icon={faTableCells}
               label="Khóa học"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
-            />
-            <NavLinkItem
+              onClick={handleNavItemClick}
+            /> */}
+            {/* <NavLinkItem
               to="/student/my-classes"
               icon={faPeopleRoof}
-              label="Lớp học của tôi"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
+              label="Lớp học"
+              onClick={handleNavItemClick}
+            /> */}
+
+            <NavLinkItem
+              to="/student/training-program"
+              icon={faGraduationCap}
+              label="CTĐT"
+              onClick={handleNavItemClick}
             />
             <NavLinkItem
+              to="/student/schedule"
+              icon={faGraduationCap}
+              label="Lịch thi"
+              onClick={handleNavItemClick}
+            />
+            <NavLinkItem
+              to="/student/routine"
+              icon={faGraduationCap}
+              label="KQ rèn luyện"
+              onClick={handleNavItemClick}
+            />
+            <NavLinkItem
+              to="/student/learning-result"
+              icon={faGraduationCap}
+              label="KQ học tập"
+              onClick={handleNavItemClick}
+            />
+            <NavLinkItem
+              to="/student/exam-registration"
+              icon={faGraduationCap}
+              label="ĐK thi lần 2"
+              onClick={handleNavItemClick}
+            />
+            {/* Thêm dropdown cho "Chương trình đào tạo" trên desktop */}
+            {/* <DropdownMenu
+              label="Học vụ"
+              icon={faSitemap}
+              items={[
+                {
+                  to: "/student/schedule",
+                  label: "Lịch thi",
+                  onClick: handleNavItemClick,
+                },
+                {
+                  to: "/student/routine",
+                  label: "Kết quả rèn luyện",
+                  onClick: handleNavItemClick,
+                },
+                {
+                  to: "/student/learning-result",
+                  label: "Kết quả học tập",
+                  onClick: handleNavItemClick,
+                },
+                {
+                  to: "/student/exam-registration",
+                  label: "Đăng ký thi lần 2",
+                  onClick: handleNavItemClick,
+                },
+              ]}
+            /> */}
+            {/* <NavLinkItem
               to="/student/blogs"
-              icon={faBookOpen}
-              label="Blog học tập"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
-            />
-            <NavLinkItem
-              to="/student/progress"
-              icon={faChartLine}
-              label="Tiến độ"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
-            />
-            <NavLinkItem
+              icon={faMapSigns}
+              label="Blog"
+              onClick={handleNavItemClick}
+            /> */}
+            {/* <NavLinkItem
               to="/student/chat"
               icon={faCircleQuestion}
-              label="Hỗ trợ"
-              onClick={handleNavItemClick} // Đóng menu khi chọn mục
-            />
+              label="Trợ giúp"
+              onClick={handleNavItemClick}
+            /> */}
           </ul>
         </nav>
 

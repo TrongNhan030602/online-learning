@@ -1,42 +1,50 @@
 import { Link } from "react-router-dom";
 import "../../styles/landing/program-showcase/programs-showcase.css";
 
-import graphicImage from "../../assets/img/landing/banner-3d-animation.jpg";
-import architectureImage from "../../assets/img/landing/banner-visual-effects-768x768.jpg";
-import vfxImage from "../../assets/img/landing/banner-game-art-design-768x768.jpg";
+import tkdh from "../../assets/img/landing/DESIGN24-01.jpg";
+import ttdpt from "../../assets/img/landing/DESIGN24-02.jpg";
+import hh2d from "../../assets/img/landing/DESIGN24-03.jpg";
+import hh3d from "../../assets/img/landing/DESIGN24-04.jpg";
+import dhtt from "../../assets/img/landing/DESIGN24-05.jpg";
+import tkuiux from "../../assets/img/landing/DESIGN24-06.jpg";
 
 const ProgramsShowcase = () => {
   const programs = [
     {
       id: 1,
-      name: "Thiết kế đồ họa quảng cáo",
-      image: graphicImage,
+      name: "Thiết kế đồ họa",
+      image: tkdh,
     },
     {
       id: 2,
-      name: "Thiết kế đồ hoạ kiến trúc nội thất",
-      image: architectureImage,
+      name: "Truyền thông đa phương tiện",
+      image: ttdpt,
     },
     {
       id: 3,
-      name: "Thiết kế đồ hoạ kỹ xảo phim ảnh",
-      image: vfxImage,
+      name: "Hoạt hình 2d",
+      image: hh2d,
     },
     {
       id: 4,
-      name: "Thiết kế đồ hoạ kỹ xảo phim ảnh",
-      image: vfxImage,
+      name: "Hoạt hình 3 d",
+      image: hh3d,
     },
     {
       id: 5,
-      name: "Thiết kế đồ hoạ kỹ xảo phim ảnh",
-      image: vfxImage,
+      name: "Đồ họa truyền hình",
+      image: dhtt,
+    },
+    {
+      id: 6,
+      name: "Thiết kế UI/UX",
+      image: tkuiux,
     },
   ];
 
   return (
     <section className="programs">
-      <h2 className="programs__title">Chương trình đào tạo</h2>
+      <h2 className="programs__title">Chuyên ngành đào tạo</h2>
       <div className="programs__list">
         {programs.map((prog) => (
           <Link
@@ -46,9 +54,9 @@ const ProgramsShowcase = () => {
             state={prog} // ← truyền toàn bộ object qua state
             className="programs__item"
           >
-            <div className="programs__overlay">
+            {/* <div className="programs__overlay">
               <h3 className="programs__name">{prog.name}</h3>
-            </div>
+            </div> */}
             <div className="programs__image-wrapper">
               <img
                 src={prog.image}

@@ -95,9 +95,9 @@ const ClassSessions = () => {
 
   const getYouTubeVideoId = (url) => {
     const regExp =
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})|(?:https?:\/\/)?(?:www\.)?youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/;
     const match = url.match(regExp);
-    return match && match[1] ? match[1] : null;
+    return match && (match[1] || match[2]) ? match[1] || match[2] : null;
   };
 
   if (loading) {
@@ -105,8 +105,8 @@ const ClassSessions = () => {
       <Loading
         text="Đang tải thông tin lớp..."
         size="lg"
-        variant="danger"
-        textVariant="danger"
+        variant="primary"
+        textVariant="primary"
       />
     );
   }
@@ -121,7 +121,7 @@ const ClassSessions = () => {
           </p>
           <div className="class-sessions__course-info">
             <p>
-              <strong>Khóa học:</strong> {classroom.course.title}
+              <strong>Chương trình:</strong> {classroom.course.title}
             </p>
           </div>
           <div className="class-sessions__class-details">

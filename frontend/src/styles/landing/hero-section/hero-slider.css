@@ -1,5 +1,6 @@
 .hero-slider {
   width: 100%;
+  padding-top: 90px;
   position: relative;
   background-color: #000;
   z-index: 1;
@@ -18,7 +19,7 @@
 
 .hero-slider__image {
   width: 100%;
-  height: auto;
+  height: 500px;
   object-fit: cover;
   transition: transform 1.5s ease;
   will-change: transform;
@@ -64,4 +65,11 @@
   background-color: #fafafa;
   border: 1px solid #dada;
   transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .hero-slider__image {
+    width: 100%;
+    height: auto;
+  }
 }

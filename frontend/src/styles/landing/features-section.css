@@ -21,7 +21,7 @@
 
 /* --- Features section --- */
 .features {
-  padding: 220px 20px 20px;
+  padding: 100px 20px 20px;
   color: var(--features-text-light);
   text-align: center;
   position: relative;
@@ -267,9 +267,6 @@
 }
 
 @media (max-width: 1024px) {
-  .features {
-    padding: 80px 20px;
-  }
   .features__title {
     font-size: 2.4rem;
     margin-bottom: 2.5rem;
@@ -286,7 +283,7 @@
 
 @media (max-width: 768px) {
   .features {
-    padding: 60px 20px;
+    padding: 40px 20px;
   }
 
   .features__title {

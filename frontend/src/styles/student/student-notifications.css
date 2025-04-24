@@ -1,64 +1,66 @@
-/* student-notifications.css */
-
 .student-notifications {
-  font-family: "Roboto", sans-serif;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  max-width: 800px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
 }
 
 .student-notifications__title {
   font-size: 2rem;
-  font-weight: 700;
-  color: #333;
   margin-bottom: 1.5rem;
-  text-align: center;
+  color: #113f73;
 }
 
 .student-notifications__list {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .student-notifications__item {
-  background-color: #ffffff;
-  border-left: 5px solid #4caf50;
-  padding: 1rem;
+  background: white;
+  border-left: 5px solid transparent;
+  padding: 1rem 1.5rem;
   margin-bottom: 1rem;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  transition: all 0.2s;
 }
 
 .student-notifications__item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #f1f7ff;
+}
+
+.student-notifications__item--new {
+  border-left-color: #0d6efd;
+  background-color: #e7f1ff;
 }
 
 .student-notifications__item-title {
   font-size: 1.2rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.5rem;
+  margin: 0;
+  color: #113f73;
+}
+
+.student-notifications__item-time {
+  font-size: 0.9rem;
+  color: #6c757d;
+  float: right;
+}
+
+.student-notifications__item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .student-notifications__item-content {
-  font-size: 1rem;
-  color: #555;
-}
-
-.student-notifications__item-new {
-  background-color: #f0f8ff;
-  border-left-color: #ff9800;
+  margin-top: 0.5rem;
+  color: #333;
 }
 
 .student-notifications__message {
-  font-size: 1rem;
-  color: #666;
+  margin-top: 2rem;
+  font-style: italic;
+  color: #6c757d;
   text-align: center;
-  margin-top: 1.5rem;
 }

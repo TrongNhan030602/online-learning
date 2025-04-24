@@ -63,6 +63,7 @@ const YouTubePlayer = ({ videoId, lessonId, onComplete }) => {
             modestbranding: 1,
             rel: 0,
             showinfo: 0,
+            // Thêm các tham số cần thiết cho video Shorts nếu cần
           },
         });
       }

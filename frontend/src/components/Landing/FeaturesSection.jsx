@@ -50,7 +50,7 @@ const FeaturesSection = () => {
   return (
     <section className="features">
       <div className="container">
-        <h2 className="features__title">Tính năng nổi bật</h2>
+        <h2 className="features__title">Vì sao nên học tại Design24</h2>
         <div className="features__grid">
           {features.map((feature, index) => (
             <div

@@ -1,26 +1,34 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import LandingLayout from "../layouts/LandingLayout"; // Layout chung cho tất cả các trang
 import LandingPage from "../pages/public/LandingPage";
 import ProgramDetailPage from "../pages/public/ProgramDetailPage";
-
+import AboutPage from "../pages/public/AboutPage";
+import ConsultPage from "../pages/public/ConsultPage";
+import TrainingCollegePage from "../pages/public/TrainingCollegePage";
+import TrainingIntermediatePage from "../pages/public/TrainingIntermediatePage";
+import TrainingCertificatePage from "../pages/public/TrainingCertificatePage";
+import TrainingSoftwarePage from "../pages/public/TrainingSoftwarePage";
 const LandingRoute = () => {
   const { isAuthenticated, user } = useAuth();
 
   if (isAuthenticated) {
-    if (user?.role === "admin")
+    if (user?.role === "admin") {
       return (
         <Navigate
           to="/admin"
           replace
         />
       );
-    if (user?.role === "student")
+    }
+    if (user?.role === "student") {
       return (
         <Navigate
           to="/student"
           replace
         />
       );
+    }
     return (
       <Navigate
         to="/login"
@@ -32,14 +40,45 @@ const LandingRoute = () => {
   // Với người chưa login → cho truy cập các route public
   return (
     <Routes>
-      <Route
-        index
-        element={<LandingPage />}
-      />
-      <Route
-        path="program/:id"
-        element={<ProgramDetailPage />}
-      />
+      <Route element={<LandingLayout />}>
+        {/* Các trang con sẽ được render ở đây */}
+        <Route
+          index
+          element={<LandingPage />}
+        />
+        <Route
+          path="about"
+          element={<AboutPage />}
+        />
+
+        <Route
+          path="consult"
+          element={<ConsultPage />}
+        />
+        {/* Thêm các routes cho Đào tạo */}
+        <Route
+          path="training/software"
+          element={<TrainingSoftwarePage />}
+        />
+        <Route
+          path="training/college"
+          element={<TrainingCollegePage />}
+        />
+        <Route
+          path="training/intermediate"
+          element={<TrainingIntermediatePage />}
+        />
+        <Route
+          path="training/certificate"
+          element={<TrainingCertificatePage />}
+        />
+
+        {/* Thêm các routes cho các trang khác */}
+        <Route
+          path="program/:id"
+          element={<ProgramDetailPage />}
+        />
+      </Route>
     </Routes>
   );
 };

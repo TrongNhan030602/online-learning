@@ -1,0 +1,79 @@
+.exam-schedule {
+  padding: 20px;
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.exam-schedule__title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #113f73;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.exam-schedule__title svg {
+  margin-right: 10px;
+}
+
+.exam-schedule__info {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.exam-schedule__info strong {
+  color: #113f73;
+}
+
+.exam-schedule__table {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.exam-schedule__table th,
+.exam-schedule__table td {
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.exam-schedule__table th {
+  background-color: #113f73;
+  color: white;
+  font-weight: bold;
+}
+
+.exam-schedule__table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.exam-schedule__table tbody tr:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+.exam-schedule__table td {
+  font-weight: 600;
+}
+
+.exam-schedule__table td:nth-child(2) {
+  color: #2e8b57; /* Màu xanh cho mã học phần */
+}
+
+.exam-schedule__table td:nth-child(3) {
+  font-style: italic;
+  color: #f39c12; /* Màu vàng cho tên học phần */
+}
+
+.exam-schedule__table td:nth-child(7),
+.exam-schedule__table td:nth-child(8) {
+  font-style: italic;
+  color: #ff6347; /* Màu đỏ cho lần thi 2 */
+}
+
+.exam-schedule__table td:nth-child(10) {
+  color: #1e7e34; /* Màu xanh cho thời gian làm bài */
+}
