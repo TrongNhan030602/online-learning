@@ -9,13 +9,14 @@ class CourseSessionRepository implements CourseSessionRepositoryInterface
 {
     public function getAllSessions()
     {
-        return CourseSession::all();
+        return CourseSession::with(relations: 'course')->get();
     }
 
     public function getSessionById($id)
     {
-        return CourseSession::find($id); // Truyền id trực tiếp vào đây
+        return CourseSession::with(relations: 'course')->find($id);
     }
+
 
     public function createSession(array $data)
     {

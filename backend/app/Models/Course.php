@@ -9,7 +9,17 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'title', 'description', 'is_active'];
+    protected $fillable = [
+        'code',
+        'title',
+        'description',
+        'is_active',
+        'credits',
+        'total_hours',
+        'theory_hours',
+        'practice_hours',
+        'exam_hours'
+    ];
 
     // Môn học có thể thuộc nhiều học kỳ
     public function semesters()

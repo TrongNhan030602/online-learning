@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ExemptCourseRequest;
-use App\Services\ExemptCourseService;
-use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Services\ExemptCourseService;
+use App\Http\Requests\ExemptCourseRequest\ExemptCourseRequest;
 
 class ExemptCourseController extends Controller
 {
@@ -29,10 +29,7 @@ class ExemptCourseController extends Controller
                 'data' => $exemptCourse
             ], 201);
         } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Có lỗi xảy ra khi thêm môn miễn.',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->handleException($e, 'Có lỗi xảy ra khi thêm môn miễn.');
         }
     }
 
@@ -42,14 +39,19 @@ class ExemptCourseController extends Controller
         try {
             $exemptCourses = $this->service->getExemptCoursesForStudent($studentId);
 
+            if ($exemptCourses->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có môn miễn cho học viên này.',
+                    'data' => []
+                ], 404);
+            }
+
             return response()->json([
+                'message' => 'Danh sách môn miễn.',
                 'data' => $exemptCourses
             ], 200);
         } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Có lỗi xảy ra khi lấy danh sách môn miễn.',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->handleException($e, 'Có lỗi xảy ra khi lấy danh sách môn miễn.');
         }
     }
 
@@ -60,13 +62,20 @@ class ExemptCourseController extends Controller
             $isExempt = $this->service->checkIfExempt($studentId, $courseId);
 
             return response()->json([
+                'message' => 'Kết quả kiểm tra miễn môn.',
                 'data' => ['is_exempt' => $isExempt]
             ], 200);
         } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Có lỗi xảy ra khi kiểm tra miễn môn.',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->handleException($e, 'Có lỗi xảy ra khi kiểm tra miễn môn.');
         }
+    }
+
+    // Hàm xử lý lỗi chung
+    private function handleException(Exception $e, string $message): JsonResponse
+    {
+        return response()->json([
+            'message' => $message,
+            'error' => $e->getMessage()
+        ], 500);
     }
 }

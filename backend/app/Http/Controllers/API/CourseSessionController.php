@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\API;
 
+use Exception;
 use App\Http\Controllers\Controller;
 use App\Services\CourseSessionService;
-use App\Http\Requests\CourseSessionRequest;
-use Exception;
+use App\Http\Requests\CourseSessionRequest\CourseSessionRequest;
 
 class CourseSessionController extends Controller
 {
@@ -37,17 +37,25 @@ class CourseSessionController extends Controller
     {
         try {
             $session = $this->courseSessionService->getSessionById($id);
+
+            if (!$session) {
+                return response()->json([
+                    'message' => 'Buổi học không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Chi tiết buổi học.',
                 'data' => $session
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Buổi học không tồn tại.',
+                'message' => 'Lỗi khi lấy chi tiết buổi học.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
+
 
     // Tạo mới buổi học
     public function store(CourseSessionRequest $request)
@@ -71,31 +79,47 @@ class CourseSessionController extends Controller
     {
         try {
             $session = $this->courseSessionService->updateSession($id, $request->validated());
+
+            if (!$session) {
+                return response()->json([
+                    'message' => 'Buổi học không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Buổi học đã được cập nhật.',
                 'data' => $session
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Buổi học không tồn tại.',
+                'message' => 'Lỗi khi cập nhật buổi học.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
+
 
     // Xóa buổi học
     public function destroy($id)
     {
         try {
-            $this->courseSessionService->deleteSession($id);
+            $deleted = $this->courseSessionService->deleteSession($id);
+
+            if (!$deleted) {
+                return response()->json([
+                    'message' => 'Buổi học không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Buổi học đã được xóa.'
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Buổi học không tồn tại.',
+                'message' => 'Lỗi khi xóa buổi học.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
+
 }

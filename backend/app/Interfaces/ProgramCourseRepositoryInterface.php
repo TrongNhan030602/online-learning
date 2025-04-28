@@ -1,7 +1,7 @@
 <?php
 namespace App\Interfaces;
 
-interface ProgramCourseInterface
+interface ProgramCourseRepositoryInterface
 {
     public function assignCourseToProgram(array $data);
     public function getCoursesByTrainingProgram(int $trainingProgramId);

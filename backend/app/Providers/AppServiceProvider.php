@@ -20,7 +20,7 @@ use App\Interfaces\TrainingProgramRepositoryInterface;
 use App\Repositories\TrainingProgramRepository;
 use App\Interfaces\SemesterRepositoryInterface;
 use App\Repositories\SemesterRepository;
-use App\Interfaces\ProgramCourseInterface;
+use App\Interfaces\ProgramCourseRepositoryInterface;
 use App\Repositories\ProgramCourseRepository;
 use App\Interfaces\CourseRepositoryInterface;
 use App\Repositories\CourseRepository;
@@ -64,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserProfileRepositoryInterface::class, UserProfileRepository::class);
         $this->app->bind(TrainingProgramRepositoryInterface::class, TrainingProgramRepository::class);
         $this->app->bind(SemesterRepositoryInterface::class, SemesterRepository::class);
-        $this->app->bind(ProgramCourseInterface::class, ProgramCourseRepository::class);
+        $this->app->bind(ProgramCourseRepositoryInterface::class, ProgramCourseRepository::class);
         $this->app->bind(CourseRepositoryInterface::class, CourseRepository::class);
         $this->app->bind(CourseSessionRepositoryInterface::class, CourseSessionRepository::class);
         $this->app->bind(LessonRepositoryInterface::class, LessonRepository::class);

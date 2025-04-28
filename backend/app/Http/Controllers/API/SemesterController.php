@@ -3,6 +3,7 @@ namespace App\Http\Controllers\API;
 
 use Exception;
 use Illuminate\Http\Request;
+use App\Models\TrainingProgram;
 use App\Services\SemesterService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SemesterRequest\SemesterRequest;
@@ -21,6 +22,13 @@ class SemesterController extends Controller
     {
         try {
             $semesters = $this->semesterService->getAllSemesters();
+
+            if ($semesters->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có học kỳ nào.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Danh sách học kỳ.',
                 'data' => $semesters
@@ -38,6 +46,13 @@ class SemesterController extends Controller
     {
         try {
             $semester = $this->semesterService->getSemesterById($id);
+
+            if (!$semester) {
+                return response()->json([
+                    'message' => 'Học kỳ không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Chi tiết học kỳ.',
                 'data' => $semester
@@ -54,8 +69,8 @@ class SemesterController extends Controller
     public function store(SemesterRequest $request)
     {
         try {
-            // Kiểm tra chương trình đào tạo có loại "college" hoặc "intermediate"
-            $trainingProgram = $request->training_program_id;
+            $trainingProgram = TrainingProgram::findOrFail($request->training_program_id);
+
             if (!in_array($trainingProgram->level, ['college', 'intermediate'])) {
                 return response()->json([
                     'message' => 'Chỉ chương trình đào tạo loại "college" hoặc "intermediate" mới có học kỳ.'
@@ -63,6 +78,7 @@ class SemesterController extends Controller
             }
 
             $semester = $this->semesterService->createSemester($request->validated());
+
             return response()->json([
                 'message' => 'Học kỳ đã được tạo.',
                 'data' => $semester
@@ -80,6 +96,13 @@ class SemesterController extends Controller
     {
         try {
             $semester = $this->semesterService->updateSemester($id, $request->validated());
+
+            if (!$semester) {
+                return response()->json([
+                    'message' => 'Học kỳ không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Học kỳ đã được cập nhật.',
                 'data' => $semester
@@ -96,7 +119,14 @@ class SemesterController extends Controller
     public function destroy($id)
     {
         try {
-            $this->semesterService->deleteSemester($id);
+            $deleted = $this->semesterService->deleteSemester($id);
+
+            if (!$deleted) {
+                return response()->json([
+                    'message' => 'Học kỳ không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Học kỳ đã được xóa.'
             ], 200);
@@ -114,6 +144,12 @@ class SemesterController extends Controller
         try {
             $courseIds = $request->course_ids;
             $semester = $this->semesterService->addCoursesToSemester($semesterId, $courseIds);
+
+            if (!$semester) {
+                return response()->json([
+                    'message' => 'Học kỳ không tồn tại.'
+                ], 404);
+            }
 
             return response()->json([
                 'message' => 'Môn học đã được gán vào học kỳ thành công.',

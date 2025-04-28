@@ -5,6 +5,8 @@ use Exception;
 use App\Http\Controllers\Controller;
 use App\Services\TrainingProgramService;
 use App\Http\Requests\TrainingProgramRequest\TrainingProgramRequest;
+use App\Models\Semester;
+use Illuminate\Http\JsonResponse;
 
 class TrainingProgramController extends Controller
 {
@@ -15,56 +17,156 @@ class TrainingProgramController extends Controller
         $this->service = $service;
     }
 
-    public function index()
-    {
-        return response()->json($this->service->getAll());
-    }
-
-    public function show($id)
+    // Lấy tất cả chương trình đào tạo
+    public function index(): JsonResponse
     {
         try {
-            return response()->json($this->service->getById($id));
+            $programs = $this->service->getAll();
+
+            if ($programs->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có chương trình đào tạo nào.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Danh sách chương trình đào tạo.',
+                'data' => $programs
+            ], 200);
+
         } catch (Exception $e) {
-            return response()->json(['message' => 'Không tìm thấy chương trình đào tạo.', 'error' => $e->getMessage()], 404);
+            return response()->json([
+                'message' => 'Lỗi khi lấy danh sách chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
-    public function store(TrainingProgramRequest $request)
+    // Lấy chi tiết chương trình đào tạo
+    public function show($id): JsonResponse
     {
         try {
-            $program = $this->service->create($request->validated());
-            return response()->json(['message' => 'Tạo chương trình đào tạo thành công.', 'data' => $program], 201);
+            $program = $this->service->getById($id);
+
+            if (!$program) {
+                return response()->json([
+                    'message' => 'Chương trình đào tạo không tồn tại.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Chi tiết chương trình đào tạo.',
+                'data' => $program
+            ], 200);
+
         } catch (Exception $e) {
-            return response()->json(['message' => 'Lỗi khi tạo chương trình.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Lỗi khi lấy chi tiết chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
-    public function update(TrainingProgramRequest $request, $id)
+    // Tạo mới chương trình đào tạo
+    public function store(TrainingProgramRequest $request): JsonResponse
     {
         try {
-            $program = $this->service->update($id, $request->validated());
-            return response()->json(['message' => 'Cập nhật thành công.', 'data' => $program]);
+            $data = $request->validated();
+            $program = $this->service->create($data);
+
+            if (in_array($program->level, ['college', 'intermediate'])) {
+                $semester = new Semester([
+                    'name' => 'Học kỳ 1',
+                    'training_program_id' => $program->id
+                ]);
+                $semester->save();
+            }
+
+            return response()->json([
+                'message' => 'Tạo chương trình đào tạo thành công.',
+                'data' => $program
+            ], 201);
+
         } catch (Exception $e) {
-            return response()->json(['message' => 'Lỗi khi cập nhật.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Lỗi khi tạo chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
-    public function destroy($id)
+    // Cập nhật chương trình đào tạo
+    public function update(TrainingProgramRequest $request, $id): JsonResponse
     {
         try {
-            $this->service->delete($id);
-            return response()->json(['message' => 'Đã xóa chương trình.']);
+            $data = $request->validated();
+            $program = $this->service->update($id, $data);
+
+            if (!$program) {
+                return response()->json([
+                    'message' => 'Không tìm thấy chương trình đào tạo để cập nhật.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Cập nhật chương trình đào tạo thành công.',
+                'data' => $program
+            ], 200);
+
         } catch (Exception $e) {
-            return response()->json(['message' => 'Lỗi khi xóa chương trình.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Lỗi khi cập nhật chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
-    public function filterByLevel($level)
+    // Xóa chương trình đào tạo
+    public function destroy($id): JsonResponse
     {
         try {
-            return response()->json($this->service->getByLevel($level));
+            $deleted = $this->service->delete($id);
+
+            if (!$deleted) {
+                return response()->json([
+                    'message' => 'Không tìm thấy chương trình đào tạo để xóa.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Xóa chương trình đào tạo thành công.'
+            ], 200);
+
         } catch (Exception $e) {
-            return response()->json(['message' => 'Lỗi khi lọc theo loại.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Lỗi khi xóa chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Lọc chương trình đào tạo theo cấp bậc
+    public function filterByLevel($level): JsonResponse
+    {
+        try {
+            $programs = $this->service->getByLevel($level);
+
+            if ($programs->isEmpty()) {
+                return response()->json([
+                    'message' => "Không có chương trình đào tạo nào với cấp bậc '{$level}'."
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Danh sách chương trình đào tạo theo cấp bậc.',
+                'data' => $programs
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lọc chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

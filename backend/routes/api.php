@@ -23,6 +23,7 @@ use App\Http\Controllers\API\ProgramCourseController;
 use App\Http\Controllers\API\LearningResultController;
 use App\Http\Controllers\API\DisciplineScoreController;
 use App\Http\Controllers\API\TrainingProgramController;
+use App\Http\Controllers\API\ReExamRegistrationController;
 use App\Http\Controllers\API\StudentTrainingProgramController;
 
 
@@ -268,6 +269,25 @@ Route::prefix('learning-results')->group(function () {
 
     // Xóa kết quả học tập
     Route::delete('/{id}', [LearningResultController::class, 'destroy']);
+});
+
+// API thi lại
+
+Route::prefix('re-exam-registrations')->group(function () {
+    // Lấy tất cả đăng ký thi lại
+    Route::get('/docker-compose.yml', [ReExamRegistrationController::class, 'index']);
+
+    // Lấy đăng ký thi lại theo ID
+    Route::get('/{id}', [ReExamRegistrationController::class, 'show']);
+
+    // Tạo mới đăng ký thi lại
+    Route::post('/', [ReExamRegistrationController::class, 'store']);
+
+    // Cập nhật đăng ký thi lại
+    Route::put('/{id}', [ReExamRegistrationController::class, 'update']);
+
+    // Xóa đăng ký thi lại
+    Route::delete('/{id}', [ReExamRegistrationController::class, 'destroy']);
 });
 
 

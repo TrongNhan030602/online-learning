@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StudentTrainingProgramRequest;
-use App\Services\StudentTrainingProgramService;
-use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Services\StudentTrainingProgramService;
+use App\Http\Requests\StudentTrainingProgramRequest\StudentTrainingProgramRequest;
 
 class StudentTrainingProgramController extends Controller
 {
@@ -23,8 +23,14 @@ class StudentTrainingProgramController extends Controller
             $data = $request->validated();
             $studentTrainingProgram = $this->service->registerStudentToProgram($data);
 
+            if (!$studentTrainingProgram) {
+                return response()->json([
+                    'message' => 'Không thể đăng ký học viên vào chương trình.'
+                ], 400);
+            }
+
             return response()->json([
-                'message' => 'Học viên đăng ký thành công',
+                'message' => 'Học viên đăng ký thành công.',
                 'data' => $studentTrainingProgram
             ], 201);
 
@@ -42,7 +48,14 @@ class StudentTrainingProgramController extends Controller
         try {
             $students = $this->service->getStudentsInProgram($trainingProgramId);
 
+            if ($students->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có học viên nào trong chương trình.'
+                ], 404);
+            }
+
             return response()->json([
+                'message' => 'Danh sách học viên trong chương trình.',
                 'data' => $students
             ], 200);
 
@@ -60,35 +73,44 @@ class StudentTrainingProgramController extends Controller
         try {
             $studentTrainingProgram = $this->service->getStudentInfo($id);
 
+            if (!$studentTrainingProgram) {
+                return response()->json([
+                    'message' => 'Không tìm thấy thông tin học viên trong chương trình.'
+                ], 404);
+            }
+
             return response()->json([
+                'message' => 'Chi tiết học viên trong chương trình.',
                 'data' => $studentTrainingProgram
             ], 200);
 
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Không tìm thấy thông tin học viên.',
+                'message' => 'Có lỗi xảy ra khi lấy thông tin học viên.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
+
+    // Xóa học viên khỏi chương trình
     public function removeStudent($studentId, $trainingProgramId): JsonResponse
     {
         try {
             $result = $this->service->removeStudentFromProgram($studentId, $trainingProgramId);
 
-            if ($result) {
+            if (!$result) {
                 return response()->json([
-                    'message' => 'Học viên đã được bỏ khỏi chương trình thành công.'
-                ], 200);
-            } else {
-                return response()->json([
-                    'message' => 'Không tìm thấy học viên trong chương trình để bỏ.',
+                    'message' => 'Không tìm thấy học viên trong chương trình để xóa.'
                 ], 404);
             }
 
+            return response()->json([
+                'message' => 'Học viên đã được xóa khỏi chương trình thành công.'
+            ], 200);
+
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Có lỗi xảy ra khi bỏ học viên khỏi chương trình.',
+                'message' => 'Có lỗi xảy ra khi xóa học viên khỏi chương trình.',
                 'error' => $e->getMessage()
             ], 500);
         }

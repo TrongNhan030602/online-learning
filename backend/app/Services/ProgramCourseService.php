@@ -1,13 +1,13 @@
 <?php
 namespace App\Services;
 
-use App\Interfaces\ProgramCourseInterface;
+use App\Interfaces\ProgramCourseRepositoryInterface;
 
 class ProgramCourseService
 {
     protected $programCourseRepo;
 
-    public function __construct(ProgramCourseInterface $programCourseRepo)
+    public function __construct(ProgramCourseRepositoryInterface $programCourseRepo)
     {
         $this->programCourseRepo = $programCourseRepo;
     }

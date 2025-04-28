@@ -43,11 +43,15 @@ class CourseRepository implements CourseRepositoryInterface
             throw new ModelNotFoundException('Môn học không tồn tại.');
         }
 
-        $course->is_active = ($status == 'active') ? true : false;
+        // Chuyển đổi trạng thái từ 'active'/'inactive' thành 1/0
+        $course->is_active = ($status == 'active') ? 1 : 0;
+
+        // Lưu thay đổi vào CSDL
         $course->save();
 
         return $course;
     }
+
 
     public function deleteCourse(int $id)
     {

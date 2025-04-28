@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
@@ -20,6 +21,14 @@ class CourseController extends Controller
     {
         try {
             $courses = $this->courseService->getAllCourses();
+
+            if ($courses->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có môn học nào.',
+                    'data' => []
+                ], 200);
+            }
+
             return response()->json([
                 'message' => 'Danh sách môn học.',
                 'data' => $courses
@@ -37,15 +46,23 @@ class CourseController extends Controller
     {
         try {
             $course = $this->courseService->getCourseById($id);
+
+            if (!$course) {
+                return response()->json([
+                    'message' => 'Môn học không tồn tại.',
+                    'data' => null
+                ], 404); // Sửa status về 404 đúng chuẩn
+            }
+
             return response()->json([
                 'message' => 'Chi tiết môn học.',
                 'data' => $course
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Môn học không tồn tại.',
+                'message' => 'Lỗi khi lấy chi tiết môn học.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
 
@@ -71,15 +88,22 @@ class CourseController extends Controller
     {
         try {
             $course = $this->courseService->updateCourse($id, $request->validated());
+
+            if (!$course) {
+                return response()->json([
+                    'message' => 'Môn học không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Môn học đã được cập nhật.',
                 'data' => $course
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Môn học không tồn tại.',
+                'message' => 'Lỗi khi cập nhật môn học.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
 
@@ -88,15 +112,22 @@ class CourseController extends Controller
     {
         try {
             $course = $this->courseService->updateStatus($id, $status);
+
+            if (!$course) {
+                return response()->json([
+                    'message' => 'Môn học không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Trạng thái môn học đã được cập nhật.',
                 'data' => $course
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Môn học không tồn tại.',
+                'message' => 'Lỗi khi cập nhật trạng thái môn học.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
 
@@ -104,15 +135,22 @@ class CourseController extends Controller
     public function destroy($id)
     {
         try {
-            $this->courseService->deleteCourse($id);
+            $deleted = $this->courseService->deleteCourse($id);
+
+            if (!$deleted) {
+                return response()->json([
+                    'message' => 'Môn học không tồn tại.'
+                ], 404);
+            }
+
             return response()->json([
                 'message' => 'Môn học đã được xóa.'
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Môn học không tồn tại.',
+                'message' => 'Lỗi khi xóa môn học.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
 }

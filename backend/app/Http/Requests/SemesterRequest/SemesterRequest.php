@@ -2,6 +2,7 @@
 namespace App\Http\Requests\SemesterRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SemesterRequest extends FormRequest
 {
@@ -12,10 +13,17 @@ class SemesterRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'training_program_id' => 'required|exists:training_programs,id',
+        // Kiểm tra kiểu HTTP request để quyết định khi nào yêu cầu training_program_id
+        $rules = [
             'name' => 'required|string|max:255',
         ];
+
+        // Nếu là PUT (cập nhật), không yêu cầu training_program_id
+        if ($this->isMethod('post')) {
+            $rules['training_program_id'] = 'required|exists:training_programs,id';
+        }
+
+        return $rules;
     }
 
     public function messages()

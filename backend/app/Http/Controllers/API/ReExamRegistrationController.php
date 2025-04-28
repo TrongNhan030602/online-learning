@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\ReExamRegistrationService;
 use App\Http\Requests\ReExamRegistrationRequest;
+use Exception;
 
 class ReExamRegistrationController extends Controller
 {
@@ -16,39 +18,109 @@ class ReExamRegistrationController extends Controller
     }
 
     // Lấy tất cả đăng ký thi lại
-    public function index()
+    public function index(): JsonResponse
     {
-        $reExamRegistrations = $this->service->getAll();
-        return response()->json($reExamRegistrations);
+        try {
+            $reExamRegistrations = $this->service->getAll();
+
+            if ($reExamRegistrations->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có đăng ký thi lại nào.'
+                ], 404);
+            }
+
+            return response()->json([
+                'data' => $reExamRegistrations
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lấy dữ liệu đăng ký thi lại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Lấy đăng ký thi lại theo ID
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        $reExamRegistration = $this->service->getById($id);
-        return response()->json($reExamRegistration);
+        try {
+            $reExamRegistration = $this->service->getById($id);
+
+            if (!$reExamRegistration) {
+                return response()->json([
+                    'message' => 'Đăng ký thi lại không tồn tại.'
+                ], 404);
+            }
+
+            return response()->json([
+                'data' => $reExamRegistration
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lấy thông tin đăng ký thi lại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Tạo mới đăng ký thi lại
-    public function store(ReExamRegistrationRequest $request)
+    public function store(ReExamRegistrationRequest $request): JsonResponse
     {
-        $data = $request->validated();
-        $reExamRegistration = $this->service->create($data);
-        return response()->json($reExamRegistration, 201);
+        try {
+            $data = $request->validated();
+            $reExamRegistration = $this->service->create($data);
+
+            return response()->json([
+                'message' => 'Đăng ký thi lại thành công.',
+                'data' => $reExamRegistration
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi tạo đăng ký thi lại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Cập nhật đăng ký thi lại
-    public function update(ReExamRegistrationRequest $request, $id)
+    public function update(ReExamRegistrationRequest $request, $id): JsonResponse
     {
-        $data = $request->validated();
-        $reExamRegistration = $this->service->update($id, $data);
-        return response()->json($reExamRegistration);
+        try {
+            $data = $request->validated();
+            $reExamRegistration = $this->service->update($id, $data);
+
+            if (!$reExamRegistration) {
+                return response()->json([
+                    'message' => 'Không tìm thấy đăng ký thi lại để cập nhật.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Cập nhật đăng ký thi lại thành công.',
+                'data' => $reExamRegistration
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi cập nhật đăng ký thi lại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Xóa đăng ký thi lại
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        $this->service->delete($id);
-        return response()->json(['message' => 'Đăng ký thi lại đã được xóa']);
+        try {
+            $this->service->delete($id);
+
+            return response()->json([
+                'message' => 'Đăng ký thi lại đã được xóa.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi xóa đăng ký thi lại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
