@@ -3,27 +3,28 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\API\FaqController;
-use App\Http\Controllers\ApiDataController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\OrderController;
-use App\Http\Controllers\API\CouponController;
+
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\LessonController;
-use App\Http\Controllers\API\ReviewController;
-use App\Http\Controllers\API\ProgressController;
-use App\Http\Controllers\API\ClassRoomController;
-use App\Http\Controllers\API\AttendanceController;
-use App\Http\Controllers\API\CourseFileController;
-use App\Http\Controllers\API\EnrollmentController;
+use App\Http\Controllers\API\MaterialController;
+use App\Http\Controllers\API\SemesterController;
 use App\Http\Controllers\API\BlogCommentController;
+use App\Http\Controllers\API\CertificateController;
 use App\Http\Controllers\API\UserProfileController;
-use App\Http\Controllers\API\ClassSessionController;
-use App\Http\Controllers\API\LandingSlideController;
-use App\Http\Controllers\API\StudentClassController;
+use App\Http\Controllers\API\ExamScheduleController;
+use App\Http\Controllers\API\ExemptCourseController;
+use App\Http\Controllers\API\NotificationController;
+use App\Http\Controllers\API\CourseSessionController;
+use App\Http\Controllers\API\ProgramCourseController;
+use App\Http\Controllers\API\LearningResultController;
+use App\Http\Controllers\API\DisciplineScoreController;
 use App\Http\Controllers\API\TrainingProgramController;
+use App\Http\Controllers\API\StudentTrainingProgramController;
+
 
 
 // Truy cập ảnh
@@ -78,134 +79,210 @@ Route::middleware(['auth:api'])->group(function () {
 });
 
 
-// API quản lý khóa học
+// API Training-Program
+Route::prefix('training-programs')->group(function () {
+    Route::get('/', [TrainingProgramController::class, 'index']);
+    Route::get('/{id}', [TrainingProgramController::class, 'show']);
+    Route::post('/', [TrainingProgramController::class, 'store']);
+    Route::put('/{id}', [TrainingProgramController::class, 'update']);
+    Route::delete('/{id}', [TrainingProgramController::class, 'destroy']);
+    Route::get('/filter/{level}', [TrainingProgramController::class, 'filterByLevel']); // Lọc theo loại
+});
+
+
+// API Semesters
+
+Route::prefix('semesters')->group(function () {
+    // Lấy danh sách học kỳ
+    Route::get('/', [SemesterController::class, 'index']);
+    // Lấy chi tiết học kỳ
+    Route::get('/{id}', [SemesterController::class, 'show']);
+    // Tạo học kỳ
+    Route::post('/', [SemesterController::class, 'store']);
+    // Cập nhật học kỳ
+    Route::put('/{id}', [SemesterController::class, 'update']);
+    // Xóa học kỳ
+    Route::delete('/{id}', [SemesterController::class, 'destroy']);
+
+    // Gán môn học vào học kỳ
+    Route::post('/{semesterId}/add-courses', [SemesterController::class, 'addCoursesToSemester']);
+});
+
+
+// API ProgramCourse
+Route::prefix('program-courses')->group(function () {
+    // Gán môn học vào chương trình (chỉ áp dụng cho loại không có học kỳ: certificate, specialized, software)
+    Route::post('/assign', [ProgramCourseController::class, 'assign']);
+
+    // Lấy danh sách môn học theo chương trình đào tạo
+    Route::get('/training-programs/{trainingProgramId}', [ProgramCourseController::class, 'index']);
+
+    // Xóa môn học khỏi chương trình đào tạo
+    Route::delete('/{id}', [ProgramCourseController::class, 'destroy']);
+});
+
+
+//  API Courses (môn học)
 Route::prefix('courses')->group(function () {
-    // Lấy danh sách khóa học
+    // Lấy danh sách môn học
     Route::get('/', [CourseController::class, 'index']);
 
-    // Lấy chi tiết một khóa học
-    Route::get('/{id}', [CourseController::class, 'show']);
+    // Lấy chi tiết môn học
+    Route::get('{id}', [CourseController::class, 'show']);
 
-    // Thêm khóa học mới (chỉ admin)
-    Route::post('/', [CourseController::class, 'store'])->middleware('auth:api', 'role:admin');
+    // Tạo môn học mới
+    Route::post('/', [CourseController::class, 'store']);
 
-    // Cập nhật thông tin khóa học (không cập nhật file) (chỉ admin)
-    Route::put('/{id}', [CourseController::class, 'update'])->middleware('auth:api', 'role:admin');
-    Route::post('/{id}/update-image', [CourseController::class, 'updateImage'])
-        ->middleware('auth:api', 'role:admin');
-    // Xóa khóa học (và xóa các file liên quan) (chỉ admin)
-    Route::delete('/{id}', [CourseController::class, 'destroy'])->middleware('auth:api', 'role:admin');
+    // Cập nhật môn học
+    Route::put('{id}', [CourseController::class, 'update']);
 
-});
-// API riêng dùng  để cập nhật file (image, document) cho Course
-Route::prefix('courses/{courseId}/files')->group(function () {
-    Route::get('/', [CourseFileController::class, 'index'])->middleware('auth:api', 'role:admin');
-    Route::post('/', [CourseFileController::class, 'store'])->middleware('auth:api', 'role:admin');
-    Route::delete('/{fileId}', [CourseFileController::class, 'destroy'])->middleware('auth:api', 'role:admin');
-});
+    // Cập nhật trạng thái môn học (active/inactive)
+    Route::put('{id}/status/{status}', [CourseController::class, 'updateStatus']);
 
-// API quản lý bài học
-Route::prefix('lessons')->group(function () {
-    Route::get('/', [LessonController::class, 'index']);
-    Route::get('/{id}', [LessonController::class, 'show']);
-    Route::post('/', [LessonController::class, 'store'])->middleware('auth:api', 'role:admin');
-    Route::put('/{id}', [LessonController::class, 'update'])->middleware('auth:api', 'role:admin');
-    Route::delete('/{id}', [LessonController::class, 'destroy'])->middleware('auth:api', 'role:admin');
-    // Endpoint để thêm tài liệu vào bài học
-    Route::post('/{lessonId}/documents', [LessonController::class, 'addDocuments'])->middleware('auth:api', 'role:admin');
-    // Endpoint riêng để gán file cho bài học
-    Route::post('/{lessonId}/selected-files', [LessonController::class, 'assignFiles'])->middleware('auth:api', 'role:admin');
-    Route::delete('/{lessonId}/documents/{documentId}', [LessonController::class, 'deleteDocument'])
-        ->middleware('auth:api', 'role:admin');
+    // Xóa môn học
+    Route::delete('{id}', [CourseController::class, 'destroy']);
 });
 
 
+// API Course Sessions (buổi học của môn)
 
-// API quản lý chương trình đào tạo
+Route::prefix('course-sessions')->group(function () {
+    // Lấy danh sách buổi học
+    Route::get('/', [CourseSessionController::class, 'index']);
 
-Route::prefix('training-program')->group(function () {
-    Route::get('/', [TrainingProgramController::class, 'getAll']);
-    Route::get('/{id}', [TrainingProgramController::class, 'getById']);
-    Route::get('/course/{courseId}', [TrainingProgramController::class, 'getByCourseId']);
-    Route::post('/', [TrainingProgramController::class, 'create']);
-    Route::delete('/{id}', [TrainingProgramController::class, 'delete']);
-    Route::put('/{id}', [TrainingProgramController::class, 'update']);
-});
-// API quản lý slide (banner landing page)
-Route::prefix('landing/slides')->group(function () {
-    // Lấy danh sách slide
-    Route::get('/', [LandingSlideController::class, 'index']);
+    // Lấy chi tiết buổi học
+    Route::get('{id}', [CourseSessionController::class, 'show']);
 
-    // Tạo mới slide
-    Route::post('/', [LandingSlideController::class, 'store']);
-
-    // Xoá slide
-    Route::delete('/{id}', [LandingSlideController::class, 'destroy']);
-});
-
-// API quản lý lớp học
-Route::prefix('classes')->group(function () {
-    Route::get('/by-course/{courseId}', [ClassRoomController::class, 'getByCourseId']); // Đưa lên trên
-    Route::get('/', [ClassRoomController::class, 'getAll']);
-    Route::get('/{id}', [ClassRoomController::class, 'getById']);
-    Route::post('/', [ClassRoomController::class, 'create']);
-    Route::put('/{id}', [ClassRoomController::class, 'update']);
-    Route::delete('/{id}', [ClassRoomController::class, 'delete']);
-});
-
-
-// API  quản lý ghi danh
-Route::prefix('enrollments')->group(function () {
-    Route::post('/enroll', [EnrollmentController::class, 'enroll']); // Ghi danh
-    Route::get('/by-classroom/{classroomId}', [EnrollmentController::class, 'getByClassroom']); // Lấy danh sách học viên của lớp
-    Route::get('/by-student/{userId}', [EnrollmentController::class, 'getByStudent']); // Lấy danh sách lớp của học viên
-    Route::put('/approve/{id}', [EnrollmentController::class, 'approve']); // Duyệt ghi danh
-    Route::put('/reject/{id}', [EnrollmentController::class, 'reject']); // Từ chối ghi danh
-    Route::delete('/{id}', [EnrollmentController::class, 'remove']); // Xóa ghi danh
-});
-
-
-// API quản lý buổi học của lớp
-Route::prefix('classrooms')->group(function () {
-    // Lấy danh sách buổi học của lớp học
-    Route::get('/{classroomId}/sessions', [ClassSessionController::class, 'index']);
-
-    // Thêm buổi học mới vào lớp học
-    Route::post('/{classroomId}/sessions', [ClassSessionController::class, 'store']);
+    // Tạo buổi học mới
+    Route::post('/', [CourseSessionController::class, 'store']);
 
     // Cập nhật buổi học
-    Route::put('/{classroomId}/sessions/{sessionId}', [ClassSessionController::class, 'update']);
+    Route::put('{id}', [CourseSessionController::class, 'update']);
 
     // Xóa buổi học
-    Route::delete('/{classroomId}/sessions/{sessionId}', [ClassSessionController::class, 'destroy']);
-    // Xủ lý Thêm , xóa bài học vào buổi học    
-    // Lấy danh sách bài học chưa có cho buổi học
-    Route::get('/sessions/{sessionId}/available-lessons', [ClassSessionController::class, 'availableLessons']);
-    // Lấy danh sách bài học đang có cho buổi học
-    Route::get('/sessions/{sessionId}/current-lessons', [ClassSessionController::class, 'currentLessons']);
-
-    // Thêm bài học vào buổi học
-    Route::post('/sessions/{sessionId}/lessons', [ClassSessionController::class, 'addLesson']);
-
-    // Xóa bài học khỏi buổi học
-    Route::delete('/sessions/{sessionId}/lessons/{lessonId}', [ClassSessionController::class, 'removeLesson']);
+    Route::delete('{id}', [CourseSessionController::class, 'destroy']);
 });
 
 
-// API quản lý điểm danh
-Route::prefix('attendance')->group(function () {
-    Route::post('/', [AttendanceController::class, 'markAttendance']);  // Điểm danh
-    Route::get('/session/{classSessionId}', [AttendanceController::class, 'getBySession']); // Lấy danh sách điểm danh theo buổi học
-    Route::get('/student/{userId}', [AttendanceController::class, 'getByStudent']); // Lấy lịch sử điểm danh của học viên
-    Route::put('/{id}', [AttendanceController::class, 'updateAttendance']); // Cập nhật điểm danh
-    Route::delete('/{id}', [AttendanceController::class, 'deleteAttendance']); // Xóa điểm danh
+//  API Lessions
+Route::prefix('lessons')->group(function () {
+    // Route lấy danh sách bài học theo buổi học 
+    Route::get('/course-session/{courseSessionId}', [LessonController::class, 'index']);
+
+    // Route lấy chi tiết bài học theo ID (GET /lessons/{id})
+    Route::get('/{id}', [LessonController::class, 'show']);
+
+    // Route tạo mới bài học (POST /lessons/)
+    Route::post('/', [LessonController::class, 'store']);
+
+    // Route cập nhật bài học (PUT /lessons/{id})
+    Route::put('/{id}', [LessonController::class, 'update']);
+
+    // Route xóa bài học (DELETE /lessons/{id})
+    Route::delete('/{id}', [LessonController::class, 'destroy']);
 });
 
-// API xem tài liệu của học viên
-Route::middleware(['auth:api'])->prefix('student')->group(function () {
-    Route::get('/my-classes', [StudentClassController::class, 'getMyClasses']);
-    Route::get('/my-classes/{classroom}/sessions-with-lessons', [StudentClassController::class, 'getSessionsWithLessons']);
+
+// API Materials (tài liệu của buổi)
+Route::prefix('materials')->group(function () {
+    Route::get('/lesson/{lessonId}', [MaterialController::class, 'index']);
+    Route::get('/{id}', [MaterialController::class, 'show']);
+    Route::post('/', [MaterialController::class, 'store']); // Tạo mới
+    Route::put('/{id}', [MaterialController::class, 'update']); // Cập nhật JSON
+    Route::post('/{id}/update', [MaterialController::class, 'updateWithFile']); // Cập nhật có file
+    Route::delete('/{id}', [MaterialController::class, 'destroy']);
 });
+
+// API student training-programs (thêm sinh viên vào CTĐT)
+Route::prefix('student-training-programs')->group(function () {
+    // Đăng ký học viên vào chương trình
+    Route::post('/', [StudentTrainingProgramController::class, 'store']);
+
+    // Lấy danh sách học viên trong chương trình đào tạo
+    Route::get('/training-programs/{trainingProgramId}/students', [StudentTrainingProgramController::class, 'getStudents']);
+
+    // Lấy thông tin học viên trong chương trình đào tạo
+    Route::get('/{id}', [StudentTrainingProgramController::class, 'show']);
+
+    // Bỏ học viên khỏi chương trình đào tạo
+    Route::delete('/{studentId}/{trainingProgramId}', [StudentTrainingProgramController::class, 'removeStudent']);
+});
+
+//API exempt-courses (môn học miễn)
+Route::prefix('exempt-courses')->group(function () {
+    Route::post('/', [ExemptCourseController::class, 'store']); // Thêm môn miễn
+    Route::get('/student/{studentId}', [ExemptCourseController::class, 'getExemptCourses']); // Lấy danh sách môn miễn của học viên
+    Route::get('/check/{studentId}/{courseId}', [ExemptCourseController::class, 'checkExemption']); // Kiểm tra môn có được miễn không
+});
+
+
+// API certificates (chứng chỉ/ bằng)
+Route::prefix('certificates')->group(function () {
+    Route::post('/', [CertificateController::class, 'store']);
+    Route::get('/{id}', [CertificateController::class, 'show']);
+    Route::get('/student/{studentId}', [CertificateController::class, 'studentCertificates']);
+});
+
+// API exam-schedules (lịch thi)
+Route::prefix('exam-schedules')->group(function () {
+    Route::get('/', [ExamScheduleController::class, 'index']);
+    Route::post('/', [ExamScheduleController::class, 'store']);
+    Route::get('/{id}', [ExamScheduleController::class, 'show']);
+    Route::put('/{id}', [ExamScheduleController::class, 'update']);
+    Route::delete('/{id}', [ExamScheduleController::class, 'destroy']);
+});
+
+// API Điểm rèn luyện
+
+Route::prefix('discipline-scores')->group(function () {
+    // Lấy danh sách điểm rèn luyện
+    Route::get('/', [DisciplineScoreController::class, 'index']);
+
+    // Lấy chi tiết điểm rèn luyện
+    Route::get('/{id}', [DisciplineScoreController::class, 'show']);
+
+    // Tạo mới điểm rèn luyện
+    Route::post('/', [DisciplineScoreController::class, 'store']);
+
+    // Cập nhật điểm rèn luyện
+    Route::put('/{id}', [DisciplineScoreController::class, 'update']);
+
+    // Xóa điểm rèn luyện
+    Route::delete('/{id}', [DisciplineScoreController::class, 'destroy']);
+});
+
+//API KQHT
+
+Route::prefix('learning-results')->group(function () {
+    // Lấy tất cả kết quả học tập
+    Route::get('/', [LearningResultController::class, 'index']);
+
+    // Lấy kết quả học tập theo ID
+    Route::get('/{id}', [LearningResultController::class, 'show']);
+
+    // Tạo mới kết quả học tập
+    Route::post('/', [LearningResultController::class, 'store']);
+
+    // Cập nhật kết quả học tập
+    Route::put('/{id}', [LearningResultController::class, 'update']);
+
+    // Xóa kết quả học tập
+    Route::delete('/{id}', [LearningResultController::class, 'destroy']);
+});
+
+
+
+// API Notifications
+Route::prefix('notifications')->group(function () {
+    Route::get('/', [NotificationController::class, 'index']);
+    Route::post('/', [NotificationController::class, 'store']);
+    Route::put('/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::delete('/{id}', [NotificationController::class, 'destroy']);
+});
+
+
+
+
 
 // API quản lý blog
 Route::prefix('blogs')->group(function () {
@@ -243,66 +320,6 @@ Route::prefix('faqs')->group(function () {
 
 
 
-Route::prefix('coupons')->group(function () {
-
-    // 📌 Quản lý mã giảm giá (CRUD)
-    Route::get('/', [CouponController::class, 'index']);  // ✅ Lấy danh sách mã giảm giá
-    Route::post('/', [CouponController::class, 'store']);  // ✅ Tạo mới mã giảm giá
-    Route::put('/{id}', [CouponController::class, 'update']);  // ✅ Cập nhật mã giảm giá
-    Route::delete('/{id}', [CouponController::class, 'destroy']);  // ✅ Xóa mã giảm giá
-
-    // 📌 Xử lý mã giảm giá
-    Route::get('/active', [CouponController::class, 'getActiveCoupons']); // ✅ Lấy danh sách mã còn hạn
-    Route::get('/{id}', [CouponController::class, 'show']); // ✅ Lấy chi tiết mã giảm giá
-    Route::get('/apply/{code}', [CouponController::class, 'applyCoupon']); // ✅ Kiểm tra & áp dụng mã
-    Route::post('/reset-usage/{id}', [CouponController::class, 'resetUsage']); // ✅ Reset số lần sử dụng
-
-});
-
-// API quản lý tiến độ học viên
-Route::prefix('progress')->middleware('auth:api')->group(function () {
-    Route::get('/', [ProgressController::class, 'index']); // Lấy danh sách tiến độ
-    Route::get('/{id}', [ProgressController::class, 'show']); // Lấy chi tiết tiến độ
-    Route::post('/', [ProgressController::class, 'store']); // Tạo mới tiến độ
-    Route::put('/{id}', [ProgressController::class, 'update'])->middleware('auth:api', 'role:admin'); // Cập nhật tiến độ
-    Route::put('/{id}/complete', [ProgressController::class, 'markLessonComplete']); // Đánh dấu bài học hoàn thành
-    Route::get('/user/{userId}/completed-lessons', [ProgressController::class, 'getCompletedLessons']); // Danh sách bài học hoàn thành
-    Route::post('/{courseId}/review', [ProgressController::class, 'submitReview']); // Đánh giá khóa học
-    Route::get('/admin/users-progress', [ProgressController::class, 'adminViewProgress'])->middleware('auth:api', 'role:admin'); // Admin xem tiến độ học viên
-});
-
-
-
-
-// API quản lý đánh giá khóa học
-Route::prefix('reviews')->group(function () {
-    Route::get('/', [ReviewController::class, 'index']);          // Lấy danh sách đánh giá
-    Route::put('/{id}/approve', [ReviewController::class, 'approve']); // Duyệt đánh giá
-    Route::delete('/{id}', [ReviewController::class, 'destroy']); // Xóa đánh giá
-});
-
-Route::prefix('orders')->group(function () {
-    Route::get('/', [OrderController::class, 'index']);
-    Route::get('/{id}', [OrderController::class, 'show']);
-    Route::put('/{id}', [OrderController::class, 'update']);
-    Route::delete('/{id}', [OrderController::class, 'destroy']);
-
-    // **Tạo đơn hàng mới**
-    Route::post('/', [OrderController::class, 'store']);
-
-    // **Hủy đơn hàng**
-    Route::post('/{orderId}/cancel', [OrderController::class, 'cancel']);
-
-    // Tiến hành thanh toán
-    Route::post('{id}/checkout', [OrderController::class, 'checkout']);
-
-    // Xác nhận thanh toán
-    Route::post('{id}/confirm-payment', [OrderController::class, 'confirmPayment']);
-
-    // Xử lý lỗi thanh toán
-    Route::post('{id}/payment-failure', [OrderController::class, 'handlePaymentFailure']);
-});
-
 
 
 
@@ -321,21 +338,6 @@ Route::middleware('auth:api')->group(function () {
 });
 
 
-
-// API trả về phía mobile
-Route::prefix('mobile')->group(function () {
-    Route::get('/courses', [ApiDataController::class, 'getCourses']);
-    Route::get('/training-programs/all', [ApiDataController::class, 'getAllTrainingPrograms']);
-    Route::get('/training-programs/{courseId}', [ApiDataController::class, 'getTrainingProgramsByCourse']);
-    Route::get('/students/all', [ApiDataController::class, 'getAllStudents']);
-    Route::get('/users', [ApiDataController::class, 'getUsers']);
-
-
-    Route::get('/classes', [ApiDataController::class, 'getClasses']);
-    Route::get('/sessions/all', [ApiDataController::class, 'getAllSessions']);
-    Route::get('/sessions/{classId}', [ApiDataController::class, 'getSessionsByClass']);
-    Route::get('/students/{classId}', [ApiDataController::class, 'getStudentsByClass']);
-});
 
 
 

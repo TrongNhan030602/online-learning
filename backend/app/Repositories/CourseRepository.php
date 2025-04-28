@@ -1,36 +1,20 @@
 <?php
-
 namespace App\Repositories;
 
-use App\Interfaces\CourseRepositoryInterface;
 use App\Models\Course;
-use Illuminate\Support\Facades\Storage;
-use Exception;
+use App\Interfaces\CourseRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CourseRepository implements CourseRepositoryInterface
 {
-    public function getAllCourses($filters)
+    public function getAllCourses()
     {
-        try {
-            $query = Course::query();
-
-            if (!empty($filters['title'])) {
-                $query->where('title', 'LIKE', "%{$filters['title']}%");
-            }
-
-            return $query->get();
-        } catch (Exception $e) {
-            throw new Exception("Lỗi trong quá trình truy vấn khóa học: " . $e->getMessage());
-        }
+        return Course::all();
     }
 
     public function getCourseById($id)
     {
-        return Course::with([
-            'files',
-            'lessons.selectedFiles',
-            'lessons.documents', // Thêm mối quan hệ tài liệu cho mỗi bài học
-        ])->findOrFail($id);
+        return Course::find($id);  // Truyền id trực tiếp vào đây
     }
 
 
@@ -39,23 +23,38 @@ class CourseRepository implements CourseRepositoryInterface
         return Course::create($data);
     }
 
-    public function updateCourse($id, array $data)
+    public function updateCourse(int $id, array $data)
     {
-        $course = Course::findOrFail($id);
+        $course = $this->getCourseById($id);
+
+        if (!$course) {
+            throw new ModelNotFoundException('Môn học không tồn tại.');
+        }
+
         $course->update($data);
-        return $course->fresh();
+        return $course;
     }
 
-
-    public function deleteCourse($id)
+    public function updateStatus(int $id, string $status)
     {
-        $course = Course::findOrFail($id);
+        $course = $this->getCourseById($id);
 
-        // Xóa các file liên quan từ storage nếu có quan hệ files
-        if ($course->files) {
-            foreach ($course->files as $file) {
-                Storage::disk('public')->delete($file->file_path);
-            }
+        if (!$course) {
+            throw new ModelNotFoundException('Môn học không tồn tại.');
+        }
+
+        $course->is_active = ($status == 'active') ? true : false;
+        $course->save();
+
+        return $course;
+    }
+
+    public function deleteCourse(int $id)
+    {
+        $course = $this->getCourseById($id);
+
+        if (!$course) {
+            throw new ModelNotFoundException('Môn học không tồn tại.');
         }
 
         return $course->delete();

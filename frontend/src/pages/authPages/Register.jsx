@@ -5,8 +5,8 @@ const Register = () => {
   return (
     <AuthLayout
       imageUrl="https://cdn.brvn.vn/static/onboarding/brvn_reading.jpg"
-      title="Nghiên cứu và Kết nối cho Công việc"
-      description="200+ case-study phân tích các chiến dịch Marketing kinh điển. 700+ danh bạ Agency kết nối với Brand. Tất cả những gì một người làm Marketing cần đều có trên Brands Vietnam."
+      title="Đăng ký tại Học viện Design24 – Khám phá hành trình sáng tạo"
+      description="Tham gia Học viện Design24 để bắt đầu học hỏi từ các chuyên gia trong ngành thiết kế đồ họa và truyền thông đa phương tiện. Khám phá các khóa học đa dạng và bắt đầu con đường sự nghiệp của bạn ngay hôm nay."
     >
       <RegisterForm />
     </AuthLayout>

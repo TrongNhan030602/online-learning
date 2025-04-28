@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,25 +8,44 @@ class TrainingProgram extends Model
 {
     use HasFactory;
 
-    protected $table = 'training_programs';
     protected $fillable = [
-        'course_id',
         'name',
-        'description',
-        'duration',
-        'requirements',
-        'objectives'
+        'code',
+        'level',
+        'advisor_id',
+        'note',
     ];
 
-    // Quan hệ 1 - 1: Mỗi chương trình đào tạo thuộc một khóa học
-    public function course()
+    // Một chương trình đào tạo có một cố vấn (advisor)
+    public function advisor()
     {
-        return $this->belongsTo(Course::class);
-    }
-    public function slides()
-    {
-        return $this->hasMany(LandingSlide::class);
+        // TrainingProgram thuộc về User (cố vấn), một cố vấn có thể chỉ dẫn nhiều chương trình
+        return $this->belongsTo(User::class, 'advisor_id');
     }
 
+    // Một chương trình đào tạo có thể có nhiều học kỳ (semesters)
+    public function semesters()
+    {
+        // Chương trình đào tạo có thể có nhiều học kỳ
+        return $this->hasMany(Semester::class);
+    }
+
+    // Một chương trình đào tạo có thể có nhiều môn học (qua bảng ProgramCourse)
+    public function programCourses()
+    {
+        // TrainingProgram và Course liên kết với nhau qua bảng ProgramCourse
+        return $this->hasMany(ProgramCourse::class);
+    }
+
+    // Sinh viên có thể đăng ký nhiều chương trình đào tạo
+    public function students()
+    {
+        // Mối quan hệ nhiều-nhiều giữa TrainingProgram và User (học viên)
+        return $this->belongsToMany(User::class, 'student_training_programs', 'training_program_id', 'student_id');
+    }
+    public function learningResults()
+    {
+        return $this->hasMany(LearningResult::class, 'program_id');
+    }
 
 }

@@ -1,124 +1,70 @@
 <?php
-
 namespace App\Http\Controllers\API;
 
 use Exception;
 use App\Http\Controllers\Controller;
-use App\Exceptions\ApiExceptionHandler;
 use App\Services\TrainingProgramService;
-use App\Http\Requests\TrainingProgram\StoreTrainingProgramRequest;
-use App\Http\Requests\TrainingProgram\UpdateTrainingProgramRequest;
+use App\Http\Requests\TrainingProgramRequest\TrainingProgramRequest;
 
 class TrainingProgramController extends Controller
 {
-    protected $trainingProgramService;
+    protected $service;
 
-    public function __construct(TrainingProgramService $trainingProgramService)
+    public function __construct(TrainingProgramService $service)
     {
-        $this->trainingProgramService = $trainingProgramService;
+        $this->service = $service;
     }
-    public function getByCourseId($courseId)
+
+    public function index()
+    {
+        return response()->json($this->service->getAll());
+    }
+
+    public function show($id)
     {
         try {
-            // Kiểm tra xem courseId có hợp lệ không
-            if (!$courseId) {
-                return response()->json([
-                    'error' => 'Thiếu courseId!',
-                    'message' => 'Vui lòng cung cấp courseId hợp lệ.'
-                ], 400);
-            }
-
-            // Lấy chương trình đào tạo theo courseId
-            $trainingProgram = $this->trainingProgramService->getTrainingProgramByCourseId($courseId);
-
-            // Kiểm tra nếu không tìm thấy chương trình đào tạo
-            if (!$trainingProgram) {
-                return response()->json([
-                    'error' => 'Không tìm thấy chương trình đào tạo!',
-                    'message' => 'Chương trình đào tạo cho khóa học này không tồn tại.'
-                ], 404);
-            }
-
-            // Trả về kết quả chương trình đào tạo
-            return response()->json($trainingProgram);
+            return response()->json($this->service->getById($id));
         } catch (Exception $e) {
-            // Xử lý ngoại lệ
-            return ApiExceptionHandler::handle($e);
+            return response()->json(['message' => 'Không tìm thấy chương trình đào tạo.', 'error' => $e->getMessage()], 404);
         }
     }
 
-
-    public function getAll()
+    public function store(TrainingProgramRequest $request)
     {
         try {
-            $trainingPrograms = $this->trainingProgramService->getAll();
-            return response()->json($trainingPrograms);
+            $program = $this->service->create($request->validated());
+            return response()->json(['message' => 'Tạo chương trình đào tạo thành công.', 'data' => $program], 201);
         } catch (Exception $e) {
-            return ApiExceptionHandler::handle($e);
+            return response()->json(['message' => 'Lỗi khi tạo chương trình.', 'error' => $e->getMessage()], 500);
         }
     }
 
-    public function getById($id)
+    public function update(TrainingProgramRequest $request, $id)
     {
         try {
-            $trainingProgram = $this->trainingProgramService->getById($id);
-
-            if (!$trainingProgram) {
-                return response()->json([
-                    'error' => 'Không tìm thấy chương trình đào tạo!',
-                    'message' => 'Chương trình đào tạo không tồn tại.'
-                ], 404);
-            }
-
-            return response()->json($trainingProgram);
+            $program = $this->service->update($id, $request->validated());
+            return response()->json(['message' => 'Cập nhật thành công.', 'data' => $program]);
         } catch (Exception $e) {
-            return ApiExceptionHandler::handle($e);
+            return response()->json(['message' => 'Lỗi khi cập nhật.', 'error' => $e->getMessage()], 500);
         }
     }
 
-    public function create(StoreTrainingProgramRequest $request)
+    public function destroy($id)
     {
         try {
-            $trainingProgram = $this->trainingProgramService->create($request->validated());
-            return response()->json([
-                'message' => 'Tạo chương trình đào tạo thành công!',
-                'data' => $trainingProgram
-            ], 201);
+            $this->service->delete($id);
+            return response()->json(['message' => 'Đã xóa chương trình.']);
         } catch (Exception $e) {
-            return ApiExceptionHandler::handle($e);
+            return response()->json(['message' => 'Lỗi khi xóa chương trình.', 'error' => $e->getMessage()], 500);
         }
     }
 
-    public function update(UpdateTrainingProgramRequest $request, $id)
+    public function filterByLevel($level)
     {
         try {
-            $trainingProgram = $this->trainingProgramService->update($id, $request->validated());
-            return response()->json([
-                'message' => 'Cập nhật chương trình đào tạo thành công!',
-                'data' => $trainingProgram
-            ]);
+            return response()->json($this->service->getByLevel($level));
         } catch (Exception $e) {
-            return ApiExceptionHandler::handle($e);
-        }
-    }
-
-    public function delete($id)
-    {
-        try {
-            $deleted = $this->trainingProgramService->delete($id);
-
-            if (!$deleted) {
-                return response()->json([
-                    'error' => 'Xóa thất bại!',
-                    'message' => 'Chương trình đào tạo không tồn tại hoặc đã bị xóa trước đó.'
-                ], 404);
-            }
-
-            return response()->json([
-                'message' => 'Xóa chương trình đào tạo thành công!'
-            ], 200);
-        } catch (Exception $e) {
-            return ApiExceptionHandler::handle($e);
+            return response()->json(['message' => 'Lỗi khi lọc theo loại.', 'error' => $e->getMessage()], 500);
         }
     }
 }

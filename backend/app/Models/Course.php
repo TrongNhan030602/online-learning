@@ -8,51 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
     use HasFactory;
-    protected $table = 'courses';
-    protected $fillable = [
-        'title',
-        'description',
-        'price',
-        'image_url'
-    ];
-    public function files()
+
+    protected $fillable = ['code', 'title', 'description', 'is_active'];
+
+    // Môn học có thể thuộc nhiều học kỳ
+    public function semesters()
     {
-        return $this->hasMany(CourseFile::class);
+        // Nhiều môn học có thể có mặt trong nhiều học kỳ, thông qua bảng trung gian 'semester_courses'
+        return $this->belongsToMany(Semester::class, 'semester_courses');
     }
+
+    // Môn học có thể thuộc nhiều chương trình đào tạo (training programs)
     public function trainingPrograms()
     {
-        return $this->hasMany(TrainingProgram::class);
+        // Nhiều môn học có thể xuất hiện trong nhiều chương trình đào tạo, thông qua bảng trung gian 'program_courses'
+        return $this->belongsToMany(TrainingProgram::class, 'program_courses');
     }
-    /**
-     * Mối quan hệ 1 - N: Một khóa học có nhiều bài học
-     */
-    public function lessons()
+
+    // Môn học có thể có nhiều điểm số (scores)
+    public function scores()
     {
-        return $this->hasMany(Lesson::class);
+        // Mỗi môn học có thể có nhiều điểm số cho sinh viên
+        return $this->hasMany(Score::class);
     }
-
-    // Một khóa học có nhiều lớp học
-    public function classRooms()
+    // 
+    public function reExamRegistrations()
     {
-        return $this->hasMany(ClassRoom::class);
+        return $this->hasMany(ReExamRegistration::class, 'course_id');
     }
-
-
-    /**
-     * Mối quan hệ 1 - N: Một khóa học có nhiều đánh giá
-     */
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
-    /**
-     * Mối quan hệ 1 - N: Một khóa học có thể thuộc nhiều đơn hàng
-     */
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
-
-
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services;
 
 use App\Interfaces\CourseRepositoryInterface;
@@ -14,46 +13,33 @@ class CourseService
         $this->courseRepository = $courseRepository;
     }
 
-    public function listCourses($filters)
+    public function getAllCourses()
     {
-        try {
-            return $this->courseRepository->getAllCourses($filters);
-        } catch (Exception $e) {
-            throw new Exception("Lỗi khi lấy danh sách khóa học: " . $e->getMessage());
-        }
+        return $this->courseRepository->getAllCourses();
     }
 
-    public function createNewCourse($data)
-    {
-        try {
-            return $this->courseRepository->createCourse($data);
-        } catch (Exception $e) {
-            throw new Exception("Lỗi khi tạo khóa học: " . $e->getMessage());
-        }
-    }
     public function getCourseById($id)
     {
-        try {
-            return $this->courseRepository->getCourseById($id);
-        } catch (Exception $e) {
-            throw new Exception("Lỗi khi lấy chi tiết khóa học: " . $e->getMessage());
-        }
-    }
-    public function updateExistingCourse($id, $data)
-    {
-        try {
-            return $this->courseRepository->updateCourse($id, $data);
-        } catch (Exception $e) {
-            throw new Exception("Lỗi khi cập nhật khóa học: " . $e->getMessage());
-        }
+        return $this->courseRepository->getCourseById($id);
     }
 
-    public function deleteCourseById($id)
+    public function createCourse(array $data)
     {
-        try {
-            return $this->courseRepository->deleteCourse($id);
-        } catch (Exception $e) {
-            throw new Exception("Lỗi khi xóa khóa học: " . $e->getMessage());
-        }
+        return $this->courseRepository->createCourse($data);
+    }
+
+    public function updateCourse($id, array $data)
+    {
+        return $this->courseRepository->updateCourse($id, $data);
+    }
+
+    public function updateStatus($id, $status)
+    {
+        return $this->courseRepository->updateStatus($id, $status);
+    }
+
+    public function deleteCourse($id)
+    {
+        return $this->courseRepository->deleteCourse($id);
     }
 }

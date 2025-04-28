@@ -5,8 +5,8 @@ const Login = () => {
   return (
     <AuthLayout
       imageUrl="https://cdn.brvn.vn/static/onboarding/brvn_thinking.jpg"
-      title="Tuyển dụng và Tìm việc làm Marketing"
-      description="Marketing đến Marketer. Truyền thông tới dân Quảng cáo. Làm Brand cho Agency. Tuyển dụng và Tìm việc làm Marketing dễ dàng tại Brands Vietnam."
+      title="Học viện Design24 - Cổng đăng nhập học viên"
+      description="Đăng nhập để truy cập khóa học, theo dõi tiến độ, nhận thông báo mới nhất và kết nối cùng cộng đồng sáng tạo tại Học viện Design24."
     >
       <LoginForm />
     </AuthLayout>

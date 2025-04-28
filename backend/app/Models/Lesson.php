@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,46 +8,17 @@ class Lesson extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'course_id',
-        'title',
-        'content',
-        'video_url',
-        'order',
-    ];
-    /**
-     * Mối quan hệ với bảng LessonDocuments.
-     */
-    public function documents()
+    protected $fillable = ['course_session_id', 'title', 'content'];
+
+    // Mỗi bài học thuộc về một buổi học
+    public function courseSession()
     {
-        return $this->hasMany(LessonDocument::class, 'lesson_id');
-    }
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
-    }
-    // Quan hệ many-to-many: Bài học chọn các tài liệu từ khóa học
-    public function selectedFiles()
-    {
-        return $this->belongsToMany(CourseFile::class, 'course_file_lesson', 'lesson_id', 'course_file_id')
-            ->withTimestamps();
+        return $this->belongsTo(CourseSession::class);
     }
 
-
-
-    // Quan hệ many-to-many giữa bài học và buổi học 
-    public function classSessions()
+    // Mỗi bài học có thể có nhiều tài liệu
+    public function materials()
     {
-        return $this->belongsToMany(ClassSession::class, 'class_session_lesson', 'lesson_id', 'class_session_id')
-            ->withTimestamps();
+        return $this->hasMany(Material::class);
     }
-
-
-
-    public function progress()
-    {
-        return $this->hasMany(Progress::class);
-    }
-
-
 }

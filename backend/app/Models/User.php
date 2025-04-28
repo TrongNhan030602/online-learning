@@ -31,27 +31,42 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(UserProfile::class, 'user_id');
     }
-
-    public function enrollments()
+    // Sinh viên có thể đăng ký nhiều chương trình đào tạo
+    public function trainingPrograms()
     {
-        return $this->hasMany(Enrollment::class, 'user_id');
+        // Mối quan hệ nhiều-nhiều giữa User (học viên) và TrainingProgram (chương trình đào tạo)
+        return $this->belongsToMany(TrainingProgram::class, 'student_training_programs', 'student_id', 'training_program_id');
     }
 
-    // Lấy danh sách lớp học mà học viên đã tham gia (nếu có)
-    public function classrooms()
+    // Sinh viên có thể có nhiều môn học được miễn khi liên thông
+    public function exemptCourses()
     {
-        return $this->belongsToMany(ClassRoom::class, 'enrollments', 'user_id', 'classroom_id')
-            ->withTimestamps();
-    }
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
+        // Mỗi sinh viên có thể có nhiều môn học được miễn, thông qua bảng ExemptCourse
+        return $this->hasMany(ExemptCourse::class, 'student_id');
     }
 
-    public function progress()
+    // Sinh viên có thể có nhiều điểm số (scores)
+    public function scores()
     {
-        return $this->hasMany(Progress::class);
+        // Mỗi sinh viên có thể có nhiều điểm số cho các môn học
+        return $this->hasMany(Score::class, 'student_id');
     }
+
+    // Sinh viên có thể có nhiều chứng chỉ/bằng
+    public function certificates()
+    {
+        // Mỗi sinh viên có thể có nhiều chứng chỉ
+        return $this->hasMany(Certificate::class, 'student_id');
+    }
+    public function reExamRegistrations()
+    {
+        return $this->hasMany(ReExamRegistration::class, 'student_id');
+    }
+    public function learningResults()
+    {
+        return $this->hasMany(LearningResult::class, 'student_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
