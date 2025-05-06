@@ -47,5 +47,9 @@ class TrainingProgram extends Model
     {
         return $this->hasMany(LearningResult::class, 'program_id');
     }
+    public function banners()
+    {
+        return $this->hasMany(TrainingProgramBanner::class);
+    }
 
 }

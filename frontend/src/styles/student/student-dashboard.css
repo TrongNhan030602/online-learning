@@ -12,55 +12,243 @@
   position: relative;
 }
 
-.dashboard__section-title svg {
-  margin-right: 10px;
-  color: var(--primary-color);
+/* slogan section */
+.slogan {
+  background-color: var(--primary-color); /* Dùng màu chủ đạo từ biến chung */
+  padding: 4rem 2rem; /* Tăng padding để phần slogan rộng hơn */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Bóng đổ nổi bật hơn */
+  transition: all 0.3s ease; /* Thêm hiệu ứng chuyển động */
 }
 
-/* Đường chéo dưới tiêu đề */
-.dashboard__section-title::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  background: var(--primary-color);
-  bottom: -5px;
-  left: 0;
-  border-radius: 10px;
-}
-/* Slogan */
-.dashboard__slogan {
-  background-color: #f5f6fa;
-  border-left: 4px solid var(--primary-color);
-  padding: 1rem 1.25rem;
-  margin: 0.5rem auto;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  max-width: 900px;
-  text-align: center;
-  animation: fadeSlideShort 0.5s ease-in-out;
+.slogan:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ khi hover */
 }
 
-.dashboard__slogan-title {
-  font-size: 1.5rem;
+.slogan__title {
+  font-size: 3rem; /* Tăng cỡ chữ tiêu đề */
+  font-weight: 700; /* Chữ đậm hơn */
+  color: var(--text-white); /* Màu chữ trắng để nổi bật trên nền xanh */
+  margin-bottom: 1.5rem; /* Khoảng cách dưới tiêu đề */
+  text-align: center; /* Căn giữa */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ cho chữ */
+}
+
+.slogan__title .slogan__icon {
+  font-size: 3rem; /* Cỡ biểu tượng lớn hơn */
+  margin-right: 1rem; /* Khoảng cách giữa biểu tượng và văn bản */
+  color: var(--secondary-color); /* Màu của biểu tượng cũng là trắng */
+}
+
+.slogan__description {
+  font-size: 1.4rem; /* Tăng cỡ chữ mô tả */
+  color: var(--text-white); /* Màu chữ trắng */
+  font-style: italic; /* Để chữ nghiêng */
+  text-align: center; /* Căn giữa */
+  opacity: 0.85; /* Làm mờ chữ một chút để nhấn mạnh tiêu đề */
+}
+
+/* Các hiệu ứng hover cho biểu tượng */
+.slogan__icon:hover {
+  color: var(--secondary-color); /* Thay đổi màu khi hover */
+  transition: color 0.3s ease;
+}
+/* RegisteredClasses section */
+.registered-classes {
+  background-color: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ nhẹ */
+  margin-top: 2rem; /* Khoảng cách giữa các section */
+}
+
+.registered-classes__title {
+  font-size: 1.8rem;
   font-weight: 600;
   color: var(--primary-color);
-  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.dashboard__slogan-subtext {
+.registered-classes__title .registered-classes__icon {
+  margin-right: 0.8rem; /* Khoảng cách giữa biểu tượng và tiêu đề */
+  font-size: 1.5rem;
+}
+
+.registered-classes__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.registered-classes__item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.registered-classes__item:hover {
+  transform: translateY(-5px); /* Hiệu ứng nâng cao khi hover */
+  background-color: #e9ecef; /* Thay đổi màu nền khi hover */
+}
+
+.registered-classes__class-name {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.registered-classes__class-date {
   font-size: 1rem;
-  color: #444;
-  margin: 0;
+  color: var(--secondary-color);
+  font-style: italic;
 }
 
-@keyframes fadeSlideShort {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
+/* Responsive design */
+@media (max-width: 768px) {
+  .registered-classes__title {
+    font-size: 1.6rem;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .registered-classes__item {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+/* NewCourses section */
+.new-courses {
+  background-color: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ nhẹ */
+  margin-top: 2rem; /* Khoảng cách giữa các section */
+}
+
+.new-courses__title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.new-courses__title .new-courses__icon {
+  margin-right: 0.8rem; /* Khoảng cách giữa biểu tượng và tiêu đề */
+  font-size: 1.5rem;
+}
+
+.new-courses__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.new-courses__item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.new-courses__item:hover {
+  transform: translateY(-5px); /* Hiệu ứng nâng cao khi hover */
+  background-color: #e9ecef; /* Thay đổi màu nền khi hover */
+}
+
+.new-courses__item-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.new-courses__item-description {
+  font-size: 1rem;
+  color: var(--secondary-color);
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .new-courses__title {
+    font-size: 1.6rem;
+  }
+
+  .new-courses__item {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+/* BlogList section */
+.blog-list {
+  background-color: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ nhẹ */
+  margin-top: 2rem; /* Khoảng cách giữa các section */
+}
+
+.blog-list__title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.blog-list__title .blog-list__icon {
+  margin-right: 0.8rem; /* Khoảng cách giữa biểu tượng và tiêu đề */
+  font-size: 1.5rem;
+}
+
+.blog-list__items {
+  list-style-type: none;
+  padding: 0;
+}
+
+.blog-list__item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.blog-list__item:hover {
+  transform: translateY(-5px); /* Hiệu ứng nâng cao khi hover */
+  background-color: #e9ecef; /* Thay đổi màu nền khi hover */
+}
+
+.blog-list__item-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.blog-list__item-description {
+  font-size: 1rem;
+  color: var(--secondary-color);
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .blog-list__title {
+    font-size: 1.6rem;
+  }
+
+  .blog-list__item {
+    padding: 0.8rem;
+    font-size: 0.9rem;
   }
 }

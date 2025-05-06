@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Exception;
 use App\Models\User;
+use App\Enums\RoleEnum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Interfaces\UserRepositoryInterface;
@@ -12,6 +13,9 @@ class UserRepository implements UserRepositoryInterface
 {
     public function createUser(array $data, array $profileData)
     {
+        if (!in_array($data['role'], RoleEnum::values(), true)) {
+            throw new Exception("Role không hợp lệ");
+        }
         // Tạo người dùng
         $user = User::create($data);
 
@@ -20,6 +24,7 @@ class UserRepository implements UserRepositoryInterface
 
         return $user;
     }
+
     public function getAllUsers(array $filters)
     {
         try {
@@ -47,7 +52,7 @@ class UserRepository implements UserRepositoryInterface
                 $query->where('users.role', $filters['role']);
             }
 
-            // Tìm kiếm theo tên hoặc email
+            // Lọc theo tìm kiếm tên, email hoặc tên trong profile
             if (!empty($filters['search'])) {
                 $search = $filters['search'];
                 $query->where(function ($q) use ($search) {
@@ -92,13 +97,13 @@ class UserRepository implements UserRepositoryInterface
 
 
 
+
+
     public function getUserById($id)
     {
         try {
             return User::with([
                 'profile',
-                'enrollments.classroom.course',
-                'enrollments.classroom.sessions',
             ])->findOrFail($id);
         } catch (Exception $e) {
             throw new Exception("Lỗi trong quá trình truy vấn người dùng: " . $e->getMessage());
@@ -134,12 +139,20 @@ class UserRepository implements UserRepositoryInterface
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
+
+        // Bảo vệ không cho phép xóa người dùng là cố vấn
+        if ($user->role === RoleEnum::Advisor->value) {
+            throw new Exception("Không thể xóa người dùng là cố vấn.");
+        }
+
         // Xóa các dữ liệu liên quan nếu cần (ví dụ: enrollments, reviews, progress)
         $user->enrollments()->delete();
         $user->reviews()->delete();
         $user->progress()->delete();
+
         return $user->delete();
     }
+
 
     public function resetPassword($id, $password)
     {
@@ -152,16 +165,19 @@ class UserRepository implements UserRepositoryInterface
     {
         try {
             $total = User::count();
-            $admins = User::where('role', 'admin')->count();
-            $students = User::where('role', 'student')->count();
+            $admins = User::where('role', RoleEnum::Admin->value)->count();
+            $students = User::where('role', RoleEnum::Student->value)->count();
+            $advisors = User::where('role', RoleEnum::Advisor->value)->count();  // Thêm thống kê cho cố vấn
 
             return [
                 'total_users' => $total,
                 'admins' => $admins,
                 'students' => $students,
+                'advisors' => $advisors,  // Thêm thống kê cho cố vấn
             ];
         } catch (Exception $e) {
             throw new Exception("Lỗi khi lấy thống kê người dùng: " . $e->getMessage());
         }
     }
+
 }

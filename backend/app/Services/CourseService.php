@@ -42,4 +42,11 @@ class CourseService
     {
         return $this->courseRepository->deleteCourse($id);
     }
+
+    //For Student
+    public function getLearningDetail($id)
+    {
+        return $this->courseRepository->getLearningDetail($id);
+    }
+
 }

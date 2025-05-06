@@ -21,6 +21,14 @@ class ExamScheduleController extends Controller
     {
         try {
             $data = $this->examScheduleService->getAll();
+
+            // Kiểm tra nếu không có dữ liệu
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có lịch thi nào',
+                ], 404); // Mã trạng thái HTTP: 404 Not Found
+            }
+
             return response()->json([
                 'data' => $data
             ]);
@@ -31,6 +39,7 @@ class ExamScheduleController extends Controller
             ], 500); // Mã trạng thái HTTP: 500 Internal Server Error
         }
     }
+
 
     public function store(ExamScheduleRequest $request)
     {

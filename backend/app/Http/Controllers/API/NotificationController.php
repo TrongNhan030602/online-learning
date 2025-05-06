@@ -20,12 +20,24 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         try {
-            $notifications = $this->service->getUserNotifications($request->user()->id);
-            return response()->json($notifications);
+            $userId = $request->user()->id;
+            $notifications = $this->service->getUserNotifications($userId);
+
+            if ($notifications->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có thông báo nào cho người dùng.'
+                ], 204); // hoặc 404 nếu muốn báo rõ hơn
+            }
+
+            return response()->json($notifications, 200);
         } catch (Exception $e) {
-            return response()->json(['message' => 'Không thể lấy danh sách thông báo.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Không thể lấy danh sách thông báo.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
+
 
     public function store(NotificationRequest $request)
     {

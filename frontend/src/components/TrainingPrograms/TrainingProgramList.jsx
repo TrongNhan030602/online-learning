@@ -7,23 +7,62 @@ import "../../styles/trainingPrograms/training-program-list.css";
 
 const TrainingProgramList = ({ trainingPrograms, onEdit, onDelete }) => {
   const [sortConfig, setSortConfig] = useState({ key: "id", direction: "asc" });
-  // Sắp xếp danh sách
+  const levelPriority = {
+    college: 1,
+    intermediate: 2,
+    certificate: 3,
+    specialized: 4,
+    software: 5,
+  };
+
   const sortedPrograms = [...trainingPrograms].sort((a, b) => {
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === "asc" ? -1 : 1;
-    }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === "asc" ? 1 : -1;
-    }
+    const aVal =
+      sortConfig.key === "level" ? levelPriority[a.level] : a[sortConfig.key];
+    const bVal =
+      sortConfig.key === "level" ? levelPriority[b.level] : b[sortConfig.key];
+
+    if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
     return 0;
   });
 
-  // Xử lý khi nhấn vào tiêu đề cột để sắp xếp
   const handleSort = (key) => {
     setSortConfig((prev) => ({
       key,
       direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
     }));
+  };
+  const formatLevel = (level) => {
+    switch (level) {
+      case "college":
+        return "Cao đẳng";
+      case "intermediate":
+        return "Trung cấp";
+      case "certificate":
+        return "Chứng chỉ nghề";
+      case "specialized":
+        return "Chuyên sâu";
+      case "software":
+        return "Phần mềm";
+      default:
+        return level;
+    }
+  };
+  const getLevelDescription = (level) => {
+    switch (level) {
+      case "college":
+        return "Chương trình có nhiều môn học, cấp bằng tốt nghiệp, có thể liên thông.";
+      case "intermediate":
+        return "Chương trình trung cấp, có học kỳ, cấp bằng tốt nghiệp,có thể liên thông.";
+      case "certificate":
+        return "Chứng chỉ nghề, phải học đủ các môn";
+      case "specialized":
+        return "Chứng nhận chuyên đề cụ thể, học nhiều môn, không chia học kỳ.";
+      case "software":
+        return "Chỉ học một phần mềm duy nhất, ví dụ: Photoshop.";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -31,8 +70,6 @@ const TrainingProgramList = ({ trainingPrograms, onEdit, onDelete }) => {
       <h2 className="training-program-list__title">
         Danh sách chương trình đào tạo
       </h2>
-
-      {/* Bảng danh sách chương trình đào tạo */}
       <div className="training-program-list__table-wrapper">
         <table className="training-program-list__table">
           <thead>
@@ -41,77 +78,109 @@ const TrainingProgramList = ({ trainingPrograms, onEdit, onDelete }) => {
                 className="training-program-list__td"
                 onClick={() => handleSort("id")}
               >
-                ID <FontAwesomeIcon icon={faSort} />
+                <span className="sortable-header">
+                  ID <FontAwesomeIcon icon={faSort} />
+                </span>
               </th>
               <th
                 className="training-program-list__td"
                 onClick={() => handleSort("name")}
               >
-                Tên chương trình <FontAwesomeIcon icon={faSort} />
+                <span className="sortable-header">
+                  Tên <FontAwesomeIcon icon={faSort} />
+                </span>
               </th>
               <th
                 className="training-program-list__td"
-                onClick={() => handleSort("course_id")}
+                onClick={() => handleSort("code")}
               >
-                Khóa học ID <FontAwesomeIcon icon={faSort} />
+                <span className="sortable-header">
+                  Mã Lớp <FontAwesomeIcon icon={faSort} />
+                </span>
               </th>
-              <th className="training-program-list__td">Mô tả</th>
-              <th className="training-program-list__td">Thời gian</th>
-              <th className="training-program-list__td">Yêu cầu</th>
-              <th className="training-program-list__td">Mục tiêu</th>
+
+              <th
+                className="training-program-list__td"
+                onClick={() => handleSort("level")}
+              >
+                <span className="sortable-header">
+                  Cấp bậc <FontAwesomeIcon icon={faSort} />
+                </span>
+              </th>
+              <th className="training-program-list__td">Cố vấn</th>
+              <th className="training-program-list__td">Số học kỳ</th>
+              <th className="training-program-list__td">Ghi chú</th>
               <th className="training-program-list__td">Hành động</th>
             </tr>
           </thead>
           <tbody>
             {sortedPrograms.length > 0 ? (
-              sortedPrograms.map((program) => (
-                <tr key={program.id}>
-                  <td className="training-program-list__td">{program.id}</td>
-                  <td className="training-program-list__td">
-                    <Link
-                      className="training-program-list__link"
-                      to={`/admin/training-programs/${program.id}`}
+              sortedPrograms.map((program, index) =>
+                program.id ? ( // Kiểm tra id của mỗi chương trình
+                  <tr key={program.id}>
+                    <td className="training-program-list__td">{program.id}</td>
+                    <td className="training-program-list__td">
+                      <Link
+                        to={`/admin/training-programs/${program.id}`}
+                        className="training-program-list__link"
+                      >
+                        {program.name}
+                      </Link>
+                    </td>
+                    <td className="training-program-list__td">
+                      {program.code}
+                    </td>
+                    <td
+                      className="training-program-list__td"
+                      title={getLevelDescription(program.level)}
                     >
-                      {program.name}
-                    </Link>
-                  </td>
-                  <td className="training-program-list__td">
-                    {program.course_id}
-                  </td>
-                  <td className="training-program-list__td">
-                    {program.description}
-                  </td>
-                  <td className="training-program-list__td">
-                    {program.duration} tháng
-                  </td>
-                  <td className="training-program-list__td">
-                    {program.requirements}
-                  </td>
-                  <td className="training-program-list__td">
-                    {program.objectives}
-                  </td>
-                  <td className="training-program-list__td">
-                    <button
-                      onClick={() => onEdit(program)}
-                      title="Sửa chương trình đào tạo"
-                      className="training-program-list__action-button"
+                      {formatLevel(program.level)}
+                    </td>
+
+                    <td className="training-program-list__td">
+                      {program.advisor?.name || "—"}
+                    </td>
+                    <td className="training-program-list__td">
+                      {program.semesters?.length || 0}
+                    </td>
+
+                    <td className="training-program-list__td">
+                      {program.note}
+                    </td>
+                    <td className="training-program-list__td">
+                      <button
+                        onClick={() => onEdit(program)}
+                        title="Sửa chương trình đào tạo"
+                        className="training-program-list__action-button"
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </button>
+                      <button
+                        onClick={() => onDelete(program.id)}
+                        title="Xóa chương trình đào tạo"
+                        className="training-program-list__action-button training-program-list__action-button--delete"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={index}>
+                    {" "}
+                    {/* Nếu không có id, không render dòng này */}
+                    <td
+                      colSpan="9"
+                      style={{ textAlign: "center", padding: "10px" }}
                     >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                    <button
-                      onClick={() => onDelete(program.id)}
-                      title="Xóa chương trình đào tạo"
-                      className="training-program-list__action-button training-program-list__action-button--delete"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </td>
-                </tr>
-              ))
+                      Dữ liệu không hợp lệ.
+                    </td>
+                  </tr>
+                )
+              )
             ) : (
               <tr className="training-program-list__tr">
                 <td
-                  colSpan="8"
+                  colSpan="9"
                   style={{ textAlign: "center", padding: "10px" }}
                 >
                   Chưa có chương trình đào tạo nào được tạo.

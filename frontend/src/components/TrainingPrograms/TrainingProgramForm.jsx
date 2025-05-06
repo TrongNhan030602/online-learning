@@ -1,52 +1,31 @@
 import PropTypes from "prop-types";
-import { useEffect, useMemo } from "react";
-import { useForm, Controller } from "react-hook-form"; // Import Controller
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import ReactSelect from "react-select";
 import "../../styles/trainingPrograms/training-program-form.css";
 import trainingProgramApi from "../../api/trainingProgramApi";
 import { useToast } from "../../hooks/useToast";
 
 // Schema validation với Yup
 const schema = yup.object().shape({
-  course_id: yup
-    .mixed()
-    .required("Khóa học không được để trống")
-    .test("is-valid-course", "Khóa học không hợp lệ", (value) => {
-      return typeof value === "number" || (value && value.value);
-    }),
   name: yup.string().required("Tên chương trình không được để trống"),
-  duration: yup
-    .number()
-    .typeError("Thời gian phải là một số")
-    .positive("Thời gian phải là số dương")
-    .integer("Thời gian phải là số nguyên")
-    .required("Thời gian không được để trống"),
-  requirements: yup.string().required("Yêu cầu không được để trống"),
-  objectives: yup.string().required("Mục tiêu không được để trống"),
-  description: yup.string().required("Mô tả không được để trống"),
+  code: yup.string().required("Mã chương trình không được để trống"),
+  level: yup.string().required("Cấp độ không được để trống"),
+  note: yup.string().required("Ghi chú không được để trống"),
+  advisor_id: yup.string().required("Vui lòng chọn cố vấn"),
 });
 
 const TrainingProgramForm = ({
   initialData = null,
   onSuccess,
   onCancel,
-  courses,
+  advisors,
 }) => {
   const { addToast } = useToast();
 
-  const courseOptions = useMemo(
-    () =>
-      courses.map((course) => ({
-        value: course.id,
-        label: course.title,
-      })),
-    [courses]
-  );
-
+  // Sử dụng useForm mà không cần courses
   const {
-    control, // Dùng control để kết nối với Controller
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -54,57 +33,51 @@ const TrainingProgramForm = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      course_id: "",
       name: "",
-      duration: "",
-      requirements: "",
-      objectives: "",
+      level: "college", // Ví dụ, mặc định là college
+      code: "",
+      note: "",
+      advisor_id: "",
     },
   });
 
   useEffect(() => {
     if (initialData) {
-      const selectedCourse = courseOptions.find(
-        (c) => c.value === initialData.course_id
-      );
-
       reset({
         ...initialData,
-        course_id: selectedCourse || "",
+        advisor_id: initialData.advisor_id?.toString() || "", // Ép về string
       });
     } else {
       reset({
-        course_id: "",
         name: "",
-        duration: "",
-        requirements: "",
-        objectives: "",
+        level: "college",
+        code: "",
+        note: "",
+        advisor_id: "",
       });
     }
-  }, [initialData, reset, courseOptions]);
+  }, [initialData, reset]);
 
   const onSubmit = async (data) => {
     try {
-      // Chuẩn bị dữ liệu trước khi gửi đi
       const preparedData = {
         ...data,
-        course_id: data.course_id?.value || data.course_id, // Đảm bảo đúng kiểu ID khóa học (value từ ReactSelect)
+        advisor_id: parseInt(data.advisor_id), // Convert lại về số
       };
 
       if (initialData?.id) {
-        // Nếu có initialData thì gọi API cập nhật
+        // Cập nhật chương trình đào tạo
         const response = await trainingProgramApi.update(
           initialData.id,
           preparedData
         );
         console.log("Cập nhật thành công:", response.data);
       } else {
-        // Nếu không có initialData thì gọi API tạo mới
+        // Tạo mới chương trình đào tạo
         const response = await trainingProgramApi.create(preparedData);
         console.log("Tạo mới thành công:", response.data);
       }
 
-      // Hiển thị thông báo thành công
       addToast({
         title: "Thành công!",
         message: initialData
@@ -132,33 +105,6 @@ const TrainingProgramForm = ({
       </h3>
 
       <div className="training-program-form__group">
-        <label className="training-program-form__label">Khóa học</label>
-        <Controller
-          name="course_id"
-          control={control}
-          render={({ field }) => (
-            <ReactSelect
-              {...field}
-              options={courseOptions}
-              isDisabled={!!initialData} // 🔒 Disable nếu đang update
-              className={`react-select__control ${
-                errors.course_id ? "training-program-form__input--error" : ""
-              }`}
-              placeholder="Chọn khóa học"
-              onChange={(selectedOption) => {
-                field.onChange(selectedOption ? selectedOption : "");
-              }}
-            />
-          )}
-        />
-        {errors.course_id && (
-          <p className="training-program-form__error">
-            {errors.course_id.message}
-          </p>
-        )}
-      </div>
-
-      <div className="training-program-form__group">
         <label className="training-program-form__label">Tên chương trình</label>
         <input
           type="text"
@@ -173,66 +119,67 @@ const TrainingProgramForm = ({
       </div>
 
       <div className="training-program-form__group">
-        <label className="training-program-form__label">
-          Thời gian (theo tháng)
-        </label>
+        <label className="training-program-form__label">Mã chương trình</label>
         <input
-          type="number"
-          {...register("duration")}
+          type="text"
+          {...register("code")}
           className={`training-program-form__input ${
-            errors.duration ? "training-program-form__input--error" : ""
+            errors.code ? "training-program-form__input--error" : ""
           }`}
-          min="1"
-          step="1"
         />
-        {errors.duration && (
+        {errors.code && (
+          <p className="training-program-form__error">{errors.code.message}</p>
+        )}
+      </div>
+
+      <div className="training-program-form__group">
+        <label className="training-program-form__label">Mức độ</label>
+        <select
+          {...register("level")}
+          className="training-program-form__input"
+        >
+          <option value="college">Cao đẳng</option>
+          <option value="intermediate">Trung cấp</option>
+          <option value="certificate">Chứng chỉ</option>
+          <option value="specialized">Chuyên ngành</option>
+          <option value="software">Phần mềm</option>
+        </select>
+      </div>
+      <div className="training-program-form__group">
+        <label className="training-program-form__label">Cố vấn</label>
+        <select
+          {...register("advisor_id")}
+          className={`training-program-form__input ${
+            errors.advisor_id ? "training-program-form__input--error" : ""
+          }`}
+        >
+          <option value="">-- Chọn cố vấn --</option>
+          {advisors.map((advisor) => (
+            <option
+              key={advisor.id}
+              value={advisor.id.toString()} // Bảo đảm là chuỗi
+            >
+              {advisor.name}
+            </option>
+          ))}
+        </select>
+        {errors.advisor_id && (
           <p className="training-program-form__error">
-            {errors.duration.message}
+            {errors.advisor_id.message}
           </p>
         )}
       </div>
 
       <div className="training-program-form__group">
-        <label className="training-program-form__label">Yêu cầu</label>
+        <label className="training-program-form__label">Ghi chú</label>
         <textarea
-          {...register("requirements")}
+          {...register("note")}
           className={`training-program-form__textarea ${
-            errors.requirements ? "training-program-form__input--error" : ""
+            errors.note ? "training-program-form__input--error" : ""
           }`}
         />
-        {errors.requirements && (
-          <p className="training-program-form__error">
-            {errors.requirements.message}
-          </p>
-        )}
-      </div>
-
-      <div className="training-program-form__group">
-        <label className="training-program-form__label">Mục tiêu</label>
-        <textarea
-          {...register("objectives")}
-          className={`training-program-form__textarea ${
-            errors.objectives ? "training-program-form__input--error" : ""
-          }`}
-        />
-        {errors.objectives && (
-          <p className="training-program-form__error">
-            {errors.objectives.message}
-          </p>
-        )}
-      </div>
-      <div className="training-program-form__group">
-        <label className="training-program-form__label">Mô tả</label>
-        <textarea
-          {...register("description")}
-          className={`training-program-form__textarea ${
-            errors.description ? "training-program-form__input--error" : ""
-          }`}
-        />
-        {errors.description && (
-          <p className="training-program-form__error">
-            {errors.description.message}
-          </p>
+        {errors.note && (
+          <p className="training-program-form__error">{errors.note.message}</p>
         )}
       </div>
 
@@ -260,12 +207,7 @@ TrainingProgramForm.propTypes = {
   initialData: PropTypes.object,
   onSuccess: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  courses: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+  advisors: PropTypes.array.isRequired,
 };
 
 export default TrainingProgramForm;

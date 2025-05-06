@@ -153,4 +153,30 @@ class CourseController extends Controller
             ], 500);
         }
     }
+
+    //For Student 
+    public function learningDetail($id)
+    {
+        try {
+            $course = $this->courseService->getLearningDetail($id);
+
+            if (!$course) {
+                return response()->json([
+                    'message' => 'Môn học không tồn tại hoặc không khả dụng.',
+                    'data' => null
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Thông tin chi tiết học môn.',
+                'data' => $course
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy thông tin học môn.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

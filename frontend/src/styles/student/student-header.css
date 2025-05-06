@@ -311,8 +311,9 @@
 
 /* Icon xuống xoay khi hover */
 .student-header__icon-dropdown {
-  margin-left: 8px;
+  margin-right: 8px;
   transition: transform 0.3s ease;
+  color: var(--primary-color);
 }
 
 .student-header__nav-item:hover .student-header__icon-dropdown {

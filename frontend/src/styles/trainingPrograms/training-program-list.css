@@ -8,6 +8,7 @@
   width: 100%;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .training-program-list__filters {
   display: flex;
   gap: 10px;
@@ -28,13 +29,7 @@
   outline: none;
 }
 
-/* Cột có thể sắp xếp */
-.training-program-list__td {
-  position: relative;
-  cursor: pointer;
-  user-select: none;
-}
-
+/* Title */
 .training-program-list__title {
   font-size: 1.8rem;
   font-weight: 600;
@@ -43,6 +38,12 @@
   border-bottom: 1px solid #eaeaea;
   text-align: center;
   background-color: #f9f9f9;
+}
+
+/* Table */
+.training-program-list__table-wrapper {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .training-program-list__table {
@@ -57,20 +58,41 @@
   border-bottom: 1px solid #f1f1f1;
 }
 
+/* Header */
 .training-program-list__table th {
   background-color: #f0f0f0;
   color: #555;
   font-weight: 500;
   text-transform: uppercase;
   font-size: 0.9rem;
+  user-select: none;
+  cursor: pointer;
 }
+.sortable-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* khoảng cách giữa text và icon */
+  cursor: pointer;
+}
+
+.sortable-header svg {
+  font-size: 0.8rem; /* thu nhỏ icon nếu cần */
+}
+.sortable-header:hover {
+  color: #007bff;
+}
+
+/* Data cells */
 .training-program-list__td {
   font-size: 1rem;
   color: #444;
 }
+
 .training-program-list__table tr:hover {
   background-color: #f7f7f7;
 }
+
+/* Link */
 .training-program-list__link {
   color: var(--primary-color) !important;
   text-decoration: none;
@@ -78,7 +100,11 @@
   transition: color 0.3s ease;
 }
 
-/* Action buttons */
+.training-program-list__link:hover {
+  text-decoration: underline;
+}
+
+/* Action Buttons */
 .training-program-list__action-button {
   background-color: #fff;
   outline: 1.2px solid #007bff;
@@ -97,26 +123,29 @@
   transform: scale(1.02);
   color: #fff;
 }
-.course-list__table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-}
+
+/* Delete button */
 .training-program-list__action-button--delete {
   background-color: #fff;
-  outline: 1.2px solid var(--primary-color);
+  outline: 1.2px solid #c82333;
   padding: 8px 13px;
-  color: var(--primary-color);
+  color: #c82333;
 }
 
 .training-program-list__action-button--delete:hover {
   background-color: #c82333;
+  color: #fff;
 }
+
+/* Empty data */
 .training-program-list__no-data {
   text-align: center;
   font-size: 16px;
   color: #888;
   margin-top: 20px;
 }
+
+/* Icon-only button (e.g., image) */
 .training-program-list__action-button--image {
   color: #007bff;
 }

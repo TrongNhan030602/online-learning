@@ -41,4 +41,11 @@ class TrainingProgramService
     {
         return $this->repo->getByLevel($level);
     }
+
+    // For Student
+    public function getDetailedById($id)
+    {
+        return $this->repo->getDetailedById($id);
+    }
+
 }

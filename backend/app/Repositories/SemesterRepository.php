@@ -13,7 +13,7 @@ class SemesterRepository implements SemesterRepositoryInterface
 
     public function getAllSemesters()
     {
-        return Semester::with('trainingProgram', 'courses')->get();
+        return Semester::with('trainingProgram')->get();
     }
 
     public function getSemesterById($id)

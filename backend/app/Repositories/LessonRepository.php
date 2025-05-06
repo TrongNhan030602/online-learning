@@ -14,7 +14,7 @@ class LessonRepository implements LessonRepositoryInterface
 
     public function getLessonById($id)
     {
-        return Lesson::find($id);  // Truyền id trực tiếp vào đây
+        return Lesson::find($id);
     }
 
     public function createLesson(array $data)
@@ -24,7 +24,7 @@ class LessonRepository implements LessonRepositoryInterface
             throw new Exception("Không tìm thấy thông tin buổi học.");
         }
 
-        return Lesson::create($data);  // Dữ liệu đã có course_session_id
+        return Lesson::create($data);
     }
 
 

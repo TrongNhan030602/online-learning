@@ -1,19 +1,22 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
+import { faGraduationCap } from "@fortawesome/free-solid-svg-icons"; // Import icon
 
-const Slogan = () => (
-  <div className="dashboard__slogan">
-    <h2 className="dashboard__slogan-title">
-      <FontAwesomeIcon
-        icon={faLightbulb}
-        className="me-2 text-primary"
-      />
-      Học hôm nay - Làm chủ ngày mai
-    </h2>
-    <p className="dashboard__slogan-subtext">
-      Mở rộng tư duy, nâng cao kỹ năng với những khóa học chất lượng.
-    </p>
-  </div>
-);
+const Slogan = () => {
+  return (
+    <div className="slogan text-center py-5 bg-light rounded shadow">
+      <h2 className="slogan__title display-4 text-primary mb-3">
+        <FontAwesomeIcon
+          icon={faGraduationCap}
+          className="slogan__icon mr-2"
+        />
+        Chào mừng bạn đến với Hệ thống Học Tập!
+      </h2>
+      <p className="slogan__description lead text-muted">
+        Khám phá chương trình học, khóa học mới và nhiều hơn nữa!
+      </p>
+    </div>
+  );
+};
 
 export default Slogan;

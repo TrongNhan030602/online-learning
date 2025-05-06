@@ -2,68 +2,64 @@ import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 const YouTubePlayer = ({ videoId, lessonId, onComplete }) => {
-  const playerRef = useRef(null);
   const containerRef = useRef(null);
+  const playerRef = useRef(null);
+  const intervalRef = useRef(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
   const [lastCheckTime, setLastCheckTime] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
-    const onPlayerReady = (event) => {
+    const handlePlayerReady = (event) => {
       playerRef.current = event.target;
 
-      // Bắt đầu theo dõi tiến độ video mỗi giây
-      const id = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         if (!playerRef.current || videoCompleted) return;
 
         const currentTime = playerRef.current.getCurrentTime();
         const duration = playerRef.current.getDuration();
 
-        // Kiểm tra xem có tua nhanh không (tua nhanh quá nhanh)
-        if (lastCheckTime > 0 && currentTime - lastCheckTime < 1) {
+        // Nếu tua quá nhanh (không hợp lệ)
+        if (lastCheckTime > 0 && currentTime - lastCheckTime > 10) {
           playerRef.current.pauseVideo();
           alert("⏩ Vui lòng không tua nhanh video.");
+          return;
         }
 
         setLastCheckTime(currentTime);
 
-        // Kiểm tra xem video đã được xem đủ 90% chưa
+        // Nếu đã xem hơn 90% video
         if (duration > 0 && currentTime / duration >= 0.9) {
           setVideoCompleted(true);
-          onComplete(lessonId); // Gọi callback khi video đã hoàn thành
-          clearInterval(id); // Dừng theo dõi khi hoàn thành
+          onComplete(lessonId);
+          clearInterval(intervalRef.current);
         }
-      }, 1000); // Cập nhật mỗi giây
-
-      setIntervalId(id);
+      }, 1000);
     };
 
-    const onPlayerStateChange = (event) => {
-      if (event.data === window.YT.PlayerState.ENDED) {
-        // Nếu video kết thúc mà chưa hoàn thành, gọi lại onComplete
-        if (!videoCompleted) {
-          setVideoCompleted(true);
-          onComplete(lessonId);
-        }
-        clearInterval(intervalId);
+    const handlePlayerStateChange = (event) => {
+      if (event.data === window.YT?.PlayerState.ENDED && !videoCompleted) {
+        setVideoCompleted(true);
+        onComplete(lessonId);
+        clearInterval(intervalRef.current);
       }
     };
 
     const createPlayer = () => {
-      if (containerRef.current && window.YT?.Player) {
+      if (containerRef.current && !playerRef.current) {
         new window.YT.Player(containerRef.current, {
           videoId,
           width: "100%",
           height: "315",
           events: {
-            onReady: onPlayerReady,
-            onStateChange: onPlayerStateChange,
+            onReady: handlePlayerReady,
+            onStateChange: handlePlayerStateChange,
           },
           playerVars: {
             modestbranding: 1,
             rel: 0,
             showinfo: 0,
-            // Thêm các tham số cần thiết cho video Shorts nếu cần
+            fs: 0,
+            disablekb: 0,
           },
         });
       }
@@ -72,20 +68,24 @@ const YouTubePlayer = ({ videoId, lessonId, onComplete }) => {
     if (window.YT?.Player) {
       createPlayer();
     } else {
+      // Load API nếu chưa có
+      const scriptExists = document.getElementById("youtube-iframe-api");
+      if (!scriptExists) {
+        const tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+        tag.id = "youtube-iframe-api";
+        document.body.appendChild(tag);
+      }
+
       window.onYouTubeIframeAPIReady = createPlayer;
     }
 
     return () => {
-      if (intervalId) clearInterval(intervalId); // Dọn dẹp khi component unmount
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
-  }, [
-    videoId,
-    lessonId,
-    onComplete,
-    videoCompleted,
-    lastCheckTime,
-    intervalId,
-  ]);
+  }, [videoId, lessonId, onComplete, videoCompleted, lastCheckTime]);
 
   return (
     <div

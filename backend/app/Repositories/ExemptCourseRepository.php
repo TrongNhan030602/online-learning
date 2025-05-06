@@ -3,17 +3,17 @@
 namespace App\Repositories;
 
 use App\Models\ExemptCourse;
+use App\Models\StudentTrainingProgram;
+use App\Models\ProgramCourse;
 use App\Interfaces\ExemptCourseRepositoryInterface;
 
 class ExemptCourseRepository implements ExemptCourseRepositoryInterface
 {
-    // Thêm môn miễn cho học viên
     public function create(array $data)
     {
         return ExemptCourse::create($data);
     }
 
-    // Lấy danh sách môn miễn của học viên
     public function getByStudentId($studentId)
     {
         return ExemptCourse::where('student_id', $studentId)
@@ -21,11 +21,26 @@ class ExemptCourseRepository implements ExemptCourseRepositoryInterface
             ->get();
     }
 
-    // Kiểm tra môn học có được miễn cho học viên không
     public function isExempt($studentId, $courseId)
     {
         return ExemptCourse::where('student_id', $studentId)
             ->where('course_id', $courseId)
+            ->exists();
+    }
+
+    //  Kiểm tra học viên có học chương trình đào tạo không
+    public function isStudentEnrolledInProgram($studentId, $programId)
+    {
+        return StudentTrainingProgram::where('student_id', $studentId)
+            ->where('training_program_id', $programId)
+            ->exists();
+    }
+
+    //  Kiểm tra môn học có thuộc chương trình đào tạo không
+    public function isCourseInProgram($courseId, $programId)
+    {
+        return ProgramCourse::where('course_id', $courseId)
+            ->where('training_program_id', $programId)
             ->exists();
     }
 }

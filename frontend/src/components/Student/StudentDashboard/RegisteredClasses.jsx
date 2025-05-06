@@ -1,105 +1,35 @@
-import { useEffect, useState } from "react";
-import { Card, Row, Col, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChalkboardTeacher } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { getStorageUrl } from "../../../utils/getStorageUrl";
-import studentClassApi from "../../../api/studentClassApi";
-import "../../../styles/student/my-class/registered-classes.css";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 
 const RegisteredClasses = () => {
-  const [classes, setClasses] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const response = await studentClassApi.getMyClasses();
-        setClasses(response.data.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách lớp học:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchClasses();
-  }, []);
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
+  const classes = [
+    { id: 1, name: "Thiết kế Đồ Họa", date: "15/05/2025" },
+    { id: 2, name: "Lập trình Web", date: "20/05/2025" },
+  ];
 
   return (
-    <section className="dashboard__section registered-classes">
-      <h3 className="dashboard__section-title">
-        <FontAwesomeIcon icon={faChalkboardTeacher} /> Lớp đã tham gia
+    <div className="registered-classes">
+      <h3 className="registered-classes__title">
+        <FontAwesomeIcon
+          icon={faCalendarAlt}
+          className="registered-classes__icon"
+        />
+        Lớp học đã đăng ký
       </h3>
-
-      {loading ? (
-        <div className="text-center py-4">
-          <Spinner
-            animation="border"
-            variant="primary"
-          />
-        </div>
-      ) : classes.length === 0 ? (
-        <div className="text-center py-4 text-muted">
-          Bạn chưa tham gia lớp học nào.
-        </div>
-      ) : (
-        <Row>
-          {classes.map((item) => (
-            <Col
-              md={4}
-              key={item.id}
-              className="mb-4"
-            >
-              <Link
-                to={`/student/my-classes/${item.id}`}
-                className="class-card__link"
-              >
-                <Card className="dashboard__card class-card h-100">
-                  <Card.Img
-                    variant="top"
-                    src={getStorageUrl(item.course.image_url)}
-                    alt={item.course.title}
-                    className="class-card__image"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/fallback-image.jpg";
-                    }}
-                  />
-                  <Card.Body>
-                    <Card.Title
-                      className="class-card__title"
-                      title={item.course.title}
-                    >
-                      {item.course.title}
-                    </Card.Title>
-                    <Card.Text className="class-card__text">
-                      {item.name}
-                    </Card.Text>
-                    <Card.Text className="class-card__text">
-                      Thời gian: {formatDate(item.start_date)} -{" "}
-                      {formatDate(item.end_date)}
-                    </Card.Text>
-                    <Card.Text className="class-card__text">
-                      Học viên: {item.current_students}/{item.max_students}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Link>
-            </Col>
-          ))}
-        </Row>
-      )}
-    </section>
+      <ul className="registered-classes__list">
+        {classes.map((classItem) => (
+          <li
+            key={classItem.id}
+            className="registered-classes__item"
+          >
+            <p className="registered-classes__class-name">{classItem.name}</p>
+            <span className="registered-classes__class-date">
+              Ngày: {classItem.date}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

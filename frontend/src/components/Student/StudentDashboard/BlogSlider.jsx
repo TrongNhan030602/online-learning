@@ -1,107 +1,36 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import Slider from "react-slick";
-import { Card, OverlayTrigger, Tooltip } from "react-bootstrap";
-import blogApi from "../../../api/blogApi";
-import { getStorageUrl } from "../../../utils/getStorageUrl";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "../../../styles/student/blogs/blog-slider.css";
+import { Carousel } from "react-bootstrap";
 
 const BlogSlider = () => {
-  const [blogs, setBlogs] = useState([]);
-  const navigate = useNavigate();
-  const startXRef = useRef(0);
-
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const response = await blogApi.getBlogs();
-        const blogsWithImages = response.data
-          .filter((blog) => blog.images && blog.images.length > 0)
-          .slice(0, 6);
-        setBlogs(blogsWithImages);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách blog:", error);
-      }
-    };
-
-    fetchBlogs();
-  }, []);
-
-  const handleMouseDown = (e) => {
-    startXRef.current = e.clientX;
-  };
-
-  const handleMouseUp = (e, blogId) => {
-    const deltaX = Math.abs(e.clientX - startXRef.current);
-    if (deltaX < 10) {
-      navigate(`/student/blogs/${blogId}`);
-    }
-  };
-
-  const settings = {
-    dots: true,
-    arrows: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
+  const blogs = [
+    {
+      id: 1,
+      title: "Học tập hiệu quả mùa dịch",
+      image: "/images/course-1.jpg",
+    },
+    {
+      id: 2,
+      title: "10 kỹ năng cần thiết cho sinh viên",
+      image: "/images/course-2.jpg",
+    },
+  ];
 
   return (
-    <section className="dashboard__section blog-slider-section">
-      <Slider
-        {...settings}
-        className="dashboard__slider"
-      >
+    <div className="blog-slider">
+      <Carousel>
         {blogs.map((blog) => (
-          <div
-            className="dashboard__slide"
+          <Carousel.Item
             key={blog.id}
-            onMouseDown={handleMouseDown}
-            onMouseUp={(e) => handleMouseUp(e, blog.id)}
+            className="blog-slider__item"
           >
-            <Card className="blog-card">
-              {blog.images.length > 0 && (
-                <Card.Img
-                  variant="top"
-                  src={getStorageUrl(blog.images[0].image)}
-                  alt={`Ảnh blog: ${blog.title}`}
-                  className="blog-card__image"
-                />
-              )}
-              <Card.Body className="blog-card__body">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip>{blog.title}</Tooltip>}
-                >
-                  <Card.Title className="blog-card__title">
-                    {blog.title}
-                  </Card.Title>
-                </OverlayTrigger>
-              </Card.Body>
-            </Card>
-          </div>
+            <img
+              className="d-block w-100 blog-slider__image"
+              src={blog.image}
+              alt={blog.title}
+            />
+          </Carousel.Item>
         ))}
-      </Slider>
-    </section>
+      </Carousel>
+    </div>
   );
 };
 

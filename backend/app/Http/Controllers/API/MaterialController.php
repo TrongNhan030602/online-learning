@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\MaterialRequest\MaterialRequest;
-use App\Services\MaterialService;
 use Exception;
+use App\Services\MaterialService;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\MaterialRequest\MaterialRequest;
+use App\Http\Requests\MaterialRequest\MaterialUpdateRequest;
 
 class MaterialController extends Controller
 {
@@ -17,7 +19,6 @@ class MaterialController extends Controller
         $this->materialService = $materialService;
     }
 
-    // Lấy danh sách tài liệu theo bài học
     public function index($lessonId): JsonResponse
     {
         try {
@@ -41,7 +42,6 @@ class MaterialController extends Controller
         }
     }
 
-    // Lấy chi tiết tài liệu
     public function show($id): JsonResponse
     {
         try {
@@ -65,7 +65,6 @@ class MaterialController extends Controller
         }
     }
 
-    // Tạo mới tài liệu
     public function store(MaterialRequest $request): JsonResponse
     {
         try {
@@ -86,51 +85,106 @@ class MaterialController extends Controller
         }
     }
 
-    // Cập nhật tài liệu với file (nếu có)
     public function updateWithFile(MaterialRequest $request, $id): JsonResponse
     {
         try {
-            $data = $request->validated();
-            $data = $this->handleFileUpload($request, $data);
+            $material = $this->materialService->getMaterialById($id);
 
-            $material = $this->materialService->updateMaterial($id, $data);
+            if (!$material) {
+                return response()->json([
+                    'message' => 'Tài liệu không tồn tại.'
+                ], 404);
+            }
+
+            $data = $request->validated();
+
+            // Kiểm tra nếu loại tài liệu thay đổi từ file sang link
+            if ($material->type === 'file' && $data['type'] === 'link') {
+                // Xóa file cũ trong storage nếu tồn tại
+                if ($material->file_path) {
+                    if (Storage::disk('public')->exists($material->file_path)) {
+                        $deleted = Storage::disk('public')->delete($material->file_path);
+                        if ($deleted) {
+                            \Log::info("File đã được xóa: " . $material->file_path);
+                        } else {
+                            \Log::error("Không thể xóa file: " . $material->file_path);
+                        }
+                    } else {
+                        \Log::warning("File không tồn tại: " . $material->file_path);
+                    }
+                }
+            }
+
+            // Xử lý upload file mới nếu loại là file
+            $data = $this->handleFileUpload($request, $data, $material);
+
+            // Cập nhật tài liệu
+            $updatedMaterial = $this->materialService->updateMaterial($id, $data);
 
             return response()->json([
                 'message' => 'Tài liệu đã được cập nhật.',
-                'data' => $material
+                'data' => $updatedMaterial
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Tài liệu không tồn tại hoặc lỗi khi cập nhật.',
+                'message' => 'Lỗi khi cập nhật tài liệu.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
 
-    // Cập nhật tài liệu không có file
-    public function update(MaterialRequest $request, $id): JsonResponse
+
+
+    public function update(MaterialUpdateRequest $request, $id): JsonResponse
     {
         try {
             $data = $request->validated();
 
-            $material = $this->materialService->updateMaterial($id, $data);
+            $material = $this->materialService->getMaterialById($id);
+
+            if (!$material) {
+                return response()->json([
+                    'message' => 'Tài liệu không tồn tại.'
+                ], 404);
+            }
+            // Kiểm tra nếu loại tài liệu thay đổi từ file sang link
+            if ($data['type'] === 'link' && $material->file_path) {
+                // Xóa file cũ trong storage nếu tồn tại
+                Storage::disk('public')->exists($material->file_path);
+                $deleted = Storage::disk('public')->delete($material->file_path);
+
+
+            }
+            $updatedMaterial = $this->materialService->updateMaterial($id, $data);
 
             return response()->json([
                 'message' => 'Tài liệu đã được cập nhật.',
-                'data' => $material
+                'data' => $updatedMaterial
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Tài liệu không tồn tại hoặc lỗi khi cập nhật.',
+                'message' => 'Lỗi khi cập nhật tài liệu.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
 
-    // Xóa tài liệu
     public function destroy($id): JsonResponse
     {
         try {
+            $material = $this->materialService->getMaterialById($id);
+
+            if (!$material) {
+                return response()->json([
+                    'message' => 'Tài liệu không tồn tại.'
+                ], 404);
+            }
+
+            // Xóa file vật lý nếu có
+            if ($material->type === 'file' && $material->file_path) {
+                Storage::disk('public')->delete($material->file_path);
+            }
+
             $this->materialService->deleteMaterial($id);
 
             return response()->json([
@@ -138,18 +192,24 @@ class MaterialController extends Controller
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Tài liệu không tồn tại hoặc lỗi khi xóa.',
+                'message' => 'Lỗi khi xóa tài liệu.',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 500);
         }
     }
 
-    // Hàm xử lý upload file cho tài liệu
-    private function handleFileUpload($request, $data)
+    private function handleFileUpload($request, $data, $material = null)
     {
-        if ($request->type === 'file' && $request->hasFile('file_path')) {
-            $path = $request->file('file_path')->store('materials', 'public');
-            $data['file_path'] = '/storage/' . $path;
+        if ($request->type == 'file' && $request->hasFile('file_path')) {
+            if ($material && $material->file_path) {
+                Storage::disk('public')->delete($material->file_path);
+            }
+
+            $originalName = $request->file('file_path')->getClientOriginalName();
+            $folder = 'materials';
+            $path = $request->file('file_path')->storeAs($folder, $originalName, 'public');
+
+            $data['file_path'] = $folder . '/' . $originalName;
         }
 
         return $data;

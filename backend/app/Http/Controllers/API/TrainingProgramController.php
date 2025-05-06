@@ -2,11 +2,12 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
+use App\Models\Semester;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\TrainingProgramService;
 use App\Http\Requests\TrainingProgramRequest\TrainingProgramRequest;
-use App\Models\Semester;
-use Illuminate\Http\JsonResponse;
 
 class TrainingProgramController extends Controller
 {
@@ -75,11 +76,20 @@ class TrainingProgramController extends Controller
             $program = $this->service->create($data);
 
             if (in_array($program->level, ['college', 'intermediate'])) {
-                $semester = new Semester([
-                    'name' => 'Học kỳ 1',
-                    'training_program_id' => $program->id
-                ]);
-                $semester->save();
+                // Tạo học kỳ đầu tiên
+                $semesters = [
+                    'Học kỳ 01',
+                    'Học kỳ 02',
+                    'Học kỳ 03'
+                ];
+
+                foreach ($semesters as $semesterName) {
+                    $semester = new Semester([
+                        'name' => $semesterName,
+                        'training_program_id' => $program->id
+                    ]);
+                    $semester->save();
+                }
             }
 
             return response()->json([
@@ -94,6 +104,7 @@ class TrainingProgramController extends Controller
             ], 500);
         }
     }
+
 
     // Cập nhật chương trình đào tạo
     public function update(TrainingProgramRequest $request, $id): JsonResponse
@@ -130,20 +141,21 @@ class TrainingProgramController extends Controller
             if (!$deleted) {
                 return response()->json([
                     'message' => 'Không tìm thấy chương trình đào tạo để xóa.'
-                ], 404);
+                ], 404); // Nếu không tìm thấy chương trình để xóa
             }
 
             return response()->json([
                 'message' => 'Xóa chương trình đào tạo thành công.'
-            ], 200);
+            ], 200); // Nếu xóa thành công
 
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Lỗi khi xóa chương trình đào tạo.',
                 'error' => $e->getMessage()
-            ], 500);
+            ], 500); // Xử lý lỗi server
         }
     }
+
 
     // Lọc chương trình đào tạo theo cấp bậc
     public function filterByLevel($level): JsonResponse
@@ -169,4 +181,139 @@ class TrainingProgramController extends Controller
             ], 500);
         }
     }
+
+    // Phần cho Học viên
+    public function getStudentPrograms(Request $request)
+    {
+        try {
+            $user = $request->user(); // Lấy người dùng từ JWT token
+            $programs = $user->trainingPrograms; // Lấy các chương trình đào tạo mà học viên đang tham gia
+
+            if ($programs->isEmpty()) {
+                return response()->json([
+                    'message' => 'Bạn chưa đăng ký chương trình đào tạo nào.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Danh sách chương trình đào tạo bạn đang học.',
+                'data' => $programs
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy danh sách chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function detailed($id)
+    {
+        try {
+            $program = $this->service->getDetailedById($id);
+
+            if (!$program) {
+                return response()->json([
+                    'message' => 'Chương trình đào tạo không tồn tại.'
+                ], 404);
+            }
+
+            // Tính tổng số tín chỉ và thời gian
+            $totalCredits = 0;
+            $totalHours = 0;
+            $totalTheoryHours = 0;
+            $totalPracticeHours = 0;
+            $totalExamHours = 0;
+
+            // Dữ liệu sẽ được trả về
+            $data = [
+                'id' => $program->id,
+                'name' => $program->name,
+                'code' => $program->code,
+                'level' => $program->level,
+                'note' => $program->note,
+                'advisor' => $program->advisor,
+                'semesters' => [],
+                'program_courses' => [] // Để lưu các môn học không có học kỳ
+            ];
+
+            // Nếu chương trình có học kỳ
+            if (!$program->semesters->isEmpty()) {
+                $data['semesters'] = $program->semesters->map(function ($semester) use (&$totalCredits, &$totalHours, &$totalTheoryHours, &$totalPracticeHours, &$totalExamHours) {
+                    return [
+                        'id' => $semester->id,
+                        'name' => $semester->name,
+                        'courses' => $semester->courses->map(function ($course) use (&$totalCredits, &$totalHours, &$totalTheoryHours, &$totalPracticeHours, &$totalExamHours) {
+                            // Cộng dồn tổng tín chỉ và thời gian
+                            $totalCredits += $course->credits;
+                            $totalHours += $course->total_hours;
+                            $totalTheoryHours += $course->theory_hours;
+                            $totalPracticeHours += $course->practice_hours;
+                            $totalExamHours += $course->exam_hours;
+
+                            return [
+                                'id' => $course->id,
+                                'code' => $course->code,
+                                'name' => $course->title,
+                                'credits' => $course->credits,
+                                'total_hours' => $course->total_hours,
+                                'theory_hours' => $course->theory_hours,
+                                'practice_hours' => $course->practice_hours,
+                                'exam_hours' => $course->exam_hours,
+                            ];
+                        })
+                    ];
+                });
+            }
+
+            // Nếu chương trình không có học kỳ, lấy các môn học từ programCourses
+            if ($program->semesters->isEmpty()) {
+                $data['program_courses'] = $program->programCourses->map(function ($programCourse) use (&$totalCredits, &$totalHours, &$totalTheoryHours, &$totalPracticeHours, &$totalExamHours) {
+                    $course = $programCourse->course; // Lấy môn học từ quan hệ programCourses
+
+                    // Cộng dồn tổng tín chỉ và thời gian
+                    $totalCredits += $course->credits;
+                    $totalHours += $course->total_hours;
+                    $totalTheoryHours += $course->theory_hours;
+                    $totalPracticeHours += $course->practice_hours;
+                    $totalExamHours += $course->exam_hours;
+
+                    return [
+                        'id' => $course->id,
+                        'code' => $course->code,
+                        'name' => $course->title,
+                        'credits' => $course->credits,
+                        'total_hours' => $course->total_hours,
+                        'theory_hours' => $course->theory_hours,
+                        'practice_hours' => $course->practice_hours,
+                        'exam_hours' => $course->exam_hours,
+                    ];
+                });
+            }
+
+            // Thêm tổng kết vào dữ liệu
+            $data['summary'] = [
+                'total_credits' => $totalCredits,
+                'total_hours' => $totalHours,
+                'total_theory_hours' => $totalTheoryHours,
+                'total_practice_hours' => $totalPracticeHours,
+                'total_exam_hours' => $totalExamHours,
+            ];
+
+            return response()->json([
+                'message' => 'Chi tiết đầy đủ chương trình đào tạo.',
+                'data' => $data
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy chi tiết chương trình đào tạo.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
 }

@@ -6,6 +6,7 @@ enum RoleEnum: string
 {
     case Admin = 'admin';
     case Student = 'student';
+    case Advisor = 'advisor';  // Thêm role Advisor
 
     public static function values(): array
     {

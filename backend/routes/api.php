@@ -1,7 +1,6 @@
 <?php
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BlogController;
@@ -24,6 +23,7 @@ use App\Http\Controllers\API\LearningResultController;
 use App\Http\Controllers\API\DisciplineScoreController;
 use App\Http\Controllers\API\TrainingProgramController;
 use App\Http\Controllers\API\ReExamRegistrationController;
+use App\Http\Controllers\API\TrainingProgramBannerController;
 use App\Http\Controllers\API\StudentTrainingProgramController;
 
 
@@ -68,6 +68,8 @@ Route::prefix('users')->group(function () {
     Route::put('/{id}', [UserController::class, 'update'])->middleware('auth:api', 'role:admin');
     Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('auth:api', 'role:admin');
     Route::post('/{id}/reset-password', [UserController::class, 'resetPassword'])->middleware('auth:api', 'role:admin');
+    Route::get('/role/{role}', [UserController::class, 'getUsersByRole'])->middleware('auth:api', 'role:admin');
+
 });
 
 Route::middleware(['auth:api'])->group(function () {
@@ -88,8 +90,16 @@ Route::prefix('training-programs')->group(function () {
     Route::put('/{id}', [TrainingProgramController::class, 'update']);
     Route::delete('/{id}', [TrainingProgramController::class, 'destroy']);
     Route::get('/filter/{level}', [TrainingProgramController::class, 'filterByLevel']); // Lọc theo loại
-});
 
+
+});
+//API Training-Program  Banners
+Route::prefix('training-program-banners')->group(function () {
+    Route::get('/{programId}', [TrainingProgramBannerController::class, 'index']);
+    Route::post('/', [TrainingProgramBannerController::class, 'store']);
+    Route::post('/{id}', [TrainingProgramBannerController::class, 'update']); // Không dùng PUT vì có file
+    Route::delete('/{id}', [TrainingProgramBannerController::class, 'destroy']);
+});
 
 // API Semesters
 
@@ -190,7 +200,7 @@ Route::prefix('materials')->group(function () {
     Route::get('/{id}', [MaterialController::class, 'show']);
     Route::post('/', [MaterialController::class, 'store']); // Tạo mới
     Route::put('/{id}', [MaterialController::class, 'update']); // Cập nhật JSON
-    Route::post('/{id}/update', [MaterialController::class, 'updateWithFile']); // Cập nhật có file
+    Route::post('/{id}', [MaterialController::class, 'updateWithFile']); // Cập nhật file (POST nhưng vào id luôn)
     Route::delete('/{id}', [MaterialController::class, 'destroy']);
 });
 
@@ -217,7 +227,7 @@ Route::prefix('exempt-courses')->group(function () {
 });
 
 
-// API certificates (chứng chỉ/ bằng)
+// API certificates (chứng chỉ/ bằng) ==> X
 Route::prefix('certificates')->group(function () {
     Route::post('/', [CertificateController::class, 'store']);
     Route::get('/{id}', [CertificateController::class, 'show']);
@@ -339,7 +349,14 @@ Route::prefix('faqs')->group(function () {
 });
 
 
+// Routes For Student
 
+Route::prefix('student')->middleware('auth:api')->group(function () {
+    // Lấy danh sách chương trình đào tạo mà học viên đang tham gia
+    Route::get('/training-programs', [TrainingProgramController::class, 'getStudentPrograms']);
+    Route::get('/training-programs/{id}/detail', [TrainingProgramController::class, 'detailed']);
+    Route::get('/courses/{id}/learning', [CourseController::class, 'learningDetail']);
+});
 
 
 

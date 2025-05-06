@@ -63,7 +63,6 @@ class UserController extends Controller
         try {
             $user = $this->userService->getUserById((int) $id);
             // Eager load các quan hệ: enrollments, reviews, progress
-            $user->load(['profile']);
             return response()->json($user, 200);
         } catch (Exception $e) {
             return response()->json([
@@ -131,4 +130,17 @@ class UserController extends Controller
             ], 500);
         }
     }
+    public function getUsersByRole($role)
+    {
+        try {
+            $users = $this->userService->listUsers(['role' => $role]);
+            return response()->json($users, 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi: Không thể lấy người dùng theo vai trò.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

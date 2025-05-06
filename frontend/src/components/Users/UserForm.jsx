@@ -22,7 +22,11 @@ const createSchema = yup.object().shape({
   password_confirmation: yup
     .string()
     .oneOf([yup.ref("password"), null], "Mật khẩu xác nhận không khớp"),
-  role: yup.string().required("Vai trò không được để trống"),
+  role: yup
+    .string()
+    .oneOf(["student", "admin", "advisor"], "Vai trò không hợp lệ")
+    .required("Vai trò không được để trống"),
+
   first_name: yup.string().required("Tên riêng không được để trống"),
   last_name: yup.string().required("Họ không được để trống"),
   phone: yup
@@ -115,7 +119,7 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="user-form__group">
-        <label className="user-form__label">Tên tài khoản:</label>
+        <label className="user-form__label">Tên người dùng:</label>
         <input
           type="text"
           {...register("name")}
@@ -182,6 +186,7 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
             >
               <option value="">Chọn vai trò</option>
               <option value="student">Học viên</option>
+              <option value="advisor">Cố vấn</option>
               <option value="admin">Admin</option>
             </select>
             {errors.role && (

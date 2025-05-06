@@ -7,7 +7,7 @@ const TrainingProgramModal = ({
   handleClose,
   initialData,
   onSuccess,
-  courses,
+  advisors,
 }) => {
   return (
     <Modal
@@ -26,11 +26,11 @@ const TrainingProgramModal = ({
         <TrainingProgramForm
           initialData={initialData}
           onSuccess={() => {
-            onSuccess();
+            onSuccess(); // truyền dữ liệu về cha
             handleClose();
           }}
           onCancel={handleClose}
-          courses={courses}
+          advisors={advisors}
         />
       </Modal.Body>
     </Modal>
@@ -42,7 +42,7 @@ TrainingProgramModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   initialData: PropTypes.object,
   onSuccess: PropTypes.func.isRequired,
-  courses: PropTypes.array.isRequired,
+  advisors: PropTypes.array.isRequired,
 };
 
 export default TrainingProgramModal;

@@ -12,4 +12,6 @@ interface ExemptCourseRepositoryInterface
 
     // Kiểm tra môn học có được miễn cho học viên không
     public function isExempt($studentId, $courseId);
+    public function isStudentEnrolledInProgram($studentId, $programId);
+    public function isCourseInProgram($courseId, $programId);
 }

@@ -38,7 +38,6 @@ const AdminUsers = () => {
   }, []);
 
   const handleEdit = (user) => {
-    console.log("Editing user:", user);
     setEditingUser(user);
     setShowUserModal(true);
   };

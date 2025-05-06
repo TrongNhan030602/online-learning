@@ -20,7 +20,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var list<string>
      */
-    protected $tabel = "users";
+    protected $table = "users";
     protected $fillable = [
         'name',
         'email',
@@ -78,8 +78,18 @@ class User extends Authenticatable implements JWTSubject
     ];
     public function is_admin()
     {
-        return $this->role === RoleEnum::Admin;
+        return $this->role === RoleEnum::Admin->value;  // Dùng .value để lấy giá trị của Enum
     }
+    public function is_student()
+    {
+        return $this->role === RoleEnum::Student->value;
+    }
+
+    public function is_advisor()
+    {
+        return $this->role === RoleEnum::Advisor->value;
+    }
+
     /**
      * Get the attributes that should be cast.
      *

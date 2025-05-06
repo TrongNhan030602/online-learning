@@ -9,4 +9,8 @@ interface TrainingProgramRepositoryInterface
     public function update($id, array $data);
     public function delete($id);
     public function getByLevel($level);
+
+    // For Student
+    public function getDetailedById($id);
+
 }

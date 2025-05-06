@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useToast } from "../../../hooks/useToast";
 import trainingProgramApi from "../../../api/trainingProgramApi";
-import courseApi from "../../../api/courseApi";
-
+import userApi from "../../../api/userApi";
 import TrainingProgramList from "../../../components/TrainingPrograms/TrainingProgramList";
 import TrainingProgramModal from "../../../components/TrainingPrograms/TrainingProgramModal";
 import ConfirmDialog from "../../../components/Common/ConfirmDialog";
@@ -10,9 +9,7 @@ import Loading from "../../../components/Common/Loading";
 import "../../../styles/trainingPrograms/admin-training-programs.css";
 
 const AdminTrainingPrograms = () => {
-  const [courses, setCourses] = useState([]); // Lưu danh sách khóa học
-
-  const [programs, setPrograms] = useState([]);
+  const [programs, setPrograms] = useState([]); // Khởi tạo mảng rỗng
   const [loading, setLoading] = useState(true);
   const [editingProgram, setEditingProgram] = useState(null);
   const [showProgramModal, setShowProgramModal] = useState(false);
@@ -20,71 +17,113 @@ const AdminTrainingPrograms = () => {
     isOpen: false,
     programId: null,
   });
-
+  const [advisors, setAdvisors] = useState([]);
   const { addToast } = useToast();
 
+  // Hàm fetch dữ liệu (dùng useCallback để tránh việc gọi lại khi không cần thiết)
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const programsRes = await trainingProgramApi.getAll();
+      const fetchedPrograms = Array.isArray(programsRes.data?.data)
+        ? programsRes.data.data
+        : [];
+      setPrograms(fetchedPrograms); // Cập nhật dữ liệu khi fetch xong
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu:", error);
+      addToast({
+        title: "Lỗi",
+        message: "Không thể tải dữ liệu chương trình đào tạo.",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [addToast]);
+
   useEffect(() => {
-    const fetchPrograms = async () => {
-      setLoading(true);
+    // Fetch dữ liệu chương trình đào tạo và danh sách cố vấn khi component được render lần đầu
+    fetchData();
+    const fetchAdvisors = async () => {
       try {
-        const res = await trainingProgramApi.getAll();
-        setPrograms(Array.isArray(res.data) ? res.data : []); // Đảm bảo rằng res.data là mảng
-      } catch (err) {
-        console.error("Lỗi khi lấy chương trình đào tạo:", err);
-      } finally {
-        setLoading(false);
+        const res = await userApi.getUsers({ role: "advisor" });
+        setAdvisors(res.data || []);
+      } catch (error) {
+        console.error("Lỗi khi tải danh sách cố vấn:", error);
+        addToast({
+          title: "Lỗi",
+          message: "Không thể tải danh sách cố vấn.",
+          type: "error",
+        });
       }
     };
+    fetchAdvisors();
+  }, [fetchData, addToast]);
 
-    fetchPrograms();
-  }, []);
-  // Fetch danh sách khóa học
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const coursesRes = await courseApi.getCourses();
-        setCourses(coursesRes.data);
-      } catch (err) {
-        console.error("Lỗi khi lấy dữ liệu khóa học:", err);
-      }
-    };
-
-    fetchCourses();
-  }, []);
+  // Hàm thêm mới chương trình đào tạo
   const handleAdd = () => {
     setEditingProgram(null);
     setShowProgramModal(true);
   };
 
+  // Hàm chỉnh sửa chương trình đào tạo
   const handleEdit = (program) => {
     setEditingProgram(program);
     setShowProgramModal(true);
   };
 
+  // Hàm xoá chương trình đào tạo
   const handleDelete = (id) => {
     setConfirmDelete({ isOpen: true, programId: id });
   };
 
+  // Xác nhận xoá chương trình đào tạo
   const confirmDeleteProgram = async () => {
     try {
-      await trainingProgramApi.delete(confirmDelete.programId);
-      setPrograms(programs.filter((p) => p.id !== confirmDelete.programId));
-      addToast({
-        title: "Thành công!",
-        message: "Đã xóa chương trình đào tạo.",
-        type: "success",
-        duration: 3000,
-      });
-    } catch (err) {
-      console.error("Lỗi khi xoá:", err);
+      const response = await trainingProgramApi.delete(confirmDelete.programId);
+
+      if (response.status === 200) {
+        // Kiểm tra phản hồi từ API
+        setPrograms(
+          (prev) => prev.filter((p) => p.id !== confirmDelete.programId) // Cập nhật lại state trực tiếp
+        );
+
+        addToast({
+          title: "Thành công!",
+          message: "Chương trình đào tạo đã được xóa.",
+          type: "success",
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi khi xoá chương trình:", error);
       addToast({
         title: "Lỗi!",
-        message: "Không thể xoá chương trình.",
+        message: error.response?.data?.message || "Không thể xoá chương trình.",
         type: "error",
+        duration: 3000,
       });
     } finally {
       setConfirmDelete({ isOpen: false, programId: null });
     }
+  };
+
+  // Hàm xử lý khi thêm mới hoặc chỉnh sửa chương trình
+  const handleModalSuccess = async () => {
+    // Đóng modal sau khi hoàn thành
+    setShowProgramModal(false);
+
+    // Hiển thị thông báo thành công
+    addToast({
+      title: "Thành công!",
+      message: editingProgram
+        ? "Chỉnh sửa chương trình đào tạo thành công."
+        : "Thêm mới chương trình đào tạo thành công.",
+      type: "success",
+    });
+
+    // Gọi lại fetchData để reload lại danh sách
+    fetchData();
   };
 
   return (
@@ -103,9 +142,9 @@ const AdminTrainingPrograms = () => {
         <Loading text="Đang tải dữ liệu..." />
       ) : (
         <TrainingProgramList
-          trainingPrograms={programs}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          trainingPrograms={programs} // Truyền lại dữ liệu mới từ state
+          onEdit={handleEdit} // Hàm chỉnh sửa
+          onDelete={handleDelete} // Hàm xóa
         />
       )}
 
@@ -113,19 +152,8 @@ const AdminTrainingPrograms = () => {
         show={showProgramModal}
         handleClose={() => setShowProgramModal(false)}
         initialData={editingProgram}
-        courses={courses || []}
-        onSuccess={() => {
-          setLoading(true);
-          trainingProgramApi
-            .getAll()
-            .then((res) => {
-              setPrograms(Array.isArray(res.data) ? res.data : []);
-            })
-            .catch((err) => {
-              console.error("Lỗi reload:", err);
-            })
-            .finally(() => setLoading(false));
-        }}
+        onSuccess={handleModalSuccess}
+        advisors={advisors}
       />
 
       <ConfirmDialog

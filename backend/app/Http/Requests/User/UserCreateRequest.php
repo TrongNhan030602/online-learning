@@ -19,7 +19,7 @@ class UserCreateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|in:admin,student',
+            'role' => 'required|in:admin,student,advisor',
 
             // Các trường hồ sơ người dùng
             'first_name' => 'required|string|max:255',

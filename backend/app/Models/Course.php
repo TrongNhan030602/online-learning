@@ -46,4 +46,9 @@ class Course extends Model
     {
         return $this->hasMany(ReExamRegistration::class, 'course_id');
     }
+
+    public function courseSessions()
+    {
+        return $this->hasMany(CourseSession::class);
+    }
 }

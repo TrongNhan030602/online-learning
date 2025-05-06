@@ -1,120 +1,203 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "react-bootstrap";
+import BannerModal from "../../../components/TrainingPrograms/Banners/BannerModal"; // Import BannerModal vào đây
+
 import trainingProgramApi from "../../../api/trainingProgramApi";
 import { getStorageUrl } from "../../../utils/getStorageUrl";
 import "../../../styles/trainingPrograms/training-program-detail.css";
 
+const levelLabels = {
+  college: "Cao đẳng",
+  intermediate: "Trung cấp",
+  certificate: "Chứng chỉ nghề",
+  specialized: "Chuyên sâu",
+  software: "Phần mềm",
+};
+
 const TrainingProgramDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [trainingProgram, setTrainingProgram] = useState(null);
+  const [program, setProgram] = useState(null);
+  const [selectedBanner, setSelectedBanner] = useState(null);
+  const [showBannerModal, setShowBannerModal] = useState(false);
 
-  useEffect(() => {
-    trainingProgramApi
-      .getById(id)
-      .then((response) => setTrainingProgram(response.data))
-      .catch((error) =>
-        console.error("Lỗi khi lấy thông tin chương trình đào tạo", error)
-      );
+  const fetchProgram = useCallback(async () => {
+    try {
+      const response = await trainingProgramApi.getById(id);
+      setProgram(response.data.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy thông tin chương trình đào tạo", error);
+    }
   }, [id]);
 
-  if (!trainingProgram) {
-    return <div className="loading">Đang tải...</div>;
-  }
+  useEffect(() => {
+    fetchProgram();
+  }, [id, fetchProgram]);
 
-  const course = trainingProgram.course;
-  const courseImageUrl = course?.image_url
-    ? getStorageUrl(course.image_url)
-    : null;
+  const handleEditBanner = (banner) => {
+    setSelectedBanner(banner);
+    setShowBannerModal(true);
+  };
+
+  const handleAddBanner = () => {
+    setSelectedBanner(null); // Đặt selectedBanner là null để thêm mới banner
+    setShowBannerModal(true);
+  };
+
+  const handleSaveBanner = () => {
+    fetchProgram(); // Tải lại banners sau khi lưu
+  };
+
+  const handleSemesterClick = (semesterId) => {
+    navigate(`/admin/semester-detail/${semesterId}`);
+  };
+
+  const handleCourseClick = (courseId) => {
+    navigate(`/admin/course-detail/${courseId}`);
+  };
+
+  const handleAddSemester = () => {
+    console.log("Thêm học kỳ mới");
+  };
+
+  const handleAddCourse = () => {
+    console.log("Chọn môn học cho chương trình");
+  };
+
+  if (!program) return <div className="loading">Đang tải...</div>;
 
   return (
     <div className="training-program-detail">
       <div className="training-program-detail__back">
-        <button onClick={() => navigate(-1)}>← Quay lại</button>
+        <button onClick={() => navigate(-1)}>&larr; Quay lại</button>
       </div>
 
       <div className="training-program-detail__header">
-        <h1 className="training-program-detail__title">
-          {trainingProgram.name}
-        </h1>
+        <h1 className="training-program-detail__title">{program.name}</h1>
         <p className="training-program-detail__description">
-          {trainingProgram.description || "Không có mô tả"}
+          {program.note || "Không có mô tả"}
         </p>
       </div>
 
       <div className="training-program-detail__info">
-        <div className="training-program-detail__duration">
-          <h3>Thời gian:</h3>
-          <p>{trainingProgram.duration || "Không xác định"} tháng</p>
+        <div>
+          <strong>Mã chương trình:</strong>
+          <span>{program.code}</span>
         </div>
-        <div className="training-program-detail__requirements">
-          <h3>Yêu cầu:</h3>
-          <p>{trainingProgram.requirements || "Không có yêu cầu cụ thể"}</p>
+        <div>
+          <strong>Cấp bậc:</strong>
+          <span>{levelLabels[program.level]}</span>
         </div>
-        <div className="training-program-detail__objectives">
-          <h3>Mục tiêu:</h3>
-          <p>{trainingProgram.objectives || "Chưa cập nhật mục tiêu"}</p>
+        <div>
+          <strong>Cố vấn:</strong>
+          <span>{program.advisor?.name || "Chưa có"}</span>
         </div>
       </div>
 
-      {course ? (
-        <div className="training-program-detail__course-info">
-          <h2>Thuộc về khóa học</h2>
-          <div className="training-program-detail__course">
-            {courseImageUrl && (
+      {/* Banners */}
+      {program.banners?.length > 0 && (
+        <div className="training-program-detail__banners">
+          {program.banners.map((banner) => (
+            <div
+              key={banner.id}
+              className="training-program-detail__banner"
+            >
               <img
-                className="training-program-detail__course-image"
-                src={courseImageUrl}
-                alt={course.title}
+                src={getStorageUrl(banner.image_url)}
+                alt={banner.title}
+                className="training-program-detail__banner-image"
               />
-            )}
-            <div className="training-program-detail__course-description">
-              <h3>{course.title}</h3>
-              <p>{course.description || "Không có mô tả khóa học"}</p>
-              <p className="training-program-detail__course-price">
-                Giá: {new Intl.NumberFormat().format(course.price || 0)} VND
-              </p>
+              <span
+                className="training-program-detail__banner-icon"
+                onClick={() => handleEditBanner(banner)}
+              >
+                <FontAwesomeIcon icon={faPen} />
+              </span>
             </div>
-          </div>
+          ))}
+          <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={handleAddBanner}
+          >
+            + Thêm banner
+          </Button>
         </div>
-      ) : (
-        <p className="training-program-detail__no-course">
-          Chưa có thông tin khóa học.
+      )}
+
+      {/* Program Semesters */}
+      {program.semesters?.length > 0 && (
+        <div className="training-program-detail__semesters">
+          <h3>
+            Học kỳ{" "}
+            <button
+              className="training-program-detail__button"
+              onClick={handleAddSemester}
+            >
+              Thêm học kỳ
+            </button>
+          </h3>
+          <ul>
+            {program.semesters.map((semester) => (
+              <li
+                key={semester.id}
+                className="semester-item"
+                onClick={() => handleSemesterClick(semester.id)}
+              >
+                Học kỳ {semester.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Program Courses */}
+      {program.program_courses?.length > 0 && !program.semesters?.length && (
+        <div className="training-program-detail__courses">
+          <h3>
+            Danh sách môn học{" "}
+            <button
+              className="training-program-detail__button"
+              onClick={handleAddCourse}
+            >
+              Chọn môn học
+            </button>
+          </h3>
+          <ul>
+            {program.program_courses.map((course) => {
+              const courseDetails = course.course;
+              return (
+                <li
+                  key={course.id}
+                  onClick={() => handleCourseClick(course.course.id)}
+                  className="course-item"
+                >
+                  <strong>{courseDetails.title}</strong> ({courseDetails.code})
+                  <p>{courseDetails.description}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+
+      {!program.program_courses?.length && !program.semesters?.length && (
+        <p>
+          Chưa có môn học nào hoặc học kỳ nào được gán cho chương trình này.
         </p>
       )}
 
-      <div className="training-program-detail__classrooms">
-        <h3>Lớp học</h3>
-        {course?.class_rooms?.length > 0 ? (
-          course.class_rooms.map((classRoom) => (
-            <div
-              key={classRoom.id}
-              className="training-program-detail__classroom"
-            >
-              <h4>{classRoom.name}</h4>
-              <p>
-                Thời gian: {new Date(classRoom.start_date).toLocaleDateString()}{" "}
-                - {new Date(classRoom.end_date).toLocaleDateString()}
-              </p>
-              <p>
-                Trạng thái:{" "}
-                {{
-                  open: "Mở",
-                  ongoing: "Đang diễn ra",
-                  completed: "Đã hoàn thành",
-                  closed: "Đóng",
-                }[classRoom.status] || "Chưa xác định"}
-              </p>
-              <p>
-                Số lượng học viên: {classRoom.current_students}/
-                {classRoom.max_students}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p>Chưa có lớp học nào được mở cho chương trình này.</p>
-        )}
-      </div>
+      {/* Banner Modal */}
+      <BannerModal
+        show={showBannerModal}
+        onHide={() => setShowBannerModal(false)}
+        programId={id}
+        selectedBanner={selectedBanner}
+        onSave={handleSaveBanner}
+      />
     </div>
   );
 };

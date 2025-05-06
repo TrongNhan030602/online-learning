@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
             // Không cần validate email, role và password
             'email' => 'nullable|email|max:255|unique:users,email,' . $userId,  // email chỉ kiểm tra nếu có thay đổi
             'password' => 'nullable|min:6', // mật khẩu có thể thay đổi, nhưng không bắt buộc
-            'role' => 'nullable|in:admin,student', // không yêu cầu cập nhật role
+            'role' => 'nullable|in:admin,student,advisor', // không yêu cầu cập nhật role
 
             // Các trường hồ sơ người dùng
             'first_name' => 'sometimes|required|string|max:255',

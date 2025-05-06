@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom"; // Import Navigate
+import { Routes, Route } from "react-router-dom"; // Import Navigate
 import { lazy, Suspense } from "react";
 import StudentLayout from "../layouts/StudentLayout";
 import Loading from "../components/Common/Loading";
@@ -14,19 +14,17 @@ const Blogs = lazy(() => import("../pages/students/Blogs/Blogs"));
 const BlogDetail = lazy(() => import("../pages/students/Blogs/BlogDetail"));
 const StudentProfile = lazy(() => import("../pages/students/StudentProfile"));
 const TrainingProgram = lazy(() => import("../pages/students/TrainingProgram"));
-// const StudentDashboard = lazy(() =>
-//   import("../pages/students/StudentDashboard/StudentDashboard")
-// );
+const StudentDashboard = lazy(() =>
+  import("../pages/students/StudentDashboard/StudentDashboard")
+);
 const StudentNotifications = lazy(() =>
   import("../pages/students/StudentNotifications")
 );
 const StudentChat = lazy(() => import("../pages/students/StudentChat"));
-const StudentMyClasses = lazy(() =>
-  import("../pages/students/MyClasses/StudentMyClasses")
+const CourseLearningPage = lazy(() =>
+  import("../pages/students/MyCourse/CourseLearningPage")
 );
-const ClassSessions = lazy(() =>
-  import("../pages/students/MyClasses/ClassSessions")
-);
+
 // Học vụ
 const ExamSchedule = lazy(() =>
   import("../pages/students/Academic/ExamSchedule")
@@ -48,15 +46,9 @@ const StudentRoutes = () => {
         path="/"
         element={<StudentLayout />}
       >
-        {/* Redirect mặc định khi truy cập vào /student */}
+        {/* Redirect mặc định khi truy cập vào trang chủ */}
         <Route
           index
-          // element={<Navigate to="/student/dashboard" />}
-          element={<Navigate to="/student/training-program" />}
-        />
-
-        {/* <Route
-          path="dashboard"
           element={
             <Suspense
               fallback={
@@ -68,10 +60,28 @@ const StudentRoutes = () => {
                 />
               }
             >
-              <StudentDashboard />
+              <StudentDashboard /> {/* Trang chủ */}
             </Suspense>
           }
-        /> */}
+        />
+        <Route
+          path="my-training-program/:id"
+          element={
+            <Suspense
+              fallback={
+                <Loading
+                  text="Đang tải dữ liệu..."
+                  size="lg"
+                  variant="primary"
+                  textVariant="primary"
+                />
+              }
+            >
+              <TrainingProgram />
+            </Suspense>
+          }
+        />
+
         {/* Khóa */}
         <Route
           path="courses"
@@ -142,41 +152,25 @@ const StudentRoutes = () => {
             </Suspense>
           }
         />
-        {/* Lớp  */}
+        {/* Môn  */}
         <Route
-          path="my-classes"
+          path="my-course/:courseId"
           element={
             <Suspense
               fallback={
                 <Loading
-                  text="Đang tải dữ liệu..."
+                  text="Đang tải trang học..."
                   size="lg"
                   variant="primary"
                   textVariant="primary"
                 />
               }
             >
-              <StudentMyClasses />
+              <CourseLearningPage />
             </Suspense>
           }
         />
-        <Route
-          path="my-classes/:classroomId"
-          element={
-            <Suspense
-              fallback={
-                <Loading
-                  text="Đang tải dữ liệu..."
-                  size="lg"
-                  variant="primary"
-                  textVariant="primary"
-                />
-              }
-            >
-              <ClassSessions />
-            </Suspense>
-          }
-        />
+
         {/* Thông tin cá nhân */}
         <Route
           path="profile"

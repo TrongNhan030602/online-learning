@@ -63,4 +63,13 @@ class CourseRepository implements CourseRepositoryInterface
 
         return $course->delete();
     }
+
+    // For Student
+    public function getLearningDetail($id)
+    {
+        return Course::with([
+            'courseSessions.lessons.materials'
+        ])->find($id);
+    }
+
 }
