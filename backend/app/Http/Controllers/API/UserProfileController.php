@@ -53,21 +53,30 @@ class UserProfileController extends Controller
         $userId = Auth::id();
         $file = $request->file('avatar');
 
-        // Lấy tên file an toàn
+        // 👉 Lấy avatar cũ để xóa
+        $oldAvatar = $this->profileService->getAvatarPath($userId); // cần viết hàm này
+
+        // 👉 Tạo tên file mới
         $originalName = $file->getClientOriginalName();
         $extension = $file->getClientOriginalExtension();
         $nameWithoutExt = pathinfo($originalName, PATHINFO_FILENAME);
         $slug = Str::slug($nameWithoutExt);
         $newName = $slug . '-' . time() . '.' . $extension;
 
-        // Lưu vào storage/app/public/avatars/
+        // 👉 Lưu file mới
         $path = $file->storeAs('avatars', $newName, 'public');
 
-        // Cập nhật đường dẫn trong DB (chỉ lưu /avatars/xxx.png)
+        // 👉 Xóa avatar cũ nếu tồn tại
+        if ($oldAvatar && Storage::disk('public')->exists($oldAvatar)) {
+            Storage::disk('public')->delete($oldAvatar);
+        }
+
+        // 👉 Cập nhật DB
         $this->profileService->updateAvatar($userId, 'avatars/' . $newName);
 
         return response()->json(['avatar' => 'avatars/' . $newName]);
     }
+
     public function changePassword(ChangePasswordRequest $request)
     {
         $userId = Auth::id();  // Lấy user hiện tại từ JWT hoặc Auth

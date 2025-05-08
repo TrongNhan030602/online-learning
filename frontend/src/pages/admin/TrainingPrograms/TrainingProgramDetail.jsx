@@ -1,11 +1,22 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPen,
+  faTrashAlt,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
-import BannerModal from "../../../components/TrainingPrograms/Banners/BannerModal"; // Import BannerModal vào đây
+import BannerModal from "../../../components/TrainingPrograms/Banners/BannerModal";
+import CourseSelectorModal from "../../../components/TrainingPrograms/Courses/CourseSelectorModal";
+
+import SemesterModal from "../../../components/Semester/SemesterModal";
+import ConfirmDialog from "../../../components/Common/ConfirmDialog";
+import { useToast } from "../../../hooks/useToast";
 
 import trainingProgramApi from "../../../api/trainingProgramApi";
+import programCourseApi from "../../../api/programCourseApi";
+import semesterApi from "../../../api/semesterApi";
 import { getStorageUrl } from "../../../utils/getStorageUrl";
 import "../../../styles/trainingPrograms/training-program-detail.css";
 
@@ -19,10 +30,19 @@ const levelLabels = {
 
 const TrainingProgramDetail = () => {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const { id } = useParams();
   const [program, setProgram] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [showBannerModal, setShowBannerModal] = useState(false);
+  // State cho Modal xử lý học kỳ
+  const [showSemesterModal, setShowSemesterModal] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState(null);
+  // State xác nhận xóa học kỳ
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [semesterToDelete, setSemesterToDelete] = useState(null);
+  // State chọn môn cho CTĐT
+  const [showCourseModal, setShowCourseModal] = useState(false);
 
   const fetchProgram = useCallback(async () => {
     try {
@@ -48,7 +68,7 @@ const TrainingProgramDetail = () => {
   };
 
   const handleSaveBanner = () => {
-    fetchProgram(); // Tải lại banners sau khi lưu
+    fetchProgram();
   };
 
   const handleSemesterClick = (semesterId) => {
@@ -59,12 +79,69 @@ const TrainingProgramDetail = () => {
     navigate(`/admin/course-detail/${courseId}`);
   };
 
+  // Xử lý xóa học kỳ
+  const handleDeleteSemesterClick = (semesterId) => {
+    setSemesterToDelete(semesterId);
+    setShowConfirm(true);
+  };
+
+  const confirmDeleteSemester = async () => {
+    if (!semesterToDelete) return;
+    try {
+      await semesterApi.deleteSemester(semesterToDelete);
+      fetchProgram();
+      addToast({
+        title: "Thành công!",
+        message: "Học kỳ đã được xóa.",
+        type: "success",
+        duration: 1500,
+      });
+    } catch (error) {
+      console.error("Lỗi khi xóa học kỳ:", error);
+    } finally {
+      setShowConfirm(false);
+      setSemesterToDelete(null);
+    }
+  };
+
+  const cancelDeleteSemester = () => {
+    setShowConfirm(false);
+    setSemesterToDelete(null);
+  };
+
+  // Xử lý sửa học kỳ
+  const handleEditSemester = (semester) => {
+    setSelectedSemester(semester); // Chọn học kỳ cần sửa
+    setShowSemesterModal(true); // Mở modal sửa học kỳ
+  };
+  // Xử lý thêm học kỳ
   const handleAddSemester = () => {
-    console.log("Thêm học kỳ mới");
+    setSelectedSemester(null); // Đặt selectedSemester = null khi thêm mới học kỳ
+    setShowSemesterModal(true); // Mở modal thêm học kỳ
   };
 
   const handleAddCourse = () => {
-    console.log("Chọn môn học cho chương trình");
+    setShowCourseModal(true);
+  };
+  const handleDeleteCourse = async (programCourseId) => {
+    try {
+      await programCourseApi.deleteProgramCourse(programCourseId);
+      fetchProgram(); // Cập nhật lại danh sách
+      addToast({
+        title: "Thành công!",
+        message: "Môn học đã được xóa khỏi chương trình.",
+        type: "success",
+        duration: 1500,
+      });
+    } catch (error) {
+      console.error("Lỗi khi xóa môn học:", error);
+      addToast({
+        title: "Lỗi!",
+        message: "Không thể xóa môn học.",
+        type: "error",
+        duration: 2000,
+      });
+    }
   };
 
   if (!program) return <div className="loading">Đang tải...</div>;
@@ -76,7 +153,9 @@ const TrainingProgramDetail = () => {
       </div>
 
       <div className="training-program-detail__header">
-        <h1 className="training-program-detail__title">{program.name}</h1>
+        <h1 className="training-program-detail__title">
+          {program.name} - <strong>{program.code}</strong>
+        </h1>
         <p className="training-program-detail__description">
           {program.note || "Không có mô tả"}
         </p>
@@ -98,9 +177,9 @@ const TrainingProgramDetail = () => {
       </div>
 
       {/* Banners */}
-      {program.banners?.length > 0 && (
-        <div className="training-program-detail__banners">
-          {program.banners.map((banner) => (
+      <div className="training-program-detail__banners">
+        {program.banners?.length > 0 ? (
+          program.banners.map((banner) => (
             <div
               key={banner.id}
               className="training-program-detail__banner"
@@ -117,16 +196,22 @@ const TrainingProgramDetail = () => {
                 <FontAwesomeIcon icon={faPen} />
               </span>
             </div>
-          ))}
-          <Button
-            size="sm"
-            variant="outline-primary"
-            onClick={handleAddBanner}
-          >
-            + Thêm banner
-          </Button>
-        </div>
-      )}
+          ))
+        ) : (
+          <p className="training-program-detail__no-banner">
+            Chưa có banner nào.
+          </p>
+        )}
+
+        <Button
+          size="sm"
+          variant="outline-primary"
+          onClick={handleAddBanner}
+          className="training-program-detail__add-banner-btn"
+        >
+          + Thêm banner
+        </Button>
+      </div>
 
       {/* Program Semesters */}
       {program.semesters?.length > 0 && (
@@ -140,22 +225,46 @@ const TrainingProgramDetail = () => {
               Thêm học kỳ
             </button>
           </h3>
-          <ul>
+          <ul className="training-program-detail__semester-list">
             {program.semesters.map((semester) => (
               <li
                 key={semester.id}
-                className="semester-item"
                 onClick={() => handleSemesterClick(semester.id)}
+                className="training-program-detail__semester-item"
               >
-                Học kỳ {semester.name}
+                <span className="training-program-detail__semester-name">
+                  {semester.name}{" "}
+                  <span className="training-program-detail__semester-icon">
+                    <FontAwesomeIcon icon={faChevronRight} />
+                  </span>
+                </span>
+                <div className="training-program-detail__semester-actions">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditSemester(semester);
+                    }}
+                    className="training-program-detail__semester-btn training-program-detail__semester-btn--edit"
+                  >
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteSemesterClick(semester.id);
+                    }}
+                    className="training-program-detail__semester-btn training-program-detail__semester-btn--delete"
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
         </div>
       )}
-
       {/* Program Courses */}
-      {program.program_courses?.length > 0 && !program.semesters?.length && (
+      {(program.program_courses?.length > 0 || !program.semesters?.length) && (
         <div className="training-program-detail__courses">
           <h3>
             Danh sách môn học{" "}
@@ -166,28 +275,40 @@ const TrainingProgramDetail = () => {
               Chọn môn học
             </button>
           </h3>
-          <ul>
-            {program.program_courses.map((course) => {
-              const courseDetails = course.course;
-              return (
-                <li
-                  key={course.id}
-                  onClick={() => handleCourseClick(course.course.id)}
-                  className="course-item"
-                >
-                  <strong>{courseDetails.title}</strong> ({courseDetails.code})
-                  <p>{courseDetails.description}</p>
-                </li>
-              );
-            })}
-          </ul>
+          {program.program_courses?.length === 0 &&
+          !program.semesters?.length ? (
+            <p className="text-center">
+              Chưa có môn học nào được gán cho chương trình này.
+            </p>
+          ) : (
+            <ul>
+              {program.program_courses.map((course) => {
+                const courseDetails = course.course;
+                return (
+                  <li
+                    key={course.id}
+                    className="course-item d-flex justify-content-between align-items-start"
+                  >
+                    <div
+                      onClick={() => handleCourseClick(course.course.id)}
+                      style={{ cursor: "pointer", flex: 1 }}
+                    >
+                      <strong>{courseDetails.title}</strong> (
+                      {courseDetails.code})<p>{courseDetails.description}</p>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteCourse(course.id)}
+                      className="btn btn-sm btn-outline-danger ms-2"
+                      title="Xóa môn học"
+                    >
+                      <FontAwesomeIcon icon={faTrashAlt} />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
-      )}
-
-      {!program.program_courses?.length && !program.semesters?.length && (
-        <p>
-          Chưa có môn học nào hoặc học kỳ nào được gán cho chương trình này.
-        </p>
       )}
 
       {/* Banner Modal */}
@@ -197,6 +318,29 @@ const TrainingProgramDetail = () => {
         programId={id}
         selectedBanner={selectedBanner}
         onSave={handleSaveBanner}
+      />
+      {/* Modal xử lý học kỳ */}
+      <SemesterModal
+        show={showSemesterModal}
+        onHide={() => setShowSemesterModal(false)}
+        programId={id}
+        selectedSemester={selectedSemester}
+        onSave={fetchProgram}
+      />
+      {/* Modal xử lý chọn môn */}
+      <CourseSelectorModal
+        show={showCourseModal}
+        onHide={() => setShowCourseModal(false)}
+        trainingProgramId={id}
+        onSave={fetchProgram}
+      />
+
+      <ConfirmDialog
+        isOpen={showConfirm}
+        title="Xác nhận xóa"
+        message="Bạn có chắc chắn muốn xóa học kỳ này?"
+        onConfirm={confirmDeleteSemester}
+        onCancel={cancelDeleteSemester}
       />
     </div>
   );

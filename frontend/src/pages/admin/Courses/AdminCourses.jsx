@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../../hooks/useToast"; // Import useToast
+import { useToast } from "../../../hooks/useToast";
 import courseApi from "../../../api/courseApi";
 import CourseList from "../../../components/Courses/CourseList";
 import CourseModal from "../../../components/Courses/CourseModal";
@@ -29,11 +29,11 @@ const AdminCourses = () => {
     courseApi
       .getCourses()
       .then((res) => {
-        setCourses(res.data);
+        setCourses(res.data.data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Lỗi khi lấy danh sách khóa học:", err);
+        console.error("Lỗi khi lấy danh sách môn học:", err);
         setLoading(false);
       });
   };
@@ -62,7 +62,7 @@ const AdminCourses = () => {
       .then(() => {
         addToast({
           title: "Thành công!",
-          message: "Khóa học đã được xóa.",
+          message: "Môn học đã được xóa.",
           type: "success",
           duration: 3000,
         });
@@ -71,7 +71,7 @@ const AdminCourses = () => {
       .catch((err) => {
         addToast({
           title: "Lỗi!",
-          message: err.response?.data?.message || "Xóa khóa học thất bại.",
+          message: err.response?.data?.message || "Xóa môn học thất bại.",
           type: "error",
           duration: 3000,
         });
@@ -92,7 +92,7 @@ const AdminCourses = () => {
     setShowCourseModal(false);
     addToast({
       title: "Thành công!",
-      message: "Thao tác với khóa học hoàn tất.",
+      message: "Thao tác với môn học hoàn tất.",
       type: "success",
       duration: 3000,
     });
@@ -107,13 +107,13 @@ const AdminCourses = () => {
   return (
     <div className="admin-courses">
       <div className="admin-courses__header">
-        <h2 className="admin-courses__title">Quản lý Khóa học</h2>
+        <h2 className="admin-courses__title">Quản lý Môn học</h2>
         <div className="admin-courses__actions">
           <button
             className="admin-courses__btn admin-courses__btn--primary"
             onClick={handleAdd}
           >
-            + Thêm khóa học
+            + Thêm môn học
           </button>
         </div>
       </div>
@@ -122,13 +122,13 @@ const AdminCourses = () => {
           <Loading
             text="Đang tải dữ liệu..."
             size="lg"
-            variant="danger"
-            textVariant="danger"
+            variant="primary"
+            textVariant="primary"
           />
         </div>
       ) : (
         <CourseList
-          courses={courses}
+          subjects={courses}
           onEdit={handleEdit}
           onDelete={handleDelete}
           onSelect={handleSelect}
@@ -149,11 +149,10 @@ const AdminCourses = () => {
         />
       )}
 
-      {/* Hộp thoại xác nhận xóa khóa học */}
       <ConfirmDialog
         isOpen={confirmDelete.isOpen}
         title="Xác nhận xóa"
-        message="Bạn có chắc chắn muốn xóa khóa học này không?"
+        message="Bạn có chắc chắn muốn xóa môn học này không?"
         onConfirm={confirmDeleteCourse}
         onCancel={() => setConfirmDelete({ isOpen: false, courseId: null })}
       />

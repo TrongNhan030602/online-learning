@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import trainingProgramBannerApi from "../../../api/trainingProgramBannerApi";
+import { useToast } from "../../../hooks/useToast";
 
 const BannerModal = ({ show, onHide, programId, selectedBanner, onSave }) => {
   const [bannerForm, setBannerForm] = useState({
@@ -21,6 +22,7 @@ const BannerModal = ({ show, onHide, programId, selectedBanner, onSave }) => {
       setBannerForm({ title: "", description: "", image_url: "" });
     }
   }, [selectedBanner]);
+  const { addToast } = useToast();
 
   const handleSave = async () => {
     try {
@@ -38,6 +40,12 @@ const BannerModal = ({ show, onHide, programId, selectedBanner, onSave }) => {
         formData.append("image", bannerForm.image_url);
         await trainingProgramBannerApi.create(formData);
       }
+      addToast({
+        title: "Thành công!",
+        message: "Banner đã được lưu.",
+        type: "success",
+        duration: 1500,
+      });
       onSave();
       onHide();
     } catch (error) {
@@ -50,6 +58,12 @@ const BannerModal = ({ show, onHide, programId, selectedBanner, onSave }) => {
       if (selectedBanner) {
         await trainingProgramBannerApi.delete(selectedBanner.id);
         onSave();
+        addToast({
+          title: "Thành công!",
+          message: "Banner đã được xóa.",
+          type: "success",
+          duration: 1500,
+        });
         onHide();
       }
     } catch (error) {

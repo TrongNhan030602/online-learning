@@ -1,0 +1,79 @@
+/* Sử dụng biến toàn cục từ global.css */
+
+.semester-detail {
+  font-family: var(--primary-font);
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.semester-detail__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.semester-detail__title {
+  margin-top: 1rem;
+  font-family: var(--heading-font);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.semester-detail__table {
+  margin-top: 20px;
+  font-size: var(--base-font-size);
+  line-height: var(--base-line-height);
+}
+
+.semester-detail__course-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.semester-detail__course-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.semester-detail__note {
+  color: var(--text-gray);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+}
+.semester-detail__table td:last-child {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.semester-detail__table .btn-sm {
+  padding: 4px 8px;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.semester-detail__table svg {
+  width: 16px;
+  height: 16px;
+}
+
+/*  Modal */
+.course-item {
+  background-color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+
+.course-item:hover {
+  background-color: #f8f9fa;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.1);
+}
+
+.course-item.selected {
+  background-color: #e6f0ff;
+  border-color: #0d6efd;
+}

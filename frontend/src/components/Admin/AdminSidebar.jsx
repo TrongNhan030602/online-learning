@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import "../../styles/admin-sidebar.css";
-import logo from "../../assets/img/bc-logo@2x.webp";
+import logo from "../../assets/img/logo.webp";
 const AdminSidebar = () => {
   return (
     <aside className="admin__sidebar">
@@ -40,7 +40,7 @@ const AdminSidebar = () => {
               className="admin__nav-link"
               to="/admin/courses"
             >
-              Quản lý khóa học
+              Quản lý môn học
             </NavLink>
           </li>
           <li className="admin__nav-item">
@@ -73,14 +73,6 @@ const AdminSidebar = () => {
               to="/admin/faqs"
             >
               Quản lý FAQs
-            </NavLink>
-          </li>
-          <li className="admin__nav-item">
-            <NavLink
-              className="admin__nav-link"
-              to="/admin/coupons"
-            >
-              Quản lý mã giảm giá
             </NavLink>
           </li>
 

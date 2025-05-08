@@ -26,4 +26,9 @@ class ProgramCourseService
     {
         return $this->programCourseRepo->deleteProgramCourse($id);
     }
+    public function getAvailableCourses(int $trainingProgramId)
+    {
+        return $this->programCourseRepo->getAvailableCourses($trainingProgramId);
+    }
+
 }

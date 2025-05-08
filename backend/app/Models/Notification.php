@@ -10,16 +10,19 @@ class Notification extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'training_program_id',
         'title',
         'body',
         'type',
-        'is_read',
-        'read_at',
     ];
 
-    public function user()
+    public function receivers()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(NotificationReceiver::class);
+    }
+
+    public function trainingProgram()
+    {
+        return $this->belongsTo(TrainingProgram::class);
     }
 }

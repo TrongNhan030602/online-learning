@@ -2,6 +2,7 @@
 namespace App\Http\Requests\CourseRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CourseRequest extends FormRequest
 {
@@ -13,18 +14,31 @@ class CourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|string|max:255|unique:courses,code,' . $this->route('id') . ',id',  // Đảm bảo không trùng mã khi cập nhật
+            'code' => 'required|string|max:255|unique:courses,code,' . $this->route('id') . ',id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'is_active' => 'required|boolean',
-            'credits' => 'nullable|integer|min:1',         // Số tín chỉ, tối thiểu là 1
-            'total_hours' => 'nullable|integer|min:1',     // Tổng số giờ học, tối thiểu là 1
-            'theory_hours' => 'nullable|integer|min:0',    // Giờ lý thuyết, tối thiểu là 0
-            'practice_hours' => 'nullable|integer|min:0',  // Giờ thực hành/thực tập, tối thiểu là 0
-            'exam_hours' => 'nullable|integer|min:0',      // Giờ thi/kiểm tra, tối thiểu là 0
+            'credits' => 'nullable|integer|min:1',
+            'total_hours' => [
+                'nullable',
+                'integer',
+                'min:1',
+                function ($attribute, $value, $fail) {
+                    $theory_hours = $this->input('theory_hours', 0);
+                    $practice_hours = $this->input('practice_hours', 0);
+                    $exam_hours = $this->input('exam_hours', 0);
+                    $expected_total_hours = $theory_hours + $practice_hours + $exam_hours;
+
+                    if ($value !== $expected_total_hours) {
+                        $fail('Tổng số giờ học phải bằng tổng của giờ lý thuyết, thực hành và thi.');
+                    }
+                },
+            ],
+            'theory_hours' => 'nullable|integer|min:0',
+            'practice_hours' => 'nullable|integer|min:0',
+            'exam_hours' => 'nullable|integer|min:0',
         ];
     }
-
 
     public function messages()
     {

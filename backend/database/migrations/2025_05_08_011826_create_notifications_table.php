@@ -9,13 +9,15 @@ return new class extends Migration {
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('training_program_id')->nullable();
             $table->string('title');
             $table->text('body');
-            $table->string('type')->nullable();
-            $table->boolean('is_read')->default(false);
-            $table->timestamp('read_at')->nullable();
+            $table->string('type')->default('general'); // Ví dụ: general | exam | announcement
             $table->timestamps();
+
+            $table->foreign('training_program_id')
+                ->references('id')->on('training_programs')
+                ->onDelete('set null');
         });
     }
 

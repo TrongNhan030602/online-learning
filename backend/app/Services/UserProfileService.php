@@ -19,6 +19,11 @@ class UserProfileService
             ->with('user') // 🔥 Đảm bảo lấy luôn User
             ->first();
     }
+    public function getAvatarPath($userId)
+    {
+        $profile = $this->getProfile($userId);
+        return $profile->avatar;
+    }
 
 
 

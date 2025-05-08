@@ -15,6 +15,8 @@ const authApi = {
       password,
       password_confirmation,
     }),
+
+  getPersonalInfo: () => axiosClient.get("/auth/personal-info"),
 };
 
 export default authApi;

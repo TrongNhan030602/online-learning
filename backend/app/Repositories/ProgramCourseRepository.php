@@ -1,9 +1,11 @@
 <?php
 namespace App\Repositories;
 
-use App\Models\ProgramCourse;
-use App\Interfaces\ProgramCourseRepositoryInterface;
 use Exception;
+use App\Models\Course;
+use App\Models\ProgramCourse;
+use App\Models\SemesterCourse;
+use App\Interfaces\ProgramCourseRepositoryInterface;
 
 class ProgramCourseRepository implements ProgramCourseRepositoryInterface
 {
@@ -48,4 +50,18 @@ class ProgramCourseRepository implements ProgramCourseRepositoryInterface
         }
         return $programCourse->delete();
     }
+
+
+    // Lấy tất cả các môn học chưa được gán vào chương trình đào tạo
+    public function getAvailableCourses(int $trainingProgramId)
+    {
+        // Lấy danh sách các môn học đã được gán vào chương trình
+        $assignedCourses = ProgramCourse::where('training_program_id', $trainingProgramId)
+            ->pluck('course_id')->toArray();
+
+        // Lấy tất cả các môn học chưa được gán vào chương trình đào tạo
+        return Course::whereNotIn('id', $assignedCourses)->get(); // Đảm bảo loại trừ các môn học đã gán
+    }
+
+
 }

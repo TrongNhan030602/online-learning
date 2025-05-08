@@ -66,6 +66,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(LearningResult::class, 'student_id');
     }
+    public function notificationReceivers()
+    {
+        return $this->hasMany(NotificationReceiver::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

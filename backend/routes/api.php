@@ -50,13 +50,15 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
-    Route::post('refresh', [AuthController::class, 'refresh'])->middleware('auth:api');
+    Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me'])->middleware('auth:api');
 
     // Reset password routes
     Route::post('reset-password', [AuthController::class, 'sendMail']);
     Route::put('reset-password/{token}', [AuthController::class, 'reset']);
 
+    // Thông tin cá nhân
+    Route::get('personal-info', [UserController::class, 'personalInfo'])->middleware('auth:api');
 });
 
 // API quản lý người dùng
@@ -91,7 +93,8 @@ Route::prefix('training-programs')->group(function () {
     Route::delete('/{id}', [TrainingProgramController::class, 'destroy']);
     Route::get('/filter/{level}', [TrainingProgramController::class, 'filterByLevel']); // Lọc theo loại
 
-
+    // Route để lấy danh sách môn học chưa được gán vào học kỳ nào
+    Route::get('/{trainingProgramId}/courses-not-in-semesters', [SemesterController::class, 'getUnassignedCourses']);
 });
 //API Training-Program  Banners
 Route::prefix('training-program-banners')->group(function () {
@@ -117,6 +120,9 @@ Route::prefix('semesters')->group(function () {
 
     // Gán môn học vào học kỳ
     Route::post('/{semesterId}/add-courses', [SemesterController::class, 'addCoursesToSemester']);
+    // Xóa môn học khỏi học kỳ
+    Route::post('/{semesterId}/remove-courses', [SemesterController::class, 'removeCoursesFromSemester']);
+
 });
 
 
@@ -127,6 +133,9 @@ Route::prefix('program-courses')->group(function () {
 
     // Lấy danh sách môn học theo chương trình đào tạo
     Route::get('/training-programs/{trainingProgramId}', [ProgramCourseController::class, 'index']);
+
+    // Lấy danh sách môn học mà chương trình chưa có
+    Route::get('/available-courses/{trainingProgramId}', [ProgramCourseController::class, 'getAvailableCourses']);
 
     // Xóa môn học khỏi chương trình đào tạo
     Route::delete('/{id}', [ProgramCourseController::class, 'destroy']);
@@ -303,11 +312,13 @@ Route::prefix('re-exam-registrations')->group(function () {
 
 
 // API Notifications
-Route::prefix('notifications')->group(function () {
+Route::prefix('notifications')->middleware('auth:api')->group(function () {
     Route::get('/', [NotificationController::class, 'index']);
     Route::post('/', [NotificationController::class, 'store']);
-    Route::put('/{id}/read', [NotificationController::class, 'markAsRead']);
-    Route::delete('/{id}', [NotificationController::class, 'destroy']);
+    Route::patch('/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::get('/statistics', [NotificationController::class, 'statistics']);
+    Route::delete('/{id}', [NotificationController::class, 'delete']);
+    Route::get('/training-program/{trainingProgramId}', [NotificationController::class, 'getByTrainingProgram']);
 });
 
 

@@ -143,4 +143,19 @@ class UserController extends Controller
         }
     }
 
+    public function personalInfo(Request $request)
+    {
+        try {
+            $user = $request->user(); // Lấy từ JWT hoặc session
+            $info = $this->userService->getPersonalInfo($user->id);
+            return response()->json($info, 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi: Không thể lấy thông tin cá nhân.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
 }

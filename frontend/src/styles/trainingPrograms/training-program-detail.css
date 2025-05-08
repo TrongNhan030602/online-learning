@@ -140,6 +140,11 @@
 .training-program-detail__banner-icon:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
+.training-program-detail__no-banner {
+  font-style: italic;
+  color: #777;
+  margin-bottom: 10px;
+}
 
 /* Học kỳ */
 .training-program-detail__semesters {
@@ -152,20 +157,52 @@
   color: var(--primary-color);
 }
 
-.semester-item {
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 12px 20px;
-  border: 1px solid #ecf0f1;
-  border-radius: 8px;
-  background-color: var(--text-white);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-bottom: 10px;
+.training-program-detail__semester-list {
+  padding: 0;
+  list-style: none;
 }
 
-.semester-item:hover {
-  background-color: #f4f6f7;
-  transform: translateX(5px);
+.training-program-detail__semester-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background-color: #fff;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.training-program-detail__semester-item:hover {
+  background-color: #e4e1e1;
+}
+
+.training-program-detail__semester-name {
+  flex-grow: 1;
+}
+
+.training-program-detail__semester-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.training-program-detail__semester-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+
+.training-program-detail__semester-btn--edit:hover {
+  color: #0d6efd;
+}
+
+.training-program-detail__semester-btn--delete:hover {
+  color: #dc3545;
 }
 
 /* Nút thêm học kỳ */

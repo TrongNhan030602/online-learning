@@ -12,8 +12,8 @@ const CourseModal = ({ show, handleClose, initialData, onSuccess }) => {
       <Modal.Header closeButton>
         <Modal.Title>
           {initialData && initialData.id
-            ? "Cập nhật khóa học"
-            : "Thêm khóa học mới"}
+            ? "Cập nhật môn học"
+            : "Thêm môn học mới"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

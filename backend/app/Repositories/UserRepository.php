@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Exception;
 use App\Models\User;
 use App\Enums\RoleEnum;
+use App\Models\TrainingProgram;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Interfaces\UserRepositoryInterface;
@@ -179,5 +180,45 @@ class UserRepository implements UserRepositoryInterface
             throw new Exception("Lỗi khi lấy thống kê người dùng: " . $e->getMessage());
         }
     }
+
+
+    public function getPersonalInfo($userId)
+    {
+        try {
+            $user = User::with([
+                'profile',
+                'trainingPrograms' => function ($query) {
+                    $query->with('advisor:id,name,email');  // Thêm email vào 'advisor'
+                }
+            ])->findOrFail($userId);
+
+            $trainingPrograms = $user->trainingPrograms->map(function ($program) {
+                return [
+                    'id' => $program->id,
+                    'name' => $program->name,
+                    'code' => $program->code,
+                    'level' => $program->level,
+                    'entry_type' => $program->pivot->entry_type,
+                    'advisor' => optional($program->advisor)->name,  // Dùng optional để tránh lỗi khi không có advisor
+                    'advisor_email' => optional($program->advisor)->email,  // Dùng optional để tránh lỗi khi không có advisor
+                    'from_program' => optional(TrainingProgram::find($program->pivot->from_program_id))->name,  // Dùng optional để tránh lỗi khi không có từ chương trình
+                ];
+            });
+
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'profile' => $user->profile,
+                'training_programs' => $trainingPrograms,
+            ];
+        } catch (Exception $e) {
+            throw new Exception("Không thể lấy thông tin cá nhân: " . $e->getMessage());
+        }
+    }
+
+
+
 
 }

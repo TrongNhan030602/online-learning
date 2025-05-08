@@ -16,7 +16,6 @@ const AdminLayout = () => {
     "/admin/lessons": "Quản lý bài học",
     "/admin/faqs": "Quản lý FAQs",
     "/admin/blogs": "Quản lý blog",
-    "/admin/coupons": "Quản lý mã giảm giá",
     "/admin/chats": "Quản lý tin nhắn",
     "/admin/progress": "Quản lý tiến độ",
   };

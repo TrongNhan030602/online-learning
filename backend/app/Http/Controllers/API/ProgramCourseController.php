@@ -107,5 +107,31 @@ class ProgramCourseController extends Controller
         }
     }
 
+    // Lấy danh sách các môn học chưa được gán vào chương trình đào tạo
+    public function getAvailableCourses($trainingProgramId)
+    {
+        try {
+            $courses = $this->service->getAvailableCourses($trainingProgramId);
+
+            if ($courses->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không tìm thấy môn học nào chưa được gán vào chương trình đào tạo này.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Danh sách môn học chưa được gán vào chương trình đào tạo.',
+                'data' => $courses
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy danh sách môn học.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
 
 }

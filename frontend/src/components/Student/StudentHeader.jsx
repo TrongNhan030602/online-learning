@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import authApi from "../../api/authApi"; // logout()
 import studentTrainingApi from "../../api/studentTrainingApi";
 import { useNavigate, NavLink } from "react-router-dom";
@@ -7,14 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faUserCircle,
-  // faMapSigns,
-  // faTableCells,
   faGraduationCap,
-  // faCircleQuestion,
-  // faPeopleRoof,
   faSitemap,
   faAlignLeft as faBars,
-  // faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/student/student-header.css";
 import logo from "/logo.webp";
@@ -28,7 +23,7 @@ const NavLinkItem = ({ to, icon, label, onClick }) => (
           ? "student-header__nav-link student-header__nav-link--active"
           : "student-header__nav-link"
       }
-      onClick={onClick} // Gọi onClick khi nhấn vào link
+      onClick={onClick}
     >
       <FontAwesomeIcon
         icon={icon}
@@ -65,14 +60,38 @@ const DropdownMenu = ({ label, items }) => {
     </li>
   );
 };
+
 const StudentHeader = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [programs, setPrograms] = useState([]);
-  const [isMenuOpen, setMenuOpen] = useState(false); // State cho việc mở/đóng menu
+  const [isMenuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const menuRef = useRef(null); // Thêm ref cho menu slide-in
+  const menuRef = useRef(null);
   const navigate = useNavigate();
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const response = await authApi.getUser();
+      setUser(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy thông tin người dùng:", error);
+    }
+  }, []);
+
+  const fetchPrograms = useCallback(async () => {
+    try {
+      const response = await studentTrainingApi.getStudentPrograms();
+      setPrograms(response.data.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy chương trình đào tạo:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUser();
+    fetchPrograms();
+  }, [fetchUser, fetchPrograms]); // Cập nhật thông tin người dùng và chương trình đào tạo một lần
 
   const handleLogout = async () => {
     try {
@@ -84,30 +103,30 @@ const StudentHeader = () => {
     }
   };
 
-  const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
-  const closeDropdown = (event) => {
+  const toggleDropdown = useCallback(
+    () => setDropdownOpen((prev) => !prev),
+    []
+  );
+  const closeDropdown = useCallback((event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setDropdownOpen(false);
     }
-  };
+  }, []);
 
-  // Hàm đóng menu nếu click ngoài menu slide-in
-  const closeMenu = (event) => {
+  const closeMenu = useCallback((event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setMenuOpen(false);
     }
-  };
+  }, []);
 
-  // Mở menu
-  const toggleMenu = (event) => {
-    setMenuOpen(!isMenuOpen);
-    event.stopPropagation(); // Ngừng sự kiện click ra ngoài để tránh đóng menu ngay lập tức
-  };
+  const toggleMenu = useCallback((event) => {
+    setMenuOpen((prev) => !prev);
+    event.stopPropagation();
+  }, []);
 
-  // Đóng menu khi chọn 1 mục
-  const handleNavItemClick = () => {
-    setMenuOpen(false); // Đóng menu khi chọn một item
-  };
+  const handleNavItemClick = useCallback(() => {
+    setMenuOpen(false);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -117,42 +136,19 @@ const StudentHeader = () => {
     };
 
     document.addEventListener("click", closeDropdown);
-    document.addEventListener("click", closeMenu); // Lắng nghe sự kiện click để đóng menu
+    document.addEventListener("click", closeMenu);
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.removeEventListener("click", closeDropdown);
-      document.removeEventListener("click", closeMenu); // Dọn dẹp sự kiện
+      document.removeEventListener("click", closeMenu);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
-
-  const fetchUser = async () => {
-    try {
-      const response = await authApi.getUser();
-      setUser(response.data);
-    } catch (error) {
-      console.error("Lỗi khi lấy thông tin người dùng:", error);
-    }
-  };
-  const fetchPrograms = async () => {
-    try {
-      const response = await studentTrainingApi.getStudentPrograms(); // Lấy danh sách chương trình đào tạo
-      setPrograms(response.data.data);
-    } catch (error) {
-      console.error("Lỗi khi lấy chương trình đào tạo:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-    fetchPrograms();
-  }, []);
+  }, [closeDropdown, closeMenu]);
 
   return (
     <header className="student-header">
       <div className="student-header__container">
-        {/* Nút menu */}
         <div
           className="student-header__menu-btn"
           onClick={toggleMenu}
@@ -170,9 +166,8 @@ const StudentHeader = () => {
           </NavLink>
         </div>
 
-        {/* Menu slide-in */}
         <div
-          ref={menuRef} // Gắn ref vào menu
+          ref={menuRef}
           className={`student-header__menu ${isMenuOpen ? "show" : ""}`}
         >
           <ul>
@@ -209,23 +204,9 @@ const StudentHeader = () => {
                 onClick: handleNavItemClick,
               }))}
             />
-
-            {/* <NavLinkItem
-              to="/student/blogs"
-              icon={faMapSigns}
-              label="Blog"
-              onClick={handleNavItemClick}
-            /> */}
-            {/* <NavLinkItem
-              to="/student/chat"
-              icon={faCircleQuestion}
-              label="Trợ giúp"
-              onClick={handleNavItemClick}
-            /> */}
           </ul>
         </div>
 
-        {/* Navbar gốc trên desktop */}
         <nav className="student-header__nav">
           <ul className="student-header__nav-list">
             <DropdownMenu
@@ -236,7 +217,6 @@ const StudentHeader = () => {
                 onClick: handleNavItemClick,
               }))}
             />
-
             <NavLinkItem
               to="/student/schedule"
               icon={faGraduationCap}
@@ -261,20 +241,6 @@ const StudentHeader = () => {
               label="ĐK thi lần 2"
               onClick={handleNavItemClick}
             />
-            {/* Thêm dropdown cho "Chương trình đào tạo" trên desktop */}
-
-            {/* <NavLinkItem
-              to="/student/blogs"
-              icon={faMapSigns}
-              label="Blog"
-              onClick={handleNavItemClick}
-            /> */}
-            {/* <NavLinkItem
-              to="/student/chat"
-              icon={faCircleQuestion}
-              label="Trợ giúp"
-              onClick={handleNavItemClick}
-            /> */}
           </ul>
         </nav>
 
@@ -285,7 +251,7 @@ const StudentHeader = () => {
           >
             <FontAwesomeIcon
               icon={faBell}
-              className="student-header__icon"
+              className="student-header__icon bell-shake"
             />
           </NavLink>
 

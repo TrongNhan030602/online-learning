@@ -162,4 +162,45 @@ class SemesterController extends Controller
             ], 500);
         }
     }
+    public function removeCoursesFromSemester(Request $request, $semesterId)
+    {
+        try {
+            $courseIds = $request->course_ids;
+            $semester = $this->semesterService->removeCoursesFromSemester($semesterId, $courseIds);
+
+            if (!$semester) {
+                return response()->json([
+                    'message' => 'Học kỳ không tồn tại.'
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Môn học đã được xóa khỏi học kỳ thành công.',
+                'data' => $semester
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi xóa môn học khỏi học kỳ.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getUnassignedCourses($trainingProgramId)
+    {
+        try {
+            $courses = $this->semesterService->getUnassignedCourses($trainingProgramId);
+
+            return response()->json([
+                'message' => 'Danh sách môn học chưa được gán vào học kỳ nào.',
+                'data' => $courses
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi lấy danh sách môn học.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

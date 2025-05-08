@@ -46,4 +46,14 @@ class SemesterService
     {
         return $this->semesterRepository->addCoursesToSemester($semesterId, $courseIds);
     }
+    public function removeCoursesFromSemester($semesterId, array $courseIds)
+    {
+        return $this->semesterRepository->removeCoursesFromSemester($semesterId, $courseIds);
+    }
+
+    public function getUnassignedCourses($trainingProgramId)
+    {
+        return $this->semesterRepository->getCoursesNotInAnySemester($trainingProgramId);
+    }
+
 }

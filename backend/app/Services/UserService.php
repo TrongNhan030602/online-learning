@@ -72,4 +72,14 @@ class UserService
             throw new Exception("Lỗi khi lấy thống kê người dùng: " . $e->getMessage());
         }
     }
+
+    public function getPersonalInfo($id)
+    {
+        try {
+            return $this->userRepository->getPersonalInfo($id);
+        } catch (Exception $e) {
+            throw new Exception("Lỗi khi lấy thông tin cá nhân: " . $e->getMessage());
+        }
+    }
+
 }
