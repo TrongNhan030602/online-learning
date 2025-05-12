@@ -46,20 +46,22 @@ Route::get('/storage/{path}', function ($path) {
 
 
 // Authentication routes
-Route::group(['prefix' => 'auth'], function () {
+Route::prefix('auth')->group(function () {
+    // Không cần auth
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
-    Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::get('me', [AuthController::class, 'me'])->middleware('auth:api');
-
-    // Reset password routes
+    Route::post('/refresh-token', [AuthController::class, 'refreshAccessToken']);
     Route::post('reset-password', [AuthController::class, 'sendMail']);
     Route::put('reset-password/{token}', [AuthController::class, 'reset']);
 
-    // Thông tin cá nhân
-    Route::get('personal-info', [UserController::class, 'personalInfo'])->middleware('auth:api');
+    // Cần auth:api
+    Route::middleware('auth:api')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('me', [AuthController::class, 'me']);
+        Route::get('personal-info', [UserController::class, 'personalInfo']);
+    });
 });
+
 
 // API quản lý người dùng
 Route::prefix('users')->group(function () {
@@ -93,9 +95,16 @@ Route::prefix('training-programs')->group(function () {
     Route::delete('/{id}', [TrainingProgramController::class, 'destroy']);
     Route::get('/filter/{level}', [TrainingProgramController::class, 'filterByLevel']); // Lọc theo loại
 
+    // Lấy danh sách học kỳ của chương trình đào tạo
+    Route::get('/{id}/semesters', [TrainingProgramController::class, 'getSemesters']);
+    // Route để lấy danh sách học viên chưa nhập điểm rèn luyện cho học kỳ cụ thể
+    Route::get('/{id}/semesters/{semesterId}/students-without-scores', [TrainingProgramController::class, 'getStudentsWithoutScores']);
+
     // Route để lấy danh sách môn học chưa được gán vào học kỳ nào
     Route::get('/{trainingProgramId}/courses-not-in-semesters', [SemesterController::class, 'getUnassignedCourses']);
 });
+
+
 //API Training-Program  Banners
 Route::prefix('training-program-banners')->group(function () {
     Route::get('/{programId}', [TrainingProgramBannerController::class, 'index']);
@@ -220,6 +229,9 @@ Route::prefix('student-training-programs')->group(function () {
 
     // Lấy danh sách học viên trong chương trình đào tạo
     Route::get('/training-programs/{trainingProgramId}/students', [StudentTrainingProgramController::class, 'getStudents']);
+    //Lấy danh sách học viên không có trong chương trình đào tạo
+    Route::get('/training-programs/{trainingProgramId}/students/not-registered', [StudentTrainingProgramController::class, 'getStudentsNotInProgram']);
+    Route::get('/{studentId}/previous', [StudentTrainingProgramController::class, 'getPreviousProgram']);
 
     // Lấy thông tin học viên trong chương trình đào tạo
     Route::get('/{id}', [StudentTrainingProgramController::class, 'show']);
@@ -269,6 +281,8 @@ Route::prefix('discipline-scores')->group(function () {
 
     // Xóa điểm rèn luyện
     Route::delete('/{id}', [DisciplineScoreController::class, 'destroy']);
+
+    Route::get('/student/points', [DisciplineScoreController::class, 'getByStudent']);
 });
 
 //API KQHT

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\DisciplineScoreRequest;
-use App\Services\DisciplineScoreService;
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\DisciplineScoreService;
+use App\Http\Requests\DisciplineScoreRequest\DisciplineScoreRequest;
 
 class DisciplineScoreController extends Controller
 {
@@ -21,17 +21,37 @@ class DisciplineScoreController extends Controller
     {
         try {
             $data = $this->service->getAll();
+
             if ($data->isEmpty()) {
                 return response()->json([
-                    'message' => 'Không có điểm kỷ luật nào.',
-                ], 404); // Không tìm thấy dữ liệu, trả về 404 Not Found
+                    'message' => 'Không có điểm rèn luyện nào.',
+                ], 404);
             }
-            return response()->json($data);
+
+            $result = $data->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'student_training_program_id' => $item->student_training_program_id,
+                    'user_id' => $item->studentTrainingProgram->user->id ?? null,
+                    'student_name' => $item->studentTrainingProgram->user->name ?? null,
+                    'semester_id' => $item->semester_id,
+                    'semester_name' => $item->semester->name ?? null,
+                    'training_program' => [
+                        'id' => $item->semester->trainingProgram->id ?? null,
+                        'name' => $item->semester->trainingProgram->name ?? null,
+                        'code' => $item->semester->trainingProgram->code ?? null,
+                    ],
+                    'score' => $item->score,
+                    'evaluation' => $item->evaluation,
+                ];
+            });
+
+            return response()->json($result);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Lỗi khi lấy danh sách điểm kỷ luật.',
+                'message' => 'Lỗi khi lấy danh sách điểm rèn luyện.',
                 'error' => $e->getMessage()
-            ], 500); // Mã trạng thái HTTP: 500 Internal Server Error
+            ], 500);
         }
     }
 
@@ -41,15 +61,15 @@ class DisciplineScoreController extends Controller
             $data = $this->service->getById($id);
             if (!$data) {
                 return response()->json([
-                    'message' => 'Không tìm thấy điểm kỷ luật với ID ' . $id,
-                ], 404); // Không tìm thấy dữ liệu, trả về 404 Not Found
+                    'message' => 'Không tìm thấy điểm rèn luyện với ID ' . $id,
+                ], 404);
             }
             return response()->json($data);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Lỗi khi lấy điểm kỷ luật.',
+                'message' => 'Lỗi khi lấy điểm rèn luyện.',
                 'error' => $e->getMessage()
-            ], 500); // Mã trạng thái HTTP: 500 Internal Server Error
+            ], 500);
         }
     }
 
@@ -57,12 +77,12 @@ class DisciplineScoreController extends Controller
     {
         try {
             $data = $this->service->create($request->validated());
-            return response()->json($data, 201); // Mã trạng thái HTTP: 201 Created
+            return response()->json($data, 201);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Lỗi khi tạo điểm kỷ luật.',
+                'message' => 'Lỗi khi tạo điểm rèn luyện.',
                 'error' => $e->getMessage()
-            ], 500); // Mã trạng thái HTTP: 500 Internal Server Error
+            ], 500);
         }
     }
 
@@ -72,15 +92,15 @@ class DisciplineScoreController extends Controller
             $data = $this->service->update($id, $request->validated());
             if (!$data) {
                 return response()->json([
-                    'message' => 'Không tìm thấy điểm kỷ luật để cập nhật.',
-                ], 404); // Không tìm thấy dữ liệu để cập nhật, trả về 404 Not Found
+                    'message' => 'Không tìm thấy điểm rèn luyện để cập nhật.',
+                ], 404);
             }
             return response()->json($data);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Lỗi khi cập nhật điểm kỷ luật.',
+                'message' => 'Lỗi khi cập nhật điểm rèn luyện.',
                 'error' => $e->getMessage()
-            ], 500); // Mã trạng thái HTTP: 500 Internal Server Error
+            ], 500);
         }
     }
 
@@ -90,15 +110,37 @@ class DisciplineScoreController extends Controller
             $deleted = $this->service->delete($id);
             if (!$deleted) {
                 return response()->json([
-                    'message' => 'Không tìm thấy điểm kỷ luật để xóa.',
-                ], 404); // Không tìm thấy dữ liệu để xóa, trả về 404 Not Found
+                    'message' => 'Không tìm thấy điểm rèn luyện để xóa.',
+                ], 404);
             }
             return response()->json(['message' => 'Xóa thành công']);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Lỗi khi xóa điểm kỷ luật.',
+                'message' => 'Lỗi khi xóa điểm rèn luyện.',
                 'error' => $e->getMessage()
-            ], 500); // Mã trạng thái HTTP: 500 Internal Server Error
+            ], 500);
         }
     }
+
+    public function getByStudent()
+    {
+        try {
+            $userId = auth()->user()->id; // Lấy ID của người dùng hiện tại
+            $data = $this->service->getByStudent($userId);
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có điểm rèn luyện nào.',
+                ], 404);
+            }
+
+            return response()->json($data);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy điểm rèn luyện.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

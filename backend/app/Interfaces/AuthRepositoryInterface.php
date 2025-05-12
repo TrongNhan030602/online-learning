@@ -7,7 +7,7 @@ interface AuthRepositoryInterface
     public function register(array $data);
     public function login(array $credentials);
     public function logout();
-    public function refresh();
+    public function refreshAccessToken(string $refreshToken);
     public function me();
     public function createPasswordResetToken($email);
     public function findPasswordResetToken($token);

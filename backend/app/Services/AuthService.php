@@ -22,18 +22,31 @@ class AuthService
     {
         return $this->authRepository->register($data);
     }
-
     public function login(array $credentials)
     {
         $data = $this->authRepository->login($credentials);
 
         return [
             'access_token' => $data['access_token'],
+            'refresh_token' => $data['refresh_token'],
             'role' => $data['role'],
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
         ];
     }
+
+    public function refreshAccessToken(string $refreshToken)
+    {
+        $data = $this->authRepository->refreshAccessToken($refreshToken);
+
+        return [
+            'access_token' => $data['access_token'],
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+        ];
+    }
+
+
 
 
     public function logout()
@@ -42,14 +55,7 @@ class AuthService
         return ['message' => 'Đăng xuất thành công!'];
     }
 
-    public function refresh()
-    {
-        return [
-            'access_token' => $this->authRepository->refresh(),
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ];
-    }
+
 
     public function me()
     {

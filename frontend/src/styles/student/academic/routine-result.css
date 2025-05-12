@@ -1,20 +1,43 @@
 .routine-result {
-  padding: 20px;
-  background-color: #fefefe;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .routine-result__title {
-  font-size: 24px;
-  color: #113f73;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
+  font-size: 26px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .routine-result__title svg {
-  margin-right: 10px;
+  margin-right: 12px;
+  color: #f39c12;
+}
+
+.accordion-button {
+  background-color: #1a5b90;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+  color: white;
+  background-color: #1a5b90;
+}
+
+.accordion-button:hover {
+  background-color: #113f73;
 }
 
 .routine-result__table th {
@@ -22,12 +45,14 @@
   color: white;
   text-align: center;
   font-weight: bold;
+  padding: 10px;
 }
 
 .routine-result__table td {
   text-align: center;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
+  padding: 12px;
 }
 
 .routine-result__table tr:nth-child(even) {
@@ -36,4 +61,20 @@
 
 .routine-result__table tr:hover {
   background-color: #e6f0ff;
+  cursor: pointer;
+}
+
+.routine-result__table th,
+.routine-result__table td {
+  border: 1px solid #e0e0e0;
+}
+
+.routine-result__table .fa-calendar-alt,
+.routine-result__table .fa-star,
+.routine-result__table .fa-thumbs-up {
+  margin-right: 8px;
+}
+
+.routine-result__table tr {
+  transition: background-color 0.2s ease;
 }

@@ -19,7 +19,8 @@ class UserUpdateRequest extends FormRequest
 
         return [
             // Chỉ cho phép cập nhật 'name'
-            'name' => 'sometimes|required|string|max:255',
+            'name' => 'sometimes|required|string|max:255|unique:users,name,' . $userId,
+
 
             // Không cần validate email, role và password
             'email' => 'nullable|email|max:255|unique:users,email,' . $userId,  // email chỉ kiểm tra nếu có thay đổi
@@ -42,6 +43,7 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'name.required' => 'Trường tên không được bỏ trống khi cập nhật.',
+            'name.unique' => 'Tên đã tồn tại, vui lòng chọn tên khác.',
             'name.string' => 'Trường tên phải là chuỗi.',
             'name.max' => 'Trường tên không được vượt quá 255 ký tự.',
             'email.email' => 'Trường email không hợp lệ.',

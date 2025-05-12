@@ -13,11 +13,11 @@ import AddSessionModal from "../../../components/Sessions/AddSessionModal";
 import EditSessionModal from "../../../components/Sessions/EditSessionModal";
 import AddLessonModal from "../../../components/Sessions/AddLessonModal";
 import DeleteLessonModal from "../../../components/Sessions/DeleteLessonModal";
-import AddStudentModal from "../../../components/Classes/AddStudentModal";
+import AddStudentModal from "../../../components/DisciplineScores/AddStudentModal";
 
 import "../../../styles/classes/class-detail.css";
 
-const ClassDetail = () => {
+const DisciplineScoresDetail = () => {
   const { addToast } = useToast();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -419,4 +419,4 @@ const ClassDetail = () => {
   );
 };
 
-export default ClassDetail;
+export default DisciplineScoresDetail;

@@ -42,6 +42,14 @@ class TrainingProgramService
         return $this->repo->getByLevel($level);
     }
 
+    public function getSemestersByProgramId($programId)
+    {
+        return $this->repo->getSemestersByProgramId($programId);
+    }
+    public function getStudentsWithoutScoresForSemester($programId, $semesterId)
+    {
+        return $this->repo->getStudentsWithoutScoresForSemester($programId, $semesterId);
+    }
     // For Student
     public function getDetailedById($id)
     {

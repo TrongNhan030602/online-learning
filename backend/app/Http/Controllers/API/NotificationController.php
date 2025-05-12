@@ -124,8 +124,7 @@ class NotificationController extends Controller
     public function delete($id, Request $request)
     {
         try {
-            $userId = $request->user()->id;
-            $success = $this->service->deleteNotification($id, $userId);
+            $success = $this->service->deleteNotification($id);
 
             if (!$success) {
                 return response()->json([

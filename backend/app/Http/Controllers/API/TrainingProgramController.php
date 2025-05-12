@@ -26,9 +26,11 @@ class TrainingProgramController extends Controller
 
             if ($programs->isEmpty()) {
                 return response()->json([
-                    'message' => 'Không có chương trình đào tạo nào.'
-                ], 404);
+                    'message' => 'Không có chương trình đào tạo nào.',
+                    'data' => []
+                ], 200);
             }
+
 
             return response()->json([
                 'message' => 'Danh sách chương trình đào tạo.',
@@ -165,9 +167,11 @@ class TrainingProgramController extends Controller
 
             if ($programs->isEmpty()) {
                 return response()->json([
-                    'message' => "Không có chương trình đào tạo nào với cấp bậc '{$level}'."
-                ], 404);
+                    'message' => "Không có chương trình đào tạo nào với cấp bậc '{$level}'.",
+                    'data' => []
+                ], 200);
             }
+
 
             return response()->json([
                 'message' => 'Danh sách chương trình đào tạo theo cấp bậc.',
@@ -191,9 +195,11 @@ class TrainingProgramController extends Controller
 
             if ($programs->isEmpty()) {
                 return response()->json([
-                    'message' => 'Bạn chưa đăng ký chương trình đào tạo nào.'
-                ], 404);
+                    'message' => 'Bạn chưa đăng ký chương trình đào tạo nào.',
+                    'data' => []
+                ], 200);
             }
+
 
             return response()->json([
                 'message' => 'Danh sách chương trình đào tạo bạn đang học.',
@@ -207,7 +213,62 @@ class TrainingProgramController extends Controller
             ], 500);
         }
     }
+    // Lấy danh sách học kỳ theo chương trình đào tạo
+    public function getSemesters($id)
+    {
+        try {
+            // Gọi repo để lấy danh sách học kỳ
+            $semestersData = $this->service->getSemestersByProgramId($id);
 
+            // Kiểm tra nếu không có học kỳ nào
+            if (empty($semestersData['semesters'])) {
+                return response()->json([
+                    'message' => 'Không có học kỳ nào trong chương trình đào tạo này.'
+                ], 404);
+            }
+
+            // Trả về kết quả theo cấu trúc mong muốn
+            return response()->json([
+                'message' => 'Danh sách học kỳ theo chương trình đào tạo.',
+                'data' => $semestersData
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy danh sách học kỳ.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function getStudentsWithoutScores($programId, $semesterId)
+    {
+        try {
+            // Gọi phương thức từ service
+            $students = $this->service->getStudentsWithoutScoresForSemester($programId, $semesterId);
+
+            if ($students->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có học viên nào chưa nhập điểm rèn luyện cho học kỳ này.',
+                    'data' => []
+                ], 200);
+            }
+
+
+            return response()->json([
+                'message' => 'Danh sách học viên chưa nhập điểm rèn luyện.',
+                'data' => $students
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy danh sách học viên.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    //For student
     public function detailed($id)
     {
         try {

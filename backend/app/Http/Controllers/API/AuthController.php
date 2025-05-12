@@ -52,6 +52,20 @@ class AuthController extends Controller
             return response()->json(['message' => 'Đăng nhập thất bại.'], 500);
         }
     }
+    public function refreshAccessToken(Request $request)
+    {
+        $request->validate([
+            'refresh_token' => 'required|string',
+        ]);
+
+        try {
+            $tokenData = $this->authService->refreshAccessToken($request->refresh_token);
+            return response()->json($tokenData);
+        } catch (Exception $e) {
+            Log::error('Refresh token error: ' . $e->getMessage());
+            return response()->json(['message' => 'Refresh token không hợp lệ hoặc đã hết hạn.'], 401);
+        }
+    }
 
     public function logout()
     {
@@ -64,16 +78,7 @@ class AuthController extends Controller
         }
     }
 
-    public function refresh()
-    {
-        try {
-            $tokenData = $this->authService->refresh();
-            return response()->json($tokenData);
-        } catch (Exception $e) {
-            Log::error('Refresh error: ' . $e->getMessage());
-            return response()->json(['message' => 'Refresh token thất bại.'], 500);
-        }
-    }
+
 
     public function me()
     {

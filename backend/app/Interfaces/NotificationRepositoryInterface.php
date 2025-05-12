@@ -10,5 +10,5 @@ interface NotificationRepositoryInterface
 
     public function markAsRead(int $notificationId, int $userId): bool;
     public function getNotificationsByTrainingProgram(int $trainingProgramId): array;
-    public function deleteNotification(int $notificationId, int $userId): bool;
+    public function deleteNotification($notificationId);
 }

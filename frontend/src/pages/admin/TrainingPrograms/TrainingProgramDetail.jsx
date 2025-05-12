@@ -5,6 +5,8 @@ import {
   faPen,
   faTrashAlt,
   faChevronRight,
+  faUsers,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 import BannerModal from "../../../components/TrainingPrograms/Banners/BannerModal";
@@ -212,7 +214,18 @@ const TrainingProgramDetail = () => {
           + Thêm banner
         </Button>
       </div>
-
+      <div className="mt-2 mb-4">
+        <Button
+          variant="success"
+          onClick={() => navigate(`/admin/training-programs/${id}/students`)}
+        >
+          <FontAwesomeIcon
+            icon={faUsers}
+            className="mx-1"
+          />
+          Quản lý học viên
+        </Button>
+      </div>
       {/* Program Semesters */}
       {program.semesters?.length > 0 && (
         <div className="training-program-detail__semesters">
@@ -222,6 +235,11 @@ const TrainingProgramDetail = () => {
               className="training-program-detail__button"
               onClick={handleAddSemester}
             >
+              {" "}
+              <FontAwesomeIcon
+                icon={faPlus}
+                className="mx-1"
+              />
               Thêm học kỳ
             </button>
           </h3>
@@ -272,6 +290,10 @@ const TrainingProgramDetail = () => {
               className="training-program-detail__button"
               onClick={handleAddCourse}
             >
+              <FontAwesomeIcon
+                icon={faPlus}
+                className="mx-1"
+              />
               Chọn môn học
             </button>
           </h3>

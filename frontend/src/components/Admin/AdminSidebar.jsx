@@ -54,9 +54,9 @@ const AdminSidebar = () => {
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
-              to="/admin/classes"
+              to="/admin/discipline-scores"
             >
-              Quản lý lớp học
+              Quản lý ĐRL
             </NavLink>
           </li>
           <li className="admin__nav-item">

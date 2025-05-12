@@ -11,7 +11,7 @@ class TrainingProgram extends Model
     protected $fillable = [
         'name',
         'code',
-        'level',
+        'level', // 'college','intermediate','certificate','specialized','software'
         'advisor_id',
         'note',
     ];
@@ -41,8 +41,14 @@ class TrainingProgram extends Model
     public function students()
     {
         // Mối quan hệ nhiều-nhiều giữa TrainingProgram và User (học viên)
-        return $this->belongsToMany(User::class, 'student_training_programs', 'training_program_id', 'student_id');
+        return $this->belongsToMany(User::class, 'student_training_programs', 'training_program_id', 'user_id');
     }
+
+    public function studentTrainingPrograms()
+    {
+        return $this->hasMany(StudentTrainingProgram::class, 'training_program_id');
+    }
+
     public function learningResults()
     {
         return $this->hasMany(LearningResult::class, 'program_id');

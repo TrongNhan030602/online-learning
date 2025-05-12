@@ -110,7 +110,7 @@
   outline: 1.2px solid #007bff;
   color: #007bff;
   border: none;
-  margin: 4px;
+  margin: 12px;
   border-radius: 4px;
   padding: 8px 12px;
   cursor: pointer;
@@ -137,6 +137,16 @@
   color: #fff;
 }
 
+.training-program-list__action-button--enter {
+  background-color: #fff;
+  outline: 1.2px solid #057a72;
+  padding: 8px 14px;
+  color: #057a72;
+}
+.training-program-list__action-button--enter:hover {
+  background-color: #057a72;
+  color: #fff;
+}
 /* Empty data */
 .training-program-list__no-data {
   text-align: center;

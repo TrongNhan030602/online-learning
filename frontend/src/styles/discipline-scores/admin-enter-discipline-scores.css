@@ -1,0 +1,81 @@
+/* Container chính */
+.admin-enter-discipline-scores {
+  padding: 20px;
+  background-color: var(--bg-light);
+  border-radius: var(--border-radius);
+  font-family: var(--primary-font);
+}
+
+/* Tiêu đề */
+.admin-enter-discipline-scores__header {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-bottom: 30px;
+  font-family: var(--heading-font);
+}
+
+/* Khu vực học kỳ */
+.admin-enter-discipline-scores__semester-section {
+  margin-bottom: 20px;
+}
+
+/* Header học kỳ */
+.admin-enter-discipline-scores__semester-header {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Accordion body (form nhập) */
+.admin-enter-discipline-scores__form {
+  padding: 20px;
+  background-color: #fff;
+}
+
+/* Thẻ sinh viên */
+.admin-enter-discipline-scores__card {
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+}
+
+/* Tên sinh viên */
+.admin-enter-discipline-scores__card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Nhóm form */
+.admin-enter-discipline-scores__form-group {
+  margin-bottom: 15px;
+}
+
+/* Nút */
+.admin-enter-discipline-scores__button {
+  width: 100%;
+}
+
+.admin-enter-discipline-scores__button--submit {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.admin-enter-discipline-scores__button--submit:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+/* Tin nhắn rỗng */
+.admin-enter-discipline-scores__empty-message {
+  color: var(--text-gray);
+  font-size: 1rem;
+}
+
+/* Hành động (nút điều hướng) */
+.admin-enter-discipline-scores__actions {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0;
+}

@@ -12,18 +12,25 @@ class StudentTrainingProgramRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'student_id' => 'required|exists:users,id', // Học viên phải tồn tại trong bảng users
-            'training_program_id' => 'required|exists:training_programs,id', // Chương trình đào tạo phải tồn tại
-            'entry_type' => 'required|in:default,lien_thong,van_bang_2', // Loại nhập học phải đúng
-            'from_program_id' => 'nullable|exists:training_programs,id', // Chương trình học cũ, nếu có
+        $rules = [
+            'user_id' => 'required|exists:users,id',
+            'training_program_id' => 'required|exists:training_programs,id',
+            'entry_type' => 'required|in:default,lien_thong,van_bang_2',
+            'from_program_id' => 'nullable|exists:training_programs,id',
         ];
+
+        if ($this->input('entry_type') === 'lien_thong') {
+            $rules['from_program_id'] = 'required|exists:training_programs,id'; // Nếu là liên thông thì from_program_id bắt buộc
+        }
+
+        return $rules;
     }
+
 
     public function messages()
     {
         return [
-            'student_id.required' => 'Học viên là bắt buộc.',
+            'user_id.required' => 'ID người dùng là bắt buộc.',
             'training_program_id.required' => 'Chương trình đào tạo là bắt buộc.',
             'entry_type.required' => 'Loại nhập học là bắt buộc.',
         ];

@@ -37,4 +37,9 @@ class DisciplineScoreService
     {
         return $this->repository->delete($id);
     }
+
+    public function getByStudent($student_id)
+    {
+        return $this->repository->getByStudent($student_id);
+    }
 }

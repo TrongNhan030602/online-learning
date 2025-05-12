@@ -54,7 +54,7 @@ class NotificationRepository
 
 
 
-    public function deleteNotification(int $notificationId): bool
+    public function deleteNotification($notificationId)
     {
         // Tìm thông báo theo ID
         $notification = Notification::find($notificationId);

@@ -1,7 +1,12 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faSort } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faTrash,
+  faSort,
+  faClipboardList,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import "../../styles/trainingPrograms/training-program-list.css";
 
@@ -155,6 +160,16 @@ const TrainingProgramList = ({ trainingPrograms, onEdit, onDelete }) => {
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
+                      {(program.level === "college" ||
+                        program.level === "intermediate") && (
+                        <Link
+                          to={`/admin/training-programs/${program.id}/discipline-scores`}
+                          title="Nhập điểm rèn luyện"
+                          className="training-program-list__action-button  training-program-list__action-button--enter"
+                        >
+                          <FontAwesomeIcon icon={faClipboardList} />
+                        </Link>
+                      )}
                       <button
                         onClick={() => onDelete(program.id)}
                         title="Xóa chương trình đào tạo"

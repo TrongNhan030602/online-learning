@@ -17,13 +17,23 @@ const AdminFaqs = lazy(() => import("../pages/admin/Faqs/AdminFaqs"));
 const FaqDetail = lazy(() => import("../pages/admin/Faqs/FaqDetail"));
 const AdminChat = lazy(() => import("../pages/admin/Chat/AdminChat"));
 const AdminProfile = lazy(() => import("../pages/admin/AdminProfile"));
-const AdminClasses = lazy(() => import("../pages/admin/Classes/AdminClasses"));
-const ClassDetail = lazy(() => import("../pages/admin/Classes/ClassDetail"));
+const AdminDisciplineScores = lazy(() =>
+  import("../pages/admin/DisciplineScores/AdminDisciplineScores")
+);
+const AdminEnterDisciplineScores = lazy(() =>
+  import("../pages/admin/DisciplineScores/AdminEnterDisciplineScores")
+);
+const DisciplineScoresDetail = lazy(() =>
+  import("../pages/admin/DisciplineScores/DisciplineScoresDetail")
+);
 const AdminTrainingPrograms = lazy(() =>
   import("../pages/admin/TrainingPrograms/AdminTrainingPrograms")
 );
 const TrainingProgramDetail = lazy(() =>
   import("../pages/admin/TrainingPrograms/TrainingProgramDetail")
+);
+const ProgramStudentsPage = lazy(() =>
+  import("../pages/admin/TrainingPrograms/ProgramStudentsPage")
 );
 
 const SemesterDetail = lazy(() =>
@@ -64,6 +74,25 @@ const AdminRoutes = () => {
             </Suspense>
           }
         />
+        {/* Quản lý Nhập điểm rèn luyện (chỉ nhập) */}
+        <Route
+          path="training-programs/:programId/discipline-scores"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminEnterDisciplineScores />
+            </Suspense>
+          }
+        />
+
+        {/* Quản lý học viện của chương trình */}
+        <Route
+          path="training-programs/:programId/students"
+          element={
+            <Suspense fallback={<Loading />}>
+              <ProgramStudentsPage />
+            </Suspense>
+          }
+        />
 
         <Route
           path="semester-detail/:id"
@@ -75,18 +104,18 @@ const AdminRoutes = () => {
         />
 
         <Route
-          path="classes"
+          path="discipline-scores"
           element={
             <Suspense fallback={<Loading />}>
-              <AdminClasses />
+              <AdminDisciplineScores />
             </Suspense>
           }
         />
         <Route
-          path="classes/:id"
+          path="discipline-scores/:id"
           element={
             <Suspense fallback={<Loading />}>
-              <ClassDetail />
+              <DisciplineScoresDetail />
             </Suspense>
           }
         />

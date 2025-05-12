@@ -1,14 +1,14 @@
 <?php
-
 namespace App\Repositories;
 
 use App\Models\User;
-use Illuminate\Support\Str;
 use App\Models\PasswordReset;
-use App\Interfaces\AuthRepositoryInterface;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\RefreshToken;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Interfaces\AuthRepositoryInterface;
 
 class AuthRepository implements AuthRepositoryInterface
 {
@@ -24,26 +24,58 @@ class AuthRepository implements AuthRepositoryInterface
     public function login(array $credentials)
     {
         if (!$token = Auth::attempt($credentials)) {
-            throw new \Exception(message: 'Thông tin đăng nhập không chính xác!');
+            throw new \Exception('Thông tin đăng nhập không chính xác!');
         }
+
         $user = Auth::user();
 
-        // Trả về cả token và vai trò của người dùng ở cùng một cấp
+        // Tạo refresh token mới
+        $refreshToken = Str::random(64);
+
+        RefreshToken::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'token' => $refreshToken,
+                'expires_at' => now()->addDays(7),
+            ]
+        );
+
         return [
             'access_token' => $token,
+            'refresh_token' => $refreshToken,
             'role' => $user->role,
+        ];
+    }
+
+    public function refreshAccessToken(string $refreshToken)
+    {
+        $record = RefreshToken::where('token', $refreshToken)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (!$record) {
+            throw new \Exception('Refresh token không hợp lệ hoặc đã hết hạn.');
+        }
+
+        $user = $record->user;
+        $accessToken = JWTAuth::fromUser($user);
+
+        return [
+            'access_token' => $accessToken,
         ];
     }
 
     public function logout()
     {
+        $user = Auth::user();
         JWTAuth::invalidate(JWTAuth::getToken());
+
+        if ($user) {
+            RefreshToken::where('user_id', $user->id)->delete(); // Xoá refresh token khi logout
+        }
     }
 
-    public function refresh()
-    {
-        return JWTAuth::refresh(JWTAuth::getToken());
-    }
+
 
     public function me()
     {
@@ -54,8 +86,8 @@ class AuthRepository implements AuthRepositoryInterface
     public function createPasswordResetToken($email)
     {
         return PasswordReset::updateOrCreate(
-            attributes: ['email' => $email],
-            values: ['token' => Str::random(length: 60)]
+            ['email' => $email],
+            ['token' => Str::random(60)]
         );
     }
 

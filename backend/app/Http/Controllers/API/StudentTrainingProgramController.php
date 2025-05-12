@@ -5,6 +5,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\StudentTrainingProgramService;
+use App\Http\Resources\StudentTrainingProgramResource;
 use App\Http\Requests\StudentTrainingProgramRequest\StudentTrainingProgramRequest;
 
 class StudentTrainingProgramController extends Controller
@@ -23,9 +24,10 @@ class StudentTrainingProgramController extends Controller
             $data = $request->validated();
             $studentTrainingProgram = $this->service->registerStudentToProgram($data);
 
+            // Kiểm tra nếu không có chương trình đào tạo trước (trường hợp 'lien_thong')
             if (!$studentTrainingProgram) {
                 return response()->json([
-                    'message' => 'Không thể đăng ký học viên vào chương trình.'
+                    'message' => 'Không thể đăng ký học viên vào chương trình. Sinh viên cần có chương trình đào tạo trước.'
                 ], 400);
             }
 
@@ -48,15 +50,11 @@ class StudentTrainingProgramController extends Controller
         try {
             $students = $this->service->getStudentsInProgram($trainingProgramId);
 
-            if ($students->isEmpty()) {
-                return response()->json([
-                    'message' => 'Không có học viên nào trong chương trình.'
-                ], 404);
-            }
-
             return response()->json([
-                'message' => 'Danh sách học viên trong chương trình.',
-                'data' => $students
+                'message' => $students->isEmpty()
+                    ? 'Không có học viên nào trong chương trình.'
+                    : 'Danh sách học viên trong chương trình.',
+                'data' => StudentTrainingProgramResource::collection($students)
             ], 200);
 
         } catch (Exception $e) {
@@ -65,6 +63,33 @@ class StudentTrainingProgramController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+
+    //Lấy danh sách học viên không nằm trong chương trình đào tạo
+    public function getStudentsNotInProgram($trainingProgramId): JsonResponse
+    {
+        try {
+            $students = $this->service->getStudentsNotInProgram($trainingProgramId);
+
+            return response()->json([
+                'message' => 'Danh sách học viên chưa thuộc chương trình.',
+                'data' => $students
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi xảy ra khi lấy danh sách học viên.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getPreviousProgram($studentId)
+    {
+        $program = $this->service->getPreviousPrograms($studentId);
+        if (!$program) {
+            return response()->json(['message' => 'Không tìm thấy chương trình đào tạo trước đó hợp lệ'], 404);
+        }
+        return response()->json($program);
     }
 
     // Lấy thông tin học viên trong chương trình
@@ -115,4 +140,5 @@ class StudentTrainingProgramController extends Controller
             ], 500);
         }
     }
+
 }

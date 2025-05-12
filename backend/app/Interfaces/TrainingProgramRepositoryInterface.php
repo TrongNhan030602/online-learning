@@ -10,6 +10,8 @@ interface TrainingProgramRepositoryInterface
     public function delete($id);
     public function getByLevel($level);
 
+    public function getSemestersByProgramId($programId);
+    public function getStudentsWithoutScoresForSemester($programId, $semesterId);
     // For Student
     public function getDetailedById($id);
 

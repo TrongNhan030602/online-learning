@@ -1,0 +1,99 @@
+.program-students {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.program-students__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.program-students__title {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.program-students__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.program-students__btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.program-students__btn--back {
+  background-color: #6c757d; /* Bootstrap secondary */
+  border: none;
+}
+
+.program-students__btn--add {
+  background-color: #0d6efd; /* Bootstrap primary */
+  border: none;
+}
+.program-students__link {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+.program-students__link:hover {
+  filter: brightness(1.05);
+  text-decoration: underline;
+}
+
+.program-students__table-td--sort {
+  cursor: pointer;
+  filter: brightness(1.06);
+}
+.program-students__loading {
+  padding: 3rem;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.program-students__error {
+  margin: 2rem auto;
+  max-width: 600px;
+  font-size: 1rem;
+}
+
+.program-students__table {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.program-students__table thead th {
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.program-students__table tbody td {
+  vertical-align: middle;
+}
+
+.program-students__table tbody tr:hover {
+  background-color: #f1f9ff;
+  transition: background-color 0.3s;
+}
+
+/* Responsive cải thiện trải nghiệm mobile */
+@media (max-width: 768px) {
+  .program-students__title {
+    font-size: 1.4rem;
+  }
+
+  .program-students__table {
+    font-size: 0.9rem;
+  }
+
+  .program-students {
+    padding: 1rem;
+  }
+}

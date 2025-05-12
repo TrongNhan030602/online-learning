@@ -65,6 +65,7 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
     reset,
   } = useForm({
@@ -102,14 +103,24 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
   const onSubmit = async (data) => {
     try {
       if (initialData) {
-        await userApi.updateUser(initialData.id, data); // Cập nhật người dùng
+        await userApi.updateUser(initialData.id, data);
       } else {
-        await userApi.createUser(data); // Thêm mới người dùng
+        await userApi.createUser(data);
       }
       onSuccess(data);
       reset();
     } catch (err) {
-      console.error("Lỗi khi lưu người dùng:", err);
+      if (err.response?.status === 422 && err.response.data?.errors) {
+        const backendErrors = err.response.data.errors;
+        Object.entries(backendErrors).forEach(([field, messages]) => {
+          setError(field, {
+            type: "server",
+            message: messages[0], // lấy lỗi đầu tiên trong mảng
+          });
+        });
+      } else {
+        console.error("Lỗi không xác định:", err);
+      }
     }
   };
 
@@ -119,7 +130,7 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="user-form__group">
-        <label className="user-form__label">Tên người dùng:</label>
+        <label className="user-form__label">Tên hoặc MSSV:</label>
         <input
           type="text"
           {...register("name")}

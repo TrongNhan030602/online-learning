@@ -10,15 +10,15 @@ class DisciplineScore extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id',
+        'student_training_program_id',  // Liên kết với chương trình đào tạo của sinh viên
         'semester_id',
         'score',
         'evaluation',
     ];
 
-    public function student()
+    public function studentTrainingProgram()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(StudentTrainingProgram::class);
     }
 
     public function semester()

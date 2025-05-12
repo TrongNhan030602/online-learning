@@ -10,17 +10,20 @@ class StudentTrainingProgram extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id',
+        'user_id',
         'training_program_id',
         'entry_type',
         'from_program_id',
     ];
 
-    public function student()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-
+    public function disciplineScores()
+    {
+        return $this->hasMany(DisciplineScore::class);
+    }
     public function trainingProgram()
     {
         return $this->belongsTo(TrainingProgram::class);

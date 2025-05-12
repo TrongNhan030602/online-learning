@@ -12,7 +12,7 @@ const AdminLayout = () => {
     "/admin/users": "Quản lý người dùng",
     "/admin/courses": "Quản lý khóa học",
     "/admin/training-programs": "Quản lý CTĐT",
-    "/admin/classes": "Quản lý lớp học",
+    "/admin/discipline-scores": "Quản lý ĐRL",
     "/admin/lessons": "Quản lý bài học",
     "/admin/faqs": "Quản lý FAQs",
     "/admin/blogs": "Quản lý blog",
@@ -20,8 +20,14 @@ const AdminLayout = () => {
     "/admin/progress": "Quản lý tiến độ",
   };
 
-  // Lấy tiêu đề theo URL hiện tại
-  const getTitle = () => routeTitles[location.pathname] || "Dashboard";
+  // Lấy tiêu đề phù hợp với phần đầu của URL
+  const getTitle = () => {
+    const currentPath = location.pathname;
+    const matchedKey = Object.keys(routeTitles)
+      .sort((a, b) => b.length - a.length) // Ưu tiên match path dài hơn
+      .find((key) => currentPath.startsWith(key));
+    return routeTitles[matchedKey] || "Dashboard";
+  };
 
   return (
     <div className="admin">

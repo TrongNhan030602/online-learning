@@ -16,7 +16,7 @@ class UserCreateRequest extends FormRequest
     {
         return [
             // Các trường thông tin người dùng
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:users,name', // duy nhất để có thể là MSSV
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|in:admin,student,advisor',
@@ -37,6 +37,8 @@ class UserCreateRequest extends FormRequest
     {
         return [
             'name.required' => 'Trường tên không được bỏ trống.',
+            'name.unique' => 'Tên đã tồn tại.',
+
             'email.required' => 'Trường email không được bỏ trống.',
             'email.email' => 'Email không hợp lệ.',
             'email.unique' => 'Email đã tồn tại.',

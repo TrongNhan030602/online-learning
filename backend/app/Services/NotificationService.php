@@ -49,9 +49,9 @@ class NotificationService implements NotificationRepositoryInterface
     }
 
 
-    public function deleteNotification(int $notificationId, int $userId): bool
+    public function deleteNotification($notificationId)
     {
-        return $this->repository->deleteNotification($notificationId, $userId);
+        return $this->repository->deleteNotification($notificationId);
     }
     public function getStatistics(int $userId): array
     {

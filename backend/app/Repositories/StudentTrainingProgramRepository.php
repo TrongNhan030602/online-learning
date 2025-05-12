@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Repositories;
 
+use App\Models\User;
 use App\Models\StudentTrainingProgram;
 use App\Interfaces\StudentTrainingProgramRepositoryInterface;
 
@@ -14,17 +16,29 @@ class StudentTrainingProgramRepository implements StudentTrainingProgramReposito
     public function getStudentsByTrainingProgramId(int $trainingProgramId)
     {
         return StudentTrainingProgram::where('training_program_id', $trainingProgramId)
-            ->with('student') // Thêm mối quan hệ với bảng users để lấy thông tin học viên
+            ->with(['user', 'trainingProgram', 'fromProgram']) // Sửa lại: dùng 'user' thay vì 'student'
+            ->get();
+    }
+
+    public function getStudentsNotInProgram(int $trainingProgramId)
+    {
+        $registeredUserIds = StudentTrainingProgram::where('training_program_id', $trainingProgramId)
+            ->pluck('user_id');
+
+        return User::where('role', 'student')
+            ->whereNotIn('id', $registeredUserIds)
             ->get();
     }
 
     public function getById(int $id)
     {
-        return StudentTrainingProgram::with(['student', 'trainingProgram', 'fromProgram'])->findOrFail($id);
+        return StudentTrainingProgram::with(['user', 'trainingProgram', 'fromProgram']) // Sửa lại: dùng 'user'
+            ->findOrFail($id);
     }
-    public function removeStudentFromProgram(int $studentId, int $trainingProgramId)
+
+    public function removeStudentFromProgram(int $userId, int $trainingProgramId)
     {
-        $studentTrainingProgram = StudentTrainingProgram::where('student_id', $studentId)
+        $studentTrainingProgram = StudentTrainingProgram::where('user_id', $userId)
             ->where('training_program_id', $trainingProgramId)
             ->first();
 
@@ -33,6 +47,29 @@ class StudentTrainingProgramRepository implements StudentTrainingProgramReposito
             return true;
         }
 
-        return false; // Nếu không tìm thấy học viên trong chương trình
+        return false;
+    }
+
+    // Kiểm tra xem sinh viên có thuộc chương trình đào tạo trước đó hay không
+    public function checkPreviousProgram(int $userId, int $fromProgramId)
+    {
+        return StudentTrainingProgram::where('user_id', $userId)
+            ->where('training_program_id', $fromProgramId)
+            ->exists();
+    }
+
+    public function getPreviousPrograms(int $userId)
+    {
+        return StudentTrainingProgram::with([
+            'trainingProgram' => function ($query) {
+                $query->select('id', 'name', 'level', 'code');
+            }
+        ])
+            ->where('user_id', $userId)
+            ->whereHas('trainingProgram', function ($query) {
+                $query->whereIn('level', ['certificate', 'intermediate', 'college']);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }
