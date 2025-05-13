@@ -8,8 +8,11 @@ const userApi = {
   deleteUser: (id) => axiosClient.delete(`/users/${id}`),
   resetPassword: (id) => axiosClient.post(`/users/${id}/reset-password`),
 
-  // ✅ API mới: lấy người dùng theo vai trò
+  // Lấy người dùng theo vai trò
   getUsersByRole: (role) => axiosClient.get(`/users/role/${role}`),
+
+  // Lấy chi tiết người dùng theo ID
+  getUserDetailById: (id) => axiosClient.get(`/users/${id}/detail`),
 };
 
 export default userApi;

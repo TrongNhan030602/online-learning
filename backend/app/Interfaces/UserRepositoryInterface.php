@@ -24,4 +24,5 @@ interface UserRepositoryInterface
     // Lấy thống kê số lượng người dùng theo vai trò
     public function getStatistics();
     public function getPersonalInfo($userId);
+    public function getFullUserInfoById($id);
 }

@@ -92,7 +92,8 @@ const AdminUsers = () => {
         <Loading
           text="Đang tải dữ liệu..."
           size="lg"
-          variant="danger"
+          variant="primary"
+          textVariant="primary"
         />
       ) : users.length > 0 ? (
         <UserList

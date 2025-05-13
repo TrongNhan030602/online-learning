@@ -37,6 +37,10 @@ class User extends Authenticatable implements JWTSubject
         // Mối quan hệ nhiều-nhiều giữa User (học viên) và TrainingProgram (chương trình đào tạo)
         return $this->belongsToMany(TrainingProgram::class, 'student_training_programs', 'user_id', 'training_program_id');
     }
+    public function studentTrainingPrograms()
+    {
+        return $this->hasMany(StudentTrainingProgram::class, 'user_id');
+    }
 
     // Sinh viên có thể có nhiều môn học được miễn khi liên thông
     public function exemptCourses()

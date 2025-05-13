@@ -65,6 +65,23 @@ class CourseController extends Controller
             ], 500);
         }
     }
+    // Chi tiết đầy đủ môn học (cho admin).
+    public function fullDetail($id)
+    {
+        try {
+            $course = $this->courseService->getFullDetail($id);
+
+            return response()->json([
+                'message' => 'Chi tiết đầy đủ môn học (cho admin).',
+                'data' => $course
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy chi tiết môn học.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     // Tạo mới môn học
     public function store(CourseRequest $request)

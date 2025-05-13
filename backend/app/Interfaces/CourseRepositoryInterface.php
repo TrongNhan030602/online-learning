@@ -16,7 +16,7 @@ interface CourseRepositoryInterface
     public function updateStatus(int $id, string $status);
 
     public function deleteCourse(int $id);
-
+    public function getFullDetail(int $id);
     //For Student
     public function getLearningDetail($id);
 }

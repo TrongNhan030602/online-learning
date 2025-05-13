@@ -1,283 +1,121 @@
-/* Container chính cho trang chi tiết khóa học */
-.admin-course-detail {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* admin-course-detail.css */
+
+.course-detail__header {
+  margin-bottom: 2rem;
 }
 
-/* Header khóa học */
-.admin-course-detail__header {
-  border-bottom: 1px solid #eaeaea;
-  padding-bottom: 20px;
+.course-detail__title {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: var(--heading-font);
+}
+
+.course-detail__back-button {
+  margin-top: 1rem;
+}
+
+.course-detail__info {
+  margin-bottom: 2rem;
+}
+
+.course-detail__info-card {
+  margin-bottom: 1rem;
+}
+
+.course-detail__sessions {
+  margin-bottom: 2rem;
+}
+.course-detail__schedule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
-.admin-course-detail__header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-.admin-course-detail__btn-add {
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 0;
-  cursor: pointer;
-  margin: 5px 0;
-  transition: background-color 0.3s ease;
+
+.course-detail__schedule-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
 }
 
-.admin-course-detail__link-back {
-  font-size: 1.1rem;
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: color 0.3sease;
-}
-.admin-course-detail__link-back:hover {
-  filter: brightness(1.2);
-}
-.admin-course-detail__btn-add:hover {
-  filter: brightness(1.2);
-}
-.admin-course-detail__title {
-  font-size: 2rem;
+.add-session-button {
+  padding: 6px 14px;
+  font-size: 16px;
   font-weight: 600;
-  color: #333;
-  margin: 10px 0;
-  flex: 1;
-  text-align: center;
 }
-/* Content Course */
-.admin-course-detail__content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
-.admin-course-detail__left,
-.admin-course-detail__middle,
-.admin-course-detail__right {
-  flex: 1;
-  min-width: 250px;
-}
-
-.admin-course-detail__image-container {
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
-  height: auto;
-}
-.admin-course-detail__description {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-.admin-course-detail__price {
-  font-size: 1.2rem;
-  color: var(--primary-color);
-}
-
-/* Ảnh khóa học - thu nhỏ kích thước */
-.admin-course-detail__image {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
-}
-/* Hiệu ứng khi hover vào ảnh */
-.admin-course-detail__image-container:hover .admin-course-detail__image {
-  transform: scale(1.05);
-}
-
-/* Nút thay đổi ảnh (icon máy ảnh) */
-.admin-course-detail__image-edit {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.admin-course-detail__image-container:hover .admin-course-detail__image-edit {
-  opacity: 1;
-}
-
-/* Files Section */
-.admin-course-detail__files-section {
-  margin-bottom: 30px;
-}
-.admin-course-detail__section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #eaeaea;
-  padding-bottom: 5px;
-}
-.admin-course-detail__files {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-.admin-course-detail__file-card {
-  flex: 1 1 300px;
-  border: 1px solid #f0f0f0;
-  border-radius: 4px;
-  padding: 10px;
-  background: #fafafa;
-  text-align: center;
-}
-.admin-course-detail__file-link {
-  font-size: 1rem;
+.delete-session-button {
   margin: 10px 0;
 }
-.admin-course-detail__file-link a,
-.admin-course-detail__selected-files-link {
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.admin-course-detail__file-link a:hover,
-.admin-course-detail__selected-files-link:hover {
-  filter: brightness(1.2);
+
+.course-detail__session-card {
+  margin-bottom: 1.5rem;
 }
 
-/* Lessons Section */
-.admin-course-detail__lessons-section {
-  margin-bottom: 30px;
-}
-.admin-course-detail__accordion .accordion-button {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-}
-.admin-course-detail__accordion .accordion-button:not(.collapsed) {
-  color: var(--primary-color);
-  background-color: #f1f1f1;
-}
-.admin-course-detail__accordion .accordion-body {
-  font-size: 0.95rem;
-  color: #555;
-}
-.admin-course-detail__lesson-order {
-  font-weight: 500;
-  margin-left: 5px;
-}
-.admin-course-detail__lesson-actions {
-  margin-top: 15px;
-  text-align: right;
-}
-.admin-course-detail__btn-detail {
-  display: inline-block;
-  padding: 8px 12px;
-  background-color: var(--primary-color);
-  color: #fff;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-.admin-course-detail__btn-detail:hover {
-  filter: brightness(1.2);
-  background-color: var(--primary-color);
-  color: #fff;
-}
-.admin-course-detail__lesson-video-link,
-.admin-course-detail__lesson-documents-link {
-  font-size: 1rem;
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.admin-course-detail__lesson-video-link,
-.admin-course-detail__lesson-documents-link:hover {
-  filter: brightness(1.2);
+.course-detail__lesson-card {
+  margin-bottom: 1rem;
 }
 
-.admin-course-detail__btn-manage-files {
-  display: inline-block;
-  padding: 6px 10px;
-  background-color: transparent;
-  outline: 1.5px solid var(--primary-color);
-  color: var(--primary-color);
-  text-decoration: none;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-  border-radius: 2px;
-  font-weight: 500;
-  margin-right: 4px;
+.course-detail__lesson-materials {
+  margin-top: 1rem;
 }
-.admin-course-detail__btn-manage-files:hover {
-  filter: brightness(1.2);
-  background-color: var(--primary-color);
-  color: #fff;
-}
-.admin-course-detail__delete-btn {
+
+.course-detail__material {
+  margin-bottom: 1rem;
   padding: 8px;
-  margin-left: 4px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+}
+
+.course-detail__material-link {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
   color: var(--primary-color);
 }
 
-.admin-course-detail__delete-btn:hover {
-  background-color: rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng hover */
+.course-detail__material-link:hover {
+  text-decoration: underline;
+  color: var(--primary-hover);
 }
-/* Nút thêm tài liệu */
-.admin-course-detail__add-btn {
+
+.course-detail__back-link {
   display: inline-block;
-  padding: 6px 10px;
-  background-color: transparent;
-  outline: 1.5px solid var(--primary-color);
+  margin-top: 1rem;
   color: var(--primary-color);
   text-decoration: none;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-  border-radius: 2px;
   font-weight: 500;
-  margin: 8px;
 }
 
-.admin-course-detail__add-btn:hover {
-  filter: brightness(1.2);
-  background-color: var(--primary-color);
-  color: #fff;
+.course-detail__back-link:hover {
+  text-decoration: underline;
+  color: var(--primary-hover);
 }
 
-.admin-course-detail__add-btn .fa-plus {
-  margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+/* Đặt kiểu cho phần hiển thị thời gian */
+.course-detail__time {
+  font-size: var(--base-font-size);
+  color: var(--text-gray);
+  margin: 0.5rem 0;
+  line-height: var(--base-line-height);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .admin-course-detail__title {
-    font-size: 1.75rem;
-  }
-  .admin-course-detail__description,
-  .admin-course-detail__price {
-    font-size: 0.95rem;
-  }
-  .admin-course-detail__file-card {
-    flex: 1 1 100%;
-  }
+.course-detail__time strong {
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-right: 0.5rem;
+}
+
+.material {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.material a {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+.material a:hover {
+  color: var(--primary-hover);
 }

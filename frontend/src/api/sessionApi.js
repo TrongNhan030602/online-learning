@@ -1,37 +1,20 @@
 import axiosClient from "./axiosClient";
 
 const sessionApi = {
-  // Lấy danh sách buổi học của lớp học
-  getSessionsByClassroom: (classroomId) =>
-    axiosClient.get(`/classrooms/${classroomId}/sessions`),
+  // ✅ Lấy danh sách buổi học
+  getAll: () => axiosClient.get("/course-sessions"),
 
-  // Thêm buổi học mới vào lớp học
-  createSession: (classroomId, data) =>
-    axiosClient.post(`/classrooms/${classroomId}/sessions`, data),
+  // ✅ Lấy chi tiết 1 buổi học
+  getById: (id) => axiosClient.get(`/course-sessions/${id}`),
 
-  // Cập nhật buổi học
-  updateSession: (classroomId, sessionId, data) =>
-    axiosClient.put(`/classrooms/${classroomId}/sessions/${sessionId}`, data),
+  // ✅ Tạo buổi học mới
+  createSession: (data) => axiosClient.post("/course-sessions", data),
 
-  // Xóa buổi học
-  deleteSession: (classroomId, sessionId) =>
-    axiosClient.delete(`/classrooms/${classroomId}/sessions/${sessionId}`),
-  // Lấy danh sách bài học chưa có cho buổi học
-  getAvailableLessons: (sessionId) =>
-    axiosClient.get(`/classrooms/sessions/${sessionId}/available-lessons`),
+  // ✅ Cập nhật buổi học
+  update: (id, data) => axiosClient.put(`/course-sessions/${id}`, data),
 
-  // Lấy danh sách bài học đang có cho buổi học
-  getCurrentLessons: (sessionId) =>
-    axiosClient.get(`/classrooms/sessions/${sessionId}/current-lessons`),
-  // Thêm bài học vào buổi học
-  addLessonsToSession: (sessionId, lessonIds) =>
-    axiosClient.post(`/classrooms/sessions/${sessionId}/lessons`, {
-      lesson_ids: lessonIds,
-    }),
-
-  // Xóa bài học khỏi buổi học
-  removeLessonFromSession: (sessionId, lessonId) =>
-    axiosClient.delete(`/classrooms/sessions/${sessionId}/lessons/${lessonId}`),
+  // ✅ Xóa buổi học
+  remove: (id) => axiosClient.delete(`/course-sessions/${id}`),
 };
 
 export default sessionApi;

@@ -22,6 +22,10 @@ class CourseService
     {
         return $this->courseRepository->getCourseById($id);
     }
+    public function getFullDetail($id)
+    {
+        return $this->courseRepository->getFullDetail($id);
+    }
 
     public function createCourse(array $data)
     {

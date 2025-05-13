@@ -16,6 +16,20 @@ class CourseRepository implements CourseRepositoryInterface
     {
         return Course::find($id);  // Truyền id trực tiếp vào đây
     }
+    public function getFullDetail(int $id)
+    {
+        $course = Course::with([
+            'courseSessions.lessons.materials',
+            'semesters:id,name',
+            'trainingPrograms:id,name,code'
+        ])->find($id);
+
+        if (!$course) {
+            throw new ModelNotFoundException('Môn học không tồn tại.');
+        }
+
+        return $course;
+    }
 
 
     public function createCourse(array $data)

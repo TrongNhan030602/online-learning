@@ -156,6 +156,20 @@ class UserController extends Controller
             ], 500);
         }
     }
+    public function getUserFullInfoById($id)
+    {
+        try {
+            $info = $this->userService->getFullUserInfoById($id);
+            return response()->json($info, 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi: Không thể lấy thông tin chi tiết người dùng.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
 
 
 }

@@ -217,6 +217,43 @@ class UserRepository implements UserRepositoryInterface
             throw new Exception("Không thể lấy thông tin cá nhân: " . $e->getMessage());
         }
     }
+    public function getFullUserInfoById($id)
+    {
+        try {
+            // Lấy thông tin người dùng với các quan hệ liên quan
+            $user = User::with([
+                'profile',
+                'studentTrainingPrograms.trainingProgram',
+                'studentTrainingPrograms.fromProgram',
+                'studentTrainingPrograms.disciplineScores.semester',
+            ])->findOrFail($id);
+
+            // Thêm trường full_name cho tên đầy đủ
+            $user->full_name = $user->profile->last_name . ' ' . $user->profile->first_name;
+
+            // Chuyển đổi dữ liệu nếu cần format cho frontend
+            $user->studentTrainingPrograms->map(function ($program) {
+                // Format thông tin điểm rèn luyện cho mỗi chương trình học
+                $program->discipline_scores = $program->disciplineScores->map(function ($score) {
+                    return [
+                        'semester' => $score->semester->name,
+                        'score' => $score->score,
+                        'evaluation' => $score->evaluation
+                    ];
+                });
+
+                return $program;
+            });
+
+            return $user;
+        } catch (Exception $e) {
+            // Xử lý lỗi
+            throw new Exception("Lỗi khi lấy thông tin chi tiết người dùng: " . $e->getMessage());
+        }
+    }
+
+
+
 
 
 

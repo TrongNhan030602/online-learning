@@ -73,7 +73,7 @@ Route::prefix('users')->group(function () {
     Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('auth:api', 'role:admin');
     Route::post('/{id}/reset-password', [UserController::class, 'resetPassword'])->middleware('auth:api', 'role:admin');
     Route::get('/role/{role}', [UserController::class, 'getUsersByRole'])->middleware('auth:api', 'role:admin');
-
+    Route::get('/{id}/detail', [UserController::class, 'getUserFullInfoById'])->middleware('auth:api', 'role:admin');
 });
 
 Route::middleware(['auth:api'])->group(function () {
@@ -158,7 +158,7 @@ Route::prefix('courses')->group(function () {
 
     // Lấy chi tiết môn học
     Route::get('{id}', [CourseController::class, 'show']);
-
+    Route::get('/{id}/full-detail', [CourseController::class, 'fullDetail']);
     // Tạo môn học mới
     Route::post('/', [CourseController::class, 'store']);
 

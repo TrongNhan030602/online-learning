@@ -1,29 +1,30 @@
 import axiosClient from "./axiosClient";
 
 const lessonApi = {
-  getLessons: (courseId) =>
-    axiosClient.get("/lessons", { params: { course_id: courseId } }),
-  getSessionsByClass: (classId) =>
-    axiosClient.get(`/classrooms/${classId}/sessions`),
-  getLessonDetail: (id) => axiosClient.get(`/lessons/${id}`),
-  createLesson: (data) =>
-    axiosClient.post("/lessons", data, {
-      headers: { "Content-Type": "application/json" },
-    }),
-  updateLesson: (id, data) => axiosClient.put(`/lessons/${id}`, data),
-  deleteLesson: (id) => axiosClient.delete(`/lessons/${id}`),
-  assignFiles: (lessonId, fileIds) =>
-    axiosClient.post(`/lessons/${lessonId}/selected-files`, {
-      file_ids: fileIds,
-    }),
-  // API để thêm tài liệu vào bài học
-  addDocuments: (lessonId, documents) =>
-    axiosClient.post(`/lessons/${lessonId}/documents`, documents, {
-      headers: { "Content-Type": "multipart/form-data" },
-    }),
-  // API xóa tài liệu của bài học
-  deleteDocument: (lessonId, documentId) =>
-    axiosClient.delete(`/lessons/${lessonId}/documents/${documentId}`),
+  // Lấy danh sách bài học theo buổi học
+  getLessonsBySession: (courseSessionId) => {
+    return axiosClient.get(`/lessons/course-session/${courseSessionId}`);
+  },
+
+  // Lấy chi tiết bài học theo ID
+  getLessonById: (id) => {
+    return axiosClient.get(`/lessons/${id}`);
+  },
+
+  // Tạo mới bài học
+  createLesson: (data) => {
+    return axiosClient.post("/lessons", data);
+  },
+
+  // Cập nhật bài học
+  updateLesson: (id, data) => {
+    return axiosClient.put(`/lessons/${id}`, data);
+  },
+
+  // Xóa bài học
+  deleteLesson: (id) => {
+    return axiosClient.delete(`/lessons/${id}`);
+  },
 };
 
 export default lessonApi;

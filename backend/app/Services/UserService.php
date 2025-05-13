@@ -81,5 +81,13 @@ class UserService
             throw new Exception("Lỗi khi lấy thông tin cá nhân: " . $e->getMessage());
         }
     }
+    public function getFullUserInfoById($id)
+    {
+        try {
+            return $this->userRepository->getFullUserInfoById($id);
+        } catch (Exception $e) {
+            throw new Exception("Lỗi khi lấy thông tin chi tiết nhân: " . $e->getMessage());
+        }
+    }
 
 }

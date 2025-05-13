@@ -10,7 +10,7 @@ const AdminLayout = () => {
   const routeTitles = {
     "/admin": "Dashboard",
     "/admin/users": "Quản lý người dùng",
-    "/admin/courses": "Quản lý khóa học",
+    "/admin/courses": "Quản lý môn học",
     "/admin/training-programs": "Quản lý CTĐT",
     "/admin/discipline-scores": "Quản lý ĐRL",
     "/admin/lessons": "Quản lý bài học",

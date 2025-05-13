@@ -30,8 +30,8 @@ const FaqDetail = () => {
       <Loading
         text="Đang tải dữ liệu..."
         size="lg"
-        variant="danger"
-        textVariant="danger"
+        variant="primary"
+        textVariant="primary"
       />
     );
 

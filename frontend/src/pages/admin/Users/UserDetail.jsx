@@ -1,6 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import userApi from "../../../api/userApi";
+import { getStorageUrl } from "../../../utils/getStorageUrl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+
 import "../../../styles/user/user-detail.css";
 
 const UserDetail = () => {
@@ -11,7 +15,8 @@ const UserDetail = () => {
   useEffect(() => {
     const fetchUserDetail = async () => {
       try {
-        const response = await userApi.getUserDetail(id);
+        const response = await userApi.getUserDetailById(id);
+        console.log("Dữ liệu người dùng:", response.data);
         setUser(response.data);
       } catch (error) {
         console.error("Lỗi khi tải chi tiết người dùng:", error);
@@ -28,17 +33,28 @@ const UserDetail = () => {
   if (!user)
     return <div className="user-detail__error">Không tìm thấy người dùng</div>;
 
-  // Hàm để chuyển đổi ngày tháng (hiển thị ngày theo định dạng Việt Nam)
   const formatDateTime = (date) => {
     const dateObj = new Date(date);
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return dateObj.toLocaleDateString("vi-VN", options); // Định dạng ngày tháng theo kiểu Việt Nam
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const year = dateObj.getFullYear();
+    return `${day} tháng ${month}, ${year}`;
   };
-
-  // Hàm để hiển thị giờ (start_time và end_time)
-  const formatTime = (time) => {
-    const [hours, minutes] = time.split(":");
-    return `${hours}:${minutes}`; // Trả về thời gian theo định dạng "HH:MM"
+  const getLevelLabel = (level) => {
+    switch (level) {
+      case "college":
+        return "Cao đẳng";
+      case "intermediate":
+        return "Trung cấp";
+      case "certificate":
+        return "Chứng chỉ";
+      case "specialized":
+        return "Chuyên sâu";
+      case "software":
+        return "Phần mềm";
+      default:
+        return level;
+    }
   };
 
   return (
@@ -53,7 +69,6 @@ const UserDetail = () => {
         </Link>
       </div>
 
-      {/* Thông tin chung */}
       <div className="card user-detail__card">
         <div className="card-body">
           <p>
@@ -65,78 +80,96 @@ const UserDetail = () => {
           <p>
             <strong>Vai trò:</strong> {user.role}
           </p>
+          <p>
+            <strong>Ngày tạo:</strong> {formatDateTime(user.created_at)}
+          </p>
+          <p>
+            <strong>Ngày cập nhật:</strong> {formatDateTime(user.updated_at)}
+          </p>
         </div>
       </div>
 
-      {/* Thông tin hồ sơ */}
       {user.profile && (
         <div className="card user-detail__card">
           <div className="card-body">
-            <h4>Hồ sơ người dùng</h4>
-            <p>
-              <strong>Họ & Tên:</strong> {user.profile.first_name}{" "}
-              {user.profile.last_name}
-            </p>
-            <p>
-              <strong>Điện thoại:</strong> {user.profile.phone}
-            </p>
-            <p>
-              <strong>Địa chỉ:</strong> {user.profile.address}
-            </p>
-            <p>
-              <strong>Giới tính:</strong> {user.profile.gender}
-            </p>
-            <p>
-              <strong>Vị trí:</strong> {user.profile.position}
-            </p>
-            <p>
-              <strong>Thông tin:</strong> {user.profile.info}
-            </p>
+            <div className="d-flex justify-content-between">
+              <div className="user-detail__info">
+                <h4>Hồ sơ người dùng</h4>
+                <p>
+                  <strong>Họ & Tên:</strong> {user.profile.last_name}{" "}
+                  {user.profile.first_name}
+                </p>
+                <p>
+                  <strong>Điện thoại:</strong> {user.profile.phone}
+                </p>
+                <p>
+                  <strong>Địa chỉ:</strong> {user.profile.address}
+                </p>
+                <p>
+                  <strong>Giới tính:</strong>{" "}
+                  {user.profile.gender === "male"
+                    ? "Nam"
+                    : user.profile.gender === "female"
+                    ? "Nữ"
+                    : "Khác"}
+                </p>
+
+                <p>
+                  <strong>Vị trí:</strong> {user.profile.position}
+                </p>
+                <p>
+                  <strong>Thông tin:</strong> {user.profile.info}
+                </p>
+              </div>
+              <div className="user-detail__avatar">
+                <img
+                  src={getStorageUrl(user.profile.avatar)}
+                  alt={`${user.profile.first_name} ${user.profile.last_name}`}
+                />
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Danh sách lớp học đã ghi danh */}
-      {user.enrollments?.length > 0 && (
+      {user.student_training_programs?.length > 0 && (
         <div className="card user-detail__card">
           <div className="card-body">
-            <h4>Danh sách lớp học</h4>
-            {user.enrollments.map((enrollment, index) => (
+            <h4>Danh sách chương trình đào tạo</h4>
+            {user.student_training_programs.map((program, index) => (
               <div
-                key={enrollment.id}
-                className="user-detail__class"
+                key={program.id}
+                className="user-detail__training-program"
               >
                 <h5>
-                  {index + 1}. {enrollment.classroom.name}
+                  {index + 1}. {program.training_program.name}
                 </h5>
                 <p>
-                  <strong>Khóa học:</strong> {enrollment.classroom.course.title}
+                  <strong>Mã chương trình:</strong>{" "}
+                  {program.training_program.code}
                 </p>
                 <p>
-                  <strong>Trạng thái:</strong>{" "}
-                  <span className={`status-${enrollment.status}`}>
-                    {enrollment.status === "approved"
-                      ? "✅ Đã ghi danh"
-                      : enrollment.status}
-                  </span>
+                  <strong>Bậc:</strong>{" "}
+                  {getLevelLabel(program.training_program.level)}{" "}
+                  <FontAwesomeIcon
+                    icon={faCircleInfo}
+                    className="tooltip-icon"
+                    title="Cấp độ đào tạo: Cao đẳng, trung cấp, chứng chỉ, chuyên sâu, phần mềm"
+                  />
                 </p>
 
-                {/* Danh sách buổi học */}
-                {enrollment.classroom.sessions?.length > 0 && (
+                <p>
+                  <strong>Chú thích:</strong> {program.training_program.note}
+                </p>
+
+                {program.discipline_scores.length > 0 && (
                   <div>
-                    <strong>Lịch học:</strong>
-                    <ul className="user-detail__sessions">
-                      {enrollment.classroom.sessions.map((session) => (
-                        <li
-                          key={session.id}
-                          className="user-detail__session"
-                        >
-                          <strong>{session.title}</strong> :{" "}
-                          {formatDateTime(session.session_date)} -{" "}
-                          <strong>
-                            {formatTime(session.start_time)} -{" "}
-                            {formatTime(session.end_time)}
-                          </strong>
+                    <h6>Điểm rèn luyện:</h6>
+                    <ul>
+                      {program.discipline_scores.map((score) => (
+                        <li key={score.id}>
+                          <strong>{score.semester.name}:</strong> {score.score}{" "}
+                          - {score.evaluation}
                         </li>
                       ))}
                     </ul>

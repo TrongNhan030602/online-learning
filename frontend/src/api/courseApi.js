@@ -8,6 +8,9 @@ const courseApi = {
   // Lấy chi tiết môn học
   getCourseDetail: (id) => axiosClient.get(`/courses/${id}`),
 
+  // Lấy thông tin đầy đủ môn học (cho admin)
+  getFullDetail: (id) => axiosClient.get(`/courses/${id}/full-detail`),
+
   // Tạo mới môn học
   createCourse: (data) => axiosClient.post("/courses", data),
 

@@ -6,9 +6,7 @@ import AdminLayout from "../layouts/AdminLayout";
 const AdminCourses = lazy(() => import("../pages/admin/Courses/AdminCourses"));
 const CourseDetail = lazy(() => import("../pages/admin/Courses/CourseDetail"));
 const AdminProgress = lazy(() => import("../pages/admin/AdminProgress"));
-const AdminLessonDetail = lazy(() =>
-  import("../pages/admin/Lessons/AdminLessonDetail")
-);
+
 const AdminUsers = lazy(() => import("../pages/admin/Users/AdminUsers"));
 const UserDetail = lazy(() => import("../pages/admin/Users/UserDetail"));
 
@@ -23,9 +21,7 @@ const AdminDisciplineScores = lazy(() =>
 const AdminEnterDisciplineScores = lazy(() =>
   import("../pages/admin/DisciplineScores/AdminEnterDisciplineScores")
 );
-const DisciplineScoresDetail = lazy(() =>
-  import("../pages/admin/DisciplineScores/DisciplineScoresDetail")
-);
+
 const AdminTrainingPrograms = lazy(() =>
   import("../pages/admin/TrainingPrograms/AdminTrainingPrograms")
 );
@@ -111,14 +107,6 @@ const AdminRoutes = () => {
             </Suspense>
           }
         />
-        <Route
-          path="discipline-scores/:id"
-          element={
-            <Suspense fallback={<Loading />}>
-              <DisciplineScoresDetail />
-            </Suspense>
-          }
-        />
 
         <Route
           path="users"
@@ -145,14 +133,7 @@ const AdminRoutes = () => {
             </Suspense>
           }
         />
-        <Route
-          path="courses/:courseId/lessons/:lessonId"
-          element={
-            <Suspense fallback={<Loading />}>
-              <AdminLessonDetail />
-            </Suspense>
-          }
-        />
+
         <Route
           path="progress"
           element={

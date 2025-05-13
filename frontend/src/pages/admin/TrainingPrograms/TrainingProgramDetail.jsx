@@ -43,8 +43,10 @@ const TrainingProgramDetail = () => {
   // State xác nhận xóa học kỳ
   const [showConfirm, setShowConfirm] = useState(false);
   const [semesterToDelete, setSemesterToDelete] = useState(null);
-  // State chọn môn cho CTĐT
+  // State môn học CTĐT
   const [showCourseModal, setShowCourseModal] = useState(false);
+  const [showConfirmCourse, setShowConfirmCourse] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState(null);
 
   const fetchProgram = useCallback(async () => {
     try {
@@ -125,10 +127,17 @@ const TrainingProgramDetail = () => {
   const handleAddCourse = () => {
     setShowCourseModal(true);
   };
-  const handleDeleteCourse = async (programCourseId) => {
+  const handleDeleteCourseClick = (programCourseId) => {
+    setCourseToDelete(programCourseId);
+    setShowConfirmCourse(true);
+  };
+
+  const confirmDeleteCourse = async () => {
+    if (!courseToDelete) return;
+
     try {
-      await programCourseApi.deleteProgramCourse(programCourseId);
-      fetchProgram(); // Cập nhật lại danh sách
+      await programCourseApi.deleteProgramCourse(courseToDelete);
+      fetchProgram();
       addToast({
         title: "Thành công!",
         message: "Môn học đã được xóa khỏi chương trình.",
@@ -143,7 +152,15 @@ const TrainingProgramDetail = () => {
         type: "error",
         duration: 2000,
       });
+    } finally {
+      setShowConfirmCourse(false);
+      setCourseToDelete(null);
     }
+  };
+
+  const cancelDeleteCourse = () => {
+    setShowConfirmCourse(false);
+    setCourseToDelete(null);
   };
 
   if (!program) return <div className="loading">Đang tải...</div>;
@@ -319,7 +336,7 @@ const TrainingProgramDetail = () => {
                       {courseDetails.code})<p>{courseDetails.description}</p>
                     </div>
                     <button
-                      onClick={() => handleDeleteCourse(course.id)}
+                      onClick={() => handleDeleteCourseClick(course.id)}
                       className="btn btn-sm btn-outline-danger ms-2"
                       title="Xóa môn học"
                     >
@@ -363,6 +380,13 @@ const TrainingProgramDetail = () => {
         message="Bạn có chắc chắn muốn xóa học kỳ này?"
         onConfirm={confirmDeleteSemester}
         onCancel={cancelDeleteSemester}
+      />
+      <ConfirmDialog
+        isOpen={showConfirmCourse}
+        title="Xác nhận xóa"
+        message="Bạn có chắc chắn muốn xóa môn học này khỏi chương trình?"
+        onConfirm={confirmDeleteCourse}
+        onCancel={cancelDeleteCourse}
       />
     </div>
   );

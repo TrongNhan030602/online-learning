@@ -4,7 +4,6 @@ import { useToast } from "../../../hooks/useToast";
 import courseApi from "../../../api/courseApi";
 import CourseList from "../../../components/Courses/CourseList";
 import CourseModal from "../../../components/Courses/CourseModal";
-import CourseFilesManager from "../../../components/Courses/CourseFilesManager";
 import ConfirmDialog from "../../../components/Common/ConfirmDialog";
 import Loading from "../../../components/Common/Loading";
 import "../../../styles/course/admin-courses.css";
@@ -14,8 +13,6 @@ const AdminCourses = () => {
   const [loading, setLoading] = useState(true);
   const [editingCourse, setEditingCourse] = useState(null);
   const [showCourseModal, setShowCourseModal] = useState(false);
-  const [showFilesModal, setShowFilesModal] = useState(false);
-  const [selectedCourseForFiles, setSelectedCourseForFiles] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState({
     isOpen: false,
     courseId: null,
@@ -79,11 +76,6 @@ const AdminCourses = () => {
     setConfirmDelete({ isOpen: false, courseId: null });
   };
 
-  const handleFiles = (course) => {
-    setSelectedCourseForFiles(course);
-    setShowFilesModal(true);
-  };
-
   const handleSelect = (course) => {
     navigate(`/admin/courses/${course.id}`);
   };
@@ -97,11 +89,6 @@ const AdminCourses = () => {
       duration: 3000,
     });
     fetchCourses();
-  };
-
-  const handleFilesModalClose = () => {
-    setShowFilesModal(false);
-    setSelectedCourseForFiles(null);
   };
 
   return (
@@ -132,7 +119,6 @@ const AdminCourses = () => {
           onEdit={handleEdit}
           onDelete={handleDelete}
           onSelect={handleSelect}
-          onManageFiles={handleFiles}
         />
       )}
       <CourseModal
@@ -141,13 +127,6 @@ const AdminCourses = () => {
         initialData={editingCourse}
         onSuccess={handleCourseModalSuccess}
       />
-      {selectedCourseForFiles && (
-        <CourseFilesManager
-          show={showFilesModal}
-          handleClose={handleFilesModalClose}
-          courseId={selectedCourseForFiles.id}
-        />
-      )}
 
       <ConfirmDialog
         isOpen={confirmDelete.isOpen}
