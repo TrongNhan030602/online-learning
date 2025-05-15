@@ -85,6 +85,11 @@
   border: 1px solid #ccc;
   background-color: #fff;
 }
+.user-detail__card-account {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 /* Tooltip */
 .tooltip {

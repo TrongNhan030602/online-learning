@@ -1,6 +1,6 @@
-import "../../styles/profile/change-avatar.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import "../../styles/profile/change-avatar.css";
 
 const ChangeAvatarTab = ({ onChange }) => {
   const [preview, setPreview] = useState(null);

@@ -217,12 +217,31 @@
   margin-left: 10px;
   transition: background-color 0.3s ease;
 }
-
 .training-program-detail__button:hover {
   background-color: var(--primary-hover);
 }
+.training-program-exam__button {
+  background-color: transparent;
+  color: var(--primary-color);
+  padding: 8px 16px;
+  font-size: 1.1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.training-program-exam__button:hover {
+  background-color: var(--primary-hover);
+  color: var(--text-white);
+  border-color: var(--primary-hover);
+}
 
 /* Môn học */
+.training-program-detail__course-list {
+  margin-top: 30px;
+}
 .training-program-detail__courses {
   margin-bottom: 30px;
 }

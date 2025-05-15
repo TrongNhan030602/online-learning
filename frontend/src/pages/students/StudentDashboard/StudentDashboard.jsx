@@ -1,9 +1,9 @@
-import Slogan from "../../../components/Student/StudentDashboard/Slogan";
-import BlogSlider from "../../../components/Student/StudentDashboard/BlogSlider";
-import RegisteredClasses from "../../../components/Student/StudentDashboard/RegisteredClasses";
-import NewCourses from "../../../components/Student/StudentDashboard/NewCourses";
-import BlogList from "../../../components/Student/StudentDashboard/BlogList";
-// import FaqSection from "../../../components/Student/StudentDashboard/FaqSection";
+import Slogan from "@/components/Student/StudentDashboard/Slogan";
+import BlogSlider from "@/components/Student/StudentDashboard/BlogSlider";
+import RegisteredClasses from "@/components/Student/StudentDashboard/RegisteredClasses";
+import NewCourses from "@/components/Student/StudentDashboard/NewCourses";
+import BlogList from "@/components/Student/StudentDashboard/BlogList";
+// import FaqSection from "@/components/Student/StudentDashboard/FaqSection";
 
 import "../../../styles/student/student-dashboard.css";
 const StudentDashboard = () => {

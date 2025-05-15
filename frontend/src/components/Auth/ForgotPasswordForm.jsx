@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import authApi from "../../api/authApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import authApi from "@/api/authApi";
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");

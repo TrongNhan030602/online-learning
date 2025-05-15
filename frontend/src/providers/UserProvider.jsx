@@ -1,8 +1,8 @@
 // src/providers/UserProvider.jsx
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { UserContext } from "../contexts/UserContext";
-import userProfileApi from "../api/userProfileApi";
+import { UserContext } from "@/contexts/UserContext";
+import userProfileApi from "@/api/userProfileApi";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);

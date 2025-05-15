@@ -1,17 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
-import semesterApi from "../../../api/semesterApi";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faPlus,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { useToast } from "../../../hooks/useToast";
+import { useToast } from "@/hooks/useToast";
+import semesterApi from "@/api/semesterApi";
 
-import { useParams, useNavigate, Link } from "react-router-dom";
-import CourseSelectionModal from "../../../components/Semester/CourseSelectionModal";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
+import CourseSelectionModal from "@/components/Semester/CourseSelectionModal";
+import AddExamScheduleModal from "@/components/ExamSchedule/AddExamScheduleModal";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
 import "../../../styles/semester/semester-detail.css";
 const SemesterDetail = () => {
   const { id } = useParams();
@@ -23,8 +24,9 @@ const SemesterDetail = () => {
   const [courseToDelete, setCourseToDelete] = useState(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const { addToast } = useToast();
+  const [showAddExamModal, setShowAddExamModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // Fetch semester data
   const fetchSemester = useCallback(async () => {
     try {
       const response = await semesterApi.getSemesterById(id);
@@ -40,10 +42,9 @@ const SemesterDetail = () => {
     fetchSemester();
   }, [fetchSemester]);
 
-  // Handle when courses are added
   const handleCoursesAdded = () => {
     setShowModal(false);
-    fetchSemester(); // Re-fetch semester data after courses are added
+    fetchSemester();
   };
   const confirmRemoveCourse = async () => {
     if (!courseToDelete) return;
@@ -158,16 +159,29 @@ const SemesterDetail = () => {
                     <td>{course.practice_hours}</td>
                     <td>{course.exam_hours}</td>
                     <td>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => {
-                          setCourseToDelete(course.id);
-                          setShowConfirmDialog(true);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrashAlt} />
-                      </Button>
+                      <div className="semester-detail__course-acctions">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedCourse(course);
+                            setShowAddExamModal(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPlus} /> Thi
+                        </Button>
+
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => {
+                            setCourseToDelete(course.id);
+                            setShowConfirmDialog(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -185,10 +199,27 @@ const SemesterDetail = () => {
       <CourseSelectionModal
         show={showModal}
         onClose={() => setShowModal(false)}
-        semesterId={semester.id} // Pass semester id
-        trainingProgramId={semester.training_program.id} // Pass training program id
-        onAdded={handleCoursesAdded} // Refresh data after courses are added
+        semesterId={semester.id}
+        trainingProgramId={semester.training_program.id}
+        onAdded={handleCoursesAdded}
       />
+
+      <AddExamScheduleModal
+        show={showAddExamModal}
+        onClose={() => setShowAddExamModal(false)}
+        trainingProgramId={semester.training_program.id}
+        semesterId={semester.id}
+        courseId={selectedCourse?.id}
+        onSuccess={() => {
+          addToast({
+            title: "Thành công!",
+            message: "Đã thêm lịch thi mới.",
+            type: "success",
+            duration: 1500,
+          });
+        }}
+      />
+
       {/* Xác nhận xóa */}
       <ConfirmDialog
         isOpen={showConfirmDialog}

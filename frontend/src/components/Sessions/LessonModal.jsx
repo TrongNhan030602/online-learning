@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, Form } from "react-bootstrap";
-import lessonApi from "../../api/lessonApi";
-import { useToast } from "../../hooks/useToast";
+import lessonApi from "@/api/lessonApi";
+import { useToast } from "@/hooks/useToast";
 
 const LessonModal = ({
   show,

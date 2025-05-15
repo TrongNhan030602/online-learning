@@ -3,13 +3,13 @@ import { Container, Table, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap, faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router-dom";
-import studentTrainingApi from "../../api/studentTrainingApi"; // Import API
+import studentTrainingApi from "@/api/studentTrainingApi"; // Import API
 import "../../styles/student/training-program/training-program.css";
 
 const TrainingProgram = () => {
-  const { id } = useParams(); // `id` là tham số trong URL
+  const { id } = useParams();
   const programId = id;
-  const [trainingData, setTrainingData] = useState(null); // State for storing program data
+  const [trainingData, setTrainingData] = useState(null);
   const [totals, setTotals] = useState({
     credits: 0,
     totalHours: 0,
@@ -24,8 +24,8 @@ const TrainingProgram = () => {
       try {
         const response = await studentTrainingApi.getProgramDetail(programId);
         const data = response.data.data;
-        setTrainingData(data); // Set toàn bộ dữ liệu chương trình đào tạo
-        calculateTotals(data); // Tính tổng các giờ học và tín chỉ
+        setTrainingData(data);
+        calculateTotals(data);
       } catch (error) {
         console.error("Error fetching program detail:", error);
       }
@@ -76,7 +76,7 @@ const TrainingProgram = () => {
     navigate(`/student/my-course/${courseId}`);
   };
 
-  if (!trainingData) return <div>Loading...</div>; // Show loading if data is not yet available
+  if (!trainingData) return <div className="text-center">Đang tải...</div>;
 
   return (
     <div className="training-program">

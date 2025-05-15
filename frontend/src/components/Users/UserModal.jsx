@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 import UserForm from "./UserForm";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "@/hooks/useToast";
 
 const UserModal = ({ show, handleClose, initialData, onSuccess }) => {
   const { addToast } = useToast();

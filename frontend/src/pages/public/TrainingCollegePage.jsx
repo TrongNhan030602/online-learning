@@ -1,4 +1,3 @@
-// TrainingCollegePage.jsx
 import { Row, Col, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,8 +6,8 @@ import {
   faGlobe,
   faChalkboardTeacher,
 } from "@fortawesome/free-solid-svg-icons";
+import collegeImg from "@/assets/img/landing/cao-dang-trung-cap.png";
 import "../../styles/landing/training-page/training-detail-college.css";
-import collegeImg from "../../assets/img/landing/cao-dang-trung-cap.png";
 
 const TrainingCollegePage = () => {
   return (

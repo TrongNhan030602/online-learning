@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import "../styles/student/student-layout.css";
-import StudentHeader from "../components/Student/StudentHeader";
-import StudentFooter from "../components/Student/StudentFooter";
+import "@/styles/student/student-layout.css";
+import StudentHeader from "@/components/Student/StudentHeader";
+import StudentFooter from "@/components/Student/StudentFooter";
 
 const StudentLayout = () => {
   return (

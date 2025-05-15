@@ -1,7 +1,4 @@
-import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import avatarPlaceholder from "../../assets/react.svg";
-// Import FontAwesome components và icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -13,6 +10,8 @@ import {
   faCertificate,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import avatarPlaceholder from "@/assets/img/default-avatar.jpg";
+import { useAuth } from "@/hooks/useAuth";
 
 const Profile = () => {
   const { user, logout } = useAuth();

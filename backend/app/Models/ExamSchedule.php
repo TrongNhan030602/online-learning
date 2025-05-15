@@ -11,25 +11,39 @@ class ExamSchedule extends Model
 
     protected $fillable = [
         'course_id',
+        'semester_id',
+        'training_program_id',
+
+        'exam_type', //'midterm','final'
         'exam_date',
-        'exam_time',
-        'room',
-        'exam_date_second',
-        'exam_time_second',
-        'exam_type',
+        'start_time',
+        'end_time',
         'duration_minutes',
+
+        'retake_exam_date',
+        'retake_start_time',
+        'retake_end_time',
+
         'location',
-        'exam_term',
         'note',
-        'program_id',
     ];
 
-    public function program()
-    {
-        return $this->belongsTo(TrainingProgram::class, 'program_id');
-    }
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class);
+    }
+
+    public function trainingProgram()
+    {
+        return $this->belongsTo(TrainingProgram::class);
+    }
+    public function reExamRegistrations()
+    {
+        return $this->hasMany(ReExamRegistration::class);
     }
 }

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Spinner, Row, Col, Card, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookOpen, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import programCourseApi from "../../../api/programCourseApi";
-import { useToast } from "../../../hooks/useToast";
+import programCourseApi from "@/api/programCourseApi";
+import { useToast } from "@/hooks/useToast";
 
 const CourseSelectorModal = ({ show, onHide, trainingProgramId, onSave }) => {
   const [availableCourses, setAvailableCourses] = useState([]);

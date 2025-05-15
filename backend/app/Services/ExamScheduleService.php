@@ -13,9 +13,11 @@ class ExamScheduleService
         $this->examScheduleRepository = $examScheduleRepository;
     }
 
-    public function getAll()
+    // ADMIN - Quản lý lịch thi
+
+    public function getAll(array $filters = [])
     {
-        return $this->examScheduleRepository->getAll();
+        return $this->examScheduleRepository->getAll($filters);
     }
 
     public function getById($id)
@@ -36,5 +38,27 @@ class ExamScheduleService
     public function delete($id)
     {
         return $this->examScheduleRepository->delete($id);
+    }
+
+    // STUDENT - Lịch thi cho học viên
+
+    public function getSchedulesForStudent($studentId)
+    {
+        return $this->examScheduleRepository->getSchedulesForStudent($studentId);
+    }
+
+    public function getUpcomingForStudent($studentId)
+    {
+        return $this->examScheduleRepository->getUpcomingForStudent($studentId);
+    }
+
+    public function getCourseScheduleForStudent($studentId, $courseId)
+    {
+        return $this->examScheduleRepository->getCourseScheduleForStudent($studentId, $courseId);
+    }
+
+    public function getRetakeScheduleForStudent($studentId, $courseId)
+    {
+        return $this->examScheduleRepository->getRetakeScheduleForStudent($studentId, $courseId);
     }
 }

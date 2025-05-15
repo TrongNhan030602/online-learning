@@ -6,15 +6,15 @@ import {
   faEdit,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
-import { useUser } from "../../hooks/useUser";
-import { useToast } from "../../hooks/useToast";
-import { getStorageUrl } from "../../utils/getStorageUrl";
+import { useUser } from "@/hooks/useUser";
+import { useToast } from "@/hooks/useToast";
+import { getStorageUrl } from "@/utils/getStorageUrl";
+import ProfileTab from "@/components/Profile/ProfileTab";
+import EditProfileTab from "@/components/Profile/EditProfileTab";
+import ChangeAvatarTab from "@/components/Profile/ChangeAvatarTab";
+import ChangePasswordTab from "@/components/Profile/ChangePasswordTab";
+import userProfileApi from "@/api/userProfileApi";
 import "../../styles/profile/admin-profile.css";
-import ProfileTab from "../../components/Profile/ProfileTab";
-import EditProfileTab from "../../components/Profile/EditProfileTab";
-import ChangeAvatarTab from "../../components/Profile/ChangeAvatarTab";
-import ChangePasswordTab from "../../components/Profile/ChangePasswordTab";
-import userProfileApi from "../../api/userProfileApi";
 
 const AdminProfile = () => {
   const { user, updateUser } = useUser();

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
-import faqApi from "../../../api/faqApi";
-import Loading from "../../../components/Common/Loading";
+import faqApi from "@/api/faqApi";
+import Loading from "@/components/Common/Loading";
 import "../../../styles/faqs/faq-detail.css";
 
 const FaqDetail = () => {

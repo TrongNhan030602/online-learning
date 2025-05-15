@@ -62,6 +62,14 @@ const AdminSidebar = () => {
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
+              to="/admin/exam-schedules"
+            >
+              Quản lý Lịch thi
+            </NavLink>
+          </li>
+          <li className="admin__nav-item">
+            <NavLink
+              className="admin__nav-link"
               to="/admin/blogs"
             >
               Quản lý blog

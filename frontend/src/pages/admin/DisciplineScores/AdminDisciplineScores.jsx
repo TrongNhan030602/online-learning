@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useToast } from "../../../hooks/useToast";
-import disciplineScoreApi from "../../../api/disciplineScoreApi";
-import DisciplineScoreList from "../../../components/DisciplineScores/DisciplineScoreList";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
-import Loading from "../../../components/Common/Loading";
+import { useToast } from "@/hooks/useToast";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
+import Loading from "@/components/Common/Loading";
+import disciplineScoreApi from "@/api/disciplineScoreApi";
+import DisciplineScoreList from "@/components/DisciplineScores/DisciplineScoreList";
 import "../../../styles/discipline-scores/admin-discipline-scores.css";
 
 const AdminDisciplineScores = () => {
@@ -16,12 +16,11 @@ const AdminDisciplineScores = () => {
 
   const { addToast } = useToast();
 
-  // Định nghĩa lại fetchScores ngoài useEffect
   const fetchScores = async () => {
     setLoading(true);
     try {
       const res = await disciplineScoreApi.getDisciplineScores();
-      setScores(res.data || []); // Lấy danh sách điểm
+      setScores(res.data || []);
     } catch (error) {
       console.error("Lỗi khi tải điểm rèn luyện:", error);
     } finally {
@@ -29,10 +28,9 @@ const AdminDisciplineScores = () => {
     }
   };
 
-  // Sử dụng useEffect để chỉ chạy một lần khi component mount
   useEffect(() => {
     fetchScores();
-  }, []); // Chỉ gọi API một lần khi component mount
+  }, []);
 
   const handleDelete = (id) => {
     setConfirmDelete({ isOpen: true, scoreId: id });
@@ -41,8 +39,8 @@ const AdminDisciplineScores = () => {
   const confirmDeleteScore = async () => {
     try {
       await disciplineScoreApi.deleteDisciplineScore(confirmDelete.scoreId);
-      setScores(
-        (prev) => prev.filter((item) => item.id !== confirmDelete.scoreId) // Cập nhật danh sách sau khi xóa
+      setScores((prev) =>
+        prev.filter((item) => item.id !== confirmDelete.scoreId)
       );
       addToast({
         title: "Thành công!",
@@ -65,7 +63,6 @@ const AdminDisciplineScores = () => {
 
   const handleUpdate = async () => {
     try {
-      // Gọi lại fetchScores để tải lại danh sách điểm sau khi cập nhật
       await fetchScores();
     } catch (error) {
       console.error("Lỗi khi tải lại điểm rèn luyện:", error);
@@ -92,7 +89,7 @@ const AdminDisciplineScores = () => {
         <DisciplineScoreList
           scores={scores}
           onDelete={handleDelete}
-          onUpdate={handleUpdate} // Truyền handleUpdate vào
+          onUpdate={handleUpdate}
         />
       )}
 

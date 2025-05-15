@@ -1,7 +1,7 @@
-import "../../styles/landing/call-to-action.css";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import "../../styles/landing/call-to-action.css";
 
 const CallToAction = ({ onLoginClick }) => {
   return (

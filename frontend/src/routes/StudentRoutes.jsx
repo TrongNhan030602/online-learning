@@ -1,42 +1,37 @@
-import { Routes, Route } from "react-router-dom"; // Import Navigate
+import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import StudentLayout from "../layouts/StudentLayout";
-import Loading from "../components/Common/Loading";
+import StudentLayout from "@/layouts/StudentLayout";
+import Loading from "@/components/common/Loading";
 
 // Lazy load các trang
-const StudentCourses = lazy(() =>
-  import("../pages/students/Courses/StudentCourses")
-);
-const CourseDetail = lazy(() =>
-  import("../pages/students/Courses/CourseDetail")
-);
-const Blogs = lazy(() => import("../pages/students/Blogs/Blogs"));
-const BlogDetail = lazy(() => import("../pages/students/Blogs/BlogDetail"));
-const StudentProfile = lazy(() => import("../pages/students/StudentProfile"));
-const TrainingProgram = lazy(() => import("../pages/students/TrainingProgram"));
+
+const Blogs = lazy(() => import("@/pages/students/Blogs/Blogs"));
+const BlogDetail = lazy(() => import("@/pages/students/Blogs/BlogDetail"));
+const StudentProfile = lazy(() => import("@/pages/students/StudentProfile"));
+const TrainingProgram = lazy(() => import("@/pages/students/TrainingProgram"));
 const StudentDashboard = lazy(() =>
-  import("../pages/students/StudentDashboard/StudentDashboard")
+  import("@/pages/students/StudentDashboard/StudentDashboard")
 );
 const StudentNotifications = lazy(() =>
-  import("../pages/students/StudentNotifications")
+  import("@/pages/students/StudentNotifications")
 );
-const StudentChat = lazy(() => import("../pages/students/StudentChat"));
+const StudentChat = lazy(() => import("@/pages/students/StudentChat"));
 const CourseLearningPage = lazy(() =>
-  import("../pages/students/MyCourse/CourseLearningPage")
+  import("@/pages/students/MyCourse/CourseLearningPage")
 );
 
 // Học vụ
 const ExamSchedule = lazy(() =>
-  import("../pages/students/Academic/ExamSchedule")
+  import("@/pages/students/Academic/ExamSchedule")
 );
 const RoutineResult = lazy(() =>
-  import("../pages/students/Academic/RoutineResult")
+  import("@/pages/students/Academic/RoutineResult")
 );
 const LearningResult = lazy(() =>
-  import("../pages/students/Academic/LearningResult")
+  import("@/pages/students/Academic/LearningResult")
 );
 const ExamRegistration = lazy(() =>
-  import("../pages/students/Academic/ExamRegistration")
+  import("@/pages/students/Academic/ExamRegistration")
 );
 
 const StudentRoutes = () => {
@@ -82,41 +77,6 @@ const StudentRoutes = () => {
           }
         />
 
-        {/* Khóa */}
-        <Route
-          path="courses"
-          element={
-            <Suspense
-              fallback={
-                <Loading
-                  text="Đang tải dữ liệu..."
-                  size="lg"
-                  variant="primary"
-                  textVariant="primary"
-                />
-              }
-            >
-              <StudentCourses />
-            </Suspense>
-          }
-        />
-        <Route
-          path="courses/:id"
-          element={
-            <Suspense
-              fallback={
-                <Loading
-                  text="Đang tải dữ liệu..."
-                  size="lg"
-                  variant="primary"
-                  textVariant="primary"
-                />
-              }
-            >
-              <CourseDetail />
-            </Suspense>
-          }
-        />
         {/* Blog */}
         <Route
           path="blogs"

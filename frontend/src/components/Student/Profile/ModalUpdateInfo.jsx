@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import userProfileApi from "../../../api/userProfileApi";
-import { useToast } from "../../../hooks/useToast";
+import userProfileApi from "@/api/userProfileApi";
+import { useToast } from "@/hooks/useToast";
 
 const ProfileUpdateModal = ({ showModal, onClose }) => {
   const [formData, setFormData] = useState({

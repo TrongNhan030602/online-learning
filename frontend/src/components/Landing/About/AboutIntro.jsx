@@ -1,5 +1,5 @@
 import { Container, Row, Col, Image } from "react-bootstrap";
-import introImage from "../../../assets/img/landing/about/about-img.jpg"; // Import ảnh từ src/assets
+import introImage from "@/assets/img/landing/about/about-img.jpg";
 import "../../../styles/landing/about/about-page.css";
 
 const AboutIntro = () => {

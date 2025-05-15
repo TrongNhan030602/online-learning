@@ -1,9 +1,11 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import userApi from "../../../api/userApi";
-import { getStorageUrl } from "../../../utils/getStorageUrl";
+import userApi from "@/api/userApi";
+import { getStorageUrl } from "@/utils/getStorageUrl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import ChangePasswordModal from "@/components/Users/ChangePasswordModal";
+import { Button } from "react-bootstrap";
 
 import "../../../styles/user/user-detail.css";
 
@@ -11,12 +13,12 @@ const UserDetail = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   useEffect(() => {
     const fetchUserDetail = async () => {
       try {
         const response = await userApi.getUserDetailById(id);
-        console.log("Dữ liệu người dùng:", response.data);
         setUser(response.data);
       } catch (error) {
         console.error("Lỗi khi tải chi tiết người dùng:", error);
@@ -70,22 +72,34 @@ const UserDetail = () => {
       </div>
 
       <div className="card user-detail__card">
-        <div className="card-body">
-          <p>
-            <strong>Tài khoản:</strong> {user.name}
-          </p>
-          <p>
-            <strong>Email:</strong> {user.email}
-          </p>
-          <p>
-            <strong>Vai trò:</strong> {user.role}
-          </p>
-          <p>
-            <strong>Ngày tạo:</strong> {formatDateTime(user.created_at)}
-          </p>
-          <p>
-            <strong>Ngày cập nhật:</strong> {formatDateTime(user.updated_at)}
-          </p>
+        <div className="card-body user-detail__card-account">
+          <div>
+            <p>
+              <strong>Tài khoản:</strong> {user.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+            <p>
+              <strong>Vai trò:</strong> {user.role}
+            </p>
+            <p>
+              <strong>Ngày tạo:</strong> {formatDateTime(user.created_at)}
+            </p>
+            <p>
+              <strong>Ngày cập nhật:</strong> {formatDateTime(user.updated_at)}
+            </p>
+          </div>
+          <div>
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => setShowChangePasswordModal(true)}
+              style={{ marginTop: "8px" }}
+            >
+              Đổi mật khẩu
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -179,6 +193,14 @@ const UserDetail = () => {
             ))}
           </div>
         </div>
+      )}
+      {showChangePasswordModal && (
+        <ChangePasswordModal
+          show={showChangePasswordModal}
+          onClose={() => setShowChangePasswordModal(false)}
+          userId={user.id}
+          userName={user.name}
+        />
       )}
     </div>
   );

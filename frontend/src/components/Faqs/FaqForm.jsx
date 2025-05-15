@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import faqApi from "../../api/faqApi";
-import { useToast } from "../../hooks/useToast";
+import { useToast } from "@/hooks/useToast";
+import faqApi from "@/api/faqApi";
 import "../../styles/faqs/faq-form.css";
 
 // Schema validation với Yup

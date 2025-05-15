@@ -17,11 +17,11 @@ import {
   faUserTie,
   faCamera,
 } from "@fortawesome/free-solid-svg-icons";
-import authApi from "../../api/authApi";
-import userProfileApi from "../../api/userProfileApi";
-import { getStorageUrl } from "../../utils/getStorageUrl";
+import authApi from "@/api/authApi";
+import userProfileApi from "@/api/userProfileApi";
+import { getStorageUrl } from "@/utils/getStorageUrl";
+import ProfileUpdateModal from "@/components/Student/Profile/ModalUpdateInfo";
 import "../../styles/student/student-profile.css";
-import ProfileUpdateModal from "../../components/Student/Profile/ModalUpdateInfo";
 
 const StudentProfile = () => {
   const [studentData, setStudentData] = useState(null);

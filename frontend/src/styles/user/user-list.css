@@ -95,9 +95,9 @@
 }
 .user-list__action-button--delete {
   background-color: #fff;
-  outline: 1.2px solid var(--primary-color);
+  outline: 1.2px solid #c82333;
   padding: 8px 13px;
-  color: var(--primary-color);
+  color: #c82333;
 }
 
 .user-list__action-button--delete:hover {

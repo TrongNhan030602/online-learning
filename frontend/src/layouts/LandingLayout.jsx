@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import LandingHeader from "../components/Landing/LandingHeader";
-import CallToAction from "../components/Landing/CallToAction";
+import LandingHeader from "@/components/Landing/LandingHeader";
+import CallToAction from "@/components/Landing/CallToAction";
 
 const LandingLayout = () => {
   const navigate = useNavigate();

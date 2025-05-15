@@ -1,9 +1,8 @@
 import { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { ToastContext } from "../contexts/ToastContext";
+import { ToastContext } from "@/contexts/ToastContext";
 import { v4 as uuidv4 } from "uuid";
-import Toast from "../components/Toast/Toast";
-
+import Toast from "@/components/Toast/Toast";
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 

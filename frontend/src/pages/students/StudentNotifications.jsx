@@ -7,7 +7,7 @@ import {
   faCalendarCheck,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import notificationApi from "../../api/notificationApi";
+import notificationApi from "@/api/notificationApi";
 import "../../styles/student/student-notifications.css";
 
 const StudentNotifications = () => {

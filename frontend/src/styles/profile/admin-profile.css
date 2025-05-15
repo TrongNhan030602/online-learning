@@ -57,7 +57,7 @@
 }
 /* Khi tab đang active */
 .admin-profile-sidebar li.active {
-  background-color: #ec5432; /* Màu nền khi active */
+  background-color: var(--primary-color); /* Màu nền khi active */
   color: #fff; /* Màu chữ khi active */
 }
 

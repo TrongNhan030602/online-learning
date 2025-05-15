@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import chatApi from "../../../api/chatApi";
-import "../../../styles/chat/admin-chat.css";
-
-// Import FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import chatApi from "@/api/chatApi";
 
-import ChatSidebar from "../../../components/Chat/ChatSidebar";
-import ChatBox from "../../../components/Chat/ChatBox";
+import ChatSidebar from "@/components/Chat/ChatSidebar";
+import ChatBox from "@/components/Chat/ChatBox";
+import "../../../styles/chat/admin-chat.css";
 
 const AdminChat = () => {
   const [selectedUser, setSelectedUser] = useState(null);

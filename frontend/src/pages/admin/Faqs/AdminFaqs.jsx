@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useToast } from "../../../hooks/useToast";
-import faqApi from "../../../api/faqApi";
-import FaqList from "../../../components/Faqs/FaqList";
-import FaqModal from "../../../components/Faqs/FaqModal";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
-import Loading from "../../../components/Common/Loading";
+import faqApi from "@/api/faqApi";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
+import Loading from "@/components/Common/Loading";
+import FaqList from "@/components/Faqs/FaqList";
+import FaqModal from "@/components/Faqs/FaqModal";
 import "../../../styles/faqs/admin-faqs.css";
 
 const AdminFaqs = () => {

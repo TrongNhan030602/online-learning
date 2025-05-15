@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import trainingProgramBannerApi from "../../../api/trainingProgramBannerApi";
-import { useToast } from "../../../hooks/useToast";
+import trainingProgramBannerApi from "@/api/trainingProgramBannerApi";
+import { useToast } from "@/hooks/useToast";
 
 const BannerModal = ({ show, onHide, programId, selectedBanner, onSave }) => {
   const [bannerForm, setBannerForm] = useState({

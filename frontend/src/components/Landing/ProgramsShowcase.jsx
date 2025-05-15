@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import "../../styles/landing/program-showcase/programs-showcase.css";
 
-import tkdh from "../../assets/img/landing/DESIGN24-01.jpg";
-import ttdpt from "../../assets/img/landing/DESIGN24-02.jpg";
-import hh2d from "../../assets/img/landing/DESIGN24-03.jpg";
-import hh3d from "../../assets/img/landing/DESIGN24-04.jpg";
-import dhtt from "../../assets/img/landing/DESIGN24-05.jpg";
-import tkuiux from "../../assets/img/landing/DESIGN24-06.jpg";
+import tkdh from "@/assets/img/landing/DESIGN24-01.jpg";
+import ttdpt from "@/assets/img/landing/DESIGN24-02.jpg";
+import hh2d from "@/assets/img/landing/DESIGN24-03.jpg";
+import hh3d from "@/assets/img/landing/DESIGN24-04.jpg";
+import dhtt from "@/assets/img/landing/DESIGN24-05.jpg";
+import tkuiux from "@/assets/img/landing/DESIGN24-06.jpg";
+import "../../styles/landing/program-showcase/programs-showcase.css";
 
 const ProgramsShowcase = () => {
   const programs = [

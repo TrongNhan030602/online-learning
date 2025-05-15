@@ -6,7 +6,8 @@ const userApi = {
   createUser: (data) => axiosClient.post("/users", data),
   updateUser: (id, data) => axiosClient.put(`/users/${id}`, data),
   deleteUser: (id) => axiosClient.delete(`/users/${id}`),
-  resetPassword: (id) => axiosClient.post(`/users/${id}/reset-password`),
+  resetPassword: (id, data) =>
+    axiosClient.post(`/users/${id}/reset-password`, data),
 
   // Lấy người dùng theo vai trò
   getUsersByRole: (role) => axiosClient.get(`/users/role/${role}`),

@@ -3,6 +3,7 @@
   background-color: #f0f8ff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* Cho phép cuộn ngang */
 }
 
 .exam-schedule__title {
@@ -27,7 +28,9 @@
   color: #113f73;
 }
 
+/* TABLE STYLES */
 .exam-schedule__table {
+  min-width: 1400px; /* Quan trọng: đảm bảo không bị ép cột */
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
@@ -38,6 +41,7 @@
   text-align: center;
   padding: 12px;
   font-size: 14px;
+  white-space: nowrap; /* Không cho xuống dòng */
 }
 
 .exam-schedule__table th {
@@ -54,26 +58,44 @@
   background-color: #e0e0e0;
   cursor: pointer;
 }
+.exam-schedule__group {
+  margin-bottom: 40px;
+}
+
+.exam-schedule__group-title {
+  font-size: 20px;
+  color: #004085;
+  font-weight: 600;
+  margin-bottom: 10px;
+  border-left: 5px solid #004085;
+  padding-left: 10px;
+}
 
 .exam-schedule__table td {
   font-weight: 600;
 }
 
+/* Tô màu nổi bật các cột theo nội dung */
 .exam-schedule__table td:nth-child(2) {
-  color: #2e8b57; /* Màu xanh cho mã học phần */
+  color: #2e8b57; /* Mã học phần */
 }
 
 .exam-schedule__table td:nth-child(3) {
   font-style: italic;
-  color: #f39c12; /* Màu vàng cho tên học phần */
+  color: #f39c12; /* Tên học phần */
 }
 
-.exam-schedule__table td:nth-child(7),
-.exam-schedule__table td:nth-child(8) {
+.exam-schedule__table td:nth-child(13),
+.exam-schedule__table td:nth-child(14) {
   font-style: italic;
-  color: #ff6347; /* Màu đỏ cho lần thi 2 */
+  color: #ff6347; /* Lần thi lại */
 }
 
-.exam-schedule__table td:nth-child(10) {
-  color: #1e7e34; /* Màu xanh cho thời gian làm bài */
+.exam-schedule__table td:nth-child(11) {
+  color: #1e7e34; /* Thời lượng thi */
+}
+
+/* Responsive container (nếu dùng Table responsive trong JSX) */
+.exam-schedule table {
+  width: 100%;
 }

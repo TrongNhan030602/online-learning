@@ -4,19 +4,20 @@ import { useParams, Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileVideo, faFile } from "@fortawesome/free-solid-svg-icons";
-import courseApi from "../../../api/courseApi";
-import sessionApi from "../../../api/sessionApi";
-import lessonApi from "../../../api/lessonApi";
-import materialApi from "../../../api/materialApi";
-import { useToast } from "../../../hooks/useToast";
-import { getStorageUrl } from "../../../utils/getStorageUrl";
-import Loading from "../../../components/Common/Loading";
-import "../../../styles/course/admin-course-detail.css";
-import SessionModal from "../../../components/Sessions/SessionModal";
-import LessonModal from "../../../components/Sessions/LessonModal";
-import MaterialModal from "../../../components/Sessions/MaterialModal";
+import { useToast } from "@/hooks/useToast";
+import { getStorageUrl } from "@/utils/getStorageUrl";
 
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
+import courseApi from "@/api/courseApi";
+import sessionApi from "@/api/sessionApi";
+import lessonApi from "@/api/lessonApi";
+import materialApi from "@/api/materialApi";
+import SessionModal from "@/components/Sessions/SessionModal";
+import LessonModal from "@/components/Sessions/LessonModal";
+import MaterialModal from "@/components/Sessions/MaterialModal";
+import Loading from "@/components/Common/Loading";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
+
+import "../../../styles/course/admin-course-detail.css";
 
 const CourseDetail = () => {
   const { id } = useParams();

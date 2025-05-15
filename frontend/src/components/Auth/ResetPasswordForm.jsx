@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
-import authApi from "../../api/authApi";
+import authApi from "@/api/authApi";
 
 const ResetPasswordForm = () => {
   const [searchParams] = useSearchParams();

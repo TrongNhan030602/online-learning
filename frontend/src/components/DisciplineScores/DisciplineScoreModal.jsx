@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, InputGroup, FormControl } from "react-bootstrap";
-import disciplineScoreApi from "../../api/disciplineScoreApi";
-import { useToast } from "../../hooks/useToast";
+import disciplineScoreApi from "@/api/disciplineScoreApi";
+import { useToast } from "@/hooks/useToast";
 
 const DisciplineScoreModal = ({ isOpen, onClose, item, onUpdate }) => {
   const [score, setScore] = useState("");

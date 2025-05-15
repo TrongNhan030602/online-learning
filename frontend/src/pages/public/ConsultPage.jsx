@@ -5,7 +5,7 @@ import {
   faRoute,
   faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
-import ConsultForm from "../../components/Landing/Consult/ConsultForm";
+import ConsultForm from "@/components/Landing/Consult/ConsultForm";
 import "../../styles/landing/consult/consult-page.css";
 
 const ConsultPage = () => {

@@ -1,4 +1,3 @@
-import "../../styles/landing/training-principles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChalkboardTeacher,
@@ -6,6 +5,7 @@ import {
   faChartLine,
   faHandsHelping,
 } from "@fortawesome/free-solid-svg-icons";
+import "../../styles/landing/training-principles.css";
 
 const principles = [
   {

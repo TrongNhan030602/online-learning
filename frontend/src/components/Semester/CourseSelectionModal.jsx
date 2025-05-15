@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useCallback } from "react";
 import { Modal, Button, Spinner, Form, InputGroup } from "react-bootstrap";
-import semesterApi from "../../api/semesterApi";
-import { useToast } from "../../hooks/useToast";
+import semesterApi from "@/api/semesterApi";
+import { useToast } from "@/hooks/useToast";
 
 const CourseSelectionModal = ({
   show,

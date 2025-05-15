@@ -1,5 +1,5 @@
-import AboutIntro from "../../components/Landing/About/AboutIntro";
-import AboutUsWithImage from "../../components/Landing/About/AboutUsWithImage";
+import AboutIntro from "@/components/Landing/About/AboutIntro";
+import AboutUsWithImage from "@/components/Landing/About/AboutUsWithImage";
 import "../../styles/landing/about/about-page.css";
 
 const AboutPage = () => {

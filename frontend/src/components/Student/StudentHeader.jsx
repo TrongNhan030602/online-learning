@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useRef, useCallback } from "react";
-import authApi from "../../api/authApi"; // logout()
-import studentTrainingApi from "../../api/studentTrainingApi";
 import { useNavigate, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,6 +9,8 @@ import {
   faSitemap,
   faAlignLeft as faBars,
 } from "@fortawesome/free-solid-svg-icons";
+import authApi from "@/api/authApi"; // logout()
+import studentTrainingApi from "@/api/studentTrainingApi";
 import "../../styles/student/student-header.css";
 import logo from "/logo.webp";
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faKey, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { useToast } from "../../hooks/useToast";
-import userProfileApi from "../../api/userProfileApi";
-import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/useToast";
+import userProfileApi from "@/api/userProfileApi";
 import "../../styles/profile/change-password.css";
 
 const ChangePasswordTab = () => {

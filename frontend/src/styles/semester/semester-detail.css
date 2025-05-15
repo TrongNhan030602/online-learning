@@ -40,7 +40,10 @@
   color: var(--primary-hover);
   text-decoration: underline;
 }
-
+.semester-detail__course-acctions {
+  display: flex;
+  gap: 4px;
+}
 .semester-detail__note {
   color: var(--text-gray);
   font-size: 0.95rem;

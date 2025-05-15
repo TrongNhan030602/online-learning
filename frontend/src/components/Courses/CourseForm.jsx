@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import courseApi from "../../api/courseApi";
+import courseApi from "@/api/courseApi";
 import "../../styles/course/course-form.css";
 
 // ✅ Define validation schema với Yup

@@ -1,12 +1,12 @@
 import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 const PrivateRoute = ({ children, requiredRole }) => {
   const { user, loading } = useAuth();
 
   // Nếu vẫn đang tải dữ liệu về user, hiển thị loading
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="text-center">Đang tải thông tin...</div>;
 
   // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang login
   if (!user) {

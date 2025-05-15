@@ -2,8 +2,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom"; // Import Link từ react-router-dom
-import slide1 from "../../../assets/img/landing/landing-slider1.jpg";
-import slide2 from "../../../assets/img/landing/landing-slider2.jpg";
+import slide1 from "@/assets/img/landing/landing-slider1.jpg";
+import slide2 from "@/assets/img/landing/landing-slider2.jpg";
 import "../../../styles/landing/hero-section/hero-slider.css";
 
 const slides = [

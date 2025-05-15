@@ -1,13 +1,13 @@
 import { useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStreetView,
   faEnvelope,
   faKey,
 } from "@fortawesome/free-solid-svg-icons";
-import { validateEmail, validatePassword } from "../../utils/auth-validate";
+import { validateEmail, validatePassword } from "@/utils/auth-validate";
+import { useAuth } from "@/hooks/useAuth";
 import "../../styles/authForm.css";
 
 const LoginForm = () => {

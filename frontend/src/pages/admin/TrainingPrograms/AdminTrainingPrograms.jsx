@@ -1,15 +1,15 @@
 import { useEffect, useState, useCallback } from "react";
-import { useToast } from "../../../hooks/useToast";
-import trainingProgramApi from "../../../api/trainingProgramApi";
-import userApi from "../../../api/userApi";
-import TrainingProgramList from "../../../components/TrainingPrograms/TrainingProgramList";
-import TrainingProgramModal from "../../../components/TrainingPrograms/TrainingProgramModal";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
-import Loading from "../../../components/Common/Loading";
+import { useToast } from "@/hooks/useToast";
+import trainingProgramApi from "@/api/trainingProgramApi";
+import userApi from "@/api/userApi";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
+import Loading from "@/components/common/Loading";
+import TrainingProgramList from "@/components/TrainingPrograms/TrainingProgramList";
+import TrainingProgramModal from "@/components/TrainingPrograms/TrainingProgramModal";
 import "../../../styles/trainingPrograms/admin-training-programs.css";
 
 const AdminTrainingPrograms = () => {
-  const [programs, setPrograms] = useState([]); // Khởi tạo mảng rỗng
+  const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingProgram, setEditingProgram] = useState(null);
   const [showProgramModal, setShowProgramModal] = useState(false);
@@ -28,13 +28,14 @@ const AdminTrainingPrograms = () => {
       const fetchedPrograms = Array.isArray(programsRes.data?.data)
         ? programsRes.data.data
         : [];
-      setPrograms(fetchedPrograms); // Cập nhật dữ liệu khi fetch xong
+      setPrograms(fetchedPrograms);
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu:", error);
       addToast({
         title: "Lỗi",
         message: "Không thể tải dữ liệu chương trình đào tạo.",
         type: "error",
+        duration: 1500,
       });
     } finally {
       setLoading(false);
@@ -42,7 +43,6 @@ const AdminTrainingPrograms = () => {
   }, [addToast]);
 
   useEffect(() => {
-    // Fetch dữ liệu chương trình đào tạo và danh sách cố vấn khi component được render lần đầu
     fetchData();
     const fetchAdvisors = async () => {
       try {
@@ -83,9 +83,8 @@ const AdminTrainingPrograms = () => {
       const response = await trainingProgramApi.delete(confirmDelete.programId);
 
       if (response.status === 200) {
-        // Kiểm tra phản hồi từ API
-        setPrograms(
-          (prev) => prev.filter((p) => p.id !== confirmDelete.programId) // Cập nhật lại state trực tiếp
+        setPrograms((prev) =>
+          prev.filter((p) => p.id !== confirmDelete.programId)
         );
 
         addToast({
@@ -110,10 +109,7 @@ const AdminTrainingPrograms = () => {
 
   // Hàm xử lý khi thêm mới hoặc chỉnh sửa chương trình
   const handleModalSuccess = async () => {
-    // Đóng modal sau khi hoàn thành
     setShowProgramModal(false);
-
-    // Hiển thị thông báo thành công
     addToast({
       title: "Thành công!",
       message: editingProgram
@@ -121,15 +117,15 @@ const AdminTrainingPrograms = () => {
         : "Thêm mới chương trình đào tạo thành công.",
       type: "success",
     });
-
-    // Gọi lại fetchData để reload lại danh sách
     fetchData();
   };
 
   return (
     <div className="admin-training-programs">
       <div className="admin-training-programs__header">
-        <h2>Quản lý Chương trình đào tạo</h2>
+        <h2 className="admin-training-programs__title">
+          Quản lý Chương trình đào tạo
+        </h2>
         <button
           className="admin-training-programs__btn admin-training-programs__btn--primary"
           onClick={handleAdd}
@@ -142,9 +138,9 @@ const AdminTrainingPrograms = () => {
         <Loading text="Đang tải dữ liệu..." />
       ) : (
         <TrainingProgramList
-          trainingPrograms={programs} // Truyền lại dữ liệu mới từ state
-          onEdit={handleEdit} // Hàm chỉnh sửa
-          onDelete={handleDelete} // Hàm xóa
+          trainingPrograms={programs}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
         />
       )}
 

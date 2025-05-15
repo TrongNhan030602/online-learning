@@ -12,8 +12,10 @@ class ReExamRegistration extends Model
     protected $fillable = [
         'student_id',
         'course_id',
+        'exam_schedule_id',  // Thêm trường exam_schedule_id
         'registration_date',
         'reason',
+        'status',  // Thêm trường status
     ];
 
     public function student()
@@ -24,5 +26,10 @@ class ReExamRegistration extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    public function examSchedule()
+    {
+        return $this->belongsTo(ExamSchedule::class, 'exam_schedule_id');  // Quan hệ với bảng exam_schedules
     }
 }

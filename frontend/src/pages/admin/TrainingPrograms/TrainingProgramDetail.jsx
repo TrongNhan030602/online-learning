@@ -7,19 +7,21 @@ import {
   faChevronRight,
   faUsers,
   faPlus,
+  faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
-import BannerModal from "../../../components/TrainingPrograms/Banners/BannerModal";
-import CourseSelectorModal from "../../../components/TrainingPrograms/Courses/CourseSelectorModal";
-
-import SemesterModal from "../../../components/Semester/SemesterModal";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
 import { useToast } from "../../../hooks/useToast";
-
+import { getStorageUrl } from "../../../utils/getStorageUrl";
 import trainingProgramApi from "../../../api/trainingProgramApi";
 import programCourseApi from "../../../api/programCourseApi";
 import semesterApi from "../../../api/semesterApi";
-import { getStorageUrl } from "../../../utils/getStorageUrl";
+
+import BannerModal from "../../../components/TrainingPrograms/Banners/BannerModal";
+import CourseSelectorModal from "../../../components/TrainingPrograms/Courses/CourseSelectorModal";
+import AddExamScheduleModal from "../../../components/ExamSchedule/AddExamScheduleModal";
+import SemesterModal from "../../../components/Semester/SemesterModal";
+import ConfirmDialog from "../../../components/Common/ConfirmDialog";
+
 import "../../../styles/trainingPrograms/training-program-detail.css";
 
 const levelLabels = {
@@ -47,6 +49,9 @@ const TrainingProgramDetail = () => {
   const [showCourseModal, setShowCourseModal] = useState(false);
   const [showConfirmCourse, setShowConfirmCourse] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState(null);
+  // State thêm lịch thi
+  const [showAddExamModal, setShowAddExamModal] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
 
   const fetchProgram = useCallback(async () => {
     try {
@@ -301,8 +306,18 @@ const TrainingProgramDetail = () => {
       {/* Program Courses */}
       {(program.program_courses?.length > 0 || !program.semesters?.length) && (
         <div className="training-program-detail__courses">
-          <h3>
+          <h3 className="mb-2">
             Danh sách môn học{" "}
+            <button
+              className="training-program-exam__button"
+              onClick={() => navigate("/admin/exam-schedules")}
+            >
+              <FontAwesomeIcon
+                icon={faClipboardList}
+                className="me-1"
+              />
+              Quản lý lịch thi
+            </button>
             <button
               className="training-program-detail__button"
               onClick={handleAddCourse}
@@ -320,7 +335,7 @@ const TrainingProgramDetail = () => {
               Chưa có môn học nào được gán cho chương trình này.
             </p>
           ) : (
-            <ul>
+            <ul className="training-program-detail__course-list">
               {program.program_courses.map((course) => {
                 const courseDetails = course.course;
                 return (
@@ -335,6 +350,20 @@ const TrainingProgramDetail = () => {
                       <strong>{courseDetails.title}</strong> (
                       {courseDetails.code})<p>{courseDetails.description}</p>
                     </div>
+                    <button
+                      className="btn btn-sm btn-outline-primary"
+                      title="Thêm lịch thi"
+                      onClick={() => {
+                        setSelectedCourseId(course.course.id);
+                        setShowAddExamModal(true);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        className="me-1"
+                      />
+                      Thêm lịch thi
+                    </button>
                     <button
                       onClick={() => handleDeleteCourseClick(course.id)}
                       className="btn btn-sm btn-outline-danger ms-2"
@@ -372,6 +401,25 @@ const TrainingProgramDetail = () => {
         onHide={() => setShowCourseModal(false)}
         trainingProgramId={id}
         onSave={fetchProgram}
+      />
+      {/* Modal thêm lịch thi */}
+      <AddExamScheduleModal
+        show={showAddExamModal}
+        onClose={() => {
+          setShowAddExamModal(false);
+          setSelectedCourseId(null);
+        }}
+        courseId={selectedCourseId}
+        trainingProgramId={id}
+        semesterId={program?.semesters?.[0]?.id ?? null}
+        onSuccess={() => {
+          addToast({
+            title: "Thành công!",
+            message: "Đã thêm lịch thi mới.",
+            type: "success",
+            duration: 1500,
+          });
+        }}
       />
 
       <ConfirmDialog

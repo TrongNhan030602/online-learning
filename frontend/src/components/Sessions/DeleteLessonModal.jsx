@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Spinner, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import sessionApi from "../../api/sessionApi";
-import { useToast } from "../../hooks/useToast";
+import sessionApi from "@/api/sessionApi";
+import { useToast } from "@/hooks/useToast";
 
 const DeleteLessonModal = ({ show, handleClose, session, onLessonDeleted }) => {
   const { addToast } = useToast();

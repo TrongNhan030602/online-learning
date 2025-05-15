@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
-import "../styles/admin.css";
-import AdminSidebar from "../components/Admin/AdminSidebar";
-import AdminHeader from "../components/Admin/AdminHeader";
+import "@/styles/admin.css";
+import AdminSidebar from "@/components/Admin/AdminSidebar";
+import AdminHeader from "@/components/Admin/AdminHeader";
 
 const AdminLayout = () => {
   const location = useLocation();
@@ -13,7 +13,7 @@ const AdminLayout = () => {
     "/admin/courses": "Quản lý môn học",
     "/admin/training-programs": "Quản lý CTĐT",
     "/admin/discipline-scores": "Quản lý ĐRL",
-    "/admin/lessons": "Quản lý bài học",
+    "/admin/exam-schedules": "Quản lý lịch thi",
     "/admin/faqs": "Quản lý FAQs",
     "/admin/blogs": "Quản lý blog",
     "/admin/chats": "Quản lý tin nhắn",

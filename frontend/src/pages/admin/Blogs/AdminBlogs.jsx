@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import blogApi from "../../../api/blogApi";
-import BlogList from "../../../components/Blogs/BlogList";
-import BlogModal from "../../../components/Blogs/BlogModal";
-import ImageManagerModal from "../../../components/Blogs/ImageManagerModal";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
-import Loading from "../../../components/Common/Loading";
-import { useToast } from "../../../hooks/useToast";
+import { useToast } from "@/hooks/useToast";
+import blogApi from "@/api/blogApi";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
+import Loading from "@/components/Common/Loading";
+import BlogList from "@/components/Blogs/BlogList";
+import BlogModal from "@/components/Blogs/BlogModal";
+import ImageManagerModal from "@/components/Blogs/ImageManagerModal";
 import "../../../styles/blog/admin-blogs.css";
 
 const AdminBlogs = () => {

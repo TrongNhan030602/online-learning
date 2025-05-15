@@ -1,7 +1,7 @@
-import "../../styles/landing/testimonials.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
 import Slider from "react-slick";
+import "../../styles/landing/testimonials.css";
 
 const testimonials = [
   {

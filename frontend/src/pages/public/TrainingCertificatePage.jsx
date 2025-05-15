@@ -1,10 +1,10 @@
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCertificate } from "@fortawesome/free-solid-svg-icons";
-import "../../styles/landing/training-page/training-detail-certificate.css";
 
-import certificate1 from "../../assets/img/landing/chung-chi-1.png";
-import certificate2 from "../../assets/img/landing/chung-chi-2.png";
+import certificate1 from "@/assets/img/landing/chung-chi-1.png";
+import certificate2 from "@/assets/img/landing/chung-chi-2.png";
+import "../../styles/landing/training-page/training-detail-certificate.css";
 
 const TrainingCertificatePage = () => {
   return (

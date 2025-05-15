@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { AuthContext } from "../contexts/AuthContext";
-import authApi from "../api/authApi";
+import { AuthContext } from "@/contexts/AuthContext";
+import authApi from "@/api/authApi";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

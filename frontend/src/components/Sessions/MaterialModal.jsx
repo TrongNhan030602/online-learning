@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import materialApi from "../../api/materialApi";
-import { useToast } from "../../hooks/useToast";
+import materialApi from "@/api/materialApi";
+import { useToast } from "@/hooks/useToast";
 
 const MaterialModal = ({
   show,

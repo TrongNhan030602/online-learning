@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTools } from "@fortawesome/free-solid-svg-icons";
-import intermediateImg1 from "../../assets/img/landing/cao-dang-trung-cap.png";
+import intermediateImg1 from "@/assets/img/landing/cao-dang-trung-cap.png";
 import "../../styles/landing/training-page/training-detail-intermediate.css";
 
 const TrainingIntermediatePage = () => {

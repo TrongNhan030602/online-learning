@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
-import chatApi from "../../api/chatApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import pusher from "../../utils/pusher";
+import chatApi from "@/api/chatApi";
+import pusher from "@/utils/pusher";
 import "../../styles/chat/chat-box.css";
 
 const ChatBox = ({ selectedUser, currentUser }) => {

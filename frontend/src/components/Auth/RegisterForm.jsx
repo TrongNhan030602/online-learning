@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import "../../styles/authForm.css";
-import { useToast } from "../../hooks/useToast";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
 import {
   validateName,
   validateEmail,
   validatePassword,
-} from "../../utils/auth-validate";
+} from "@/utils/auth-validate";
+import "../../styles/authForm.css";
 
 const RegisterForm = () => {
   const { addToast } = useToast();

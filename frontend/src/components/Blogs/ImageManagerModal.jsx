@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { Modal, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
-import blogApi from "../../api/blogApi";
-import { getStorageUrl } from "../../utils/getStorageUrl";
+import blogApi from "@/api/blogApi";
+import { getStorageUrl } from "@/utils/getStorageUrl";
 import "../../styles/blog/image-manager-modal.css";
 
 const ImageManagerModal = ({ show, handleClose, blog }) => {

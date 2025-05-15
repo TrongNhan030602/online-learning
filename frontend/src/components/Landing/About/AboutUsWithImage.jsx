@@ -1,7 +1,7 @@
 import { Container, Row, Col, Image } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGem, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import aboutImage from "../../../assets/img/landing/about/about-us.jpg";
+import aboutImage from "@/assets/img/landing/about/about-us.jpg";
 import "../../../styles/landing/about/about-page.css";
 
 const AboutUsWithImage = () => {

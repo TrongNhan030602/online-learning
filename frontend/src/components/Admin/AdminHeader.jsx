@@ -1,11 +1,11 @@
+import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import PropTypes from "prop-types";
-import LogoutButton from "../Auth/LogoutButton";
-import { useUser } from "../../hooks/useUser"; // ✅ Import useUser
-import { getStorageUrl } from "../../utils/getStorageUrl"; // Import hàm xử lý URL
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faCaretDown } from "@fortawesome/free-solid-svg-icons"; // Import icon đúng
+import { faUser, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { useUser } from "@/hooks/useUser";
+import { getStorageUrl } from "@/utils/getStorageUrl";
+import LogoutButton from "../Auth/LogoutButton";
 
 import "../../styles/admin-header.css";
 

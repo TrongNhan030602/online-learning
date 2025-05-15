@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -10,7 +11,6 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/profile/profile-tab.css";
-import PropTypes from "prop-types";
 
 const ProfileTab = ({ profile }) => {
   if (!profile) return <p className="loading">Đang tải hồ sơ...</p>;

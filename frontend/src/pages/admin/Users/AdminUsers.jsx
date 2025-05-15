@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import userApi from "../../../api/userApi";
-import UserList from "../../../components/Users/UserList";
-import UserModal from "../../../components/Users/UserModal";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
-import Loading from "../../../components/Common/Loading";
-import { useToast } from "../../../hooks/useToast";
+import userApi from "@/api/userApi";
+import UserList from "@/components/Users/UserList";
+import UserModal from "@/components/Users/UserModal";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
+import Loading from "@/components/Common/Loading";
+import { useToast } from "@/hooks/useToast";
 import "../../../styles/user/admin-users.css";
 
 const AdminUsers = () => {

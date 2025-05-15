@@ -46,7 +46,7 @@
 }
 
 .edit-profile__input-wrapper:focus-within {
-  border-color: #cd2027;
+  border-color: var(--primary-color);
   box-shadow: 0 0 5px rgba(227, 6, 24, 0.3);
 }
 
@@ -75,7 +75,7 @@
 .edit-profile__button {
   grid-column: span 2;
   padding: 12px;
-  background-color: #cd2027;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 5px;
@@ -86,5 +86,5 @@
 }
 
 .edit-profile__button:hover {
-  background-color: #dc0b12;
+  background-color: #1a417b;
 }

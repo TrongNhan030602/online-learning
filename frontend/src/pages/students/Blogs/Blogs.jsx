@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Spinner, Card, Badge, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import blogApi from "../../../api/blogApi";
-import { getStorageUrl } from "../../../utils/getStorageUrl";
+import blogApi from "@/api/blogApi";
+import { getStorageUrl } from "@/utils/getStorageUrl";
 import "../../../styles/student/blogs/blogs.css";
 
 const Blogs = () => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import studentTrainingApi from "../../../api/studentTrainingApi";
-import Loading from "../../../components/Common/Loading";
+import studentTrainingApi from "@/api/studentTrainingApi";
+import Loading from "@/components/Common/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBook,
@@ -11,10 +11,9 @@ import {
   faPlus,
   faMinus,
 } from "@fortawesome/free-solid-svg-icons";
-import "../../../styles/student/my-course/my-course.css";
-import { getStorageUrl } from "../../../utils/getStorageUrl";
-import YouTubePlayer from "../../../components/Common/YouTubePlayer";
-
+import "@/styles/student/my-course/my-course.css";
+import { getStorageUrl } from "@/utils/getStorageUrl";
+import YouTubePlayer from "@/components/Common/YouTubePlayer";
 const CourseLearningPage = () => {
   const { courseId } = useParams();
   const [courseDetails, setCourseDetails] = useState(null);

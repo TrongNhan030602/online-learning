@@ -1,14 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import LandingLayout from "../layouts/LandingLayout"; // Layout chung cho tất cả các trang
-import LandingPage from "../pages/public/LandingPage";
-import ProgramDetailPage from "../pages/public/ProgramDetailPage";
-import AboutPage from "../pages/public/AboutPage";
-import ConsultPage from "../pages/public/ConsultPage";
-import TrainingCollegePage from "../pages/public/TrainingCollegePage";
-import TrainingIntermediatePage from "../pages/public/TrainingIntermediatePage";
-import TrainingCertificatePage from "../pages/public/TrainingCertificatePage";
-import TrainingSoftwarePage from "../pages/public/TrainingSoftwarePage";
+import { useAuth } from "@/hooks/useAuth";
+import LandingLayout from "@/layouts/LandingLayout";
+import LandingPage from "@/pages/public/LandingPage";
+import ProgramDetailPage from "@/pages/public/ProgramDetailPage";
+import AboutPage from "@/pages/public/AboutPage";
+import ConsultPage from "@/pages/public/ConsultPage";
+import TrainingCollegePage from "@/pages/public/TrainingCollegePage";
+import TrainingIntermediatePage from "@/pages/public/TrainingIntermediatePage";
+import TrainingCertificatePage from "@/pages/public/TrainingCertificatePage";
+import TrainingSoftwarePage from "@/pages/public/TrainingSoftwarePage";
 const LandingRoute = () => {
   const { isAuthenticated, user } = useAuth();
 

@@ -1,4 +1,3 @@
-// src/components/Landing/HeroSection/HeroSection.jsx
 import HeroSlider from "./HeroSlider";
 import "../../../styles/landing/hero-section/hero-section.css";
 

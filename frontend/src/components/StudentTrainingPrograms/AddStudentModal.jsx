@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import Select from "react-select";
-import studentTrainingProgramApi from "../../api/studentTrainingProgramApi";
-import { useToast } from "../../hooks/useToast";
+import studentTrainingProgramApi from "@/api/studentTrainingProgramApi";
+import { useToast } from "@/hooks/useToast";
 
 const AddStudentModal = ({
   programId,

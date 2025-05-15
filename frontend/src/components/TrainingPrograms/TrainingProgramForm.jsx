@@ -3,9 +3,9 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import trainingProgramApi from "@/api/trainingProgramApi";
+import { useToast } from "@/hooks/useToast";
 import "../../styles/trainingPrograms/training-program-form.css";
-import trainingProgramApi from "../../api/trainingProgramApi";
-import { useToast } from "../../hooks/useToast";
 
 // Schema validation với Yup
 const schema = yup.object().shape({

@@ -8,9 +8,9 @@ import {
   faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
 
-import trainingProgramApi from "../../../api/trainingProgramApi";
-import disciplineScoreApi from "../../../api/disciplineScoreApi";
-import { useToast } from "../../../hooks/useToast";
+import { useToast } from "@/hooks/useToast";
+import trainingProgramApi from "@/api/trainingProgramApi";
+import disciplineScoreApi from "@/api/disciplineScoreApi";
 import "../../../styles/discipline-scores/admin-enter-discipline-scores.css";
 
 const AdminEnterDisciplineScores = () => {

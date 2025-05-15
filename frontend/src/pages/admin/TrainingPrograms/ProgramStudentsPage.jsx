@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { Table, Spinner, Alert, Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,11 +10,10 @@ import {
   faArrowUp,
   faArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
-import studentTrainingProgramApi from "../../../api/studentTrainingProgramApi";
-import { useParams } from "react-router-dom";
-import AddStudentModal from "../../../components/StudentTrainingPrograms/AddStudentModal";
-import { useToast } from "../../../hooks/useToast";
-import ConfirmDialog from "../../../components/Common/ConfirmDialog";
+import { useToast } from "@/hooks/useToast";
+import studentTrainingProgramApi from "@/api/studentTrainingProgramApi";
+import AddStudentModal from "@/components/StudentTrainingPrograms/AddStudentModal";
+import ConfirmDialog from "@/components/Common/ConfirmDialog";
 import "../../../styles/trainingPrograms/program-students-page.css";
 
 const ProgramStudentsPage = () => {

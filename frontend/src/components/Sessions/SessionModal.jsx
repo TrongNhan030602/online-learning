@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { useEffect, useRef, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
-import sessionApi from "../../api/sessionApi";
-import { useToast } from "../../hooks/useToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
+import sessionApi from "@/api/sessionApi";
+import { useToast } from "@/hooks/useToast";
 
 const SessionModal = ({
   show,

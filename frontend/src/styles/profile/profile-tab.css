@@ -1,11 +1,3 @@
-:root {
-  --primary-color: #cd2027;
-  --text-color: #333;
-  --text-light: #555;
-  --bg-light: #f8f9fa;
-  --border-color: #ddd;
-}
-
 .profile-tab {
   max-width: 600px;
   margin: 0 auto;

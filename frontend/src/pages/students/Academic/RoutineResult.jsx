@@ -7,7 +7,7 @@ import {
   faThumbsUp,
   faCalendarAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import disciplineScoreApi from "../../../api/disciplineScoreApi"; // Đảm bảo import API đúng
+import disciplineScoreApi from "@/api/disciplineScoreApi"; // Đảm bảo import API đúng
 
 import "../../../styles/student/academic/routine-result.css";
 

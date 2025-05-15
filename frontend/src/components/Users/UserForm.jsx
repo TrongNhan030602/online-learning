@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import userApi from "../../api/userApi";
+import userApi from "@/api/userApi";
 import "../../styles/user/user-form.css";
 
 // Schema validation cho việc tạo mới người dùng

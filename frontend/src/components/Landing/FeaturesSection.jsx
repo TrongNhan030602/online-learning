@@ -1,4 +1,3 @@
-import "../../styles/landing/features-section.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLaptopCode,
@@ -8,6 +7,7 @@ import {
   faChalkboardTeacher,
   faMobileAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import "../../styles/landing/features-section.css";
 
 const FeaturesSection = () => {
   const features = [

@@ -1,0 +1,84 @@
+.exam-schedule-detail {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
+}
+
+.exam-schedule-detail__loading {
+  font-size: 1.5rem;
+  margin-top: 5rem;
+}
+
+.exam-schedule-detail__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  border-radius: 6px;
+  padding: 0.375rem 0.75rem;
+  background-color: var(--primary-color);
+  text-decoration: none;
+  color: var(--text-white);
+  border: none;
+}
+
+.exam-schedule-detail__back-btn:hover {
+  background-color: var(--primary-color);
+  filter: brightness(1.05);
+}
+
+.exam-schedule-detail__title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.exam-schedule-detail__card {
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+}
+
+.exam-schedule-detail__section-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #dee2e6;
+  user-select: none;
+}
+
+.exam-schedule-detail__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.exam-schedule-detail__icon {
+  font-size: 1.25rem;
+  min-width: 28px;
+  text-align: center;
+}
+
+.exam-schedule-detail__label {
+  font-weight: 600;
+  margin-right: 0.25rem;
+  white-space: nowrap;
+}
+
+.exam-schedule-detail__value {
+  color: #34495e;
+  font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+  .exam-schedule-detail__item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exam-schedule-detail__label {
+    margin-bottom: 0.15rem;
+  }
+}

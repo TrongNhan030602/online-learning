@@ -255,14 +255,39 @@ Route::prefix('certificates')->group(function () {
     Route::get('/student/{studentId}', [CertificateController::class, 'studentCertificates']);
 });
 
-// API exam-schedules (lịch thi)
 Route::prefix('exam-schedules')->group(function () {
-    Route::get('/', [ExamScheduleController::class, 'index']);
-    Route::post('/', [ExamScheduleController::class, 'store']);
-    Route::get('/{id}', [ExamScheduleController::class, 'show']);
-    Route::put('/{id}', [ExamScheduleController::class, 'update']);
-    Route::delete('/{id}', [ExamScheduleController::class, 'destroy']);
+
+    // ADMIN - Lấy tất cả lịch thi (có thể lọc theo các tham số)
+    Route::get('/', [ExamScheduleController::class, 'index']);  // GET /api/exam-schedules
+
+    // ADMIN - Lấy chi tiết lịch thi theo ID
+    Route::get('{id}', [ExamScheduleController::class, 'show']);  // GET /api/exam-schedules/{id}
+
+    // ADMIN - Tạo lịch thi mới
+    Route::post('/', [ExamScheduleController::class, 'store']);  // POST /api/exam-schedules
+
+    // ADMIN - Cập nhật lịch thi
+    Route::put('{id}', [ExamScheduleController::class, 'update']);  // PUT /api/exam-schedules/{id}
+
+    // ADMIN - Xóa lịch thi
+    Route::delete('{id}', [ExamScheduleController::class, 'destroy']);  // DELETE /api/exam-schedules/{id}
+
+    // STUDENT - Lịch thi cho học viên
+
+    Route::get('student/{studentId}', [ExamScheduleController::class, 'studentSchedules']);  // GET /api/exam-schedules/student/{studentId}
+
+    // STUDENT - Lịch thi sắp tới cho học viên (ví dụ trong 7 ngày tới)
+    Route::get('student/{studentId}/upcoming', [ExamScheduleController::class, 'upcomingSchedules']);  // GET /api/exam-schedules/student/{studentId}/upcoming
+
+    // STUDENT - Lịch thi cho môn học cụ thể của học viên
+    Route::get('student/{studentId}/course/{courseId}', [ExamScheduleController::class, 'courseSchedule']);  // GET /api/exam-schedules/student/{studentId}/course/{courseId}
+
+    // STUDENT - Lịch thi lại cho học viên
+    Route::get('student/{studentId}/retake/{courseId}', [ExamScheduleController::class, 'retakeSchedule']);  // GET /api/exam-schedules/student/{studentId}/retake/{courseId}
+// STUDENT - Lịch thi cho sinh viên đang đăng nhập (không cần truyền studentId)
+    Route::middleware('auth:api', 'role:student')->get('me/schedules', [ExamScheduleController::class, 'mySchedules']);  // GET /api/exam-schedules/my-schedules
 });
+
 
 // API Điểm rèn luyện
 

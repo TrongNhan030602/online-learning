@@ -2,9 +2,9 @@
 
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import blogApi from "../../../api/blogApi";
+import blogApi from "@/api/blogApi";
 import { Container, Image } from "react-bootstrap";
-import { getStorageUrl } from "../../../utils/getStorageUrl"; // ✅ Thêm dòng này
+import { getStorageUrl } from "@/utils/getStorageUrl"; // ✅ Thêm dòng này
 import "../../../styles/student/blogs/blog-detail.css";
 const BlogDetailPage = () => {
   const { id } = useParams();

@@ -3,41 +3,46 @@ import { lazy, Suspense } from "react";
 import AdminLayout from "../layouts/AdminLayout";
 
 // Lazy load các trang
-const AdminCourses = lazy(() => import("../pages/admin/Courses/AdminCourses"));
-const CourseDetail = lazy(() => import("../pages/admin/Courses/CourseDetail"));
-const AdminProgress = lazy(() => import("../pages/admin/AdminProgress"));
+const AdminCourses = lazy(() => import("@/pages/admin/Courses/AdminCourses"));
+const CourseDetail = lazy(() => import("@/pages/admin/Courses/CourseDetail"));
+const AdminProgress = lazy(() => import("@/pages/admin/AdminProgress"));
 
-const AdminUsers = lazy(() => import("../pages/admin/Users/AdminUsers"));
-const UserDetail = lazy(() => import("../pages/admin/Users/UserDetail"));
+const AdminUsers = lazy(() => import("@/pages/admin/Users/AdminUsers"));
+const UserDetail = lazy(() => import("@/pages/admin/Users/UserDetail"));
 
-const AdminBlogs = lazy(() => import("../pages/admin/Blogs/AdminBlogs"));
-const AdminFaqs = lazy(() => import("../pages/admin/Faqs/AdminFaqs"));
-const FaqDetail = lazy(() => import("../pages/admin/Faqs/FaqDetail"));
-const AdminChat = lazy(() => import("../pages/admin/Chat/AdminChat"));
-const AdminProfile = lazy(() => import("../pages/admin/AdminProfile"));
+const AdminBlogs = lazy(() => import("@/pages/admin/Blogs/AdminBlogs"));
+const AdminFaqs = lazy(() => import("@/pages/admin/Faqs/AdminFaqs"));
+const FaqDetail = lazy(() => import("@/pages/admin/Faqs/FaqDetail"));
+const AdminChat = lazy(() => import("@/pages/admin/Chat/AdminChat"));
+const AdminProfile = lazy(() => import("@/pages/admin/AdminProfile"));
 const AdminDisciplineScores = lazy(() =>
-  import("../pages/admin/DisciplineScores/AdminDisciplineScores")
+  import("@/pages/admin/DisciplineScores/AdminDisciplineScores")
 );
 const AdminEnterDisciplineScores = lazy(() =>
-  import("../pages/admin/DisciplineScores/AdminEnterDisciplineScores")
+  import("@/pages/admin/DisciplineScores/AdminEnterDisciplineScores")
 );
 
 const AdminTrainingPrograms = lazy(() =>
-  import("../pages/admin/TrainingPrograms/AdminTrainingPrograms")
+  import("@/pages/admin/TrainingPrograms/AdminTrainingPrograms")
 );
 const TrainingProgramDetail = lazy(() =>
-  import("../pages/admin/TrainingPrograms/TrainingProgramDetail")
+  import("@/pages/admin/TrainingPrograms/TrainingProgramDetail")
 );
 const ProgramStudentsPage = lazy(() =>
-  import("../pages/admin/TrainingPrograms/ProgramStudentsPage")
+  import("@/pages/admin/TrainingPrograms/ProgramStudentsPage")
 );
 
 const SemesterDetail = lazy(() =>
-  import("../pages/admin/Semesters/SemesterDetail")
+  import("@/pages/admin/Semesters/SemesterDetail")
 );
-
+const AdminExamSchedules = lazy(() =>
+  import("@/pages/admin/ExamSchedules/AdminExamSchedules")
+);
+const ExamScheduleDetail = lazy(() =>
+  import("@/pages/admin/ExamSchedules/ExamScheduleDetail")
+);
 // Component hiển thị khi đang tải
-const Loading = () => <div>Đang tải...</div>;
+const Loading = () => <div className="text-center">Đang tải...</div>;
 
 const AdminRoutes = () => {
   return (
@@ -134,6 +139,25 @@ const AdminRoutes = () => {
           }
         />
 
+        {/* Quản lý lịch thi */}
+        <Route
+          path="exam-schedules"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminExamSchedules />
+            </Suspense>
+          }
+        />
+
+        {/* Chi tiết lịch thi */}
+        <Route
+          path="exam-schedules/:id"
+          element={
+            <Suspense fallback={<Loading />}>
+              <ExamScheduleDetail />
+            </Suspense>
+          }
+        />
         <Route
           path="progress"
           element={

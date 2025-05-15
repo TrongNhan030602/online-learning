@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -9,7 +10,6 @@ import {
   faVenusMars,
 } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/profile/edit-profile-tab.css";
-import PropTypes from "prop-types";
 
 const EditProfileTab = ({ profile, onSubmit }) => {
   const [formData, setFormData] = useState({
