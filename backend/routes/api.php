@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\UserController;
 
+use App\Http\Controllers\API\ScoreController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\MaterialController;
@@ -310,13 +311,33 @@ Route::prefix('discipline-scores')->group(function () {
     Route::get('/student/points', [DisciplineScoreController::class, 'getByStudent']);
 });
 
+// API Điểm
+Route::prefix('scores')->group(function () {
+    // Tạo điểm mới (nhập điểm)
+    Route::post('/', [ScoreController::class, 'store']);
+
+    // Cập nhật điểm theo ID
+    Route::put('/{id}', [ScoreController::class, 'update']);
+    Route::patch('/{id}', [ScoreController::class, 'update']);
+
+    // Lấy bảng điểm của học viên theo studentId
+    Route::get('/student/{studentId}', [ScoreController::class, 'getStudentScores']);
+    Route::get('/me', [ScoreController::class, 'getMyScores']);
+
+    // Lấy bảng điểm của môn học theo courseId
+    Route::get('/course/{courseId}', [ScoreController::class, 'getCourseScores']);
+
+    // Lấy bảng điểm của học viên theo học kỳ
+    Route::get('/student/{studentId}/semester/{semesterId}', [ScoreController::class, 'getStudentScoresBySemester']);
+});
+
 //API KQHT
 
 Route::prefix('learning-results')->group(function () {
-    // Lấy tất cả kết quả học tập
+    // Lấy danh sách kết quả học tập (có thể dùng filter: program_id, student_training_program_id, semester_id)
     Route::get('/', [LearningResultController::class, 'index']);
 
-    // Lấy kết quả học tập theo ID
+    // Lấy chi tiết kết quả học tập theo ID
     Route::get('/{id}', [LearningResultController::class, 'show']);
 
     // Tạo mới kết quả học tập
@@ -324,28 +345,33 @@ Route::prefix('learning-results')->group(function () {
 
     // Cập nhật kết quả học tập
     Route::put('/{id}', [LearningResultController::class, 'update']);
+    Route::patch('/{id}', [LearningResultController::class, 'update']); // Optional: dùng PATCH nếu cần
 
     // Xóa kết quả học tập
     Route::delete('/{id}', [LearningResultController::class, 'destroy']);
-});
 
+    // Lấy kết quả học tập theo học viên, chương trình và học kỳ
+    Route::get('/by-student', [LearningResultController::class, 'getByStudent']);
+
+    // Tính và cập nhật điểm trung bình
+    Route::post('/calculate-average', [LearningResultController::class, 'calculateAverageScore']);
+
+    // Báo cáo tổng hợp kết quả học tập
+    Route::get('/report', [LearningResultController::class, 'report']);
+});
 // API thi lại
 
 Route::prefix('re-exam-registrations')->group(function () {
-    // Lấy tất cả đăng ký thi lại
-    Route::get('/docker-compose.yml', [ReExamRegistrationController::class, 'index']);
+    Route::get('/', [ReExamRegistrationController::class, 'index']);               // Lấy tất cả đăng ký thi lại (có quan hệ)
+    Route::get('/{id}', [ReExamRegistrationController::class, 'show']);            // Lấy đăng ký thi lại theo ID
+    Route::post('/', [ReExamRegistrationController::class, 'store']);              // Tạo mới đăng ký thi lại
+    Route::put('/{id}', [ReExamRegistrationController::class, 'update']);          // Cập nhật đăng ký thi lại
+    Route::delete('/{id}', [ReExamRegistrationController::class, 'destroy']);      // Xóa đăng ký thi lại
 
-    // Lấy đăng ký thi lại theo ID
-    Route::get('/{id}', [ReExamRegistrationController::class, 'show']);
+    Route::get('/user/{userId}', [ReExamRegistrationController::class, 'getByUser']);  // Lấy đăng ký thi lại theo user (có quan hệ)
+    Route::get('/status/{status}', [ReExamRegistrationController::class, 'getByStatus']);  // Lấy đăng ký thi lại theo trạng thái
 
-    // Tạo mới đăng ký thi lại
-    Route::post('/', [ReExamRegistrationController::class, 'store']);
-
-    // Cập nhật đăng ký thi lại
-    Route::put('/{id}', [ReExamRegistrationController::class, 'update']);
-
-    // Xóa đăng ký thi lại
-    Route::delete('/{id}', [ReExamRegistrationController::class, 'destroy']);
+    Route::patch('/{id}/status/{status}', [ReExamRegistrationController::class, 'changeStatus']);  // Thay đổi trạng thái đăng ký thi lại
 });
 
 

@@ -30,7 +30,7 @@ class AuthRepository implements AuthRepositoryInterface
         $user = Auth::user();
 
         // Tạo refresh token mới
-        $refreshToken = Str::random(64);
+        $refreshToken = Str::random(length: 128);
 
         RefreshToken::updateOrCreate(
             ['user_id' => $user->id],

@@ -10,4 +10,9 @@ interface ScoreRepositoryInterface
     public function getByCourse($courseId);
     public function getByStudentAndSemester($studentId, $semesterId);
     public function getById($id);
+
+    // Mới thêm
+    public function getAcceptedScoresByUser($userId);
+    public function getLatestAttemptScore($userId, $courseId);
+    public function calculateAverageScore($userId);
 }

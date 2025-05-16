@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ScoreRequest;
+use Exception;
 use App\Services\ScoreService;
 use Illuminate\Http\JsonResponse;
-use Exception;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ScoreResource;
+use App\Http\Requests\ScoreRequest\ScoreRequest;
 
 class ScoreController extends Controller
 {
@@ -74,7 +76,7 @@ class ScoreController extends Controller
             }
 
             return response()->json([
-                'data' => $scores
+                'data' => ScoreResource::collection($scores)
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -129,4 +131,61 @@ class ScoreController extends Controller
             ], 500);
         }
     }
+
+
+
+    // For student
+    public function getMyScores(): JsonResponse
+    {
+        try {
+            $studentId = Auth::id();
+            $scores = $this->service->getStudentScores($studentId);
+
+            if ($scores->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có điểm nào cho học viên này.'
+                ], 404);
+            }
+
+            // Group scores by training program
+            $grouped = $scores->groupBy(function ($score) {
+                return $score->studentTrainingProgram->trainingProgram->id ?? 0;
+            })->map(function ($programScores) {
+                $trainingProgram = $programScores->first()->studentTrainingProgram->trainingProgram ?? null;
+
+                // Group by semester id (null semesters grouped under key 0 or 'null')
+                $semesterGrouped = $programScores->groupBy(function ($score) {
+                    return $score->semester ? $score->semester->id : 0;
+                })->map(function ($semesterScores) {
+                    // Sort scores by course code or other criteria if needed here
+                    return ScoreResource::collection($semesterScores->sortBy('course.code')->values());
+                });
+
+                // Sort semesters by semester id ascending, null (0) last
+                $semesterGrouped = $semesterGrouped->sortKeys()->mapWithKeys(function ($v, $k) {
+                    return [$k === 0 ? PHP_INT_MAX : $k => $v];
+                })->sortKeys();
+
+                return [
+                    'training_program' => $trainingProgram ? [
+                        'id' => $trainingProgram->id,
+                        'code' => $trainingProgram->code,
+                        'name' => $trainingProgram->name,
+                    ] : null,
+                    'semesters' => $semesterGrouped,
+                ];
+            })->values();
+
+            return response()->json([
+                'data' => $grouped,
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lấy bảng điểm.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

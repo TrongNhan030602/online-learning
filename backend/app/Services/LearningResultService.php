@@ -12,9 +12,9 @@ class LearningResultService
         $this->repository = $repository;
     }
 
-    public function getAll()
+    public function getAll(array $filters = [])
     {
-        return $this->repository->all();
+        return $this->repository->all($filters);
     }
 
     public function getById($id)
@@ -35,5 +35,20 @@ class LearningResultService
     public function delete($id)
     {
         return $this->repository->delete($id);
+    }
+
+    public function getByStudentAndProgram(int $studentTrainingProgramId, int $programId, ?int $semesterId = null)
+    {
+        return $this->repository->findByStudentAndProgram($studentTrainingProgramId, $programId, $semesterId);
+    }
+
+    public function calculateAndUpdateAverageScore(int $studentTrainingProgramId, int $programId, ?int $semesterId = null)
+    {
+        return $this->repository->calculateAndUpdateAverageScore($studentTrainingProgramId, $programId, $semesterId);
+    }
+
+    public function getReport(array $criteria = [])
+    {
+        return $this->repository->getReport($criteria);
     }
 }

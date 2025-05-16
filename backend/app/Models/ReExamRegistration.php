@@ -10,17 +10,23 @@ class ReExamRegistration extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id',
+        'user_id',
+        'student_training_program_id',
         'course_id',
-        'exam_schedule_id',  // Thêm trường exam_schedule_id
+        'exam_schedule_id',
         'registration_date',
         'reason',
-        'status',  // Thêm trường status
+        'status',//'pending', 'approved', 'rejected'
     ];
 
     public function student()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function studentTrainingProgram()
+    {
+        return $this->belongsTo(StudentTrainingProgram::class, 'student_training_program_id');
     }
 
     public function course()
@@ -30,6 +36,6 @@ class ReExamRegistration extends Model
 
     public function examSchedule()
     {
-        return $this->belongsTo(ExamSchedule::class, 'exam_schedule_id');  // Quan hệ với bảng exam_schedules
+        return $this->belongsTo(ExamSchedule::class, 'exam_schedule_id');
     }
 }

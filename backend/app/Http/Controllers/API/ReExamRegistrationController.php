@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Http\Controllers\API;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\ReExamRegistrationService;
-use App\Http\Requests\ReExamRegistrationRequest;
-use Exception;
+use App\Http\Requests\ReExamRegistrationRequest\ReExamRegistrationRequest;
 
 class ReExamRegistrationController extends Controller
 {
@@ -17,16 +16,16 @@ class ReExamRegistrationController extends Controller
         $this->service = $service;
     }
 
-    // Lấy tất cả đăng ký thi lại
+    // Lấy tất cả đăng ký thi lại (có quan hệ)
     public function index(): JsonResponse
     {
         try {
-            $reExamRegistrations = $this->service->getAll();
+            $reExamRegistrations = $this->service->getAllWithRelations();
 
             if ($reExamRegistrations->isEmpty()) {
                 return response()->json([
                     'message' => 'Không có đăng ký thi lại nào.'
-                ], 404);
+                ], 200);
             }
 
             return response()->json([
@@ -58,6 +57,52 @@ class ReExamRegistrationController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Có lỗi khi lấy thông tin đăng ký thi lại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Lấy đăng ký thi lại theo user (có quan hệ)
+    public function getByUser($userId): JsonResponse
+    {
+        try {
+            $registrations = $this->service->getByUserWithRelations($userId);
+
+            if ($registrations->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có đăng ký thi lại cho người dùng này.'
+                ], 404);
+            }
+
+            return response()->json([
+                'data' => $registrations
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lấy đăng ký thi lại theo người dùng.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Lấy đăng ký thi lại theo trạng thái
+    public function getByStatus($status): JsonResponse
+    {
+        try {
+            $registrations = $this->service->getByStatus($status);
+
+            if ($registrations->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có đăng ký thi lại với trạng thái này.'
+                ], 404);
+            }
+
+            return response()->json([
+                'data' => $registrations
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lấy đăng ký thi lại theo trạng thái.',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -102,6 +147,24 @@ class ReExamRegistrationController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Có lỗi khi cập nhật đăng ký thi lại.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Thay đổi trạng thái đăng ký thi lại
+    public function changeStatus($id, $status): JsonResponse
+    {
+        try {
+            $registration = $this->service->changeStatus($id, $status);
+
+            return response()->json([
+                'message' => 'Cập nhật trạng thái thành công.',
+                'data' => $registration
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi cập nhật trạng thái đăng ký thi lại.',
                 'error' => $e->getMessage()
             ], 500);
         }

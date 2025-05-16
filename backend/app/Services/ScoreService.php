@@ -42,4 +42,21 @@ class ScoreService
     {
         return $this->repository->getById($id);
     }
+
+    // Mới thêm
+
+    public function getAcceptedScoresByUser($userId)
+    {
+        return $this->repository->getAcceptedScoresByUser($userId);
+    }
+
+    public function getLatestAttemptScore($userId, $courseId)
+    {
+        return $this->repository->getLatestAttemptScore($userId, $courseId);
+    }
+
+    public function calculateAverageScore($userId)
+    {
+        return $this->repository->calculateAverageScore($userId);
+    }
 }

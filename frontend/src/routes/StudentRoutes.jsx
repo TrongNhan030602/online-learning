@@ -7,7 +7,9 @@ import Loading from "@/components/common/Loading";
 
 const Blogs = lazy(() => import("@/pages/students/Blogs/Blogs"));
 const BlogDetail = lazy(() => import("@/pages/students/Blogs/BlogDetail"));
-const StudentProfile = lazy(() => import("@/pages/students/StudentProfile"));
+const StudentProfile = lazy(() =>
+  import("@/pages/students/Profile/StudentProfile")
+);
 const TrainingProgram = lazy(() => import("@/pages/students/TrainingProgram"));
 const StudentDashboard = lazy(() =>
   import("@/pages/students/StudentDashboard/StudentDashboard")

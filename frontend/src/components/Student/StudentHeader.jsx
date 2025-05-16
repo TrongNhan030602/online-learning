@@ -8,6 +8,11 @@ import {
   faGraduationCap,
   faSitemap,
   faAlignLeft as faBars,
+  faUserSecret,
+  faPowerOff,
+  faCalendarDays,
+  faSquarePollVertical,
+  faBriefcase,
 } from "@fortawesome/free-solid-svg-icons";
 import authApi from "@/api/authApi"; // logout()
 import studentTrainingApi from "@/api/studentTrainingApi";
@@ -173,13 +178,13 @@ const StudentHeader = () => {
           <ul>
             <NavLinkItem
               to="/student/schedule"
-              icon={faGraduationCap}
+              icon={faCalendarDays}
               label="Lịch thi"
               onClick={handleNavItemClick}
             />
             <NavLinkItem
               to="/student/routine"
-              icon={faGraduationCap}
+              icon={faSquarePollVertical}
               label="KQ rèn luyện"
               onClick={handleNavItemClick}
             />
@@ -191,7 +196,7 @@ const StudentHeader = () => {
             />
             <NavLinkItem
               to="/student/exam-registration"
-              icon={faGraduationCap}
+              icon={faBriefcase}
               label="ĐK thi lần 2"
               onClick={handleNavItemClick}
             />
@@ -219,13 +224,13 @@ const StudentHeader = () => {
             />
             <NavLinkItem
               to="/student/schedule"
-              icon={faGraduationCap}
+              icon={faCalendarDays}
               label="Lịch thi"
               onClick={handleNavItemClick}
             />
             <NavLinkItem
               to="/student/routine"
-              icon={faGraduationCap}
+              icon={faSquarePollVertical}
               label="KQ rèn luyện"
               onClick={handleNavItemClick}
             />
@@ -237,7 +242,7 @@ const StudentHeader = () => {
             />
             <NavLinkItem
               to="/student/exam-registration"
-              icon={faGraduationCap}
+              icon={faBriefcase}
               label="ĐK thi lần 2"
               onClick={handleNavItemClick}
             />
@@ -282,13 +287,21 @@ const StudentHeader = () => {
                 to="/student/profile"
                 className="student-header__dropdown-link"
               >
-                Tài khoản
+                <FontAwesomeIcon
+                  icon={faUserSecret}
+                  className="me-1"
+                />{" "}
+                Hồ sơ
               </NavLink>
               <a
                 href="#"
                 className="student-header__dropdown-link"
                 onClick={handleLogout}
               >
+                <FontAwesomeIcon
+                  icon={faPowerOff}
+                  className="me-1"
+                />
                 Đăng xuất
               </a>
             </div>

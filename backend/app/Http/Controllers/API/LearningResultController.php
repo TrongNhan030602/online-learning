@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Services\LearningResultService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LearningResultRequest\LearningResultRequest;
-use Illuminate\Http\JsonResponse;
 
 class LearningResultController extends Controller
 {
@@ -17,21 +18,20 @@ class LearningResultController extends Controller
         $this->service = $service;
     }
 
-    // Lấy tất cả kết quả học tập
-    public function index(): JsonResponse
+    // Lấy tất cả kết quả học tập (có thể dùng filter)
+    public function index(Request $request): JsonResponse
     {
         try {
-            $learningResults = $this->service->getAll();
-
-            if ($learningResults->isEmpty()) {
+            $filters = $request->only(['program_id', 'student_training_program_id', 'semester_id']);
+            $results = $this->service->getAll($filters);
+            if ($results->isEmpty()) {
                 return response()->json([
                     'message' => 'Không có kết quả học tập nào.'
-                ], 404);
+                ], 200);
             }
-
             return response()->json([
                 'message' => 'Danh sách kết quả học tập.',
-                'data' => $learningResults
+                'data' => $results
             ], 200);
         } catch (Exception $e) {
             return $this->handleException($e, 'Lỗi khi lấy danh sách kết quả học tập.');
@@ -42,17 +42,11 @@ class LearningResultController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $learningResult = $this->service->getById($id);
-
-            if (!$learningResult) {
-                return response()->json([
-                    'message' => 'Kết quả học tập không tồn tại.'
-                ], 404);
-            }
+            $result = $this->service->getById($id);
 
             return response()->json([
                 'message' => 'Chi tiết kết quả học tập.',
-                'data' => $learningResult
+                'data' => $result
             ], 200);
         } catch (Exception $e) {
             return $this->handleException($e, 'Lỗi khi lấy chi tiết kết quả học tập.');
@@ -64,11 +58,11 @@ class LearningResultController extends Controller
     {
         try {
             $data = $request->validated();
-            $learningResult = $this->service->create($data);
+            $result = $this->service->create($data);
 
             return response()->json([
                 'message' => 'Kết quả học tập đã được tạo.',
-                'data' => $learningResult
+                'data' => $result
             ], 201);
         } catch (Exception $e) {
             return $this->handleException($e, 'Lỗi khi tạo kết quả học tập.');
@@ -80,17 +74,11 @@ class LearningResultController extends Controller
     {
         try {
             $data = $request->validated();
-            $learningResult = $this->service->update($id, $data);
-
-            if (!$learningResult) {
-                return response()->json([
-                    'message' => 'Kết quả học tập không tồn tại.'
-                ], 404);
-            }
+            $result = $this->service->update($id, $data);
 
             return response()->json([
                 'message' => 'Kết quả học tập đã được cập nhật.',
-                'data' => $learningResult
+                'data' => $result
             ], 200);
         } catch (Exception $e) {
             return $this->handleException($e, 'Lỗi khi cập nhật kết quả học tập.');
@@ -101,19 +89,79 @@ class LearningResultController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $deleted = $this->service->delete($id);
-
-            if (!$deleted) {
-                return response()->json([
-                    'message' => 'Kết quả học tập không tồn tại hoặc đã bị xóa.'
-                ], 404);
-            }
+            $this->service->delete($id);
 
             return response()->json([
                 'message' => 'Kết quả học tập đã được xóa.'
             ], 200);
         } catch (Exception $e) {
             return $this->handleException($e, 'Lỗi khi xóa kết quả học tập.');
+        }
+    }
+
+    // Lấy kết quả học tập theo học viên, chương trình và học kỳ
+    public function getByStudent(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'student_training_program_id' => 'required|integer',
+                'program_id' => 'required|integer',
+                'semester_id' => 'nullable|integer'
+            ]);
+
+            $result = $this->service->getByStudentAndProgram(
+                $validated['student_training_program_id'],
+                $validated['program_id'],
+                $validated['semester_id'] ?? null
+            );
+
+            return response()->json([
+                'message' => 'Kết quả học tập theo học viên.',
+                'data' => $result
+            ], 200);
+        } catch (Exception $e) {
+            return $this->handleException($e, 'Lỗi khi lấy kết quả học tập theo học viên.');
+        }
+    }
+
+    // Tính và cập nhật điểm trung bình
+    public function calculateAverageScore(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'student_training_program_id' => 'required|integer',
+                'program_id' => 'required|integer',
+                'semester_id' => 'nullable|integer'
+            ]);
+
+            $result = $this->service->calculateAndUpdateAverageScore(
+                $validated['student_training_program_id'],
+                $validated['program_id'],
+                $validated['semester_id'] ?? null
+            );
+
+            return response()->json([
+                'message' => 'Đã tính và cập nhật điểm trung bình.',
+                'data' => $result
+            ], 200);
+        } catch (Exception $e) {
+            return $this->handleException($e, 'Lỗi khi tính điểm trung bình.');
+        }
+    }
+
+    // Lấy báo cáo tổng kết học tập theo tiêu chí
+    public function report(Request $request): JsonResponse
+    {
+        try {
+            $criteria = $request->only(['program_id', 'classification', 'completion_status']);
+            $results = $this->service->getReport($criteria);
+
+            return response()->json([
+                'message' => 'Báo cáo kết quả học tập.',
+                'data' => $results
+            ], 200);
+        } catch (Exception $e) {
+            return $this->handleException($e, 'Lỗi khi lấy báo cáo học tập.');
         }
     }
 

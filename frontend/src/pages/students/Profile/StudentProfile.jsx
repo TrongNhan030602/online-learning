@@ -16,18 +16,23 @@ import {
   faMapMarkerAlt,
   faUserTie,
   faCamera,
+  faKey,
+  faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 import authApi from "@/api/authApi";
 import userProfileApi from "@/api/userProfileApi";
 import { getStorageUrl } from "@/utils/getStorageUrl";
 import ProfileUpdateModal from "@/components/Student/Profile/ModalUpdateInfo";
-import "../../styles/student/student-profile.css";
+import ChangeOwnPasswordForm from "@/components/Student/Profile/ChangeOwnPasswordForm";
+
+import "@/styles/student/student-profile.css";
 
 const StudentProfile = () => {
   const [studentData, setStudentData] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   useEffect(() => {
     const fetchPersonalInfo = async () => {
@@ -129,14 +134,30 @@ const StudentProfile = () => {
               />
               Thông tin cá nhân
             </h4>
-            <Button
-              variant="outline-success"
-              size="sm"
-              className="mb-3"
-              onClick={() => setShowProfileModal(true)}
-            >
-              Cập nhật thông tin
-            </Button>
+            <div className="d-flex gap-2 mb-3">
+              <Button
+                variant="outline-success"
+                size="sm"
+                onClick={() => setShowProfileModal(true)}
+              >
+                <FontAwesomeIcon
+                  icon={faUserPen}
+                  className="me-1"
+                />
+                Cập nhật thông tin
+              </Button>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={() => setShowPasswordModal(true)}
+              >
+                <FontAwesomeIcon
+                  icon={faKey}
+                  className="me-1"
+                />
+                Đổi mật khẩu
+              </Button>
+            </div>
 
             <Row>
               <Col sm={6}>
@@ -318,6 +339,19 @@ const StudentProfile = () => {
           fetchPersonalInfo();
         }}
       />
+      <Modal
+        show={showPasswordModal}
+        onHide={() => setShowPasswordModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Đổi mật khẩu</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ChangeOwnPasswordForm
+            onSuccess={() => setShowPasswordModal(false)}
+          />
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };
