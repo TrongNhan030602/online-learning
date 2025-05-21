@@ -1,6 +1,10 @@
 import axiosClient from "./axiosClient";
 
 const programCourseApi = {
+  // Lấy danh sách môn học đã gán vào chương trình đào tạo
+  getCourses: (trainingProgramId) =>
+    axiosClient.get(`/program-courses/training-programs/${trainingProgramId}`),
+
   // Lấy danh sách môn học chưa được gán vào chương trình đào tạo
   getAvailableCourses: (trainingProgramId) =>
     axiosClient.get(`/program-courses/available-courses/${trainingProgramId}`),

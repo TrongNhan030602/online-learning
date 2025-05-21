@@ -62,9 +62,25 @@ const AdminSidebar = () => {
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
+              to="/admin/scores"
+            >
+              Quản lý Điểm học tập
+            </NavLink>
+          </li>
+          <li className="admin__nav-item">
+            <NavLink
+              className="admin__nav-link"
               to="/admin/exam-schedules"
             >
               Quản lý Lịch thi
+            </NavLink>
+          </li>
+          <li className="admin__nav-item">
+            <NavLink
+              className="admin__nav-link"
+              to="/admin/re-exam-registrations"
+            >
+              Duyệt thi lại
             </NavLink>
           </li>
           <li className="admin__nav-item">
@@ -90,14 +106,6 @@ const AdminSidebar = () => {
               to="/admin/progress"
             >
               Quản lý tiến độ
-            </NavLink>
-          </li>
-          <li className="admin__nav-item">
-            <NavLink
-              className="admin__nav-link"
-              to="/admin/chats"
-            >
-              Quản lý tin nhắn
             </NavLink>
           </li>
         </ul>

@@ -1,11 +1,17 @@
 import axiosClient from "./axiosClient";
 
 const scoreApi = {
+  // Lấy tất cả điểm (GET /scores)
+  getAllScores: () => axiosClient.get("/scores"),
+
   // Tạo điểm mới
   createScore: (data) => axiosClient.post("/scores", data),
 
   // Cập nhật điểm theo ID (PUT hoặc PATCH)
   updateScore: (id, data) => axiosClient.put(`/scores/${id}`, data),
+
+  // Xóa điểm theo ID
+  deleteScore: (id) => axiosClient.delete(`/scores/${id}`),
 
   // Lấy bảng điểm của học viên theo studentId
   getScoresByStudent: (studentId) =>

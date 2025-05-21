@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
+use Illuminate\Http\Request;
 use App\Services\ScoreService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,24 @@ class ScoreController extends Controller
     {
         $this->service = $service;
     }
+    public function index(Request $request): JsonResponse
+    {
+        try {
+            $filters = $request->only(['user_id', 'course_id', 'semester_id', 'score_type', 'is_accepted']);
 
+            $scores = $this->service->getAllWithRelations($filters);
+
+            return response()->json([
+                'message' => 'Lấy danh sách điểm thành công.',
+                'data' => ScoreResource::collection($scores)
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi lấy danh sách điểm.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
     // Nhập điểm cho học viên
     public function store(ScoreRequest $request): JsonResponse
     {
@@ -58,6 +76,21 @@ class ScoreController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Có lỗi khi cập nhật điểm.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function destroy($id): JsonResponse
+    {
+        try {
+            $this->service->deleteScore($id);
+
+            return response()->json([
+                'message' => 'Xóa điểm thành công.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi xóa điểm.',
                 'error' => $e->getMessage()
             ], 500);
         }

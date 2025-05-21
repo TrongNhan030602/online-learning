@@ -13,10 +13,11 @@ const AdminLayout = () => {
     "/admin/courses": "Quản lý môn học",
     "/admin/training-programs": "Quản lý CTĐT",
     "/admin/discipline-scores": "Quản lý ĐRL",
+    "/admin/scores": "Quản lý Điểm học tập",
     "/admin/exam-schedules": "Quản lý lịch thi",
+    "/admin/re-exam-registrations": "Duyệt thi lại",
     "/admin/faqs": "Quản lý FAQs",
     "/admin/blogs": "Quản lý blog",
-    "/admin/chats": "Quản lý tin nhắn",
     "/admin/progress": "Quản lý tiến độ",
   };
 

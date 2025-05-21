@@ -13,7 +13,15 @@ class ScoreResource extends JsonResource
             'value' => $this->value,
             'attempt' => $this->attempt,
             'is_accepted' => $this->is_accepted,
+            'student_training_program_id' => $this->student_training_program_id,
 
+            'user' => $this->whenLoaded('user', function () {
+                return [
+                    'id' => $this->user->id,
+                    'name' => $this->user->name,
+                    'email' => $this->user->email,
+                ];
+            }),
             'course' => [
                 'id' => $this->course->id,
                 'code' => $this->course->code,

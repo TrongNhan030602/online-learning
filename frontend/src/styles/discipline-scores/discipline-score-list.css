@@ -14,16 +14,16 @@
 .back-button {
   margin-bottom: 1rem;
   padding: 0.5rem 1.2rem;
-  background-color: #333;
+  background-color: var(--primary-color);
   border: none;
   cursor: pointer;
   color: #fff;
   font-weight: 500;
   border-radius: 6px;
-  transition: background-color 0.3s ease;
+  transition: filter 0.3s ease;
 }
 .back-button:hover {
-  background-color: #1f1f1f;
+  filter: brightness(1.08);
 }
 
 /* Filter input */

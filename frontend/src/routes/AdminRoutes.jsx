@@ -13,7 +13,6 @@ const UserDetail = lazy(() => import("@/pages/admin/Users/UserDetail"));
 const AdminBlogs = lazy(() => import("@/pages/admin/Blogs/AdminBlogs"));
 const AdminFaqs = lazy(() => import("@/pages/admin/Faqs/AdminFaqs"));
 const FaqDetail = lazy(() => import("@/pages/admin/Faqs/FaqDetail"));
-const AdminChat = lazy(() => import("@/pages/admin/Chat/AdminChat"));
 const AdminProfile = lazy(() => import("@/pages/admin/AdminProfile"));
 const AdminDisciplineScores = lazy(() =>
   import("@/pages/admin/DisciplineScores/AdminDisciplineScores")
@@ -41,6 +40,15 @@ const AdminExamSchedules = lazy(() =>
 const ExamScheduleDetail = lazy(() =>
   import("@/pages/admin/ExamSchedules/ExamScheduleDetail")
 );
+const AdminReExamRegistrations = lazy(() =>
+  import("@/pages/admin/ReExamRegistrations/AdminReExamRegistrations")
+);
+const ReExamRegistrationDetail = lazy(() =>
+  import("@/pages/admin/ReExamRegistrations/ReExamRegistrationDetail")
+);
+
+import AdminScores from "@/pages/admin/Scores/AdminScores";
+
 // Component hiển thị khi đang tải
 const Loading = () => <div className="text-center">Đang tải...</div>;
 
@@ -158,6 +166,33 @@ const AdminRoutes = () => {
             </Suspense>
           }
         />
+        {/* Duyệt lịch thi lại */}
+        <Route
+          path="re-exam-registrations"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminReExamRegistrations />
+            </Suspense>
+          }
+        />
+        <Route
+          path="re-exam-registrations/:id"
+          element={
+            <Suspense fallback={<Loading />}>
+              <ReExamRegistrationDetail />
+            </Suspense>
+          }
+        />
+
+        {/* Điểm học tập */}
+        <Route
+          path="scores"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminScores />
+            </Suspense>
+          }
+        />
         <Route
           path="progress"
           element={
@@ -191,14 +226,6 @@ const AdminRoutes = () => {
           }
         />
 
-        <Route
-          path="chats"
-          element={
-            <Suspense fallback={<Loading />}>
-              <AdminChat />
-            </Suspense>
-          }
-        />
         <Route
           path="profile"
           element={

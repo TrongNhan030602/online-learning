@@ -59,6 +59,11 @@ class SemesterRepository implements SemesterRepositoryInterface
         $semester->courses()->detach($courseIds);
         return $semester->load('courses');
     }
+    public function getCoursesBySemester($semesterId)
+    {
+        $semester = Semester::with('courses')->findOrFail($semesterId);
+        return $semester->courses;
+    }
 
     // Phương thức mới để lấy danh sách môn học chưa được gán vào bất kỳ học kỳ nào
     public function getCoursesNotInAnySemester($trainingProgramId)

@@ -1,0 +1,26 @@
+.admin-scores__table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.admin-scores__table td.admin-scores__table-actions {
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.admin-scores__table-actions-btn {
+  margin: 2px;
+  padding: 0.25rem 0.5rem;
+  flex-shrink: 0;
+}
+.admin-scores__header {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.5px;
+}

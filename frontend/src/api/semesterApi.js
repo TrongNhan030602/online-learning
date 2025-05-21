@@ -16,6 +16,10 @@ const semesterApi = {
   // Xóa học kỳ theo ID
   deleteSemester: (id) => axiosClient.delete(`/semesters/${id}`),
 
+  // Lấy danh sách môn học của học kỳ
+  getCoursesBySemester: (semesterId) =>
+    axiosClient.get(`/semesters/${semesterId}/courses`),
+
   // Lấy danh sách môn học chưa được gán vào học kỳ trong CTĐT
   getCoursesNotInSemester: (trainingProgramId) =>
     axiosClient.get(

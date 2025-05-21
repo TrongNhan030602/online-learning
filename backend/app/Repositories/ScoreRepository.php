@@ -10,6 +10,23 @@ use App\Interfaces\ScoreRepositoryInterface;
 
 class ScoreRepository implements ScoreRepositoryInterface
 {
+    public function getAllWithRelations($filters = [])
+    {
+        return Score::with([
+            'user:id,name,email',
+            'course:id,code,title',
+            'semester:id,name',
+            'studentTrainingProgram.trainingProgram:id,code,name'
+        ])
+            ->when(isset($filters['user_id']), fn($q) => $q->where('user_id', $filters['user_id']))
+            ->when(isset($filters['course_id']), fn($q) => $q->where('course_id', $filters['course_id']))
+            ->when(isset($filters['semester_id']), fn($q) => $q->where('semester_id', $filters['semester_id']))
+            ->when(isset($filters['score_type']), fn($q) => $q->where('score_type', $filters['score_type']))
+            ->when(isset($filters['is_accepted']), fn($q) => $q->where('is_accepted', $filters['is_accepted']))
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
     public function create(array $data)
     {
         // Lấy chương trình học viên đăng ký
@@ -46,7 +63,24 @@ class ScoreRepository implements ScoreRepositoryInterface
         if (!in_array($trainingProgram->level, ['college', 'intermediate'])) {
             $data['semester_id'] = null;
         }
+        // Kiểm tra điểm đã tồn tại chưa
+        $exists = Score::where('student_training_program_id', $data['student_training_program_id'])
+            ->where('course_id', $data['course_id'])
+            ->where('score_type', $data['score_type'])
+            ->where('attempt', $data['attempt'] ?? 1)
+            ->when(!empty($data['semester_id']), function ($query) use ($data) {
+                $query->where('semester_id', $data['semester_id']);
+            })
+            ->when(empty($data['semester_id']), function ($query) {
+                $query->whereNull('semester_id');
+            })
+            ->exists();
 
+        if ($exists) {
+            throw new \Exception('Điểm đã tồn tại cho môn học, loại điểm và lần thi này đã có.');
+        }
+        // Nếu không có attempt thì gán mặc định = 1
+        $data['attempt'] = $data['attempt'] ?? 1;
         return Score::create($data);
     }
 
@@ -89,7 +123,25 @@ class ScoreRepository implements ScoreRepositoryInterface
         if (!in_array($trainingProgram->level, ['college', 'intermediate'])) {
             $data['semester_id'] = null;
         }
+        // Kiểm tra điểm đã tồn tại chưa
+        $exists = Score::where('student_training_program_id', $data['student_training_program_id'])
+            ->where('course_id', $data['course_id'])
+            ->where('score_type', $data['score_type'])
+            ->where('attempt', $data['attempt'] ?? 1)
+            ->when(!empty($data['semester_id']), function ($query) use ($data) {
+                $query->where('semester_id', $data['semester_id']);
+            })
+            ->when(empty($data['semester_id']), function ($query) {
+                $query->whereNull('semester_id');
+            })
+            ->where('id', '<>', $id)  // <-- loại trừ bản ghi hiện tại
+            ->exists();
 
+        if ($exists) {
+            throw new \Exception('Điểm đã tồn tại cho môn học, loại điểm và lần thi này đã có.');
+        }
+        // Nếu không có attempt thì gán mặc định = 1
+        $data['attempt'] = $data['attempt'] ?? 1;
         $score->update($data);
         return $score;
     }
@@ -124,6 +176,11 @@ class ScoreRepository implements ScoreRepositoryInterface
     public function getById($id)
     {
         return Score::findOrFail($id);
+    }
+    public function delete($id)
+    {
+        $score = Score::findOrFail($id);
+        return $score->delete();
     }
 
     // Mới thêm

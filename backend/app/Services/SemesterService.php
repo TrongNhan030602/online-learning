@@ -50,6 +50,10 @@ class SemesterService
     {
         return $this->semesterRepository->removeCoursesFromSemester($semesterId, $courseIds);
     }
+    public function getCoursesBySemester($semesterId)
+    {
+        return $this->semesterRepository->getCoursesBySemester($semesterId);
+    }
 
     public function getUnassignedCourses($trainingProgramId)
     {

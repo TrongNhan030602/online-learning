@@ -1,0 +1,38 @@
+.admin-reexam {
+  font-family: var(--primary-font);
+  padding: 2rem 1rem;
+  background-color: var(--bg-light);
+  min-height: 100vh;
+}
+
+.admin-reexam__title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.admin-reexam__table th,
+.admin-reexam__table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.admin-reexam__action-btn {
+  font-size: 0.9rem;
+  padding: 0.25rem 0.6rem;
+}
+.admin-reexam__table th {
+  user-select: none;
+}
+.admin-reexam__table a {
+  text-decoration: none;
+  color: var(--bs-link-color, #0d6efd);
+}
+
+.admin-reexam__table a:hover {
+  text-decoration: underline;
+}

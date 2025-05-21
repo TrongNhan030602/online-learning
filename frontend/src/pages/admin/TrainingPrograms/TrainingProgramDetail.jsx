@@ -72,7 +72,7 @@ const TrainingProgramDetail = () => {
   };
 
   const handleAddBanner = () => {
-    setSelectedBanner(null); // Đặt selectedBanner là null để thêm mới banner
+    setSelectedBanner(null);
     setShowBannerModal(true);
   };
 
@@ -120,13 +120,13 @@ const TrainingProgramDetail = () => {
 
   // Xử lý sửa học kỳ
   const handleEditSemester = (semester) => {
-    setSelectedSemester(semester); // Chọn học kỳ cần sửa
-    setShowSemesterModal(true); // Mở modal sửa học kỳ
+    setSelectedSemester(semester);
+    setShowSemesterModal(true);
   };
   // Xử lý thêm học kỳ
   const handleAddSemester = () => {
-    setSelectedSemester(null); // Đặt selectedSemester = null khi thêm mới học kỳ
-    setShowSemesterModal(true); // Mở modal thêm học kỳ
+    setSelectedSemester(null);
+    setShowSemesterModal(true);
   };
 
   const handleAddCourse = () => {
@@ -245,7 +245,7 @@ const TrainingProgramDetail = () => {
             icon={faUsers}
             className="mx-1"
           />
-          Quản lý học viên
+          Quản lý học viên & Nhập điểm
         </Button>
       </div>
       {/* Program Semesters */}

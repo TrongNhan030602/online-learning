@@ -13,6 +13,11 @@ class ScoreService
         $this->repository = $repository;
     }
 
+    public function getAllWithRelations(array $filters = [])
+    {
+        return $this->repository->getAllWithRelations($filters);
+    }
+
     public function addScore(array $data)
     {
         return $this->repository->create($data);
@@ -58,5 +63,9 @@ class ScoreService
     public function calculateAverageScore($userId)
     {
         return $this->repository->calculateAverageScore($userId);
+    }
+    public function deleteScore($id)
+    {
+        return $this->repository->delete($id);
     }
 }

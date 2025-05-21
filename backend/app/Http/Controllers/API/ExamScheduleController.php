@@ -136,8 +136,13 @@ class ExamScheduleController extends Controller
                 ], 404);
             }
 
+            // Tạo collection resource, truyền $studentId cho từng item
+            $resourceCollection = $data->map(function ($item) use ($studentId) {
+                return new ExamScheduleResource($item, $studentId);
+            });
+
             return response()->json([
-                'data' => ExamScheduleResource::collection($data)
+                'data' => $resourceCollection,
             ], 200);
 
         } catch (Exception $e) {
@@ -147,6 +152,7 @@ class ExamScheduleController extends Controller
             ], 500);
         }
     }
+
 
 
     // Lịch thi cho học viên

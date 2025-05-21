@@ -26,7 +26,7 @@ class SemesterController extends Controller
             if ($semesters->isEmpty()) {
                 return response()->json([
                     'message' => 'Không có học kỳ nào.'
-                ], 404);
+                ], 200);
             }
 
             return response()->json([
@@ -181,6 +181,28 @@ class SemesterController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Lỗi khi xóa môn học khỏi học kỳ.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getCoursesBySemester($semesterId)
+    {
+        try {
+            $courses = $this->semesterService->getCoursesBySemester($semesterId);
+
+            if ($courses->isEmpty()) {
+                return response()->json([
+                    'message' => 'Học kỳ này chưa có môn học nào.'
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => 'Danh sách môn học của học kỳ.',
+                'data' => $courses
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Lỗi khi lấy danh sách môn học của học kỳ.',
                 'error' => $e->getMessage()
             ], 500);
         }

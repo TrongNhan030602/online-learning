@@ -1,123 +1,199 @@
-// src/pages/students/Academic/ExamRegistration.jsx
-import { useState } from "react";
-import { Table, Form, Button, Alert } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect } from "react";
+import { Table, Badge, Alert } from "react-bootstrap";
 import {
   faCalendarAlt,
-  faTimesCircle,
+  faClock,
+  faMapMarkerAlt,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom"; // nếu dùng react-router
+import reExamRegistrationApi from "@/api/reExamRegistrationApi";
 import "../../../styles/student/academic/exam-registration.css";
 
-const ExamRegistration = () => {
-  const [academicYear, setAcademicYear] = useState("2024-2025");
-  const [semester, setSemester] = useState("Học kỳ 2");
+const statusVariant = {
+  pending: "warning",
+  approved: "success",
+  rejected: "danger",
+};
+const statusText = {
+  pending: "Chờ duyệt",
+  approved: "Đã duyệt",
+  rejected: "Bị từ chối",
+};
 
-  // Dữ liệu giả - để hiển thị 'Không có'
-  const reExamSubjects = [];
+const ExamRegistration = () => {
+  const [reExamSubjects, setReExamSubjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    reExamRegistrationApi
+      .getMine()
+      .then((res) => {
+        setReExamSubjects(res.data.data || []);
+        setError(null);
+        setLoading(false);
+      })
+      .catch((error) => {
+        // Nếu response có data.message thì dùng thông báo đó, còn không hiện lỗi chung
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          setError(error.response.data.message);
+        } else {
+          setError("Không thể tải dữ liệu đăng ký thi lại.");
+        }
+        setReExamSubjects([]);
+        setLoading(false);
+      });
+  }, []);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   return (
-    <div className="exam-registration">
-      <div className="exam-registration__header">
+    <div className="exam-registration p-3">
+      <div className="exam-registration__header mb-4">
         <h2>
           <FontAwesomeIcon
             icon={faCalendarAlt}
-            className="me-2 text-primary"
+            className="me-2"
           />
-          Đăng ký thi lần 2
+          Các đăng ký của bạn
         </h2>
         <p className="text-muted">
-          Đăng ký thi lại các môn bạn chưa đạt trong lần thi đầu tiên. Hãy kiểm
-          tra kỹ thời hạn và lịch thi dự kiến.
+          Danh sách đăng ký thi lại các môn học của bạn. Vui lòng kiểm tra kỹ
+          thông tin lịch thi và trạng thái.
         </p>
       </div>
 
-      <div className="exam-registration__filter d-flex gap-4 flex-wrap my-4">
-        <Form.Group>
-          <Form.Label>Năm học:</Form.Label>
-          <Form.Select
-            value={academicYear}
-            onChange={(e) => setAcademicYear(e.target.value)}
-          >
-            <option>2024-2025</option>
-            <option>2023-2024</option>
-          </Form.Select>
-        </Form.Group>
+      {loading && <div className="text-center my-5">Đang tải dữ liệu ...</div>}
 
-        <Form.Group>
-          <Form.Label>Học kỳ:</Form.Label>
-          <Form.Select
-            value={semester}
-            onChange={(e) => setSemester(e.target.value)}
-          >
-            <option>Học kỳ 1</option>
-            <option>Học kỳ 2</option>
-          </Form.Select>
-        </Form.Group>
-      </div>
-
-      {reExamSubjects.length === 0 ? (
+      {/* Hiện lỗi API hoặc message server trả về */}
+      {error && (
         <Alert
-          variant="warning"
-          className="exam-registration__empty shadow-sm"
+          variant="danger"
+          className="text-center"
         >
-          <FontAwesomeIcon
-            icon={faTimesCircle}
-            className="me-2 text-danger"
-          />
-          Không có môn học nào cần đăng ký thi lại trong học kỳ này.
-          <div className="mt-2 text-secondary small">
+          {error}
+        </Alert>
+      )}
+
+      {/* Nếu không lỗi và danh sách rỗng thì hiện cảnh báo và hướng dẫn */}
+      {!loading && !error && reExamSubjects.length === 0 && (
+        <>
+          <Alert
+            variant="warning"
+            className="text-center"
+          >
             <FontAwesomeIcon
               icon={faInfoCircle}
-              className="me-1"
+              className="me-2"
             />
-            Nếu bạn nghĩ có sai sót, vui lòng kiểm tra{" "}
-            <strong>Kết quả học tập</strong> hoặc liên hệ cố vấn học tập.
-          </div>
-        </Alert>
-      ) : (
+            Bạn chưa có đăng ký thi lại nào.
+          </Alert>
+
+          <Alert
+            variant="info"
+            className="text-center"
+          >
+            Để đăng ký thi lại, bạn vui lòng truy cập{" "}
+            <Link
+              to="/student/schedule"
+              className="exam-registration__link"
+            >
+              giao diện Lịch thi chính thức
+            </Link>{" "}
+            và tiến hành đăng ký.
+          </Alert>
+        </>
+      )}
+
+      {/* Hiện bảng nếu có dữ liệu */}
+      {!loading && !error && reExamSubjects.length > 0 && (
         <Table
-          striped
           bordered
           hover
           responsive
+          className="shadow-sm"
         >
           <thead>
-            <tr className="text-center">
-              <th>STT</th>
-              <th>Mã lớp</th>
-              <th>Tên lớp</th>
-              <th>Điểm (L1)</th>
-              <th>Ngày thi L2</th>
+            <tr className="text-center align-middle">
+              <th>#</th>
+              <th>Mã môn học</th>
+              <th>Tên môn học</th>
+              <th>Khóa học</th>
+              <th>Ngày thi</th>
               <th>Giờ thi</th>
-              <th>Hạn đăng ký</th>
+              <th>Địa điểm</th>
+              <th>Lý do đăng ký</th>
+              <th>Trạng thái</th>
               <th>Ghi chú</th>
-              <th>Tình trạng</th>
-              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
-            {reExamSubjects.map((subject, idx) => (
-              <tr key={idx}>
-                <td>{idx + 1}</td>
-                <td>{subject.code}</td>
-                <td>{subject.name}</td>
-                <td>{subject.score1st}</td>
-                <td>{subject.examDate}</td>
-                <td>{subject.examTime}</td>
-                <td>{subject.deadline}</td>
-                <td>{subject.note}</td>
-                <td>{subject.status}</td>
-                <td>
-                  <Button
-                    size="sm"
-                    variant="primary"
-                  >
-                    Đăng ký
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {reExamSubjects.map((item, idx) => {
+              const {
+                course,
+                student_training_program,
+                exam_schedule,
+                reason,
+                status,
+              } = item;
+
+              const examDate = exam_schedule.retake_exam_date;
+              const startTime = exam_schedule.retake_start_time.slice(0, 5);
+              const endTime = exam_schedule.retake_end_time.slice(0, 5);
+
+              return (
+                <tr key={item.id}>
+                  <td className="text-center">{idx + 1}</td>
+                  <td className="text-center">{course.code}</td>
+                  <td>{course.title}</td>
+                  <td>{student_training_program.training_program.name}</td>
+                  <td className="text-center">
+                    <FontAwesomeIcon
+                      icon={faCalendarAlt}
+                      className="me-1 text-primary"
+                    />
+                    {formatDate(examDate)}
+                  </td>
+                  <td className="text-center">
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      className="me-1 text-primary"
+                    />
+                    {startTime} - {endTime}
+                  </td>
+                  <td>
+                    <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      className="me-1 text-primary"
+                    />
+                    {exam_schedule.location}
+                  </td>
+                  <td>{reason}</td>
+                  <td className="text-center">
+                    <Badge
+                      bg={statusVariant[status] || "secondary"}
+                      className="text-uppercase"
+                    >
+                      {statusText[status] || status}
+                    </Badge>
+                  </td>
+                  <td>{exam_schedule.note || "-"}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       )}

@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDay, faPenAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarDay,
+  faPenAlt,
+  faPen,
+} from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "@/hooks/useToast";
+
 import examScheduleApi from "@/api/examScheduleApi";
+import RetakeExamModal from "@/components/Student/Exam/RetakeExamModal";
 import "../../../styles/student/academic/exam-schedule.css";
 
 const ExamSchedule = () => {
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showRetakeModal, setShowRetakeModal] = useState(false);
+  const [selectedExam, setSelectedExam] = useState(null);
+  const { addToast } = useToast();
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -92,6 +103,7 @@ const ExamSchedule = () => {
                   <th>Giờ thi Lần 2(dự kiến)</th>
                   <th>Học kỳ</th>
                   <th>Ghi chú</th>
+                  <th>Hành động</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,6 +142,21 @@ const ExamSchedule = () => {
                     </td>
                     <td>{item.semester.semester_name || "Không có"}</td>
                     <td>{item.exam_details.note}</td>
+                    <td>
+                      <button
+                        className="btn btn-sm btn-outline-danger d-flex align-items-center"
+                        onClick={() => {
+                          setSelectedExam(item);
+                          setShowRetakeModal(true);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faPen}
+                          style={{ marginRight: "6px" }}
+                        />
+                        Đăng ký thi lại
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -137,6 +164,19 @@ const ExamSchedule = () => {
           </div>
         ))}
       </div>
+      <RetakeExamModal
+        show={showRetakeModal}
+        onHide={() => setShowRetakeModal(false)}
+        exam={selectedExam}
+        onSuccess={() => {
+          addToast({
+            title: "Thành công",
+            message: "Đã gửi yêu cầu đăng ký thi lại",
+            type: "success",
+            duration: 1500,
+          });
+        }}
+      />
     </div>
   );
 };

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Services\ReExamRegistrationService;
 use App\Http\Requests\ReExamRegistrationRequest\ReExamRegistrationRequest;
 
@@ -107,12 +108,37 @@ class ReExamRegistrationController extends Controller
             ], 500);
         }
     }
+    // Lấy danh sách đăng ký thi lại của sinh viên đang đăng nhập
+    public function getMyReExamRegistrations(): JsonResponse
+    {
+        try {
+            $userId = Auth::id();
+            $registrations = $this->service->getByUserWithRelations($userId);
+
+            if ($registrations->isEmpty()) {
+                return response()->json([
+                    'message' => 'Bạn chưa đăng ký lịch thi lại nào.'
+                ], 200);
+            }
+
+            return response()->json([
+                'data' => $registrations
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lấy danh sách lịch thi lại của bạn.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     // Tạo mới đăng ký thi lại
     public function store(ReExamRegistrationRequest $request): JsonResponse
     {
         try {
             $data = $request->validated();
+            $data['user_id'] = Auth::id();
+
             $reExamRegistration = $this->service->create($data);
 
             return response()->json([
@@ -155,6 +181,14 @@ class ReExamRegistrationController extends Controller
     // Thay đổi trạng thái đăng ký thi lại
     public function changeStatus($id, $status): JsonResponse
     {
+        $validStatuses = ['pending', 'approved', 'rejected'];
+
+        if (!in_array($status, $validStatuses)) {
+            return response()->json([
+                'message' => 'Trạng thái không hợp lệ.'
+            ], 422);
+        }
+
         try {
             $registration = $this->service->changeStatus($id, $status);
 
@@ -169,6 +203,7 @@ class ReExamRegistrationController extends Controller
             ], 500);
         }
     }
+
 
     // Xóa đăng ký thi lại
     public function destroy($id): JsonResponse

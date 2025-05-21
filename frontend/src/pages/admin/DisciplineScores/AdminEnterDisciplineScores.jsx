@@ -19,6 +19,7 @@ const AdminEnterDisciplineScores = () => {
   const [studentsMap, setStudentsMap] = useState({});
   const [programName, setProgramName] = useState("");
   const [programCode, setProgramCode] = useState("");
+  const [loadingStudentIds, setLoadingStudentIds] = useState([]);
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -58,21 +59,39 @@ const AdminEnterDisciplineScores = () => {
     score,
     evaluation
   ) => {
-    const scoreData = {
-      student_training_program_id: studentTrainingProgramId,
-      semester_id: semesterId,
-      score,
-      evaluation,
-    };
+    const parsedScore = parseFloat(score);
+    if (
+      isNaN(parsedScore) ||
+      parsedScore < 0 ||
+      parsedScore > 100 ||
+      !evaluation.trim()
+    ) {
+      addToast({
+        title: "Lỗi nhập điểm",
+        message: "Vui lòng nhập điểm từ 0 đến 100 và đánh giá hợp lệ.",
+        type: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setLoadingStudentIds((prev) => [...prev, studentTrainingProgramId]);
 
     try {
-      await disciplineScoreApi.createDisciplineScore(scoreData);
+      await disciplineScoreApi.createDisciplineScore({
+        student_training_program_id: studentTrainingProgramId,
+        semester_id: semesterId,
+        score: parsedScore,
+        evaluation,
+      });
+
       addToast({
-        title: "Nhập điểm rèn luyện thành công!",
-        message: "Điểm đã được nhập",
+        title: "Nhập điểm thành công",
+        message: "Điểm rèn luyện đã được lưu",
         type: "success",
         duration: 2000,
       });
+
       setStudentsMap((prev) => ({
         ...prev,
         [semesterId]: prev[semesterId].filter(
@@ -81,6 +100,16 @@ const AdminEnterDisciplineScores = () => {
       }));
     } catch (error) {
       console.error("❌ Lỗi khi nhập điểm rèn luyện:", error);
+      addToast({
+        title: "Lỗi",
+        message: "Không thể lưu điểm. Vui lòng thử lại.",
+        type: "error",
+        duration: 3000,
+      });
+    } finally {
+      setLoadingStudentIds((prev) =>
+        prev.filter((id) => id !== studentTrainingProgramId)
+      );
     }
   };
 
@@ -156,7 +185,7 @@ const AdminEnterDisciplineScores = () => {
                         <th>#</th>
                         <th>Họ tên</th>
                         <th>Email</th>
-                        <th>Điểm</th>
+                        <th>Điểm (0 - 100)</th>
                         <th>Đánh giá</th>
                         <th>Hành động</th>
                       </tr>
@@ -188,6 +217,9 @@ const AdminEnterDisciplineScores = () => {
                             <Button
                               size="sm"
                               variant="success"
+                              disabled={loadingStudentIds.includes(
+                                student.student_training_program_id
+                              )}
                               onClick={() => {
                                 const score = document.querySelector(
                                   `[name=score-${student.id}]`
@@ -195,6 +227,7 @@ const AdminEnterDisciplineScores = () => {
                                 const evaluation = document.querySelector(
                                   `[name=evaluation-${student.id}]`
                                 ).value;
+
                                 handleEnterScore(
                                   semester.id,
                                   student.student_training_program_id,
@@ -203,7 +236,11 @@ const AdminEnterDisciplineScores = () => {
                                 );
                               }}
                             >
-                              Nhập
+                              {loadingStudentIds.includes(
+                                student.student_training_program_id
+                              )
+                                ? "Đang lưu..."
+                                : "Nhập"}
                             </Button>
                           </td>
                         </tr>

@@ -127,6 +127,8 @@ Route::prefix('semesters')->group(function () {
     Route::put('/{id}', [SemesterController::class, 'update']);
     // Xóa học kỳ
     Route::delete('/{id}', [SemesterController::class, 'destroy']);
+    // Môn học của học kỳ
+    Route::get('/{semesterId}/courses', [SemesterController::class, 'getCoursesBySemester']);
 
     // Gán môn học vào học kỳ
     Route::post('/{semesterId}/add-courses', [SemesterController::class, 'addCoursesToSemester']);
@@ -313,12 +315,15 @@ Route::prefix('discipline-scores')->group(function () {
 
 // API Điểm
 Route::prefix('scores')->group(function () {
+    //Danh sách điểm
+    Route::get('/', [ScoreController::class, 'index']);
     // Tạo điểm mới (nhập điểm)
     Route::post('/', [ScoreController::class, 'store']);
 
     // Cập nhật điểm theo ID
     Route::put('/{id}', [ScoreController::class, 'update']);
     Route::patch('/{id}', [ScoreController::class, 'update']);
+    Route::delete('/{id}', [ScoreController::class, 'destroy']);
 
     // Lấy bảng điểm của học viên theo studentId
     Route::get('/student/{studentId}', [ScoreController::class, 'getStudentScores']);
@@ -363,7 +368,8 @@ Route::prefix('learning-results')->group(function () {
 
 Route::prefix('re-exam-registrations')->group(function () {
     Route::get('/', [ReExamRegistrationController::class, 'index']);               // Lấy tất cả đăng ký thi lại (có quan hệ)
-    Route::get('/{id}', [ReExamRegistrationController::class, 'show']);            // Lấy đăng ký thi lại theo ID
+    Route::get('/me', [ReExamRegistrationController::class, 'getMyReExamRegistrations']); // ✅ Đặt trước
+    Route::get('/{id}', [ReExamRegistrationController::class, 'show']);
     Route::post('/', [ReExamRegistrationController::class, 'store']);              // Tạo mới đăng ký thi lại
     Route::put('/{id}', [ReExamRegistrationController::class, 'update']);          // Cập nhật đăng ký thi lại
     Route::delete('/{id}', [ReExamRegistrationController::class, 'destroy']);      // Xóa đăng ký thi lại

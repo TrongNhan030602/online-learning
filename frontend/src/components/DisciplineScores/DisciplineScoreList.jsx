@@ -118,32 +118,8 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
                 className="sort-icon"
               />
             </th>
-            <th onClick={() => handleSort("student_name")}>
-              Học viên
-              <FontAwesomeIcon
-                icon={
-                  sortKey === "student_name"
-                    ? sortOrder === "asc"
-                      ? faArrowUp
-                      : faArrowDown
-                    : faArrowUp
-                }
-                className="sort-icon"
-              />
-            </th>
-            <th onClick={() => handleSort("training_program_name")}>
-              Chương trình đào tạo
-              <FontAwesomeIcon
-                icon={
-                  sortKey === "training_program_name"
-                    ? sortOrder === "asc"
-                      ? faArrowUp
-                      : faArrowDown
-                    : faArrowUp
-                }
-                className="sort-icon"
-              />
-            </th>
+            <th>Học viên</th>
+            <th>Chương trình đào tạo</th>
             <th onClick={() => handleSort("semester_name")}>
               Học kỳ
               <FontAwesomeIcon
@@ -170,19 +146,7 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
                 className="sort-icon"
               />
             </th>
-            <th onClick={() => handleSort("evaluation")}>
-              Đánh giá
-              <FontAwesomeIcon
-                icon={
-                  sortKey === "evaluation"
-                    ? sortOrder === "asc"
-                      ? faArrowUp
-                      : faArrowDown
-                    : faArrowUp
-                }
-                className="sort-icon"
-              />
-            </th>
+            <th>Đánh giá</th>
             <th>Hành động</th>
           </tr>
         </thead>

@@ -6,8 +6,19 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExamScheduleResource extends JsonResource
 {
-    public function toArray($request)
+    protected $studentId;
+
+    // Thêm tham số $studentId khi khởi tạo resource
+    public function __construct($resource, $studentId = null)
     {
+        parent::__construct($resource);
+        $this->studentId = $studentId;
+    }
+    public function toArray($request)
+    {// Lấy student_training_program_id
+        $studentTrainingProgramId = \App\Models\StudentTrainingProgram::where('user_id', $this->studentId)
+            ->where('training_program_id', $this->training_program_id)
+            ->value('id');
         return [
             'exam_id' => $this->id,
             'course' => [
@@ -26,6 +37,7 @@ class ExamScheduleResource extends JsonResource
                 'program_code' => $this->trainingProgram->code,
                 'program_name' => $this->trainingProgram->name,
             ],
+            'student_training_program_id' => $studentTrainingProgramId,
             'exam_details' => [
                 'exam_type' => $this->exam_type,
                 'exam_date' => $this->exam_date,

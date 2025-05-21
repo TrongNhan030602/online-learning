@@ -13,8 +13,16 @@ class ReExamRegistrationRepository implements ReExamRegistrationRepositoryInterf
 
     public function find($id)
     {
-        return ReExamRegistration::findOrFail($id);
+        return ReExamRegistration::with([
+            'student:id,name,email',
+            'studentTrainingProgram:id,training_program_id',
+            'studentTrainingProgram.trainingProgram:id,name,code',
+            'course:id,code,title',
+            'examSchedule:id,course_id,semester_id,training_program_id,exam_type,exam_date,start_time,end_time,duration_minutes,retake_exam_date,retake_start_time,retake_end_time,location,note',
+            'examSchedule.semester:id,name'
+        ])->findOrFail($id);
     }
+
 
     public function create(array $data)
     {
@@ -59,20 +67,26 @@ class ReExamRegistrationRepository implements ReExamRegistrationRepositoryInterf
     public function getByUserWithRelations($userId)
     {
         return ReExamRegistration::with([
-            'student',
-            'studentTrainingProgram',
-            'course',
-            'examSchedule',
+            'student:id,name,email',
+            'studentTrainingProgram:id,training_program_id',
+            'studentTrainingProgram.trainingProgram:id,name',
+            'course:id,code,title',
+            'examSchedule:id,course_id,semester_id,training_program_id,exam_type,exam_date,start_time,end_time,duration_minutes,retake_exam_date,retake_start_time,retake_end_time,location,note',
+            'examSchedule.semester:id,name'
         ])->where('user_id', $userId)->get();
     }
+
     public function allWithRelations()
     {
         return ReExamRegistration::with([
             'student:id,name,email',
             'studentTrainingProgram:id,training_program_id',
+            'studentTrainingProgram.trainingProgram:id,name',
             'course:id,code,title',
-            'examSchedule:id,exam_date,start_time,end_time,location'
+            'examSchedule:id,course_id,semester_id,training_program_id,exam_type,exam_date,start_time,end_time,duration_minutes,retake_exam_date,retake_start_time,retake_end_time,location,note',
+            'examSchedule.semester:id,name'
         ])->get();
     }
+
 
 }

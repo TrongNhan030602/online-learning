@@ -1,16 +1,143 @@
+/* ExamRegistration Block */
 .exam-registration {
-  padding: 2rem;
-  background-color: #fefefe;
-  border-radius: 12px;
+  font-family: var(--primary-font);
+  background-color: var(--bg-light);
+  border-radius: 8px;
+  padding: 24px;
+  color: var(--text-dark);
+}
+
+/* Header */
+.exam-registration__header {
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .exam-registration__header h2 {
-  font-weight: bold;
+  color: #113f73 !important;
+  font-size: 26px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.exam-registration__empty {
-  padding: 1.5rem;
-  border-left: 5px solid #ffc107;
-  background: #fff8e1;
-  border-radius: 10px;
+.exam-registration__header p {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  line-height: 1.4;
+}
+.exam-registration__link {
+  color: #0d6efd; /* màu primary bootstrap */
+  text-decoration: underline;
+  cursor: pointer;
+}
+.exam-registration__link:hover {
+  color: #0a58ca;
+  text-decoration: none;
+}
+
+/* Alert */
+.exam-registration__alert {
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.exam-registration__alert svg {
+  font-size: 1.2rem;
+}
+
+/* Table styling */
+.exam-registration table {
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.exam-registration thead tr {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.exam-registration thead th {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.exam-registration tbody td {
+  padding: 12px 10px;
+  vertical-align: middle;
+  font-size: 0.9rem;
+  color: var(--text-gray);
+}
+
+.exam-registration tbody tr:nth-child(even) {
+  background-color: #f9fbfd;
+}
+
+.exam-registration tbody tr:hover {
+  background-color: #e6f0ff;
+  transition: background-color 0.3s ease;
+}
+
+.exam-registration tbody td.text-center {
+  text-align: center;
+}
+
+/* Icons inside table */
+.exam-registration__icon {
+  color: var(--primary-color);
+  margin-right: 0.3rem;
+}
+
+/* Status badge */
+.badge {
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.35em 0.6em;
+  font-size: 0.75rem;
+  border-radius: 12px;
+}
+
+/* Button Detail */
+.exam-registration button.btn-info {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.exam-registration button.btn-info:disabled {
+  background-color: #c0c7d6;
+  border-color: #c0c7d6;
+  cursor: not-allowed;
+}
+
+.exam-registration button.btn-info:not(:disabled):hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .exam-registration table {
+    font-size: 0.8rem;
+  }
+
+  .exam-registration__header h2 {
+    font-size: 1.4rem;
+  }
 }

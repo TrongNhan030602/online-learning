@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
@@ -40,9 +40,17 @@ const NavLinkItem = ({ to, icon, label, onClick }) => (
 );
 
 const DropdownMenu = ({ label, items }) => {
+  const location = useLocation();
+
+  const isActive = items.some((item) => location.pathname.startsWith(item.to));
+
   return (
     <li className="student-header__nav-item dropdown">
-      <div className="student-header__nav-link">
+      <div
+        className={`student-header__nav-link ${
+          isActive ? "student-header__nav-link--active" : ""
+        }`}
+      >
         <FontAwesomeIcon
           icon={faSitemap}
           className="student-header__icon-dropdown"

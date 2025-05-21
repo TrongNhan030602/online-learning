@@ -13,6 +13,8 @@ import {
 import { useToast } from "@/hooks/useToast";
 import studentTrainingProgramApi from "@/api/studentTrainingProgramApi";
 import AddStudentModal from "@/components/StudentTrainingPrograms/AddStudentModal";
+import AddScoreModal from "@/components/Scores/AddScoreModal";
+
 import ConfirmDialog from "@/components/Common/ConfirmDialog";
 import "../../../styles/trainingPrograms/program-students-page.css";
 
@@ -25,6 +27,9 @@ const ProgramStudentsPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedStudentToRemove, setSelectedStudentToRemove] = useState(null);
+  const [showScoreModal, setShowScoreModal] = useState(false);
+  const [selectedStudentForScore, setSelectedStudentForScore] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState(""); // Trạng thái tìm kiếm
   const [sortColumn, setSortColumn] = useState("user_id"); // Mặc định sắp xếp theo ID
   const [sortOrder, setSortOrder] = useState("asc"); // Mặc định sắp xếp tăng dần
@@ -151,6 +156,14 @@ const ProgramStudentsPage = () => {
       setShowConfirmDialog(false);
       setSelectedStudentToRemove(null);
     }
+  };
+  const handleShowScoreModal = (student) => {
+    setSelectedStudentForScore(student);
+    setShowScoreModal(true);
+  };
+  const handleCloseScoreModal = () => {
+    setShowScoreModal(false);
+    setSelectedStudentForScore(null);
   };
 
   if (loading) {
@@ -290,13 +303,23 @@ const ProgramStudentsPage = () => {
                     : "Không có"}
                 </td>
                 <td>
+                  {" "}
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    title="Nhập điểm học tập"
+                    className="me-2 mb-1"
+                    onClick={() => handleShowScoreModal(student)}
+                  >
+                    <FontAwesomeIcon icon={faPlus} /> N.Điểm
+                  </Button>
                   <Button
                     variant="danger"
                     size="sm"
-                    title="Xóa"
+                    title="Xóa học viên khỏi chương trình này"
                     onClick={() => openConfirmDialog(student.user_id)}
                   >
-                    <FontAwesomeIcon icon={faTrash} />
+                    <FontAwesomeIcon icon={faTrash} /> Xóa
                   </Button>
                 </td>
               </tr>
@@ -327,10 +350,28 @@ const ProgramStudentsPage = () => {
         handleCloseModal={handleCloseModal}
         handleAddStudentSuccess={handleAddStudentSuccess}
       />
+      {/* Modal nhập điểm */}
+      {selectedStudentForScore && (
+        <AddScoreModal
+          show={showScoreModal}
+          handleClose={handleCloseScoreModal}
+          student={selectedStudentForScore}
+          trainingProgramId={programId}
+          onSuccess={() =>
+            addToast({
+              title: "Thành công!",
+              message: "Điểm đã được nhập",
+              type: "success",
+              duration: 1500,
+            })
+          }
+        />
+      )}
+
       <ConfirmDialog
         isOpen={showConfirmDialog}
         title="Xác nhận xóa"
-        message="Bạn có chắc chắn muốn xóa học viên này?"
+        message="Bạn có chắc chắn muốn xóa học viên này khỏi chương trình?"
         onConfirm={confirmRemoveStudent}
         onCancel={() => setShowConfirmDialog(false)}
       />
