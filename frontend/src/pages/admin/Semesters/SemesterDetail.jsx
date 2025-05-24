@@ -7,6 +7,8 @@ import {
   faPlus,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import BulkScoreInputModal from "@/components/Scores/BulkScoreInputModal";
+
 import { useToast } from "@/hooks/useToast";
 import semesterApi from "@/api/semesterApi";
 
@@ -25,6 +27,7 @@ const SemesterDetail = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const { addToast } = useToast();
   const [showAddExamModal, setShowAddExamModal] = useState(false);
+  const [showBulkScoreModal, setShowBulkScoreModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   const fetchSemester = useCallback(async () => {
@@ -170,7 +173,17 @@ const SemesterDetail = () => {
                         >
                           <FontAwesomeIcon icon={faPlus} /> Thi
                         </Button>
-
+                        <Button
+                          variant="success"
+                          size="sm"
+                          className="ms-2"
+                          onClick={() => {
+                            setSelectedCourse(course);
+                            setShowBulkScoreModal(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPlus} /> N.Điểm
+                        </Button>
                         <Button
                           variant="danger"
                           size="sm"
@@ -214,6 +227,22 @@ const SemesterDetail = () => {
           addToast({
             title: "Thành công!",
             message: "Đã thêm lịch thi mới.",
+            type: "success",
+            duration: 1500,
+          });
+        }}
+      />
+      {/* Nhập điểm hàng loạt */}
+      <BulkScoreInputModal
+        show={showBulkScoreModal}
+        onClose={() => setShowBulkScoreModal(false)}
+        trainingProgramId={semester.training_program.id}
+        semesterId={semester.id}
+        course={selectedCourse}
+        onSuccess={() => {
+          addToast({
+            title: "Thành công!",
+            message: "Nhập điểm hàng loạt thành công",
             type: "success",
             duration: 1500,
           });

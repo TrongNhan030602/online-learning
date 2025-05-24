@@ -1,20 +1,19 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheckCircle,
-  faTimesCircle,
-  faEdit,
-  faTrashAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "@/hooks/useToast";
 
-import { Collapse, Card, Button } from "react-bootstrap";
+import { Collapse, Card, Button, Pagination } from "react-bootstrap";
 
 import scoreApi from "@/api/scoreApi";
+import learningResultApi from "@/api/learningResultApi";
+
 import ConfirmDialog from "@/components/Common/ConfirmDialog";
 import Loading from "@/components/common/Loading";
 import EditScoreModal from "@/components/Scores/EditScoreModal";
+import LearningResultModal from "@/components/LearningResult/LearningResultModal";
+
 import "../../../styles/scores/admin-scores.css";
 
 const AdminScores = () => {
@@ -26,6 +25,14 @@ const AdminScores = () => {
   const { addToast } = useToast();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [scoreToEdit, setScoreToEdit] = useState(null);
+  const [loadingRecalculateOverall, setLoadingRecalculateOverall] = useState(
+    {}
+  );
+  // State xem điểm tổng
+  const [showLearningResultModal, setShowLearningResultModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedProgramId, setSelectedProgramId] = useState(null);
+
   // State quản lý collapse
   const [openTP, setOpenTP] = useState({});
   const [openSemester, setOpenSemester] = useState({});
@@ -78,6 +85,17 @@ const AdminScores = () => {
   useEffect(() => {
     fetchScores();
   }, []);
+  const openLearningResultModal = (userId, programId) => {
+    setSelectedUserId(userId);
+    setSelectedProgramId(programId);
+    setShowLearningResultModal(true);
+  };
+
+  const closeLearningResultModal = () => {
+    setSelectedUserId(null);
+    setSelectedProgramId(null);
+    setShowLearningResultModal(false);
+  };
 
   const openConfirmDelete = (score) => {
     setScoreToDelete(score);
@@ -198,6 +216,31 @@ const AdminScores = () => {
     }
   };
 
+  const recalculateOverall = async (programId) => {
+    try {
+      setLoadingRecalculateOverall((prev) => ({ ...prev, [programId]: true }));
+
+      await learningResultApi.recalculateOverall(programId);
+
+      addToast({
+        title: "Thành công",
+        message: `Đã lưu điểm tổng toàn chương trình.`,
+        type: "success",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error(error);
+      addToast({
+        title: "Lỗi",
+        message: "Lưu điểm tổng toàn chương trình thất bại",
+        type: "error",
+        duration: 2000,
+      });
+    } finally {
+      setLoadingRecalculateOverall((prev) => ({ ...prev, [programId]: false }));
+    }
+  };
+
   const toggleTP = (tpId) => {
     setOpenTP((prev) => ({
       ...prev,
@@ -234,7 +277,7 @@ const AdminScores = () => {
           key={tpId}
           className="mb-4 shadow-sm"
         >
-          <Card.Header>
+          <Card.Header className="d-flex justify-content-between align-items-center">
             <Button
               variant="link"
               onClick={() => toggleTP(tpId)}
@@ -243,6 +286,18 @@ const AdminScores = () => {
               className="text-decoration-none fw-bold fs-5"
             >
               {openTP[tpId] ? "▼" : "▶"} {tpData.trainingProgramName}
+            </Button>
+            <Button
+              variant="outline-success"
+              size="sm"
+              onClick={() => recalculateOverall(tpId)}
+              disabled={loadingRecalculateOverall[tpId]}
+              className="me-2"
+              title="Lưu kết quả và tính ĐTB, GPA toàn chương trình"
+            >
+              {loadingRecalculateOverall[tpId]
+                ? "Đang cập nhật..."
+                : "Lưu kết quả và tính ĐTB, GPA chương trình"}
             </Button>
           </Card.Header>
           <Collapse in={!!openTP[tpId]}>
@@ -253,8 +308,10 @@ const AdminScores = () => {
                     <h5>Không có học kỳ</h5>
                     <ScoreTable
                       scores={tpData.noSemesterScores}
+                      programId={tpId}
                       onDelete={openConfirmDelete}
                       onEdit={handleEditScore}
+                      onViewLearningResult={openLearningResultModal}
                     />
                   </div>
                 )}
@@ -264,7 +321,7 @@ const AdminScores = () => {
                     key={semId}
                     className="mb-3 shadow-sm"
                   >
-                    <Card.Header>
+                    <Card.Header className="d-flex justify-content-between align-items-center">
                       <Button
                         variant="link"
                         onClick={() => toggleSemester(semId)}
@@ -275,13 +332,16 @@ const AdminScores = () => {
                         {openSemester[semId] ? "▼" : "▶"} {semData.semesterName}
                       </Button>
                     </Card.Header>
+
                     <Collapse in={!!openSemester[semId]}>
                       <div id={`sem-collapse-${semId}`}>
                         <Card.Body>
                           <ScoreTable
                             scores={semData.scores}
+                            programId={tpId}
                             onDelete={openConfirmDelete}
                             onEdit={handleEditScore}
+                            onViewLearningResult={openLearningResultModal}
                           />
                         </Card.Body>
                       </div>
@@ -314,160 +374,267 @@ const AdminScores = () => {
         }}
         onSave={handleSaveEdit}
       />
+      <LearningResultModal
+        show={showLearningResultModal}
+        userId={selectedUserId}
+        programId={selectedProgramId}
+        onClose={closeLearningResultModal}
+      />
     </div>
   );
 };
 
-const ScoreTable = ({ scores, onDelete, onEdit }) => {
+const ScoreTable = ({
+  scores,
+  programId,
+  onDelete,
+  onEdit,
+  onViewLearningResult,
+}) => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const scoresPerPage = 1;
+  const scoresPerPage = 2;
 
-  const filteredScores = scores.filter((score) => {
-    const searchLower = search.toLowerCase();
-
-    const userText = `${score.user.name} ${score.user.email}`.toLowerCase();
-    const courseCode = score.course.code.toLowerCase();
-    const courseTitle = score.course.title.toLowerCase();
-
-    return (
-      userText.includes(searchLower) ||
-      courseCode.includes(searchLower) ||
-      courseTitle.includes(searchLower)
-    );
+  // Gom nhóm theo học viên
+  const groupedByUser = {};
+  scores.forEach((score) => {
+    const userId = score.user.id;
+    if (!groupedByUser[userId]) {
+      groupedByUser[userId] = {
+        user: score.user,
+        courses: {},
+      };
+    }
+    // gom điểm theo môn học trong user
+    const courseId = score.course.id;
+    if (!groupedByUser[userId].courses[courseId]) {
+      groupedByUser[userId].courses[courseId] = {
+        course: score.course,
+        scoresByType: {},
+      };
+    }
+    groupedByUser[userId].courses[courseId].scoresByType[score.score_type] =
+      score;
   });
+
+  // Chuyển sang mảng và lọc theo search (tìm theo học viên hoặc môn)
+  const groupedArray = Object.values(groupedByUser).filter(
+    ({ user, courses }) => {
+      const userText = `${user.name} ${user.email}`.toLowerCase();
+      const courseText = Object.values(courses)
+        .map(({ course }) => `${course.code} ${course.title}`)
+        .join(" ")
+        .toLowerCase();
+
+      const searchLower = search.toLowerCase();
+      return userText.includes(searchLower) || courseText.includes(searchLower);
+    }
+  );
 
   const indexOfLast = currentPage * scoresPerPage;
   const indexOfFirst = indexOfLast - scoresPerPage;
-  const currentScores = filteredScores.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(filteredScores.length / scoresPerPage);
-  const getVietnameseScoreType = (type) => {
-    switch (type) {
-      case "final":
-        return "Cuối kỳ";
-      case "midterm":
-        return "Giữa kỳ";
-      case "quiz":
-        return "Kiểm tra";
-      case "assignment":
-        return "Bài tập";
-      default:
-        return type;
+  const currentUsers = groupedArray.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(groupedArray.length / scoresPerPage);
+  const getPaginationRange = (total, current) => {
+    const delta = 2; // số trang xung quanh current
+    const range = [];
+    const rangeWithDots = [];
+    let l;
+
+    for (let i = 1; i <= total; i++) {
+      if (
+        i === 1 ||
+        i === total ||
+        (i >= current - delta && i <= current + delta)
+      ) {
+        range.push(i);
+      }
     }
+
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l > 2) {
+          rangeWithDots.push("...");
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+
+    return rangeWithDots;
   };
+
+  const scoreTypes = ["quiz", "midterm", "final"];
+  const getLabel = (type) => {
+    return {
+      quiz: "Kiểm tra",
+      midterm: "Giữa kỳ",
+      final: "Cuối kỳ",
+    }[type];
+  };
+
   return (
     <div>
       <div className="d-flex justify-content-between mb-2">
-        <input
-          type="text"
-          className="form-control w-50"
-          placeholder="Tìm theo học viên, mã môn hoặc tên môn"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setCurrentPage(1);
-          }}
-        />
         <div>
-          Trang {currentPage}/{totalPages || 1}
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Tìm theo mssv hoặc email"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
+
+        <div>
+          {totalPages > 1 && (
+            <div className="d-flex justify-content-center mb-3">
+              <Pagination>
+                <Pagination.Prev
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                />
+                {getPaginationRange(totalPages, currentPage).map((page, idx) =>
+                  page === "..." ? (
+                    <Pagination.Ellipsis
+                      key={`ellipsis-${idx}`}
+                      disabled
+                    />
+                  ) : (
+                    <Pagination.Item
+                      key={page}
+                      active={page === currentPage}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page}
+                    </Pagination.Item>
+                  )
+                )}
+
+                <Pagination.Next
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                />
+              </Pagination>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="admin-scores__table-wrapper">
-        <table className="table table-bordered table-hover">
-          <thead className="table-secondary">
-            <tr>
-              <th>Học viên</th>
-              <th>Mã môn</th>
-              <th>Tên môn</th>
-              <th>Loại điểm</th>
-              <th>Điểm</th>
-              <th>Lần thi</th>
-              <th>Đã duyệt</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentScores.length > 0 ? (
-              currentScores.map((score) => (
-                <tr key={score.id}>
-                  <td>
-                    <div className="fw-bold">{score.user.name}</div>
-                    <div className="text-muted small">{score.user.email}</div>
-                  </td>
-                  <td>{score.course.code}</td>
-                  <td>{score.course.title}</td>
-                  <td>{getVietnameseScoreType(score.score_type)}</td>
-                  <td>{score.value}</td>
-                  <td>{score.attempt}</td>
-                  <td className="text-center">
-                    {score.is_accepted ? (
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        className="text-success"
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        icon={faTimesCircle}
-                        className="text-danger"
-                      />
-                    )}
-                  </td>
-                  <td className="admin-scores__table-actions text-center d-flex justify-between">
-                    <button
-                      className="btn btn-sm btn-outline-primary m-auto"
-                      onClick={() => onEdit(score)}
-                      title="Sửa"
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                    <button
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={() => onDelete(score)}
-                      title="Xoá"
-                    >
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan="8"
-                  className="text-center text-muted"
-                >
-                  Không tìm thấy học viên phù hợp.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {totalPages > 1 && (
-        <div className="d-flex justify-content-end mt-2">
-          <nav>
-            <ul className="pagination pagination-sm mb-0">
-              {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(
-                (page) => (
-                  <li
-                    key={page}
-                    className={`page-item ${
-                      currentPage === page ? "active" : ""
-                    }`}
+        {currentUsers.length === 0 ? (
+          <div>Không tìm thấy dữ liệu.</div>
+        ) : (
+          currentUsers.map(({ user, courses }) => (
+            <div
+              key={user.id}
+              className="mb-4 p-3 border rounded shadow-sm"
+            >
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <h5 className="mb-0">{user.name}</h5>
+                {onViewLearningResult && (
+                  <Button
+                    variant="outline-primary"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => onViewLearningResult(user.id, programId)}
                   >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(page)}
-                    >
-                      {page}
-                    </button>
-                  </li>
-                )
-              )}
-            </ul>
-          </nav>
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="me-2"
+                    />
+                    Xem kết quả học tập
+                  </Button>
+                )}
+              </div>
+
+              <div className="text-muted small mb-2">{user.email}</div>
+
+              <table className="table table-bordered table-hover text-center align-middle">
+                <thead className="table-secondary">
+                  <tr>
+                    <th>Mã môn</th>
+                    <th>Tên môn</th>
+                    {scoreTypes.map((type) => (
+                      <th key={type}>{getLabel(type)}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.values(courses).map(({ course, scoresByType }) => (
+                    <tr key={course.id}>
+                      <td>{course.code}</td>
+                      <td className="text-start">{course.title}</td>
+                      {scoreTypes.map((type) => {
+                        const score = scoresByType[type];
+                        return (
+                          <td key={type}>
+                            {score ? (
+                              <div>
+                                <div className="fw-bold">{score.value}</div>
+                                <div className="d-flex justify-content-center gap-1 mt-1">
+                                  <button
+                                    className="btn btn-sm btn-outline-primary"
+                                    onClick={() => onEdit(score)}
+                                    title="Sửa"
+                                  >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                  </button>
+                                  <button
+                                    className="btn btn-sm btn-outline-danger"
+                                    onClick={() => onDelete(score)}
+                                    title="Xoá"
+                                  >
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <span className="text-muted">—</span>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))
+        )}
+      </div>
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-center mt-3">
+          <Pagination>
+            <Pagination.Prev
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            />
+            {[...Array(totalPages)].map((_, idx) => (
+              <Pagination.Item
+                key={idx + 1}
+                active={idx + 1 === currentPage}
+                onClick={() => setCurrentPage(idx + 1)}
+              >
+                {idx + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            />
+          </Pagination>
         </div>
       )}
     </div>

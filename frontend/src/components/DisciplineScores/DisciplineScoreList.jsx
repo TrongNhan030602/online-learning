@@ -6,6 +6,7 @@ import {
   faArrowUp,
   faArrowDown,
   faEdit,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import DisciplineScoreModal from "./DisciplineScoreModal";
 import "../../styles/discipline-scores/discipline-score-list.css";
@@ -17,6 +18,9 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
+
   const handleSort = (key) => {
     setSortKey(key);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -24,6 +28,7 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
 
   const handleFilter = (event) => {
     setFilter(event.target.value);
+    setCurrentPage(1); // Reset về trang đầu khi filter
   };
 
   const handleUpdateClick = (item) => {
@@ -82,6 +87,14 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
       group.training_program_name.toLowerCase().includes(filter.toLowerCase())
   );
 
+  // Cắt dữ liệu phân trang
+  const paginatedScores = filteredScores.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredScores.length / itemsPerPage);
+
   return (
     <div className="discipline-score-list">
       {/* Nút quay lại */}
@@ -89,7 +102,12 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
         onClick={() => window.history.back()}
         className="back-button"
       >
-        ← Quay lại
+        <FontAwesomeIcon
+          icon={faArrowLeft}
+          style={{ marginRight: "8px" }}
+          className="icon"
+        />
+        Quay lại
       </button>
 
       <div className="discipline-score-list__filters">
@@ -151,8 +169,8 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredScores.length > 0 ? (
-            filteredScores.map((group) =>
+          {paginatedScores.length > 0 ? (
+            paginatedScores.map((group) =>
               group.scores.map((item, index) => (
                 <tr key={item.id}>
                   {index === 0 && (
@@ -173,14 +191,14 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
                     <button
                       onClick={() => onDelete(item.id)}
                       title="Xóa điểm rèn luyện"
-                      className="discipline-score__btn--delete"
+                      className="discipline-score__action-button discipline-score__action-button--delete "
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
                     <button
                       onClick={() => handleUpdateClick(item)}
                       title="Cập nhật điểm rèn luyện"
-                      className="discipline-score__btn--edit"
+                      className="discipline-score__action-button"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </button>
@@ -200,6 +218,27 @@ const DisciplineScoreList = ({ scores, onDelete, onUpdate }) => {
           )}
         </tbody>
       </table>
+
+      {/* Phân trang */}
+      <div className="pagination-controls">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          ← Trang trước
+        </button>
+        <span style={{ margin: "0 10px" }}>
+          Trang {currentPage} / {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev))
+          }
+          disabled={currentPage >= totalPages}
+        >
+          Trang sau →
+        </button>
+      </div>
 
       <DisciplineScoreModal
         isOpen={modalOpen}

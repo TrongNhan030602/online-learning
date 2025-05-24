@@ -2,8 +2,6 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const scoreTypes = ["final", "quiz", "midterm", "assignment"];
-
 const EditScoreModal = ({ show, onClose, score, onSave }) => {
   const [formData, setFormData] = useState({
     user_id: null,
@@ -12,7 +10,7 @@ const EditScoreModal = ({ show, onClose, score, onSave }) => {
     semester_id: null,
     value: "",
     score_type: "final",
-    attempt: 1,
+    // attempt ẩn, không cần lưu vào state UI
     is_accepted: false,
   });
 
@@ -25,7 +23,6 @@ const EditScoreModal = ({ show, onClose, score, onSave }) => {
         semester_id: score.semester?.id ?? null,
         value: score.value ?? "",
         score_type: score.score_type ?? "final",
-        attempt: score.attempt ?? 1,
         is_accepted: score.is_accepted ?? false,
       });
     }
@@ -39,7 +36,8 @@ const EditScoreModal = ({ show, onClose, score, onSave }) => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const payload = {
       id: score?.id,
       ...formData,
@@ -50,11 +48,13 @@ const EditScoreModal = ({ show, onClose, score, onSave }) => {
       course_id: formData.course_id ? Number(formData.course_id) : null,
       semester_id: formData.semester_id ? Number(formData.semester_id) : null,
       value: Number(formData.value),
-      attempt: Number(formData.attempt),
+      attempt: 1,
+      is_accepted: formData.is_accepted,
     };
 
     onSave(payload);
   };
+
   const scoreTypeLabels = {
     final: "Cuối kỳ",
     midterm: "Giữa kỳ",
@@ -73,8 +73,9 @@ const EditScoreModal = ({ show, onClose, score, onSave }) => {
       <Modal.Header closeButton>
         <Modal.Title>Chỉnh sửa điểm</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form>
+
+      <Form onSubmit={handleSubmit}>
+        <Modal.Body>
           <Form.Group className="mb-2">
             <Form.Label>Điểm</Form.Label>
             <Form.Control
@@ -89,31 +90,10 @@ const EditScoreModal = ({ show, onClose, score, onSave }) => {
           </Form.Group>
 
           <Form.Group className="mb-2">
-            <Form.Label>Loại điểm</Form.Label>
-            <Form.Select
-              name="score_type"
-              value={formData.score_type}
-              onChange={handleChange}
-            >
-              {scoreTypes.map((type) => (
-                <option
-                  key={type}
-                  value={type}
-                >
-                  {getScoreTypeLabel(type)}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-
-          <Form.Group className="mb-2">
-            <Form.Label>Lần thi</Form.Label>
             <Form.Control
-              type="number"
-              name="attempt"
-              value={formData.attempt}
-              onChange={handleChange}
-              min={1}
+              type="text"
+              readOnly
+              value={getScoreTypeLabel(formData.score_type)}
             />
           </Form.Group>
 
@@ -126,22 +106,23 @@ const EditScoreModal = ({ show, onClose, score, onSave }) => {
               onChange={handleChange}
             />
           </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="secondary"
-          onClick={onClose}
-        >
-          Hủy
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleSubmit}
-        >
-          Lưu
-        </Button>
-      </Modal.Footer>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={onClose}
+          >
+            Hủy
+          </Button>
+          <Button
+            variant="primary"
+            type="submit"
+          >
+            Lưu
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 };

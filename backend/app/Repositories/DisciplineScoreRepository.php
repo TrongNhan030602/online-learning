@@ -70,7 +70,6 @@ class DisciplineScoreRepository implements DisciplineScoreInterface
     public function getByStudent($userId)
     {
         try {
-            // Lấy tất cả các chương trình đào tạo của người dùng (cập nhật từ student_id → user_id)
             $studentTrainingPrograms = StudentTrainingProgram::with([
                 'disciplineScores.semester',
                 'disciplineScores.semester.trainingProgram'
@@ -78,48 +77,69 @@ class DisciplineScoreRepository implements DisciplineScoreInterface
                 ->where('user_id', $userId)
                 ->get();
 
-            // Tạo danh sách điểm rèn luyện từ tất cả các chương trình đào tạo
             $disciplineScores = $studentTrainingPrograms->flatMap(function ($program) {
                 return $program->disciplineScores->map(function ($score) use ($program) {
-                    // Mỗi điểm rèn luyện sẽ có đầy đủ thông tin về tên chương trình, học kỳ, điểm và xếp loại
                     return [
-                        'program_name' => $program->trainingProgram->name, // Tên chương trình đào tạo
-                        'program_code' => $program->trainingProgram->code, // Mã chương trình đào tạo
-                        'semester_name' => $score->semester->name, // Tên học kỳ
-                        'score' => $score->score, // Điểm
-                        'evaluation' => $score->evaluation, // Xếp loại
-                        'semester_order' => (int) filter_var($score->semester->name, FILTER_SANITIZE_NUMBER_INT) // Thứ tự học kỳ
+                        'program_name' => $program->trainingProgram->name,
+                        'program_code' => $program->trainingProgram->code,
+                        'semester_name' => $score->semester->name,
+                        'score' => $score->score,
+                        'evaluation' => $score->evaluation,
+                        'semester_order' => (int) filter_var($score->semester->name, FILTER_SANITIZE_NUMBER_INT)
                     ];
                 });
             });
 
-            // Nhóm kết quả theo tên và mã chương trình đào tạo
             $groupedResults = $disciplineScores->groupBy(function ($item) {
-                return $item['program_name'] . ' - ' . $item['program_code']; // Nhóm theo tên và mã chương trình đào tạo
+                return $item['program_name'] . ' - ' . $item['program_code'];
             });
 
-            // Sắp xếp các học kỳ trong mỗi nhóm theo thứ tự học kỳ
             $groupedResults = $groupedResults->map(function ($group) {
-                return $group->sortBy('semester_order'); // Sắp xếp theo học kỳ
+                return $group->sortBy('semester_order');
             });
 
-            // Chuyển đổi kết quả thành định dạng phù hợp với frontend
             $formattedResults = $groupedResults->map(function ($group) {
-                return $group->map(function ($item) {
+                $data = $group->map(function ($item) {
                     return [
-                        'semester' => $item['semester_name'], // Tên học kỳ
-                        'totalScore' => $item['score'], // Tổng điểm
-                        'rank' => $item['evaluation'], // Xếp loại
+                        'semester' => $item['semester_name'],
+                        'totalScore' => $item['score'],
+                        'rank' => $item['evaluation'],
                     ];
                 });
+
+                $average = $group->avg('score');
+
+                return [
+                    'averageScore' => round($average, 2),
+                    'overallRank' => $this->getDisciplineRank($average),
+                    'semesters' => $data
+                ];
             });
 
             return $formattedResults;
+
         } catch (Exception $e) {
-            // Xử lý lỗi nếu có
             throw new Exception('Lỗi khi lấy điểm rèn luyện: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Xếp loại theo điểm rèn luyện trung bình toàn khóa
+     */
+    private function getDisciplineRank($average)
+    {
+        if ($average >= 90)
+            return 'Xuất sắc';
+        if ($average >= 80)
+            return 'Tốt';
+        if ($average >= 65)
+            return 'Khá';
+        if ($average >= 50)
+            return 'Trung bình';
+        return 'Yếu';
+    }
+
+
 
 
 }

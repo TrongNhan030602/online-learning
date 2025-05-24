@@ -205,13 +205,23 @@ const AdminEnterDisciplineScores = () => {
                             />
                           </td>
                           <td>
-                            <Form.Control
-                              as="textarea"
-                              rows={1}
+                            <Form.Select
                               name={`evaluation-${student.id}`}
-                              placeholder="Đánh giá"
+                              defaultValue=""
                               required
-                            />
+                            >
+                              <option
+                                value=""
+                                disabled
+                              >
+                                -- Chọn đánh giá --
+                              </option>
+                              <option value="Xuất sắc">Xuất sắc</option>
+                              <option value="Tốt">Tốt</option>
+                              <option value="Khá">Khá</option>
+                              <option value="Trung bình">Trung bình</option>
+                              <option value="Yếu">Yếu</option>
+                            </Form.Select>
                           </td>
                           <td>
                             <Button

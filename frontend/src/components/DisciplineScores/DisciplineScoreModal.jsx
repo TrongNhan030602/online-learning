@@ -91,13 +91,24 @@ const DisciplineScoreModal = ({ isOpen, onClose, item, onUpdate }) => {
 
             <InputGroup className="mb-3">
               <InputGroup.Text>Đánh giá</InputGroup.Text>
-              <FormControl
-                type="text"
+              <select
+                className="form-select"
                 value={evaluation}
                 onChange={(e) => setEvaluation(e.target.value)}
-                placeholder="Nhập đánh giá"
                 onKeyDown={handleKeyPress}
-              />
+              >
+                <option
+                  value=""
+                  disabled
+                >
+                  -- Chọn đánh giá --
+                </option>
+                <option value="Xuất sắc">Xuất sắc</option>
+                <option value="Tốt">Tốt</option>
+                <option value="Khá">Khá</option>
+                <option value="Trung bình">Trung bình</option>
+                <option value="Yếu">Yếu</option>
+              </select>
             </InputGroup>
           </>
         ) : (

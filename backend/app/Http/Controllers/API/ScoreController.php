@@ -166,6 +166,69 @@ class ScoreController extends Controller
     }
 
 
+    // Lưu hàng loạt điểm
+
+    public function saveBulkScores(Request $request): JsonResponse
+    {
+        $request->validate([
+            'bulk_scores' => 'required|array',
+            'course_id' => 'required|integer',
+            'semester_id' => 'nullable|integer',
+            'attempt' => 'integer',
+        ]);
+
+        $bulkScores = $request->input('bulk_scores');
+        $courseId = $request->input('course_id');
+        $semesterId = $request->input('semester_id', null);
+        $attempt = $request->input('attempt', 1);
+
+        try {
+            $this->service->saveBulkScoresAndCalculateResults($bulkScores, $courseId, $semesterId, $attempt);
+
+            return response()->json([
+                'message' => 'Lưu điểm hàng loạt thành công.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lưu điểm hàng loạt.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getScoresByCourseAndProgram(Request $request): JsonResponse
+    {
+        $request->validate([
+            'training_program_id' => 'required|integer',
+            'course_id' => 'required|integer',
+            'semester_id' => 'nullable|integer',
+            'attempt' => 'integer',
+        ]);
+
+        $trainingProgramId = $request->input('training_program_id');
+        $courseId = $request->input('course_id');
+        $semesterId = $request->input('semester_id', null);
+        $attempt = $request->input('attempt', 1);
+
+        try {
+            $scores = $this->service->getScoresByCourseAndProgram($trainingProgramId, $courseId, $semesterId, $attempt);
+
+            if ($scores->isEmpty()) {
+                return response()->json([
+                    'message' => 'Không có điểm cho chương trình đào tạo và môn học này.'
+                ], 200);
+            }
+
+            return response()->json([
+                'data' => ScoreResource::collection($scores)
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Có lỗi khi lấy điểm.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     // For student
     public function getMyScores(): JsonResponse

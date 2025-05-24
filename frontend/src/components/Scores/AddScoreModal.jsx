@@ -23,7 +23,7 @@ const AddScoreModal = ({
   const [semesterId, setSemesterId] = useState("");
   const [courseId, setCourseId] = useState("");
   const [scoreValue, setScoreValue] = useState("");
-  const [scoreType, setScoreType] = useState("final");
+  const [scoreType, setScoreType] = useState("quiz");
   const [attempt, setAttempt] = useState(1);
   const [isAccepted, setIsAccepted] = useState(true);
 
@@ -35,7 +35,7 @@ const AddScoreModal = ({
       setSemesterId("");
       setCourseId("");
       setScoreValue("");
-      setScoreType("final");
+      setScoreType("quiz");
       setAttempt(1);
       setIsAccepted(true);
       setError(null);
@@ -216,7 +216,7 @@ const AddScoreModal = ({
                   >
                     <option value="final">Cuối kỳ</option>
                     <option value="midterm">Giữa kỳ</option>
-                    <option value="other">Khác</option>
+                    <option value="quiz">Thường xuyên</option>
                   </Form.Select>
                 </Form.Group>
               </Col>

@@ -60,12 +60,18 @@ class ScoreService
         return $this->repository->getLatestAttemptScore($userId, $courseId);
     }
 
-    public function calculateAverageScore($userId)
+    public function saveBulkScoresAndCalculateResults(array $bulkScores, int $courseId, ?int $semesterId = null, int $attempt = 1)
     {
-        return $this->repository->calculateAverageScore($userId);
+        return $this->repository->saveBulkScoresAndCalculateResults($bulkScores, $courseId, $semesterId, $attempt);
     }
     public function deleteScore($id)
     {
         return $this->repository->delete($id);
     }
+
+    public function getScoresByCourseAndProgram(int $trainingProgramId, int $courseId, ?int $semesterId = null, int $attempt = 1)
+    {
+        return $this->repository->getScoresByCourseAndProgram($trainingProgramId, $courseId, $semesterId, $attempt);
+    }
+
 }

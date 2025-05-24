@@ -16,5 +16,7 @@ interface ScoreRepositoryInterface
     // Mới thêm
     public function getAcceptedScoresByUser($userId);
     public function getLatestAttemptScore($userId, $courseId);
-    public function calculateAverageScore($userId);
+    public function saveBulkScoresAndCalculateResults(array $bulkScores, int $courseId, ?int $semesterId = null, int $attempt = 1);
+    // API lấy điểm theo chương trình, môn, học kỳ (nullable), attempt
+    public function getScoresByCourseAndProgram(int $trainingProgramId, int $courseId, ?int $semesterId = null, int $attempt = 1);
 }

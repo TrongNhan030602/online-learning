@@ -23,6 +23,7 @@ use App\Http\Controllers\API\ProgramCourseController;
 use App\Http\Controllers\API\LearningResultController;
 use App\Http\Controllers\API\DisciplineScoreController;
 use App\Http\Controllers\API\TrainingProgramController;
+use App\Http\Controllers\API\CourseScoreWeightController;
 use App\Http\Controllers\API\ReExamRegistrationController;
 use App\Http\Controllers\API\TrainingProgramBannerController;
 use App\Http\Controllers\API\StudentTrainingProgramController;
@@ -324,6 +325,8 @@ Route::prefix('scores')->group(function () {
     Route::put('/{id}', [ScoreController::class, 'update']);
     Route::patch('/{id}', [ScoreController::class, 'update']);
     Route::delete('/{id}', [ScoreController::class, 'destroy']);
+    Route::post('/bulk-save', [ScoreController::class, 'saveBulkScores']);
+    Route::get('/by-program-course', [ScoreController::class, 'getScoresByCourseAndProgram']);
 
     // Lấy bảng điểm của học viên theo studentId
     Route::get('/student/{studentId}', [ScoreController::class, 'getStudentScores']);
@@ -339,30 +342,31 @@ Route::prefix('scores')->group(function () {
 //API KQHT
 
 Route::prefix('learning-results')->group(function () {
-    // Lấy danh sách kết quả học tập (có thể dùng filter: program_id, student_training_program_id, semester_id)
+    // CRUD kết quả học tập
     Route::get('/', [LearningResultController::class, 'index']);
-
-    // Lấy chi tiết kết quả học tập theo ID
-    Route::get('/{id}', [LearningResultController::class, 'show']);
-
-    // Tạo mới kết quả học tập
-    Route::post('/', [LearningResultController::class, 'store']);
-
-    // Cập nhật kết quả học tập
-    Route::put('/{id}', [LearningResultController::class, 'update']);
-    Route::patch('/{id}', [LearningResultController::class, 'update']); // Optional: dùng PATCH nếu cần
-
-    // Xóa kết quả học tập
     Route::delete('/{id}', [LearningResultController::class, 'destroy']);
 
-    // Lấy kết quả học tập theo học viên, chương trình và học kỳ
+    // Truy vấn kết quả học tập nâng cao
     Route::get('/by-student', [LearningResultController::class, 'getByStudent']);
+    Route::get('/me', [LearningResultController::class, 'getLearningResultsForLoggedInStudent'])->middleware('auth:api');
+    Route::get('/by-program-user', [LearningResultController::class, 'getByProgramAndUser']);
+    Route::get('/by-program', [LearningResultController::class, 'getByProgram']);
 
-    // Tính và cập nhật điểm trung bình
+    // Tính toán và cập nhật
     Route::post('/calculate-average', [LearningResultController::class, 'calculateAverageScore']);
+    Route::post('/calculate-gpa', [LearningResultController::class, 'calculateGPA']);
+    Route::post('/recalculate', [LearningResultController::class, 'recalculate']);
+    Route::post('/recalculate-overall', [LearningResultController::class, 'recalculateOverall']);
 
-    // Báo cáo tổng hợp kết quả học tập
+    // Phân loại học lực
+    Route::post('/classify', [LearningResultController::class, 'classify']);
+
+    // Báo cáo
     Route::get('/report', [LearningResultController::class, 'report']);
+
+    // Get by Id
+    Route::get('/{id}', [LearningResultController::class, 'show']);
+
 });
 // API thi lại
 
@@ -392,7 +396,18 @@ Route::prefix('notifications')->middleware('auth:api')->group(function () {
     Route::get('/training-program/{trainingProgramId}', [NotificationController::class, 'getByTrainingProgram']);
 });
 
+// API Trọng số điểm của môn
+Route::prefix('course-score-weights')->group(function () {
+    Route::get('/', [CourseScoreWeightController::class, 'index']);                  // GET all
+    Route::get('/{id}', [CourseScoreWeightController::class, 'show']);               // GET by ID
+    Route::post('/', [CourseScoreWeightController::class, 'store']);                 // POST create
+    Route::put('/{id}', [CourseScoreWeightController::class, 'update']);             // PUT update
+    Route::patch('/{id}', [CourseScoreWeightController::class, 'update']);           // PATCH update
+    Route::delete('/{id}', [CourseScoreWeightController::class, 'destroy']);         // DELETE
 
+    // Lấy tất cả trọng số theo course_id
+    Route::get('/course/{courseId}', [CourseScoreWeightController::class, 'getByCourse']);
+});
 
 
 
@@ -444,17 +459,6 @@ Route::prefix('student')->middleware('auth:api')->group(function () {
 
 
 
-// Chat
-Route::middleware('auth:api')->group(function () {
-    // Lấy tin nhắn của người dùng hiện tại
-    Route::get('/messages', [ChatController::class, 'index']);
-
-    // Gửi tin nhắn
-    Route::post('/messages', [ChatController::class, 'sendMessage']);
-
-    // Lấy danh sách học viên đã từng chat với Admin
-    Route::get('/students', [ChatController::class, 'getStudentsWhoChatted']);
-});
 
 
 

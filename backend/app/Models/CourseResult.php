@@ -1,40 +1,22 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Score extends Model
+class CourseResult extends Model
 {
     use HasFactory;
 
-    protected $table = 'scores';
-
     protected $fillable = [
-        'user_id',
         'student_training_program_id',
         'course_id',
         'semester_id',
-        'score_type',//'final','quiz','midterm',
-        'value',
-        'attempt',
-        'is_accepted',
+        'average_score',
+        'classification',
     ];
-
-    protected $casts = [
-        'value' => 'float',
-        'is_accepted' => 'boolean',
-    ];
-
 
     // Quan hệ
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
     public function studentTrainingProgram()
     {
         return $this->belongsTo(StudentTrainingProgram::class, 'student_training_program_id');

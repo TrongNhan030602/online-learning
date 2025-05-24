@@ -19,6 +19,8 @@ import semesterApi from "../../../api/semesterApi";
 import BannerModal from "../../../components/TrainingPrograms/Banners/BannerModal";
 import CourseSelectorModal from "../../../components/TrainingPrograms/Courses/CourseSelectorModal";
 import AddExamScheduleModal from "../../../components/ExamSchedule/AddExamScheduleModal";
+import BulkScoreInputModal from "../../../components/Scores/BulkScoreInputModal";
+
 import SemesterModal from "../../../components/Semester/SemesterModal";
 import ConfirmDialog from "../../../components/Common/ConfirmDialog";
 
@@ -52,6 +54,10 @@ const TrainingProgramDetail = () => {
   // State thêm lịch thi
   const [showAddExamModal, setShowAddExamModal] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
+  // State nhập điểm
+  const [showBulkScoreModal, setShowBulkScoreModal] = useState(false);
+  const [selectedCourseForBulkScore, setSelectedCourseForBulkScore] =
+    useState(null);
 
   const fetchProgram = useCallback(async () => {
     try {
@@ -245,7 +251,7 @@ const TrainingProgramDetail = () => {
             icon={faUsers}
             className="mx-1"
           />
-          Quản lý học viên & Nhập điểm
+          Quản lý học viên
         </Button>
       </div>
       {/* Program Semesters */}
@@ -371,6 +377,17 @@ const TrainingProgramDetail = () => {
                     >
                       <FontAwesomeIcon icon={faTrashAlt} />
                     </button>
+                    <button
+                      className="btn btn-sm btn-outline-success ms-2"
+                      title="Nhập điểm học tập"
+                      onClick={() => {
+                        setSelectedCourseForBulkScore(course.course);
+                        setShowBulkScoreModal(true);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faClipboardList} />
+                      &nbsp;Nhập điểm hàng loạt
+                    </button>
                   </li>
                 );
               })}
@@ -416,6 +433,25 @@ const TrainingProgramDetail = () => {
           addToast({
             title: "Thành công!",
             message: "Đã thêm lịch thi mới.",
+            type: "success",
+            duration: 1500,
+          });
+        }}
+      />
+      {/* Modal nhập điểm */}
+      <BulkScoreInputModal
+        show={showBulkScoreModal}
+        onClose={() => {
+          setShowBulkScoreModal(false);
+          setSelectedCourseForBulkScore(null);
+        }}
+        trainingProgramId={id}
+        semesterId={null} // như yêu cầu semesterId = null
+        course={selectedCourseForBulkScore}
+        onSuccess={() => {
+          addToast({
+            title: "Thành công!",
+            message: "Nhập điểm hàng loạt thành công",
             type: "success",
             duration: 1500,
           });
