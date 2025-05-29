@@ -2,7 +2,7 @@
 
 /* Định nghĩa các biến CSS chung */
 :root {
-  --primary-font: "IBM Plex Sans", "Arial", sans-serif;
+  --primary-font: "Segoe UI", Tahoma, Geneva, Verdana, "Arial", sans-serif;
   --heading-font: "Montserrat", sans-serif;
   --primary-color: #0983e8;
   --primary-hover: #0f69b3;

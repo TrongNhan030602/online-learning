@@ -1,0 +1,172 @@
+.sticky-contacts {
+  position: fixed;
+  bottom: 30px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  z-index: 999;
+}
+
+/* Nút toggle (group-icon) */
+.sticky-contacts__button--toggle {
+  width: 56px;
+  height: 56px;
+  background: radial-gradient(circle at center, #f0f0f0, #cccccc);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: shake-toggle 3s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
+  z-index: 20;
+  outline: none;
+  border: none;
+}
+
+/* Hover toggle: tăng sáng, bóng */
+.sticky-contacts__button--toggle:hover {
+  background: radial-gradient(circle at center, #ffffff, #dddddd);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  transform: scale(1.15);
+}
+.sticky-contacts__button--toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+.sticky-contacts.expanded .sticky-contacts__button--toggle {
+  transform: rotate(45deg) scale(1.15);
+  animation-play-state: paused;
+}
+
+.sticky-contacts.expanded .sticky-contacts__button--toggle:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  transform: rotate(45deg) scale(1.2);
+}
+
+.sticky-contacts__button {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  cursor: pointer;
+  overflow: visible;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: transparent;
+  z-index: 10;
+}
+
+.sticky-contacts__button:hover {
+  transform: scale(1.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.sticky-contacts__icon {
+  display: block;
+  height: 34px;
+  object-fit: contain;
+  image-rendering: crisp-edges;
+  border-radius: 50%;
+  background: transparent;
+  overflow: visible;
+}
+
+/* Background gradient for phone, messenger, zalo */
+.sticky-contacts__button--phone {
+  background: radial-gradient(circle at center, #00b14f, #006838);
+  animation: shake-soft 3s ease-in-out infinite;
+}
+
+.sticky-contacts__button--messenger {
+  background: radial-gradient(circle at center, #0084ff, #0052cc);
+  animation: shake-soft 3s ease-in-out infinite;
+}
+
+.sticky-contacts__button--zalo {
+  background: radial-gradient(circle at center, #0068ff, #003ea8);
+  animation: scale-pulse 2.5s ease-in-out infinite;
+}
+
+/* Toggle button background */
+.sticky-contacts__button--toggle {
+  background: radial-gradient(circle at center, #f0f0f0, #cccccc);
+  animation: shake-toggle 3s ease-in-out infinite;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Animations */
+@keyframes shake-soft {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  20% {
+    transform: translate(-1.5px, 1.5px) rotate(-1.2deg);
+  }
+  40% {
+    transform: translate(1.5px, -1.5px) rotate(1.2deg);
+  }
+  60% {
+    transform: translate(-1px, 1px) rotate(-0.6deg);
+  }
+  80% {
+    transform: translate(1px, -1px) rotate(0.6deg);
+  }
+}
+
+@keyframes scale-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes shake-toggle {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  25% {
+    transform: translate(-2px, 0) rotate(-3deg);
+  }
+  50% {
+    transform: translate(2px, 0) rotate(3deg);
+  }
+  75% {
+    transform: translate(-1px, 0) rotate(-1.5deg);
+  }
+}
+
+/* Ẩn 3 icon mặc định */
+.sticky-contacts > a {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Khi mở, hiện 3 icon trên */
+.sticky-contacts.expanded > a {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Hiệu ứng delay xuất hiện từng icon (tuần tự) */
+.sticky-contacts.expanded > a:nth-child(3) {
+  transition-delay: 0.05s;
+}
+.sticky-contacts.expanded > a:nth-child(2) {
+  transition-delay: 0.15s;
+}
+.sticky-contacts.expanded > a:nth-child(1) {
+  transition-delay: 0.25s;
+}

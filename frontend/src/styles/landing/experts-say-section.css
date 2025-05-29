@@ -1,0 +1,238 @@
+.experts {
+  position: relative;
+  padding: 40px 0;
+  background: url("../../assets//img/landing/bg-session-chuyen-gia.webp")
+    center/cover no-repeat;
+  z-index: 0;
+}
+
+.experts::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 66, 133, 0.85); /* Lớp phủ xanh dương đậm */
+  z-index: -1;
+}
+
+.experts__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.experts__title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #ffd700;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 14px;
+  overflow: hidden;
+}
+
+/* Vạch gạch chân ánh sáng */
+.experts__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #ffc107 0%, #fffacd 50%, #ffc107 100%);
+  border-radius: 2px;
+  opacity: 0.75;
+  box-shadow: 0 0 4px 1px #fff8dc33 inset;
+}
+
+/* Viên bi sáng lăn ngang */
+.experts__title::before {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fffacd;
+  box-shadow: 0 0 8px 4px #fff8dc88;
+  animation: lightDotSlideSuccess 5s ease-in-out infinite alternate;
+}
+
+/* Animation cho viên bi */
+@keyframes lightDotSlideSuccess {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    left: calc(100% - 10px);
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 10px);
+    opacity: 0;
+  }
+}
+
+.experts__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.experts__card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  gap: 16px;
+  min-height: 96px;
+}
+
+.experts__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+.experts__info {
+  flex: 1;
+  text-align: right;
+  padding-right: 12px;
+}
+
+.experts__info-quote {
+  font-style: italic;
+  font-size: 0.925rem;
+  line-height: 1.4;
+  color: #f5f5f5;
+  margin-bottom: 4px;
+  position: relative;
+  padding-right: 18px;
+}
+
+.experts__info-quote::before {
+  content: "“";
+  font-size: 1.4rem;
+  color: #ffc107;
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 1;
+}
+
+.experts__info-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.experts__info-title {
+  font-size: 0.85rem;
+  color: #ddd;
+  margin: 0;
+  text-align: right;
+}
+
+.experts__avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.experts__card:hover .experts__avatar {
+  transform: scale(1.03);
+}
+/* Tablet: từ 768px đến 1024px */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .experts__cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 0 20px;
+  }
+
+  .experts__card {
+    padding: 14px 16px;
+    min-height: 80px;
+  }
+
+  .experts__avatar {
+    width: 72px;
+    height: 72px;
+    margin-left: auto;
+  }
+
+  .experts__info {
+    padding-right: 0;
+  }
+
+  .experts__info-quote {
+    font-size: 0.85rem;
+  }
+
+  .experts__info-name {
+    font-size: 0.85rem;
+  }
+
+  .experts__info-title {
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile: dưới 768px */
+@media (max-width: 767px) {
+  .experts__cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 20px;
+  }
+  .experts__title {
+    font-size: 2.2rem;
+  }
+  .experts__card {
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+    border-radius: 24px;
+    padding: 20px;
+    min-height: auto;
+  }
+
+  .experts__info {
+    text-align: center;
+    padding-right: 0;
+  }
+
+  .experts__info-quote {
+    padding-right: 0;
+  }
+
+  .experts__info-quote::before {
+    display: none;
+  }
+
+  .experts__avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 0 12px 0; /* căn giữa theo flex-direction cột */
+    border-width: 2px;
+    margin-left: 0;
+  }
+}

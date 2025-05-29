@@ -41,7 +41,6 @@ const LandingRoute = () => {
   return (
     <Routes>
       <Route element={<LandingLayout />}>
-        {/* Các trang con sẽ được render ở đây */}
         <Route
           index
           element={<LandingPage />}

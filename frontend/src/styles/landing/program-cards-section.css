@@ -1,0 +1,212 @@
+.program-cards {
+  position: relative;
+  z-index: 1;
+  padding: 40px 20px 80px 20px;
+  background: url("../../assets/img/landing/bg-session-ctdt.jpg") center/cover
+    no-repeat;
+  text-align: center;
+}
+.program-cards::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(4, 4, 81, 0.8);
+  z-index: -1;
+}
+
+.program-cards__title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #ffd700;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 14px;
+  overflow: hidden;
+}
+
+/* Vạch gạch chân */
+.program-cards__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #ffc107 0%, #fffacd 50%, #ffc107 100%);
+  border-radius: 2px;
+  opacity: 0.75;
+  box-shadow: 0 0 4px 1px #fff8dc33 inset;
+}
+
+/* Viên bi tròn lăn trên vạch */
+.program-cards__title::before {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fffacd;
+  box-shadow: 0 0 8px 4px #fff8dc88;
+  animation: lightDotSlideSuccess 5s ease-in-out infinite alternate;
+}
+
+/* Animation viên bi lăn */
+@keyframes lightDotSlideSuccess {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    left: calc(100% - 10px);
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 10px);
+    opacity: 0;
+  }
+}
+
+.program-cards__container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.program-card-link {
+  display: block;
+  flex: 0 1 calc(20% - 24px);
+  max-width: 260px;
+  border-radius: 6px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.program-card-link:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+  z-index: 10;
+}
+
+.program-card {
+  background-color: transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 292px;
+  position: relative;
+}
+
+.program-card__title {
+  height: 98px;
+  background: linear-gradient(135deg, #76a0df, #2171c4);
+  font-size: 24px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #fff;
+  border-bottom: 4px solid #07568e;
+  padding: 16px;
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+.program-card-link:hover .program-card__title {
+  box-shadow: 0 8px 20px rgba(33, 113, 196, 0.7);
+}
+
+.program-card__icon {
+  display: block;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.program-card__image {
+  height: calc(286px - 80px);
+  width: 100%;
+  top: -8px;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+  border-radius: 0 0 12px 12px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.program-card-link:hover .program-card__image {
+  transform: scale(1.05);
+  filter: brightness(1.15);
+}
+
+/* ----- Tablet: 3 card / hàng, 2 xuống căn giữa ----- */
+@media (max-width: 1000px) {
+  .program-card-link {
+    flex: 0 1 calc(33.33% - 20px);
+    max-width: 200px;
+  }
+
+  .program-card {
+    height: 250px;
+  }
+
+  .program-card__title {
+    height: 70px;
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .program-card__image {
+    height: calc(250px - 70px + 8px);
+  }
+}
+
+/* ----- Mobile: 1 card mỗi hàng ----- */
+@media (max-width: 480px) {
+  .program-cards__container {
+    gap: 60px;
+  }
+  .program-cards__title {
+    font-size: 2.2rem;
+  }
+  .program-card-link {
+    flex: 0 1 100%;
+    max-width: 100%;
+  }
+  .program-card {
+    height: auto;
+  }
+  .program-card__title {
+    height: auto;
+    font-size: 1.2rem;
+    padding: 12px;
+  }
+  .program-card__image {
+    position: static;
+    top: 0;
+    height: auto;
+    border-radius: 0 0 12px 12px;
+  }
+}

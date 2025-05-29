@@ -1,14 +1,19 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Link } from "react-router-dom"; // Import Link từ react-router-dom
-import slide1 from "@/assets/img/landing/landing-slider1.jpg";
-import slide2 from "@/assets/img/landing/landing-slider2.jpg";
+import { Link } from "react-router-dom";
+// import slide1 from "@/assets/img/landing/landing-slider1.jpg";
+// import slide2 from "@/assets/img/landing/landing-slider1.jpg";
+import slide1 from "@/assets/img/landing/landing-slider3.jpg";
+import slide2 from "@/assets/img/landing/landing-slider3.jpg";
+import slide3 from "@/assets/img/landing/landing-slider3.jpg";
+// import slide2 from "@/assets/img/landing/landing-slider2.jpg";
 import "../../../styles/landing/hero-section/hero-slider.css";
 
 const slides = [
   { id: 1, image: slide1, link: "#" },
   { id: 2, image: slide2, link: "#" },
+  { id: 3, image: slide3, link: "#" },
 ];
 
 const HeroSlider = () => {

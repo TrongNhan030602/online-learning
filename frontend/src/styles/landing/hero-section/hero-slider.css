@@ -1,35 +1,38 @@
+/* Vùng slider chính */
 .hero-slider {
   width: 100%;
-  padding-top: 90px;
+  height: 100%;
   position: relative;
-  background-color: #000;
+  overflow: hidden;
   z-index: 1;
+  margin: 0;
+  line-height: 0;
+  padding: 0;
 }
 
-/* Slide wrapper tự động cao theo nội dung (ảnh) */
+/* Slide wrapper */
 .hero-slider__slide {
-  position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  z-index: 1;
+  height: auto;
 }
 
+/* Ảnh trong slider */
 .hero-slider__image {
   width: 100%;
-  height: 500px;
+  height: 100%;
   object-fit: cover;
   transition: transform 1.5s ease;
   will-change: transform;
-  background-size: cover;
+  display: block;
+  line-height: 0;
 }
 
-.slick-active .hero-slider__image {
-  transform: scale(1.02);
-}
-/* Vị trí của dots (nằm dưới slider) */
+/* Dots (pagination) */
 .hero-slider .slick-dots {
   position: absolute;
   bottom: 20px;
@@ -43,33 +46,56 @@
 }
 
 .hero-slider .slick-dots li button {
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background-color: rgba(106, 104, 104, 0.5);
-  border: 1px solid;
+  border: none;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Ẩn mặc định */
 .hero-slider .slick-dots li button::before {
   display: none;
 }
 
 .hero-slider .slick-dots li.slick-active button {
-  background-color: #02b29c;
-  transform: scale(1.3);
+  background-color: #fec232;
+  transform: scale(1.2);
 }
+
 .hero-slider .slick-dots li button:hover {
   background-color: #fafafa;
-  border: 1px solid #dada;
   transform: scale(1.1);
 }
 
+.hero-slider .slick-slide {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
+.hero-slider .slick-slide.slick-cloned {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.9;
+}
+
+.hero-slider .slick-list {
+  overflow: hidden !important;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .hero-slider__image {
-    width: 100%;
+  .hero-section {
     height: auto;
+  }
+
+  .hero-slider {
+    height: 100%;
+  }
+
+  .hero-slider .slick-dots {
+    bottom: 12px;
   }
 }

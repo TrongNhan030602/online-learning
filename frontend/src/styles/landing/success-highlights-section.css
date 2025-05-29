@@ -1,0 +1,167 @@
+.success-highlights {
+  position: relative;
+  background-image: url("../../assets/img/landing/bg-session-dau-an-thanh-cong.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 40px 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Overlay tối */
+.success-highlights::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(5 90 192 / 65%);
+  z-index: 0;
+}
+
+.success-highlights__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.success-highlights__title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #ffd700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 14px;
+  overflow: hidden;
+}
+
+/* Gạch sáng */
+.success-highlights__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #ffc107 0%, #fffacd 50%, #ffc107 100%);
+  border-radius: 2px;
+  opacity: 0.75;
+  box-shadow: 0 0 4px 1px #fff8dc33 inset;
+}
+
+/* Bi sáng */
+.success-highlights__title::before {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fffacd;
+  box-shadow: 0 0 8px 4px #fff8dc88;
+  animation: lightDotSlideSuccess 5s ease-in-out infinite alternate;
+}
+
+/* Animation */
+@keyframes lightDotSlideSuccess {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    left: calc(100% - 10px);
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 10px);
+    opacity: 0;
+  }
+}
+
+.success-highlights__description {
+  font-size: 1.2rem;
+  color: #ffffffcc;
+  max-width: 700px;
+  margin: 0 auto 50px auto;
+  line-height: 1.6;
+}
+
+.success-highlights__columns {
+  column-count: 5;
+  column-gap: 12px;
+}
+
+.success-highlights__item {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.success-highlights__item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.success-highlights__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 0;
+  transition: transform 0.4s ease;
+}
+
+.success-highlights__item:hover img {
+  transform: scale(1.05);
+}
+
+/* Responsive: điều chỉnh cột theo độ rộng màn hình */
+@media (max-width: 1200px) {
+  .success-highlights__columns {
+    column-count: 4;
+  }
+}
+
+@media (max-width: 992px) {
+  .success-highlights__columns {
+    column-count: 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .success-highlights__columns {
+    column-count: 2;
+  }
+
+  .success-highlights {
+    padding: 60px 0;
+  }
+
+  .success-highlights__title {
+    font-size: 2.2rem;
+  }
+
+  .success-highlights__description {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .success-highlights__columns {
+    column-count: 1;
+  }
+}
