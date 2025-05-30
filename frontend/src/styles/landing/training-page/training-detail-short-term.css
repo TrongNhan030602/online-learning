@@ -1,0 +1,116 @@
+.short-term {
+  padding: 4rem 1.5rem 5rem;
+  background: #f9f9f9;
+  color: #2d2d2d;
+  max-width: 1200px;
+
+  margin: 0 auto;
+  position: relative;
+  top: 90px;
+}
+
+/* Tiêu đề chính */
+.short-term__title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #b8860b;
+  position: relative;
+}
+
+.short-term__title::after {
+  content: "";
+  width: 70px;
+  height: 4px;
+  background: linear-gradient(90deg, #b8860b, #ffd700);
+  display: block;
+  margin: 0.75rem auto 0;
+  border-radius: 4px;
+}
+
+/* Mô tả đầu và kết */
+.short-term__intro,
+.short-term__cta {
+  font-size: 1.125rem;
+  color: #555;
+  max-width: 850px;
+  text-align: center;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+/* Tiêu đề phụ */
+.short-term__subtitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #b8860b;
+  margin: 3rem 0 1.5rem;
+  text-align: center;
+}
+
+/* Danh sách chứng chỉ dạng lưới */
+.short-term__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Mỗi card chứng chỉ */
+.short-term__card {
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  padding: 1.2rem 1.5rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: all 0.25s ease;
+}
+
+.short-term__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.short-term__index {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #b8860b;
+  flex-shrink: 0;
+}
+
+.short-term__name {
+  font-size: 1rem;
+  color: #2c2c2c;
+  line-height: 1.5;
+}
+
+/* Lợi ích đặc điểm nổi bật */
+.short-term__benefits {
+  list-style: none;
+  padding-left: 0;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #333;
+}
+
+.short-term__benefits li {
+  position: relative;
+  padding-left: 1.75em;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.short-term__benefits li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: #00b894;
+  font-weight: bold;
+  font-size: 1.1rem;
+}

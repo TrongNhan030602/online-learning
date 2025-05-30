@@ -18,7 +18,7 @@ const StudentNotifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await notificationApi.getAll();
+        const res = await notificationApi.getMyNotifications();
         setNotifications(res.data.data);
       } catch (err) {
         console.error(err);

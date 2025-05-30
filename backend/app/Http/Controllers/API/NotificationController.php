@@ -44,8 +44,47 @@ class NotificationController extends Controller
         }
     }
 
+    public function getAllNotifications()
+    {
+        try {
+            $notifications = $this->service->getAllNotifications();
 
-    public function index(Request $request)
+            if (empty($notifications)) {
+                return response()->json([
+                    'message' => 'Không có thông báo nào.'
+                ], 404);
+            }
+
+            return response()->json([
+                'data' => $notifications
+            ]);
+        } catch (Exception $e) {
+            Log::error('Lỗi khi lấy tất cả thông báo: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Có lỗi xảy ra khi lấy thông báo.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'type' => 'nullable|string|in:announcement,exam,reminder',
+        ]);
+
+        $updatedNotification = $this->service->updateNotification($id, $validated);
+
+        if (!$updatedNotification) {
+            return response()->json(['message' => 'Không tìm thấy thông báo'], 404);
+        }
+
+        return response()->json(['data' => $updatedNotification]);
+    }
+
+    public function getUserNotifications(Request $request)
     {
         try {
             $userId = $request->user()->id;

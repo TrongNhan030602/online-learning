@@ -8,7 +8,7 @@ const AdminLayout = () => {
 
   // Định nghĩa tiêu đề cho các route
   const routeTitles = {
-    "/admin": "Dashboard",
+    // "/admin": "Dashboard",
     "/admin/users": "Quản lý người dùng",
     "/admin/courses": "Quản lý môn học",
     "/admin/training-programs": "Quản lý CTĐT",
@@ -18,7 +18,8 @@ const AdminLayout = () => {
     "/admin/re-exam-registrations": "Duyệt thi lại",
     "/admin/faqs": "Quản lý FAQs",
     "/admin/blogs": "Quản lý blog",
-    "/admin/progress": "Quản lý tiến độ",
+    "/admin/notifications": "Quản lý thông báo",
+    // "/admin/progress": "Quản lý tiến độ",
   };
 
   // Lấy tiêu đề phù hợp với phần đầu của URL

@@ -24,14 +24,14 @@
 .profile-tab__item {
   display: flex;
   align-items: center;
-  background: var(--bg-light);
+  background: var(--primary-color);
   padding: 10px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
 }
 
 .profile-tab__icon {
-  color: var(--primary-color);
+  color: var(--text-white);
   font-size: 16px;
   margin-right: 10px;
 }

@@ -1,0 +1,104 @@
+.admin-notifications {
+  padding: 2rem 0;
+}
+
+.admin-notifications__title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+.admin-notifications__btn--primary {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 22px;
+}
+.admin-notifications__btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.admin-notifications__btn:hover {
+  filter: brightness(1.05);
+}
+.admin-notifications__form {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+}
+
+.admin-notifications__form-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+.admin-notifications__list-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.admin-notifications__table {
+  font-size: 0.95rem;
+}
+
+.admin-notifications__table th,
+.admin-notifications__table td {
+  vertical-align: middle;
+}
+
+.admin-notifications__table tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.2s ease;
+}
+
+/* Button nhỏ trong table */
+.admin-notifications__table button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Badge style */
+.badge {
+  text-transform: capitalize;
+  font-size: 0.85rem;
+}
+
+/* Form controls cho edit inline */
+.admin-notifications__table input,
+.admin-notifications__table textarea,
+.admin-notifications__table select {
+  font-size: 0.9rem;
+}
+
+/* Pagination buttons */
+.admin-notifications .btn {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 0.5rem;
+  font-size: 0.9rem;
+  margin: 4px 8px;
+}
+
+/* Alert margin */
+.admin-notifications > .alert {
+  margin-bottom: 1.5rem;
+}

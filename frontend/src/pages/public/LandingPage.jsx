@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import HeroSection from "@/components/Landing/HeroSection/HeroSection";
 import ProgramCardsSection from "@/components/Landing/ProgramCardsSection";
 import SuccessHighlightsSection from "@/components/Landing/SuccessHighlightsSection";
@@ -12,18 +14,51 @@ import RecruitmentSection from "@/components/Landing/RecruitmentSection";
 import "../../styles/Landing/landing-page.css";
 
 const LandingPage = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100); // delay để chắc chắn phần tử đã được render
+      }
+    }
+  }, [location]);
   return (
     <div className="landing">
-      <HeroSection />
-      <ProgramCardsSection />
-      <SuccessHighlightsSection />
-      <StudentProjectsSection />
-      <TeachersSliderSection />
-      <Testimonials />
-      <NewsSection />
-      <PartnersSection />
-      <ExpertsSaySection />
-      <RecruitmentSection />
+      <div id="hero">
+        <HeroSection />
+      </div>
+      <div id="programs">
+        <ProgramCardsSection />
+      </div>
+      <div id="success">
+        <SuccessHighlightsSection />
+      </div>
+      <div id="projects">
+        <StudentProjectsSection />
+      </div>
+      <div id="teachers">
+        <TeachersSliderSection />
+      </div>
+      <div id="testimonials">
+        <Testimonials />
+      </div>
+      <div id="news">
+        <NewsSection />
+      </div>
+      <div id="partners">
+        <PartnersSection />
+      </div>
+      <div id="experts">
+        <ExpertsSaySection />
+      </div>
+      <div id="recruitment">
+        <RecruitmentSection />
+      </div>
       <StickyContactButtons />
     </div>
   );

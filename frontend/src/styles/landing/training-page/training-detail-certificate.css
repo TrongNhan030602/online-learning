@@ -1,47 +1,79 @@
 .certificate {
-  padding: 120px 20px;
-  background: #ffffff;
-  color: #333;
-  max-width: 1000px;
-  margin: 0 auto;
+  padding: 3rem 1rem 4rem 1rem;
+  position: relative;
+  top: 90px;
+  background: #fff;
+  z-index: 1;
+  max-width: 1200px;
+  margin-bottom: 3rem;
   text-align: center;
 }
 
 .certificate__title {
   font-size: 2.6rem;
-  font-weight: bold;
-  color: #113f73;
+  font-weight: 800;
+  color: #b8860b; /* vàng đồng đậm */
   margin-bottom: 20px;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.certificate__title::after {
+  content: "";
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #b8860b, #ffd700);
+  display: block;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
 }
 
 .certificate__desc {
   font-size: 1.1rem;
   margin-bottom: 30px;
-  color: #555;
+  color: #444;
+  line-height: 1.7;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.certificate__subtitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #b8860b;
+  margin: 40px 0 20px;
+  border-bottom: 2px solid #b8860b;
+  padding-bottom: 0.3rem;
+  display: inline-block;
 }
 
 .certificate__list {
   list-style: none;
   padding-left: 0;
-  font-size: 1rem;
-  color: #333;
+  font-size: 1.05rem;
+  color: #444;
   line-height: 1.8;
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
   text-align: left;
 }
 
 .certificate__list li {
   position: relative;
-  padding-left: 28px;
-  margin-bottom: 14px;
+  padding-left: 32px;
+  margin-bottom: 16px;
 }
 
 .certificate__list li::before {
   content: "✔";
   position: absolute;
   left: 0;
-  color: #00b894;
+  top: 0;
+  color: #b8860b;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
@@ -49,15 +81,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
-  margin-top: 40px;
+  gap: 32px;
+  margin-top: 50px;
 }
 
 .certificate__image-wrapper {
   width: 100%;
-  max-width: 70%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  max-width: 75%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
   overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.certificate__image-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
 
 .certificate__image {
@@ -80,5 +119,13 @@
   .certificate__desc,
   .certificate__list {
     font-size: 0.95rem;
+  }
+
+  .certificate__subtitle {
+    font-size: 1.2rem;
+  }
+
+  .certificate__image-wrapper {
+    max-width: 90%;
   }
 }

@@ -2,16 +2,17 @@ import { useState } from "react";
 import "../../styles/landing/student-projects-section.css";
 
 const videos = [
-  { id: "L9RoPh3m_sA" },
-  { id: "7Ya1HzAS-LE" },
-  { id: "STUvSWGn8HY" },
-  { id: "rdP9YUaW1dQ" },
-  { id: "Srio6wNB1Xg" },
-  { id: "WQYD-DMVE8I" },
-  { id: "t7N3BGY8-K8" },
-  { id: "koM9fn4aq9g" },
-  { id: "OK1YNfLgoDk" },
-  { id: "pOQi1aAYMlU" },
+  { id: "GIyux-Bxw3I" },
+  { id: "919qCz-zi4g" },
+  // { id: "JlvVqn3nLpE" },
+  { id: "tyyjUXjoPVQ" },
+  { id: "17vCngkEbd4" },
+  // { id: "ZxVR2FnCJgM" },
+  { id: "VTWIDfQUk8c" },
+  { id: "7_UuZcgstCE" },
+  // { id: "zM2o0EQlpOk" },
+  { id: "ObQq9LMMqFw" },
+  { id: "8mgsk_Rob7w" },
 ];
 
 const StudentProjectsSection = () => {

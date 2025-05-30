@@ -4,9 +4,9 @@ import { ToastProvider } from "./providers/ToastProvider.jsx";
 import { UserProvider } from "./providers/UserProvider.jsx";
 import LandingRoute from "./routes/LandingRoute.jsx";
 import Login from "./pages/authPages/Login.jsx";
-import Register from "./pages/authPages/Register.jsx";
-import ForgotPassword from "./pages/authPages/ForgotPassword.jsx";
-import ResetPassword from "./pages/authPages/ResetPassword.jsx";
+// import Register from "./pages/authPages/Register.jsx";
+// import ForgotPassword from "./pages/authPages/ForgotPassword.jsx";
+// import ResetPassword from "./pages/authPages/ResetPassword.jsx";
 import AdminRoutes from "./routes/AdminRoutes.jsx";
 import StudentRoutes from "./routes/StudentRoutes.jsx";
 import PrivateRoute from "./routes/PrivateRoute.jsx";
@@ -27,7 +27,7 @@ function App() {
                 path="/login"
                 element={<Login />}
               />
-              <Route
+              {/* <Route
                 path="/register"
                 element={<Register />}
               />
@@ -38,7 +38,7 @@ function App() {
               <Route
                 path="/reset-password"
                 element={<ResetPassword />}
-              />
+              /> */}
               <Route
                 path="/admin/*"
                 element={

@@ -9,7 +9,6 @@ const LandingHeader = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
@@ -133,6 +132,14 @@ const LandingHeader = () => {
                 <ul className="landing-header__sidebar-list">
                   <li>
                     <NavLink
+                      to="/training/university"
+                      className="landing-header__sidebar-link"
+                    >
+                      Đại học
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
                       to="/training/college"
                       className="landing-header__sidebar-link"
                     >
@@ -152,15 +159,15 @@ const LandingHeader = () => {
                       to="/training/certificate"
                       className="landing-header__sidebar-link"
                     >
-                      Chứng chỉ - Sơ cấp
+                      Sơ cấp
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
-                      to="/training/certificate"
+                      to="/training/short-term"
                       className="landing-header__sidebar-link"
                     >
-                      Ngắn hạn - Chuyên sâu
+                      Chứng chỉ - Ngắn hạn
                     </NavLink>
                   </li>
                   <li>
@@ -176,31 +183,37 @@ const LandingHeader = () => {
 
               <section className="landing-header__sidebar-section landing-header__sidebar-section--last">
                 <NavLink
-                  to="/"
+                  to="/#programs"
+                  className="landing-header__sidebar-link"
+                >
+                  Chương trình
+                </NavLink>
+                <NavLink
+                  to="/#success"
                   className="landing-header__sidebar-link"
                 >
                   Dấu ấn thành công
                 </NavLink>
                 <NavLink
-                  to="/"
+                  to="/#projects"
                   className="landing-header__sidebar-link"
                 >
                   Dự án học viên
                 </NavLink>
                 <NavLink
-                  to="/consult"
+                  to="/#teachers"
                   className="landing-header__sidebar-link"
                 >
                   Giảng viên Design24
                 </NavLink>
                 <NavLink
-                  to="/"
+                  to="/#testimonials"
                   className="landing-header__sidebar-link"
                 >
                   Cảm nhận học viên
                 </NavLink>
                 <NavLink
-                  to="/"
+                  to="/#news"
                   className="landing-header__sidebar-link"
                 >
                   Tin tức - Sự kiện
@@ -209,28 +222,22 @@ const LandingHeader = () => {
                   to="/"
                   className="landing-header__sidebar-link"
                 >
-                  Tư vấn khóa học
-                </NavLink>
-                <NavLink
-                  to="/"
-                  className="landing-header__sidebar-link"
-                >
                   Blog
                 </NavLink>
                 <NavLink
-                  to="/"
+                  to="/#partners"
                   className="landing-header__sidebar-link"
                 >
                   Đối tác hợp tác
                 </NavLink>{" "}
                 <NavLink
-                  to="/"
+                  to="/#recruitment"
                   className="landing-header__sidebar-link"
                 >
                   Tin tuyển dụng
                 </NavLink>
                 <NavLink
-                  to="/"
+                  to="/#experts"
                   className="landing-header__sidebar-link"
                 >
                   Các chuyên gia nói gì về Design24

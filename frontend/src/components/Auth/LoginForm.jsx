@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStreetView,
@@ -37,7 +37,9 @@ const LoginForm = () => {
     setLoading(true);
     try {
       const response = await login(email, password);
-      navigate(response.data.role === "admin" ? "/admin" : "/student");
+      navigate(
+        response.data.role === "admin" ? "/admin/training-programs" : "/student"
+      );
     } catch (err) {
       console.error("Login failed", err);
       setErrors((prev) => ({
@@ -138,7 +140,7 @@ const LoginForm = () => {
             {loading ? "Đang đăng nhập..." : "ĐĂNG NHẬP"}
           </button>
 
-          <div className="text-center mt-3">
+          {/* <div className="text-center mt-3">
             <span className="me-1 text-muted">Quên mật khẩu?</span>
             <Link
               to="/forgot-password"
@@ -158,7 +160,7 @@ const LoginForm = () => {
               Đăng ký
             </Link>
             <span> mới.</span>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>

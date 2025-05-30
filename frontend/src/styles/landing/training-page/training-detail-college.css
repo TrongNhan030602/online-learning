@@ -1,124 +1,142 @@
 .training-college {
-  background: #fff;
-  padding: 120px 20px;
-  color: #113f73;
-  font-family: "Arial", sans-serif;
-  text-align: center;
+  padding: 3rem 1rem 4rem 1rem;
+  background: #fafafa;
+  color: #3a3a3a;
+  position: relative;
+  top: 90px;
+  left: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1200px; /* Giới hạn chiều rộng tối đa, giúp text không quá rộng */
+  margin: 0 auto 20px auto; /* Canh giữa toàn bộ block trên màn lớn */
 }
 
 .training-college__title {
-  font-size: 2.8rem;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #113f73;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-align: center;
   position: relative;
   display: inline-block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 0.5rem;
+  color: #b8860b;
 }
 
 .training-college__title::after {
   content: "";
-  display: block;
   width: 60px;
   height: 4px;
-  background-color: #00c48c;
-  margin: 12px auto 0;
+  background: linear-gradient(90deg, #b8860b, #ffd700);
+  display: block;
+  margin: 0.5rem auto 0;
   border-radius: 2px;
 }
 
 .training-college__desc {
-  font-size: 1.1rem;
-  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto 3rem;
+  text-align: center;
   color: #555;
-  margin-bottom: 40px;
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  font-weight: 500;
 }
 
 .training-college__banner-image {
-  width: 100%;
-  max-width: 760px;
-  max-height: 360px;
-  object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
-}
-
-.training-college__banner-image:hover {
-  transform: scale(1.015);
-  box-shadow: 0 16px 50px rgba(17, 63, 115, 0.15);
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* Giữ ảnh banner luôn căn giữa */
 }
 
 .training-college__banner-caption {
-  font-size: 1rem;
-  margin-top: 12px;
+  text-align: center;
   font-style: italic;
   color: #777;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 3rem;
 }
 
-.training-college__cards .card {
-  border: none;
-  background: #f9fbff;
-  border-radius: 20px;
-  padding: 28px;
-  text-align: center;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease-in-out;
-  height: 100%;
+.training-college__section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #b8860b;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #b8860b;
+  padding-bottom: 0.3rem;
+  max-width: max-content;
+  margin-left: 0;
+}
+
+.training-college__section-desc {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.training-college__list {
+  list-style-type: disc;
+  padding-left: 1.75rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #444;
+  font-weight: 400;
+}
+
+.training-college__cards {
+  margin-top: 3rem;
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive cho cards */
+@media (max-width: 768px) {
+  .training-college__cards {
+    gap: 1rem;
+  }
+  .training-college__card {
+    width: 100%; /* full width trên mobile */
+    max-width: 320px;
+  }
+}
+
+.training-college__card {
+  background: #fff;
+  border: 1.5px solid #ddd;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  color: #3a3a3a;
+  width: 280px;
+  transition: all 0.3s ease;
+  cursor: default;
 }
 
 .training-college__card:hover {
+  border-color: #b8860b;
+  box-shadow: 0 8px 20px rgba(184, 134, 11, 0.2);
   transform: translateY(-6px);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.1);
-}
-
-.training-college__card .svg-inline--fa {
-  color: #00c48c;
-  font-size: 2rem;
-  margin-bottom: 16px;
-  transition: color 0.3s ease;
-}
-
-.training-college__card:hover .svg-inline--fa {
-  color: #113f73;
 }
 
 .training-college__card h5 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #113f73;
-  margin-bottom: 10px;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  color: #b8860b;
 }
 
 .training-college__card p {
+  font-weight: 500;
   font-size: 0.95rem;
   color: #555;
-  line-height: 1.6;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .training-college__title {
-    font-size: 2.2rem;
-  }
-
-  .training-college__desc {
-    font-size: 1rem;
-  }
-
-  .training-college__card h5 {
-    font-size: 1.1rem;
-  }
-
-  .training-college__card p {
-    font-size: 0.9rem;
-  }
-
-  .training-college__banner-image {
-    max-height: 260px;
-  }
 }

@@ -14,6 +14,10 @@ const AdminBlogs = lazy(() => import("@/pages/admin/Blogs/AdminBlogs"));
 const AdminFaqs = lazy(() => import("@/pages/admin/Faqs/AdminFaqs"));
 const FaqDetail = lazy(() => import("@/pages/admin/Faqs/FaqDetail"));
 const AdminProfile = lazy(() => import("@/pages/admin/AdminProfile"));
+const AdminNotifications = lazy(() =>
+  import("@/pages/admin/Notifications/AdminNotifications")
+);
+
 const AdminDisciplineScores = lazy(() =>
   import("@/pages/admin/DisciplineScores/AdminDisciplineScores")
 );
@@ -201,6 +205,15 @@ const AdminRoutes = () => {
             </Suspense>
           }
         />
+        <Route
+          path="notifications"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminNotifications />
+            </Suspense>
+          }
+        />
+
         <Route
           path="blogs"
           element={

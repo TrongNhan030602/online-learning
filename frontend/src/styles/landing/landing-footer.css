@@ -1,0 +1,70 @@
+/* Footer */
+.footer {
+  padding: 40px 20px;
+  color: var(--text-white);
+  text-align: center;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  background-image: url("../../assets//img/landing/bg-section-tuyen-dung.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 1;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgb(5 53 147 / 50%); /* lớp phủ màu xanh đậm mờ */
+  z-index: -1;
+}
+
+.footer__container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* giảm khoảng cách giữa các dòng */
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer__container p {
+  margin: 0;
+  padding: 3px 0;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.footer strong {
+  color: #fff;
+  margin-right: 4px;
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: #ffd700;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .footer {
+    padding: 30px 10px;
+  }
+
+  .footer__container {
+    gap: 8px;
+  }
+
+  .footer__container p {
+    font-size: 15px;
+  }
+}

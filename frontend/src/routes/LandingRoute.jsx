@@ -9,6 +9,9 @@ import TrainingCollegePage from "@/pages/public/TrainingCollegePage";
 import TrainingIntermediatePage from "@/pages/public/TrainingIntermediatePage";
 import TrainingCertificatePage from "@/pages/public/TrainingCertificatePage";
 import TrainingSoftwarePage from "@/pages/public/TrainingSoftwarePage";
+import TrainingUniversityPage from "@/pages/public/TrainingUniversityPage";
+import TrainingShortTermPage from "@/pages/public/TrainingShortTermPage";
+
 const LandingRoute = () => {
   const { isAuthenticated, user } = useAuth();
 
@@ -49,12 +52,15 @@ const LandingRoute = () => {
           path="about"
           element={<AboutPage />}
         />
-
         <Route
           path="consult"
           element={<ConsultPage />}
         />
         {/* Thêm các routes cho Đào tạo */}
+        <Route
+          path="training/university"
+          element={<TrainingUniversityPage />}
+        />
         <Route
           path="training/software"
           element={<TrainingSoftwarePage />}
@@ -62,6 +68,10 @@ const LandingRoute = () => {
         <Route
           path="training/college"
           element={<TrainingCollegePage />}
+        />{" "}
+        <Route
+          path="training/short-term"
+          element={<TrainingShortTermPage />}
         />
         <Route
           path="training/intermediate"
@@ -71,7 +81,6 @@ const LandingRoute = () => {
           path="training/certificate"
           element={<TrainingCertificatePage />}
         />
-
         {/* Thêm các routes cho các trang khác */}
         <Route
           path="program/:id"

@@ -1,8 +1,10 @@
 import axiosClient from "./axiosClient";
 
 const notificationApi = {
-  getAll: () => axiosClient.get("/notifications"), // Lấy danh sách tất cả thông báo
+  getAll: () => axiosClient.get("/notifications/all"), // Lấy danh sách tất cả thông báo
+  getMyNotifications: () => axiosClient.get("/notifications"), // Lấy danh sách tất cả thông báo
   create: (data) => axiosClient.post("/notifications", data), // Tạo thông báo mới
+  update: (id, data) => axiosClient.put(`/notifications/${id}`, data),
   markAsRead: (notificationId) =>
     axiosClient.patch(`/notifications/${notificationId}/read`), // Đánh dấu thông báo là đã đọc
   getStatistics: () => axiosClient.get("/notifications/statistics"), // Lấy thống kê thông báo

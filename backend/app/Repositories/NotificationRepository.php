@@ -22,6 +22,22 @@ class NotificationRepository
 
         NotificationReceiver::insert($rows);
     }
+    public function updateNotification(int $notificationId, array $data)
+    {
+        $notification = Notification::find($notificationId);
+
+        if (!$notification) {
+            return null;
+        }
+
+        $notification->update([
+            'title' => $data['title'] ?? $notification->title,
+            'body' => $data['body'] ?? $notification->body,
+            'type' => $data['type'] ?? $notification->type,
+        ]);
+
+        return $notification;
+    }
 
     public function getUserNotifications(int $userId): array
     {
@@ -65,6 +81,13 @@ class NotificationRepository
         }
 
         return false; // Trả về false nếu không tìm thấy thông báo
+    }
+    public function getAllNotifications(): array
+    {
+        return Notification::with('trainingProgram')
+            ->orderByDesc('created_at')
+            ->get()
+            ->toArray();
     }
 
 

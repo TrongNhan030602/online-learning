@@ -7,7 +7,7 @@ const AdminSidebar = () => {
       <div className="admin__sidebar-top">
         <NavLink
           className="admin__logo"
-          to="/admin"
+          to="/admin/training-programs"
         >
           <img
             src={logo}
@@ -18,7 +18,7 @@ const AdminSidebar = () => {
       </div>
       <nav className="admin__nav">
         <ul className="admin__nav-list">
-          <li className="admin__nav-item">
+          {/* <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
               to="/admin"
@@ -26,7 +26,7 @@ const AdminSidebar = () => {
             >
               Dashboard
             </NavLink>
-          </li>
+          </li> */}
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
@@ -38,17 +38,17 @@ const AdminSidebar = () => {
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
-              to="/admin/courses"
+              to="/admin/training-programs"
             >
-              Quản lý môn học
+              Quản lý CTĐT
             </NavLink>
           </li>
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
-              to="/admin/training-programs"
+              to="/admin/courses"
             >
-              Quản lý CTĐT
+              Quản lý môn học
             </NavLink>
           </li>
           <li className="admin__nav-item">
@@ -86,6 +86,14 @@ const AdminSidebar = () => {
           <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
+              to="/admin/notifications"
+            >
+              Quản lý thông báo
+            </NavLink>
+          </li>
+          <li className="admin__nav-item">
+            <NavLink
+              className="admin__nav-link"
               to="/admin/blogs"
             >
               Quản lý blog
@@ -100,14 +108,14 @@ const AdminSidebar = () => {
             </NavLink>
           </li>
 
-          <li className="admin__nav-item">
+          {/* <li className="admin__nav-item">
             <NavLink
               className="admin__nav-link"
               to="/admin/progress"
             >
               Quản lý tiến độ
             </NavLink>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </aside>

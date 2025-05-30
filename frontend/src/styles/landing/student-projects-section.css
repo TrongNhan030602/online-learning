@@ -4,7 +4,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 40px 20px;
+  padding: 40px 0;
   z-index: 1;
   overflow: hidden;
 }
@@ -34,7 +34,7 @@
 .student-projects-masonry__container {
   position: relative;
   z-index: 1;
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
   text-align: center;
 }
@@ -96,14 +96,14 @@
 
 .student-projects-masonry__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 16px;
 }
 
 .student-projects-masonry__item {
   position: relative;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   background: linear-gradient(135deg, #1e2a78, #0e3963);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
@@ -113,7 +113,14 @@
 
 .student-projects-masonry__item:nth-child(1),
 .student-projects-masonry__item:nth-child(2) {
-  grid-column: span 2;
+  grid-column: span 3;
+  aspect-ratio: 16 / 9;
+}
+.student-projects-masonry__item:nth-child(n + 3) {
+  aspect-ratio: 9 / 16; /* video dọc hơn */
+  border-radius: 6px;
+  grid-column: span 1;
+  overflow: hidden;
 }
 .student-projects-masonry__item.highlighted-video {
   border: 3px solid #0873e5;
@@ -136,7 +143,7 @@
 }
 
 .student-projects-masonry__item:hover img {
-  transform: scale(1.01) rotate(1deg);
+  transform: scale(1.01);
 }
 
 .student-projects-masonry__play {
@@ -219,6 +226,7 @@
 @media (max-width: 1200px) {
   .student-projects-masonry__grid {
     grid-template-columns: repeat(3, 1fr);
+    padding: 0 20px;
   }
 
   .student-projects-masonry__item:nth-child(1),

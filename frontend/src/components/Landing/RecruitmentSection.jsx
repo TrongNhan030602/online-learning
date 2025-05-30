@@ -13,7 +13,7 @@ const recruitmentData = [
     image: recruitmentImg1,
     date: "27/05/2025",
     description:
-      "Design24 tuyển dụng Graphic Designer làm việc full-time tại Hà Nội.",
+      "Design24 tuyển dụng Graphic Designer làm việc full-time tại Cần Thơ.",
   },
   {
     id: 2,

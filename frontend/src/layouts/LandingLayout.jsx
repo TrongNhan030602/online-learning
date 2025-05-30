@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import LandingHeader from "@/components/Landing/LandingHeader";
 import CallToAction from "@/components/Landing/CallToAction";
-
+import LandingFooter from "@/components/Landing/LandingFooter";
 const LandingLayout = () => {
   const navigate = useNavigate();
 
@@ -20,6 +20,9 @@ const LandingLayout = () => {
 
       {/* CallToAction  cũng sẽ xuất hiện trên tất cả các trang */}
       <CallToAction onLoginClick={handleLoginClick} />
+
+      {/* Footer */}
+      <LandingFooter />
     </div>
   );
 };

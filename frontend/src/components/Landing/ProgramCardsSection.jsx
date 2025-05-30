@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGraduationCap,
-  faLaptopCode,
-  faClock,
-  faRocket,
-  faMicrochip,
+  faSchool,
+  faTools,
+  faBolt,
+  faStopwatch,
+  faCode,
 } from "@fortawesome/free-solid-svg-icons";
 
 import img1 from "../../assets/img/landing/ctdt-01.jpg";
@@ -12,31 +13,40 @@ import img2 from "../../assets/img/landing/ctdt-02.jpg";
 import img3 from "../../assets/img/landing/ctdt-03.jpg";
 import img4 from "../../assets/img/landing/ctdt-04.jpg";
 import img5 from "../../assets/img/landing/ctdt-05.jpg";
+import img6 from "../../assets/img/landing/ctdt-06.jpg";
 
 import "../../styles/landing/program-cards-section.css";
 
 const programs = [
   {
+    title: "Đại học",
+    description:
+      "Chương trình đại học hướng tới việc đào tạo chuyên sâu, kết hợp hài hòa giữa lý thuyết và thực hành, giúp sinh viên sẵn sàng làm việc ngay sau khi tốt nghiệp.",
+    image: img6,
+    icon: faGraduationCap,
+    link: "/training/university",
+  },
+  {
     title: "Cao đẳng",
     description:
       "Đào tạo chuyên sâu, kết hợp lý thuyết và thực hành để sẵn sàng làm việc.",
     image: img1,
-    icon: faGraduationCap,
-    link: "/training/college", // <-- bạn đổi link ở đây
+    icon: faSchool,
+    link: "/training/college",
   },
   {
     title: "Trung cấp",
     description:
       "Trang bị kiến thức nghề nghiệp và kỹ năng thực hành thiết yếu.",
     image: img2,
-    icon: faLaptopCode,
+    icon: faTools,
     link: "/training/intermediate",
   },
   {
     title: "Sơ cấp",
     description: "Đào tạo nhanh, thực tế dành cho người mới bắt đầu.",
     image: img3,
-    icon: faRocket,
+    icon: faBolt,
     link: "/training/certificate",
   },
   {
@@ -44,15 +54,15 @@ const programs = [
     description:
       "Các khóa học cấp tốc trong thời gian ngắn, linh hoạt và hiệu quả.",
     image: img4,
-    icon: faClock,
-    link: "/training/certificate",
+    icon: faStopwatch,
+    link: "/training/short-term",
   },
   {
     title: "Phần mềm",
     description:
       "Chuyên sâu về kỹ năng sử dụng và phát triển phần mềm ứng dụng.",
     image: img5,
-    icon: faMicrochip,
+    icon: faCode,
     link: "/training/software",
   },
 ];
@@ -60,7 +70,7 @@ const programs = [
 const ProgramCardsSection = () => {
   return (
     <section className="program-cards">
-      <h2 className="program-cards__title">Chương Trình Đào Tạo</h2>
+      <h2 className="program-cards__title">Chương trình liên kết đào tạo</h2>
       <div className="program-cards__container">
         {programs.map((program, index) => (
           <a

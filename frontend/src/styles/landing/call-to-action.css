@@ -2,6 +2,8 @@
   position: relative;
   background: linear-gradient(120deg, #0f3461, #2e8bc0);
   padding: 100px 20px;
+  z-index: 10;
+  left: 0;
   text-align: center;
   color: #fff;
   overflow: hidden;

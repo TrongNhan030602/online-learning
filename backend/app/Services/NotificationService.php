@@ -25,17 +25,26 @@ class NotificationService implements NotificationRepositoryInterface
         ]);
 
         $studentIds = StudentTrainingProgram::where('training_program_id', $data['training_program_id'])
-            ->pluck('student_id')
+            ->pluck('user_id')
             ->toArray();
 
         $this->repository->createReceivers($notification, $studentIds);
 
         return $notification->toArray();
     }
+    public function updateNotification(int $notificationId, array $data)
+    {
+        $notification = $this->repository->updateNotification($notificationId, $data);
+        return $notification ? $notification->toArray() : null;
+    }
 
     public function getUserNotifications(int $userId): array
     {
         return $this->repository->getUserNotifications($userId);
+    }
+    public function getAllNotifications(): array
+    {
+        return $this->repository->getAllNotifications();
     }
 
     public function markAsRead(int $notificationId, int $userId): bool
