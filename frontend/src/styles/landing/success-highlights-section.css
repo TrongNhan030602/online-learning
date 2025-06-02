@@ -5,16 +5,14 @@
   background-position: center;
   background-repeat: no-repeat;
   padding: 40px 0;
-  z-index: 1;
   overflow: hidden;
 }
 
-/* Overlay tối */
 .success-highlights::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgb(5 90 192 / 65%);
+  background: rgba(5, 90, 192, 0.65);
   z-index: 0;
 }
 
@@ -37,10 +35,8 @@
   position: relative;
   display: inline-block;
   padding-bottom: 14px;
-  overflow: hidden;
 }
 
-/* Gạch sáng */
 .success-highlights__title::after {
   content: "";
   position: absolute;
@@ -54,7 +50,6 @@
   box-shadow: 0 0 4px 1px #fff8dc33 inset;
 }
 
-/* Bi sáng */
 .success-highlights__title::before {
   content: "";
   position: absolute;
@@ -68,7 +63,6 @@
   animation: lightDotSlideSuccess 5s ease-in-out infinite alternate;
 }
 
-/* Animation */
 @keyframes lightDotSlideSuccess {
   0% {
     left: 0%;
@@ -95,73 +89,135 @@
   line-height: 1.6;
 }
 
-.success-highlights__columns {
-  column-count: 5;
-  column-gap: 12px;
+/* ==== Grid chính - 4 cột ==== */
+.success-highlights__grid {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.success-highlights__column {
+  flex: 1 1 22%;
+  min-width: 220px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.success-highlights__row--small-pair {
+  display: flex;
+  gap: 6px;
 }
 
 .success-highlights__item {
-  break-inside: avoid;
-  margin-bottom: 12px;
-  overflow: hidden;
-  border-radius: 0;
   background: #fff;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
   transition: transform 0.4s ease, box-shadow 0.3s ease;
-}
-
-.success-highlights__item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 .success-highlights__item img {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
   object-fit: cover;
-  border-radius: 0;
-  transition: transform 0.4s ease;
+  transition: all 0.4s ease;
 }
 
-.success-highlights__item:hover img {
-  transform: scale(1.05);
+/* Ảnh lớn */
+.success-highlights__item.large img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
 }
 
-/* Responsive: điều chỉnh cột theo độ rộng màn hình */
+/* Ảnh nhỏ */
+.success-highlights__item.small img {
+  width: 100%;
+  height: 118px;
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}
+
+/* ==== Responsive ==== */
+
 @media (max-width: 1200px) {
-  .success-highlights__columns {
-    column-count: 4;
+  .success-highlights__column {
+    flex: 1 1 30%;
+    min-width: 280px;
   }
 }
 
-@media (max-width: 992px) {
-  .success-highlights__columns {
-    column-count: 3;
+/* Tablet (768px - 1024px) */
+@media (max-width: 1000px) and (min-width: 768px) {
+  .success-highlights__container {
+    padding: 0;
+  }
+  .success-highlights__grid {
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .success-highlights__column {
+    flex: 1 1 44%;
+    max-width: 44%;
+    min-width: 300px;
+    gap: 8px;
+  }
+
+  .success-highlights__row--small-pair {
+    flex-direction: row;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .success-highlights__item.large img {
+    height: 424px;
+  }
+
+  .success-highlights__item.small {
+    flex: 1 1 48%;
+    max-width: 48%;
+  }
+
+  .success-highlights__item.small img {
+    height: 110px;
   }
 }
 
-@media (max-width: 768px) {
-  .success-highlights__columns {
-    column-count: 2;
+/* Mobile (dưới 768px) */
+@media (max-width: 767px) {
+  .success-highlights__grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
-
-  .success-highlights {
-    padding: 60px 0;
+  .success-highlights__column {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+    flex: none;
+    gap: 12px;
   }
-
-  .success-highlights__title {
-    font-size: 2.2rem;
+  .success-highlights__row--small-pair {
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
   }
-
-  .success-highlights__description {
-    font-size: 1rem;
-    margin-bottom: 30px;
+  .success-highlights__item.large img {
+    height: 420px; /* giảm chiều cao ảnh lớn tablet */
   }
-}
-
-@media (max-width: 480px) {
-  .success-highlights__columns {
-    column-count: 1;
+  .success-highlights__item.small {
+    flex: 1 1 48%;
+    max-width: 48%;
+  }
+  .success-highlights__item.small img {
+    height: 110px; /* giảm chiều cao ảnh nhỏ */
   }
 }

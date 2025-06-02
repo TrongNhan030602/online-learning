@@ -38,9 +38,9 @@ const TrainingShortTermPage = () => {
         </h1>
         <p className="short-term__intro">
           Với mục tiêu đào tạo toàn diện và thực tiễn, các chương trình cấp
-          chứng chỉ tại <strong>[Tên Trung Tâm]</strong> được thiết kế đa dạng,
-          phù hợp với nhiều đối tượng học viên. Mỗi khóa học mang đến kiến thức
-          nền tảng, kỹ năng chuyên môn và trải nghiệm thực tế trong các lĩnh vực
+          chứng chỉ tại <strong>Design24</strong> được thiết kế đa dạng, phù hợp
+          với nhiều đối tượng học viên. Mỗi khóa học mang đến kiến thức nền
+          tảng, kỹ năng chuyên môn và trải nghiệm thực tế trong các lĩnh vực
           sáng tạo và truyền thông.
         </p>
       </section>

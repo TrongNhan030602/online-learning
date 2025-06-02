@@ -5,9 +5,8 @@
   position: relative;
   top: 90px;
   left: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 1200px; /* Giới hạn chiều rộng tối đa, giúp text không quá rộng */
-  margin: 0 auto 20px auto; /* Canh giữa toàn bộ block trên màn lớn */
+  max-width: 1200px;
+  margin: 0 auto 20px auto;
 }
 
 .training-college__title {
@@ -82,12 +81,27 @@
 }
 
 .training-college__list {
-  list-style-type: disc;
+  list-style-type: none;
   padding-left: 1.75rem;
   margin-bottom: 2rem;
   font-size: 1rem;
   color: #444;
   font-weight: 400;
+}
+.training-college__list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.training-college__list li::before {
+  content: "✨";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #b8860b;
 }
 
 .training-college__cards {

@@ -27,7 +27,7 @@ const TrainingIntermediatePage = () => {
           </div>
 
           <h2 className="intermediate__subtitle">
-            Ngành Thiết kế Đồ họa – Nghệ Thuật Của Thời Đại Số
+            🌟 Ngành Thiết kế Đồ họa – Nghệ Thuật Của Thời Đại Số
           </h2>
           <p className="intermediate__desc">
             Thiết kế Đồ họa không chỉ là công cụ biến ý tưởng thành hình ảnh, mà

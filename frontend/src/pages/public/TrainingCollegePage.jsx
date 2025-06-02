@@ -94,16 +94,16 @@ const TrainingCollegePage = () => {
           <h5>Đặc điểm nổi bật của chương trình:</h5>
           <ul className="training-college__list">
             <li>
-              ✨ Chú trọng thực hành, giúp bạn thành thạo phần mềm và phát triển
-              tư duy thiết kế
+              Chú trọng thực hành, giúp bạn thành thạo phần mềm và phát triển tư
+              duy thiết kế
             </li>
             <li>
-              ✨ Môi trường học tập năng động, hỗ trợ bạn khám phá và phát triển
+              Môi trường học tập năng động, hỗ trợ bạn khám phá và phát triển
               phong cách cá nhân
             </li>
             <li>
-              ✨ Cơ hội thực tập và làm việc với các doanh nghiệp trong ngành,
-              tích lũy kinh nghiệm thực tế
+              Cơ hội thực tập và làm việc với các doanh nghiệp trong ngành, tích
+              lũy kinh nghiệm thực tế
             </li>
           </ul>
         </Col>
@@ -163,16 +163,16 @@ const TrainingCollegePage = () => {
           <h5>Đặc điểm nổi bật của chương trình:</h5>
           <ul className="training-college__list">
             <li>
-              ✨ Chú trọng thực hành, giúp bạn tự tin sản xuất các sản phẩm
-              truyền thông ngay trong quá trình học
+              Chú trọng thực hành, giúp bạn tự tin sản xuất các sản phẩm truyền
+              thông ngay trong quá trình học
             </li>
             <li>
-              ✨ Môi trường học tập sáng tạo, năng động và luôn bắt kịp xu hướng
+              Môi trường học tập sáng tạo, năng động và luôn bắt kịp xu hướng
               mới
             </li>
             <li>
-              ✨ Cơ hội thực tập và tiếp xúc với doanh nghiệp, tích lũy kinh
-              nghiệm và tạo dựng mạng lưới nghề nghiệp
+              Cơ hội thực tập và tiếp xúc với doanh nghiệp, tích lũy kinh nghiệm
+              và tạo dựng mạng lưới nghề nghiệp
             </li>
           </ul>
         </Col>
