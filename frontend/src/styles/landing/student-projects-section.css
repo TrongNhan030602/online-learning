@@ -1,34 +1,8 @@
 .student-projects-masonry {
   position: relative;
-  background-image: url("../../assets/img/landing/bg-session-dau-an-thanh-cong.jpeg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   padding: 40px 0;
   z-index: 1;
   overflow: hidden;
-}
-
-/* Gradient animation */
-@keyframes bgGradientFlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.student-projects-masonry::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgb(5 90 192 / 65%);
-  z-index: 0;
-  pointer-events: none;
 }
 
 .student-projects-masonry__container {

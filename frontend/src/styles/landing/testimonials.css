@@ -1,18 +1,20 @@
 .testimonials {
-  padding: 40px 20px;
-  background: linear-gradient(rgba(13, 79, 167, 0.6), rgba(3, 49, 122, 0.6)),
-    url("../../assets/img/landing/bg-session-cam-nhan-hoc-vien.webp") no-repeat
-      center center / cover;
-  color: #fff;
   position: relative;
+  padding: 40px 20px;
+  color: #fff;
   overflow: hidden;
+  z-index: 1;
 }
 
+/* Nội dung giữ phía trên */
 .testimonials__container {
+  position: relative;
+  z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
   text-align: center;
 }
+
 .testimonials__title {
   font-size: 2.8rem;
   font-weight: 800;

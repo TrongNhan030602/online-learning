@@ -1,17 +1,7 @@
 .experts {
   position: relative;
   padding: 40px 0;
-  background: url("../../assets//img/landing/bg-session-chuyen-gia.webp")
-    center/cover no-repeat;
   z-index: 0;
-}
-
-.experts::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(13, 66, 133, 0.85); /* Lớp phủ xanh dương đậm */
-  z-index: -1;
 }
 
 .experts__container {

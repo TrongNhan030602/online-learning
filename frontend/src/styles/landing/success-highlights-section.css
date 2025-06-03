@@ -1,18 +1,7 @@
 .success-highlights {
   position: relative;
-  background-image: url("../../assets/img/landing/bg-session-dau-an-thanh-cong.jpeg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   padding: 40px 0;
   overflow: hidden;
-}
-
-.success-highlights::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(5, 90, 192, 0.65);
   z-index: 0;
 }
 

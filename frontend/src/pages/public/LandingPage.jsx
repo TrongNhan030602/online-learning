@@ -23,7 +23,7 @@ const LandingPage = () => {
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100); // delay để chắc chắn phần tử đã được render
+        }, 100);
       }
     }
   }, [location]);
@@ -35,30 +35,46 @@ const LandingPage = () => {
       <div id="programs">
         <ProgramCardsSection />
       </div>
-      <div id="success">
-        <SuccessHighlightsSection />
-      </div>
-      <div id="projects">
-        <StudentProjectsSection />
-      </div>
+      <section className="section-with-bg">
+        <div className="section__content">
+          <div id="success">
+            <SuccessHighlightsSection />
+          </div>
+          <div id="projects">
+            <StudentProjectsSection />
+          </div>
+        </div>
+      </section>
+
       <div id="teachers">
         <TeachersSliderSection />
       </div>
-      <div id="testimonials">
-        <Testimonials />
-      </div>
+
+      <section className="section-with-bg">
+        <div className="section__content">
+          <div id="testimonials">
+            <Testimonials />
+          </div>
+
+          <div id="experts">
+            <ExpertsSaySection />
+          </div>
+        </div>
+      </section>
+
       <div id="news">
         <NewsSection />
       </div>
-      <div id="partners">
-        <PartnersSection />
-      </div>
-      <div id="experts">
-        <ExpertsSaySection />
-      </div>
-      <div id="recruitment">
-        <RecruitmentSection />
-      </div>
+      <section className="section-with-bg">
+        <div className="section__content">
+          <div id="partners">
+            <PartnersSection />
+          </div>
+        </div>
+        <div id="recruitment">
+          <RecruitmentSection />
+        </div>
+      </section>
       <StickyContactButtons />
     </div>
   );

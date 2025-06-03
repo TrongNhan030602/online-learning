@@ -1,9 +1,14 @@
 .partners {
   padding: 60px 0;
-  background: linear-gradient(135deg, #0c3d7c 0%, #0e4a92 100%);
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  z-index: 1;
 }
 
 .partners__container {
+  position: relative;
+  z-index: 1;
   max-width: 1140px;
   margin: 0 auto;
   padding: 0 20px;
@@ -89,7 +94,7 @@
 }
 
 .partners__item:hover {
-  transform: scale(1.08);
+  transform: scale(1.02);
 }
 
 .partners__logo {
@@ -100,7 +105,7 @@
 }
 
 .partners__logo:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 /* ==== Custom slick arrows ==== */

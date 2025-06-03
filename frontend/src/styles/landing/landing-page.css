@@ -18,3 +18,30 @@
   scroll-behavior: smooth;
   background-color: #f8f9fa; /* hoặc giữ trắng nếu bạn dùng hình nền riêng */
 }
+
+.section-with-bg {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  min-height: 100px; /* đảm bảo không bị collapse nếu nội dung rỗng */
+}
+
+.section-with-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../../assets/img/landing/bg-session/bg-02.jpg"); /* ảnh nền dùng chung */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  opacity: 0.9; /* điều chỉnh độ mờ */
+  transform: scaleY(1); /* hoặc -1 nếu muốn lật */
+  transition: background 0.4s ease;
+  pointer-events: none;
+}
+
+.section__content {
+  position: relative;
+  z-index: 1;
+}
