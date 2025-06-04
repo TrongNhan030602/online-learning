@@ -7,20 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Blog extends Model
 {
     use HasFactory;
+
     protected $table = 'blogs';
-    protected $fillable = ['title', 'content', 'author_id'];
+
+    protected $fillable = [
+        'title',
+        'content',
+        'type',     // academy, industry
+        'summary',       // tóm tắt
+        'published_at',  // ngày xuất bản
+        'status'         // trạng thái (draft, published)
+    ];
+
+    protected $dates = ['published_at']; // để tự động cast sang Carbon
+
     public function images()
     {
         return $this->hasMany(BlogImage::class);
     }
-    public function author()
-    {
-        return $this->belongsTo(User::class, 'author_id');
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(BlogComment::class, 'blog_id');
-    }
-
 }

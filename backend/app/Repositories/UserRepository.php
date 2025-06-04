@@ -147,9 +147,7 @@ class UserRepository implements UserRepositoryInterface
         }
 
         // Xóa các dữ liệu liên quan nếu cần (ví dụ: enrollments, reviews, progress)
-        $user->enrollments()->delete();
-        $user->reviews()->delete();
-        $user->progress()->delete();
+        $user->profile()->delete();
 
         return $user->delete();
     }

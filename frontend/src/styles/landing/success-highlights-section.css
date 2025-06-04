@@ -108,7 +108,9 @@
   transition: transform 0.4s ease, box-shadow 0.3s ease;
   overflow: hidden;
 }
-
+.success-highlights__item:hover {
+  transform: scale(1.02);
+}
 .success-highlights__item img {
   display: block;
   width: 100%;

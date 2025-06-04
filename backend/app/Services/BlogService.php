@@ -51,6 +51,10 @@ class BlogService
     {
         return $this->blogRepository->deleteImage($imageId);
     }
+    public function updateImage($imageId, array $data)
+    {
+        return $this->blogRepository->updateImage($imageId, $data);
+    }
 
 
 }

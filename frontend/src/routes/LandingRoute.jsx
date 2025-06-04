@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import LandingLayout from "@/layouts/LandingLayout";
 import LandingPage from "@/pages/public/LandingPage";
-import ProgramDetailPage from "@/pages/public/ProgramDetailPage";
+import NewsDetailPage from "@/pages/public/NewsDetailPage.jsx";
 import AboutPage from "@/pages/public/AboutPage";
 import ConsultPage from "@/pages/public/ConsultPage";
 import TrainingCollegePage from "@/pages/public/TrainingCollegePage";
@@ -83,8 +83,8 @@ const LandingRoute = () => {
         />
         {/* Thêm các routes cho các trang khác */}
         <Route
-          path="program/:id"
-          element={<ProgramDetailPage />}
+          path="news/:slug"
+          element={<NewsDetailPage />}
         />
       </Route>
     </Routes>

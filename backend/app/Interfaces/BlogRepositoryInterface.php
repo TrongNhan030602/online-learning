@@ -11,4 +11,5 @@ interface BlogRepositoryInterface
     public function uploadImages($id, $images);
     public function deleteImage($imageId);
     public function getImages($id);
+    public function updateImage($imageId, array $data);
 }

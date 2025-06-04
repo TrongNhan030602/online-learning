@@ -1,116 +1,137 @@
+/* Container form */
 .blog-form {
   background-color: #fff;
-  border: 1px solid var(--secondary-color);
+  border: 1px solid #ccc; /* Bạn có thể thay bằng biến màu nếu dùng CSS variables */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
 }
-.blog-form__error {
+
+/* Group mỗi trường input */
+.blog-form__group {
+  margin-bottom: 15px;
+}
+
+/* Label */
+.blog-form__group > label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+  user-select: none;
+}
+
+/* Input, select, textarea cơ bản */
+.blog-form__group input[type="text"],
+.blog-form__group input[type="datetime-local"],
+.blog-form__group select,
+.blog-form__group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+  color: #333;
+  resize: vertical; /* cho textarea */
+}
+
+/* Đặc biệt textarea */
+.blog-form__group textarea {
+  min-height: 120px;
+}
+
+/* Focus trạng thái */
+.blog-form__group input[type="text"]:focus,
+.blog-form__group input[type="datetime-local"]:focus,
+.blog-form__group select:focus,
+.blog-form__group textarea:focus {
+  outline: none;
+  border-color: #cc0000;
+  box-shadow: 0 0 5px rgba(204, 0, 0, 0.4);
+  background-color: #fff;
+}
+
+/* Hiển thị lỗi */
+.error {
   color: #d9534f;
   font-size: 0.875rem;
   margin-top: 5px;
 }
 
-.blog-form__input--error {
+/* Border đỏ cho input lỗi */
+.blog-form__group input[type="text"].error,
+.blog-form__group input[type="date"].error,
+.blog-form__group select.error,
+.blog-form__group textarea.error {
   border-color: #d9534f;
   background-color: #f8d7da;
 }
 
-.blog-form__title {
-  font-size: 1.75rem;
-  font-family: var(--heading-font);
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: var(--text-dark);
-  text-align: center;
-}
-
-.blog-form__group {
-  margin-bottom: 15px;
-}
-
-.blog-form__label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 5px;
-  color: var(--text-dark);
-}
-
-.blog-form__input,
-.blog-form__textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid var(--secondary-color);
-  border-radius: 6px;
-  font-size: var(--base-font-size);
-  background-color: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.blog-form__input:focus,
-.blog-form__textarea:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 5px rgba(204, 0, 0, 0.3);
-  outline: none;
-}
-
-.blog-form__textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
+/* Nút bấm */
 .blog-form__actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 25px;
+  gap: 10px;
 }
 
-.blog-form__button {
+/* Nút chung */
+.blog-form__actions button {
+  flex: 1;
   padding: 12px 20px;
   border: none;
   border-radius: 6px;
-  cursor: pointer;
-  font-size: var(--base-font-size);
+  font-size: 1rem;
   font-weight: 600;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+  user-select: none;
 }
 
-.blog-form__button:hover {
+/* Nút submit */
+.blog-form__actions button[type="submit"] {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.blog-form__actions button[type="submit"]:hover:not(:disabled) {
+  background-color: var(--primary-color);
   transform: scale(1.05);
 }
 
-.blog-form__button:active {
-  transform: scale(0.98);
+.blog-form__actions button[type="submit"]:disabled {
+  background-color: #e6a9a9;
+  cursor: not-allowed;
 }
 
-.blog-form__button--submit {
-  background-color: var(--primary-color);
-  color: var(--text-white);
+/* Nút hủy */
+.blog-form__actions button[type="button"] {
+  background-color: #777;
+  color: #fff;
 }
 
-.blog-form__button--submit:hover {
-  background-color: var(--primary-hover);
+.blog-form__actions button[type="button"]:hover {
+  background-color: #555;
+  transform: scale(1.05);
 }
 
-.blog-form__button--cancel {
-  background-color: var(--secondary-color);
-  color: var(--text-white);
-}
-
-.blog-form__button--cancel:hover {
-  background-color: var(--secondary-hover);
-}
-
+/* Responsive cho màn hình nhỏ */
 @media (max-width: 576px) {
   .blog-form {
     padding: 15px;
-    margin: 15px;
   }
   .blog-form__actions {
     flex-direction: column;
   }
-  .blog-form__button {
+  .blog-form__actions button {
     width: 100%;
     margin-bottom: 10px;
   }

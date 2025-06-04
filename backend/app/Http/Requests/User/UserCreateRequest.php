@@ -26,7 +26,7 @@ class UserCreateRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:255',
-            'gender' => 'nullable|in:male,female',
+            'gender' => 'nullable|in:male,female,other',
             'position' => 'nullable|string|max:255',
             'info' => 'nullable|string',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',

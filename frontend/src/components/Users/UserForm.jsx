@@ -11,17 +11,21 @@ const createSchema = yup.object().shape({
     .string()
     .required("Họ và tên không được để trống")
     .min(3, "Họ và tên phải có ít nhất 3 ký tự"),
+
   email: yup
     .string()
     .required("Email không được để trống")
     .email("Email không hợp lệ"),
+
   password: yup
     .string()
     .required("Mật khẩu không được để trống")
     .min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+
   password_confirmation: yup
     .string()
     .oneOf([yup.ref("password"), null], "Mật khẩu xác nhận không khớp"),
+
   role: yup
     .string()
     .oneOf(["student", "admin", "advisor"], "Vai trò không hợp lệ")
@@ -29,14 +33,13 @@ const createSchema = yup.object().shape({
 
   first_name: yup.string().required("Tên riêng không được để trống"),
   last_name: yup.string().required("Họ không được để trống"),
-  phone: yup
-    .string()
-    .matches(/^\d{10,11}$/, "Số điện thoại không hợp lệ")
-    .required("Số điện thoại không được để trống"),
-  address: yup.string().required("Địa chỉ không được để trống"),
-  gender: yup.string().required("Giới tính không được để trống"),
-  position: yup.string().required("Vị trí không được để trống"),
-  info: yup.string().required("Thông tin không được để trống"),
+
+  // Những trường không bắt buộc
+  phone: yup.string().nullable(),
+  address: yup.string().nullable(),
+  gender: yup.string().nullable().oneOf(["male", "female", "other"]),
+  position: yup.string().nullable(),
+  info: yup.string().nullable(),
 });
 
 // Schema validation cho việc cập nhật người dùng
@@ -79,7 +82,8 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
           last_name: initialData.profile?.last_name || "",
           phone: initialData.profile?.phone || "",
           address: initialData.profile?.address || "",
-          gender: initialData.profile?.gender || "",
+          gender: initialData?.profile?.gender ?? "other",
+
           position: initialData.profile?.position || "",
           info: initialData.profile?.info || "",
         }
@@ -93,7 +97,7 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
           last_name: "",
           phone: "",
           address: "",
-          gender: "",
+          gender: "other",
           position: "",
           info: "",
         },
@@ -269,6 +273,7 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
         >
           <option value="male">Nam</option>
           <option value="female">Nữ</option>
+          <option value="other">Khác</option>
         </select>
         {errors.gender && (
           <p className="user-form__error">{errors.gender.message}</p>

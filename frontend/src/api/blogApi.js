@@ -16,12 +16,9 @@ const blogApi = {
     });
   },
   getImages: (blogId) => axiosClient.get(`/blogs/${blogId}/images`),
+  updateImage: (imageId, data) =>
+    axiosClient.put(`/blogs/images/${imageId}`, data),
   deleteImage: (imageId) => axiosClient.delete(`/blogs/images/${imageId}`),
-
-  getComments: (blogId) => axiosClient.get(`/blog-comments/${blogId}`),
-  addComment: (data) => axiosClient.post("/blog-comments", data),
-  updateComment: (id, data) => axiosClient.put(`/blog-comments/${id}`, data),
-  deleteComment: (id) => axiosClient.delete(`/blog-comments/${id}`),
 };
 
 export default blogApi;

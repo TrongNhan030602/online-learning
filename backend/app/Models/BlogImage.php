@@ -8,7 +8,8 @@ class BlogImage extends Model
 {
     use HasFactory;
     protected $table = 'blog_images';
-    protected $fillable = ['blog_id', 'image'];
+
+    protected $fillable = ['blog_id', 'image', 'caption', 'order'];
 
     public function blog()
     {

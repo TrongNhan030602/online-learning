@@ -448,30 +448,19 @@ Route::prefix('notifications')->middleware('auth:api')->group(function () {
 
 // API quản lý blog
 Route::prefix('blogs')->group(function () {
-    Route::get('/', [BlogController::class, 'index']); // Lấy danh sách blog
-    Route::get('/{id}', [BlogController::class, 'show']); // Lấy blog theo ID
-    Route::post('/', [BlogController::class, 'store'])->middleware('auth:api', 'role:admin');
-    ; // Tạo blog
-    Route::put('/{id}', [BlogController::class, 'update'])->middleware('auth:api', 'role:admin');
-    ; // Cập nhật blog
-    Route::delete('/{id}', [BlogController::class, 'destroy'])->middleware('auth:api', 'role:admin');
-    ; // Xóa blog
+    Route::get('/', [BlogController::class, 'index']);
+    Route::get('{id}', [BlogController::class, 'show']);
+    Route::post('/', [BlogController::class, 'store']);
+    Route::put('{id}', [BlogController::class, 'update']);
+    Route::delete('{id}', [BlogController::class, 'destroy']);
 
-    // Routes quản lý ảnh
-    Route::get('/{id}/images', [BlogController::class, 'getImages']); // Lấy danh sách ảnh của blog
-    Route::post('/{id}/images', [BlogController::class, 'uploadImages'])->middleware('auth:api', 'role:admin');
-    ; // Upload ảnh cho blog
-    Route::delete('/images/{imageId}', [BlogController::class, 'deleteImage'])->middleware('auth:api', 'role:admin');
-    ; // Xóa ảnh blog
+    Route::get('{id}/images', [BlogController::class, 'getImages']);
+    Route::post('{id}/images', [BlogController::class, 'uploadImages']);
 
-});
+    // Đưa luôn route xóa ảnh vào prefix blogs
+    Route::put('/images/{imageId}', [BlogController::class, 'updateImage']);
+    Route::delete('images/{imageId}', [BlogController::class, 'deleteImage']);
 
-
-Route::prefix('blog-comments')->group(function () {
-    Route::get('/{blogId}', [BlogCommentController::class, 'index']); // Lấy danh sách bình luận theo blog
-    Route::post('/', [BlogCommentController::class, 'store']); // Tạo bình luận mới
-    Route::put('/{id}', [BlogCommentController::class, 'update']); // ✅ Chỉnh sửa bình luận
-    Route::delete('/{id}', [BlogCommentController::class, 'destroy']); // Xóa bình luận
 });
 
 
