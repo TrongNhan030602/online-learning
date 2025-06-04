@@ -141,13 +141,25 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = User::findOrFail($id);
 
-        // Bảo vệ không cho phép xóa người dùng là cố vấn
+        // Không cho xoá cố vấn
         if ($user->role === RoleEnum::Advisor->value) {
             throw new Exception("Không thể xóa người dùng là cố vấn.");
         }
 
+        DB::beginTransaction();
+        try {
+            // Xoá dữ liệu liên quan trước
+            $user->profile()?->delete();
 
-        return $user->delete();
+            // Xoá user
+            $user->delete();
+
+            DB::commit();
+            return true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception("Lỗi khi xoá người dùng: " . $e->getMessage());
+        }
     }
 
 

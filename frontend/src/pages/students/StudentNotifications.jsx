@@ -76,7 +76,28 @@ const StudentNotifications = () => {
   const unreadCount = notifications.filter((noti) => !noti.is_read).length;
 
   if (loading) return <p className="text-center">Đang tải thông báo...</p>;
-  if (error) return <p>{error}</p>;
+  if (!notifications.length) {
+    return (
+      <div className="text-center my-4 text-muted">
+        <FontAwesomeIcon
+          icon={faBell}
+          size="2x"
+          className="mb-2"
+        />
+        <p>Hiện tại bạn chưa có thông báo nào.</p>
+      </div>
+    );
+  }
+  if (error)
+    return (
+      <div className="text-danger text-center my-4">
+        <FontAwesomeIcon
+          icon={faBell}
+          className="me-2"
+        />
+        {error}
+      </div>
+    );
 
   return (
     <div className="student-notifications">

@@ -47,7 +47,12 @@ const StudentProfile = () => {
   }, []);
 
   const handleAvatarChange = (e) => {
-    setAvatarFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file && !file.type.startsWith("image/")) {
+      alert("Vui lòng chọn một file ảnh hợp lệ.");
+      return;
+    }
+    setAvatarFile(file);
   };
 
   const handleSubmitAvatar = async () => {
@@ -64,7 +69,7 @@ const StudentProfile = () => {
           avatar: response.data.avatar,
         },
       }));
-      setShowModal(false); // Đóng modal sau khi upload thành công
+      setShowModal(false);
     } catch (error) {
       console.error("Error updating avatar:", error);
     }
@@ -73,19 +78,32 @@ const StudentProfile = () => {
   if (!studentData)
     return <div className="text-center py-5">Đang tải dữ liệu...</div>;
 
-  const { email, profile, training_programs } = studentData;
+  const email = studentData?.email || "";
+  const profile = studentData?.profile || {};
+  const training_programs = Array.isArray(studentData?.training_programs)
+    ? studentData.training_programs
+    : [];
 
   const getGenderLabel = (gender) => {
-    if (gender === "male") return "Nam";
-    if (gender === "female") return "Nữ";
-    return "Khác";
+    switch (gender) {
+      case "male":
+        return "Nam";
+      case "female":
+        return "Nữ";
+      case "other":
+        return "Khác";
+      default:
+        return "Chưa xác định";
+    }
   };
+
   const formatDate = (dateString) => {
+    if (!dateString) return "Chưa có";
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    if (isNaN(date.getTime())) return "Chưa rõ";
+    return `${String(date.getDate()).padStart(2, "0")}/${String(
+      date.getMonth() + 1
+    ).padStart(2, "0")}/${date.getFullYear()}`;
   };
 
   return (
@@ -108,8 +126,8 @@ const StudentProfile = () => {
               className="profile-avatar shadow"
             />
             <h3 className="mt-3 fw-bold">
-              {profile?.last_name || "Chưa có"}
-              {profile?.first_name || "Chưa có"}{" "}
+              {profile?.last_name || ""} {profile?.first_name || ""}
+              {!profile?.last_name && !profile?.first_name && "Chưa có"}
             </h3>
             <p className="text-muted">
               <FontAwesomeIcon icon={faUserTie} />{" "}
@@ -258,7 +276,8 @@ const StudentProfile = () => {
               <Card.Title className="section-title">
                 Chương trình đào tạo
               </Card.Title>
-              {training_programs.length > 0 ? (
+              {Array.isArray(training_programs) &&
+              training_programs.length > 0 ? (
                 training_programs.map((program) => (
                   <div
                     key={program.id}
@@ -300,13 +319,18 @@ const StudentProfile = () => {
                     className="mb-3 border-0 bg-light rounded-3 px-3 py-2 advisor-card"
                   >
                     <strong>{program.name}</strong>
-                    <p className="mb-1">
-                      <FontAwesomeIcon
-                        icon={faUserTie}
-                        className="me-2"
-                      />
-                      {program.advisor || "Chưa có"}
-                    </p>
+                    {program.advisor ? (
+                      <p>
+                        <FontAwesomeIcon
+                          icon={faUserTie}
+                          className="me-2"
+                        />
+                        {program.advisor}
+                      </p>
+                    ) : (
+                      <p className="text-muted">Chưa có thông tin cố vấn</p>
+                    )}
+
                     <p>
                       <FontAwesomeIcon
                         icon={faEnvelope}

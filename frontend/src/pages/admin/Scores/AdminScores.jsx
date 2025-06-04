@@ -436,7 +436,7 @@ const ScoreTable = ({
   const currentUsers = groupedArray.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(groupedArray.length / scoresPerPage);
   const getPaginationRange = (total, current) => {
-    const delta = 2; // số trang xung quanh current
+    const delta = 2; // số trang
     const range = [];
     const rangeWithDots = [];
     let l;

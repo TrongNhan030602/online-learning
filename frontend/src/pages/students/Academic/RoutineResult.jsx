@@ -52,6 +52,24 @@ const RoutineResult = () => {
   if (loading) {
     return <div className="text-center">Đang tải dữ liệu...</div>;
   }
+  const isEmpty =
+    Object.keys(routineResults).length === 0 ||
+    Object.values(routineResults).every(
+      (program) => !program.semesters || program.semesters.length === 0
+    );
+
+  if (isEmpty) {
+    return (
+      <div className="text-center my-4 text-muted">
+        <FontAwesomeIcon
+          icon={faStar}
+          size="2x"
+          className="mb-2"
+        />
+        <p>Chưa có dữ liệu điểm rèn luyện được cập nhật.</p>
+      </div>
+    );
+  }
 
   if (error) {
     return <div>{error}</div>;

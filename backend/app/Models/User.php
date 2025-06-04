@@ -43,33 +43,33 @@ class User extends Authenticatable implements JWTSubject
     }
 
     // Sinh viên có thể có nhiều môn học được miễn khi liên thông
-    public function exemptCourses()
-    {
-        // Mỗi sinh viên có thể có nhiều môn học được miễn, thông qua bảng ExemptCourse
-        return $this->hasMany(ExemptCourse::class, 'student_id');
-    }
+    // public function exemptCourses()
+    // {
+    //     // Mỗi sinh viên có thể có nhiều môn học được miễn, thông qua bảng ExemptCourse
+    //     return $this->hasMany(ExemptCourse::class, 'student_id');
+    // }
 
     // Sinh viên có thể có nhiều điểm số (scores)
     public function scores()
     {
         // Mỗi sinh viên có thể có nhiều điểm số cho các môn học
-        return $this->hasMany(Score::class, 'student_id');
+        return $this->hasMany(Score::class, 'user_id');
     }
 
     // Sinh viên có thể có nhiều chứng chỉ/bằng
     public function certificates()
     {
         // Mỗi sinh viên có thể có nhiều chứng chỉ
-        return $this->hasMany(Certificate::class, 'student_id');
+        return $this->hasMany(Certificate::class, 'user_id');
     }
     public function reExamRegistrations()
     {
-        return $this->hasMany(ReExamRegistration::class, 'student_id');
+        return $this->hasMany(ReExamRegistration::class, 'user_id');
     }
-    public function learningResults()
-    {
-        return $this->hasMany(LearningResult::class, 'student_id');
-    }
+    // public function learningResults()
+    // {
+    //     return $this->hasMany(LearningResult::class, 'student_id');
+    // }
     public function notificationReceivers()
     {
         return $this->hasMany(NotificationReceiver::class);
@@ -133,24 +133,6 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-    // Sử dụng model event để xóa các dữ liệu liên quan khi xóa user
-    protected static function booted()
-    {
-        static::deleting(function ($user) {
-            $user->profile()->delete();
-            $user->studentTrainingPrograms()->delete();
-            // $user->exemptCourses()->delete();
-            $user->scores()->delete();
-            // $user->certificates()->delete();
-            $user->reExamRegistrations()->delete();
-            $user->learningResults()->delete();
-            $user->notificationReceivers()->delete();
 
-            // Quan hệ many-to-many phải dùng detach
-            $user->trainingPrograms()->detach();
-
-
-        });
-    }
 
 }

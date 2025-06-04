@@ -30,6 +30,8 @@ const AdminExamSchedules = () => {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const { addToast } = useToast();
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
 
   // Tạo hàm fetchExamSchedules riêng biệt
   const fetchExamSchedules = async () => {
@@ -92,6 +94,9 @@ const AdminExamSchedules = () => {
 
     applyFilters(); // Áp dụng bộ lọc
   }, [examSchedules, filters, searchQuery, sortConfig]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, searchQuery]);
 
   const handleFilterChange = (e) => {
     setFilters({
@@ -227,7 +232,14 @@ const AdminExamSchedules = () => {
   const formatTime = (timeStr) => {
     return timeStr?.slice(0, 5);
   };
-  const groupedByProgram = filteredSchedules.reduce((groups, item) => {
+  const paginatedData = filteredSchedules.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredSchedules.length / itemsPerPage);
+  // Nhóm lại sau phân trang
+  const groupedByProgram = paginatedData.reduce((groups, item) => {
     const program =
       item.training_program?.program_name +
         " (" +
@@ -377,6 +389,29 @@ const AdminExamSchedules = () => {
           </Table>
         </div>
       )}
+      <div className="d-flex justify-content-end align-items-center mt-3">
+        <Button
+          variant="outline-primary"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="me-2"
+        >
+          Trang trước
+        </Button>
+
+        <span className="mx-2">
+          Trang {currentPage} / {totalPages}
+        </span>
+
+        <Button
+          variant="outline-primary"
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+        >
+          Trang sau
+        </Button>
+      </div>
+
       <ConfirmDialog
         isOpen={!!confirmDeleteId}
         title="Xác nhận xoá lịch thi"

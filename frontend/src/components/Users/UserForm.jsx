@@ -77,14 +77,14 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
       ? {
           name: initialData.name || "",
           email: initialData.email || "",
-          role: initialData.role || "",
+          role: initialData.role || "student",
           first_name: initialData.profile?.first_name || "",
           last_name: initialData.profile?.last_name || "",
           phone: initialData.profile?.phone || "",
           address: initialData.profile?.address || "",
           gender: initialData?.profile?.gender ?? "other",
 
-          position: initialData.profile?.position || "",
+          position: initialData.profile?.position || "Học viên",
           info: initialData.profile?.info || "",
         }
       : {
@@ -92,13 +92,13 @@ const UserForm = ({ initialData = null, onSuccess, onCancel }) => {
           email: "",
           password: "",
           password_confirmation: "",
-          role: "",
+          role: "student",
           first_name: "",
           last_name: "",
           phone: "",
           address: "",
           gender: "other",
-          position: "",
+          position: "Học viên",
           info: "",
         },
   });

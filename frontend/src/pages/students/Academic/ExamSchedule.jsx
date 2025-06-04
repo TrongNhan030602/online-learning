@@ -25,7 +25,7 @@ const ExamSchedule = () => {
     examScheduleApi
       .getMySchedules()
       .then((response) => {
-        setSchedule(response.data.data);
+        setSchedule(response.data?.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -57,6 +57,18 @@ const ExamSchedule = () => {
 
   if (loading) {
     return <p className="text-muted text-center">Đang tải dữ liệu...</p>;
+  }
+  if (schedule.length === 0) {
+    return (
+      <div className="text-center text-muted py-4">
+        <FontAwesomeIcon
+          icon={faCalendarDay}
+          size="2x"
+          className="mb-2"
+        />
+        <p>Hiện chưa có lịch thi nào được cập nhật.</p>
+      </div>
+    );
   }
 
   if (error) {
