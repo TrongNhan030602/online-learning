@@ -146,8 +146,6 @@ class UserRepository implements UserRepositoryInterface
             throw new Exception("Không thể xóa người dùng là cố vấn.");
         }
 
-        // Xóa các dữ liệu liên quan nếu cần (ví dụ: enrollments, reviews, progress)
-        $user->profile()->delete();
 
         return $user->delete();
     }

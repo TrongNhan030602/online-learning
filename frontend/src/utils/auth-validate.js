@@ -20,7 +20,7 @@ export const validateEmail = (email) => {
 export const validatePassword = (password) => {
   if (!password) return "Mật khẩu không được để trống.";
   if (typeof password !== "string") return "Mật khẩu phải là một chuỗi.";
-  if (password.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự.";
+  if (password.length < 6) return "Mật khẩu phải có ít nhất 6 ký tự.";
   if (password.length > 32) return "Mật khẩu không được vượt quá 32 ký tự.";
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;

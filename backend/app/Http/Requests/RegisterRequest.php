@@ -19,7 +19,7 @@ class RegisterRequest extends FormRequest
             'password' => [
                 'required',
                 'string',
-                'min:8',
+                'min:6',
                 'max:32',
                 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
             ],
@@ -43,7 +43,7 @@ class RegisterRequest extends FormRequest
 
             'password.required' => 'Mật khẩu không được để trống.',
             'password.string' => 'Mật khẩu phải là một chuỗi.',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
             'password.max' => 'Mật khẩu không được vượt quá 32 ký tự.',
             'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ in hoa, một số và một ký tự đặc biệt.',
         ];

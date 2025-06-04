@@ -137,10 +137,20 @@ class User extends Authenticatable implements JWTSubject
     protected static function booted()
     {
         static::deleting(function ($user) {
-            // Xóa enrollments, reviews, progress liên quan
-            $user->enrollments()->delete();
-            $user->reviews()->delete();
-            $user->progress()->delete();
+            $user->profile()->delete();
+            $user->studentTrainingPrograms()->delete();
+            // $user->exemptCourses()->delete();
+            $user->scores()->delete();
+            // $user->certificates()->delete();
+            $user->reExamRegistrations()->delete();
+            $user->learningResults()->delete();
+            $user->notificationReceivers()->delete();
+
+            // Quan hệ many-to-many phải dùng detach
+            $user->trainingPrograms()->detach();
+
+
         });
     }
+
 }
